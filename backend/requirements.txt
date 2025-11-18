@@ -6,3 +6,4 @@ pydantic
 pydantic[email]
 qrcode
 python-multipart
+itsdangerous
