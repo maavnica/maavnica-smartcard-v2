@@ -370,6 +370,9 @@
   </div>
 
   <script>
+    // <<< URL de ton API Render >>>
+    const API_BASE_URL = "https://maavnica-smartcard-v2.onrender.com";
+
     let currentCardId = null;
     let currentSlug = null;
 
@@ -379,13 +382,14 @@
         alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
         return;
       }
-      window.open("/c/" + slugInput, "_blank");
+      // Ouvre la carte publique sur le domaine de l'API
+      window.open(`${API_BASE_URL}/c/` + slugInput, "_blank");
     }
 
     async function loadCardBySlug(slug) {
       if (!slug) return;
       try {
-        const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        const res = await fetch(`${API_BASE_URL}/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           alert("Aucune carte trouvée pour ce slug.");
           return;
@@ -432,7 +436,7 @@
       feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`/api/cards/${cardId}/feedback`);
+        const res = await fetch(`${API_BASE_URL}/api/cards/${cardId}/feedback`);
         if (!res.ok) {
           feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -473,7 +477,7 @@
       quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`/api/cards/${cardId}/quotes`);
+        const res = await fetch(`${API_BASE_URL}/api/cards/${cardId}/quotes`);
         if (!res.ok) {
           quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -528,13 +532,13 @@
       try {
         let res;
         if (currentCardId) {
-          res = await fetch(`/api/cards/${currentCardId}`, {
+          res = await fetch(`${API_BASE_URL}/api/cards/${currentCardId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
         } else {
-          res = await fetch("/api/cards/", {
+          res = await fetch(`${API_BASE_URL}/api/cards/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -551,7 +555,7 @@
         currentSlug = data.slug;
         document.getElementById("load-slug").value = data.slug;
         alert("Carte enregistrée ✅");
-        // Recharger avis/devis/stats si la carte existait déjà
+        // Recharger avis/devis/stats
         await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
       } catch (e) {
         console.error(e);
@@ -572,4 +576,5 @@
   </script>
 </body>
 </html>
+
 
