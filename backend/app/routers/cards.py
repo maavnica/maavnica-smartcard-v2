@@ -12,26 +12,21 @@ router = APIRouter()
 # -------------------------------------------------------------------
 # CRÉATION D'UNE CARTE (ADMIN)
 # -------------------------------------------------------------------
-@router.post("/", status_code=201)
-def create_card(card_in: schemas.CardCreate, db: Session = Depends(get_db)):
+@router.post("/", response_model=schemas.CardOut, status_code=201)
+def create_card(card: schemas.CardCreate, db: Session = Depends(get_db)):
     """
-    Crée une nouvelle SmartCard.
-    Utilisée par l'admin quand currentCardId est vide.
+    Création d'une SmartCard.
+    Pour l'instant on ne gère qu'un seul "propriétaire" de cartes,
+    on force donc user_id = 1 pour éviter l'erreur NOT NULL.
     """
-    # vérifier unicité du slug
-    existing = db.query(models.Card).filter(models.Card.slug == card_in.slug).first()
-    if existing:
-        raise HTTPException(
-            status_code=400,
-            detail="Ce slug est déjà utilisé par une autre carte.",
-        )
-
-    card = models.Card(**card_in.dict())
-    db.add(card)
+    db_card = models.Card(
+        user_id=1,          # 🔵 propriétaire par défaut
+        **card.dict()
+    )
+    db.add(db_card)
     db.commit()
-    db.refresh(card)
-    return card  # renvoyé tel quel au front (JSON)
-
+    db.refresh(db_card)
+    return db_card
 
 # -------------------------------------------------------------------
 # MISE À JOUR D'UNE CARTE (ADMIN)
