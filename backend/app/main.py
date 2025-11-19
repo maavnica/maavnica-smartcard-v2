@@ -24,14 +24,35 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Maavnica SmartCard API", version="1.0.0")
 
-# CORS (à ajuster en prod)
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from .routers import cards  # et les autres routers si tu en as
+# ...
+
+app = FastAPI(
+    title="Maavnica SmartCard API",
+)
+
+# 👇 Autoriser le front Render + localhost
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://maavnica-smartcard-v2-1.onrender.com",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # TODO: restreindre en production
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# routes
+app.include_router(cards.router, prefix="/api")
+
 
 # Middleware de session (pour savoir si l'admin est connecté)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)

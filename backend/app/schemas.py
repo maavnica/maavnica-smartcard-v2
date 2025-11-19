@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
@@ -11,7 +10,7 @@ from datetime import datetime
 class CardBase(BaseModel):
     company_name: str
     slug: str
-    # Optionnel pour accepter null / champ vide depuis le front
+    # Optionnel → accepte null / vide depuis le front
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -23,7 +22,6 @@ class CardBase(BaseModel):
 
 
 class CardCreate(CardBase):
-    # Pas de user_id ici : il est fixé côté backend (user_id = 1)
     pass
 
 
@@ -43,7 +41,6 @@ class CardPublic(BaseModel):
     id: int
     company_name: str
     slug: str
-    # Optionnel pour être cohérent avec CardBase/CardCreate
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -118,4 +115,5 @@ class UserOut(UserBase):
 
     class Config:
         orm_mode = True
+
 
