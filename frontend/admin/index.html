@@ -370,8 +370,8 @@
   </div>
 
   <script>
-    // <<< URL de ton API Render >>>
-    const API_BASE_URL = "https://maavnica-smartcard-v2.onrender.com";
+    // 🔗 ADRESSE DE L’API BACKEND (Render)
+    const API_BASE = "https://maavnica-smartcard-v2.onrender.com";
 
     let currentCardId = null;
     let currentSlug = null;
@@ -382,14 +382,13 @@
         alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
         return;
       }
-      // Ouvre la carte publique sur le domaine de l'API
-      window.open(`${API_BASE_URL}/c/` + slugInput, "_blank");
+      window.open(`${API_BASE}/c/${slugInput}`, "_blank");
     }
 
     async function loadCardBySlug(slug) {
       if (!slug) return;
       try {
-        const res = await fetch(`${API_BASE_URL}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           alert("Aucune carte trouvée pour ce slug.");
           return;
@@ -411,7 +410,6 @@
           document.getElementById("theme_color").value = data.theme_color;
         }
 
-        // QR
         const qrImg = document.getElementById("qr-image");
         if (data.qr_url) {
           qrImg.src = data.qr_url;
@@ -420,7 +418,6 @@
           qrImg.style.display = "none";
         }
 
-        // Charger avis + devis + stats
         await Promise.all([
           loadFeedback(data.id),
           loadQuotes(data.id),
@@ -436,7 +433,7 @@
       feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/cards/${cardId}/feedback`);
+        const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
         if (!res.ok) {
           feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -460,7 +457,6 @@
             feedbackContainer.appendChild(div);
           });
 
-          // Stats globales
           const total = items.length;
           const rate = total ? Math.round((positive / total) * 100) : 0;
           document.getElementById("stat-feedback-count").textContent = total;
@@ -477,7 +473,7 @@
       quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/cards/${cardId}/quotes`);
+        const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
         if (!res.ok) {
           quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -501,7 +497,6 @@
             quotesContainer.appendChild(div);
           });
 
-          // Stat
           document.getElementById("stat-quotes-count").textContent = items.length;
         }
       } catch (e) {
@@ -532,13 +527,13 @@
       try {
         let res;
         if (currentCardId) {
-          res = await fetch(`${API_BASE_URL}/api/cards/${currentCardId}`, {
+          res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
         } else {
-          res = await fetch(`${API_BASE_URL}/api/cards/`, {
+          res = await fetch(`${API_BASE}/api/cards/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -555,7 +550,6 @@
         currentSlug = data.slug;
         document.getElementById("load-slug").value = data.slug;
         alert("Carte enregistrée ✅");
-        // Recharger avis/devis/stats
         await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
       } catch (e) {
         console.error(e);
@@ -576,5 +570,6 @@
   </script>
 </body>
 </html>
+
 
 
