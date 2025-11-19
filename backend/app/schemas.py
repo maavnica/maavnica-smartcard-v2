@@ -4,10 +4,15 @@ from typing import Optional
 from datetime import datetime
 
 
+# -----------------------
+# Cartes SmartCard
+# -----------------------
+
 class CardBase(BaseModel):
     company_name: str
     slug: str
-    google_review_link: str
+    # Optionnel pour accepter null / champ vide depuis le front
+    google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
@@ -18,6 +23,7 @@ class CardBase(BaseModel):
 
 
 class CardCreate(CardBase):
+    # Pas de user_id ici : il est fixé côté backend (user_id = 1)
     pass
 
 
@@ -37,7 +43,8 @@ class CardPublic(BaseModel):
     id: int
     company_name: str
     slug: str
-    google_review_link: str
+    # Optionnel pour être cohérent avec CardBase/CardCreate
+    google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
@@ -50,6 +57,10 @@ class CardPublic(BaseModel):
     class Config:
         orm_mode = True
 
+
+# -----------------------
+# Avis clients
+# -----------------------
 
 class FeedbackCreate(BaseModel):
     satisfaction: bool
@@ -65,6 +76,10 @@ class FeedbackOut(BaseModel):
     class Config:
         orm_mode = True
 
+
+# -----------------------
+# Demandes de devis
+# -----------------------
 
 class QuoteCreate(BaseModel):
     name: str
@@ -85,6 +100,10 @@ class QuoteOut(BaseModel):
         orm_mode = True
 
 
+# -----------------------
+# Utilisateurs
+# -----------------------
+
 class UserBase(BaseModel):
     email: EmailStr
 
@@ -99,3 +118,4 @@ class UserOut(UserBase):
 
     class Config:
         orm_mode = True
+
