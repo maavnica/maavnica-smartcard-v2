@@ -6,6 +6,9 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import get_db
 
+# Si dans main.py tu n'as pas de prefix, tu peux mettre :
+# router = APIRouter(prefix="/api/cards", tags=["cards"])
+# Sinon on laisse simple et le prefix est géré dans main.py.
 router = APIRouter()
 
 
@@ -16,11 +19,13 @@ router = APIRouter()
 def create_card(card: schemas.CardCreate, db: Session = Depends(get_db)):
     """
     Création d'une SmartCard.
+
     Pour l'instant on ne gère qu'un seul "propriétaire" de cartes,
-    on force donc user_id = 1 pour éviter l'erreur NOT NULL.
+    on force donc user_id = 1 pour satisfaire la contrainte NOT NULL.
+    Le body correspond au schéma CardCreate.
     """
     db_card = models.Card(
-        user_id=1,          # 🔵 propriétaire par défaut
+        user_id=1,          # propriétaire par défaut
         **card.dict()
     )
     db.add(db_card)
@@ -28,11 +33,16 @@ def create_card(card: schemas.CardCreate, db: Session = Depends(get_db)):
     db.refresh(db_card)
     return db_card
 
+
 # -------------------------------------------------------------------
 # MISE À JOUR D'UNE CARTE (ADMIN)
 # -------------------------------------------------------------------
-@router.put("/{card_id}")
-def update_card(card_id: int, card_in: schemas.CardUpdate, db: Session = Depends(get_db)):
+@router.put("/{card_id}", response_model=schemas.CardOut)
+def update_card(
+    card_id: int,
+    card_in: schemas.CardUpdate,
+    db: Session = Depends(get_db),
+):
     """
     Met à jour une SmartCard existante.
     Utilisée par l'admin quand currentCardId est défini.
@@ -53,7 +63,7 @@ def update_card(card_id: int, card_in: schemas.CardUpdate, db: Session = Depends
 # -------------------------------------------------------------------
 # RÉCUPÉRER UNE CARTE PAR SON SLUG (ADMIN)
 # -------------------------------------------------------------------
-@router.get("/by-slug/{slug}")
+@router.get("/by-slug/{slug}", response_model=schemas.CardOut)
 def get_card_by_slug(slug: str, db: Session = Depends(get_db)):
     """
     Récupère une carte par son slug.
@@ -68,8 +78,11 @@ def get_card_by_slug(slug: str, db: Session = Depends(get_db)):
 # -------------------------------------------------------------------
 # LISTE DES AVIS (ADMIN)
 # -------------------------------------------------------------------
-@router.get("/{card_id}/feedback")
-def list_feedback(card_id: int, db: Session = Depends(get_db)) -> List[schemas.FeedbackOut]:
+@router.get(
+    "/{card_id}/feedback",
+    response_model=List[schemas.FeedbackOut],
+)
+def list_feedback(card_id: int, db: Session = Depends(get_db)):
     """
     Liste tous les avis rapides liés à une carte.
     Affiché dans la colonne droite de l'admin.
@@ -90,8 +103,11 @@ def list_feedback(card_id: int, db: Session = Depends(get_db)) -> List[schemas.F
 # -------------------------------------------------------------------
 # LISTE DES DEMANDES DE DEVIS (ADMIN)
 # -------------------------------------------------------------------
-@router.get("/{card_id}/quotes")
-def list_quotes(card_id: int, db: Session = Depends(get_db)) -> List[schemas.QuoteOut]:
+@router.get(
+    "/{card_id}/quotes",
+    response_model=List[schemas.QuoteOut],
+)
+def list_quotes(card_id: int, db: Session = Depends(get_db)):
     """
     Liste toutes les demandes de devis liées à une carte.
     Affiché dans la colonne droite de l'admin.
@@ -107,5 +123,6 @@ def list_quotes(card_id: int, db: Session = Depends(get_db)) -> List[schemas.Quo
         .all()
     )
     return quotes
+
 
 

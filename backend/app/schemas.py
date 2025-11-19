@@ -3,14 +3,17 @@ from typing import Optional
 from datetime import datetime
 
 
-# -----------------------
-# Cartes SmartCard
-# -----------------------
+# -------------------------
+#  CARTES SMARTCARD
+# -------------------------
 
 class CardBase(BaseModel):
+    """
+    Champs communs pour une carte.
+    Ces noms DOIVENT être identiques à ceux envoyés par le front.
+    """
     company_name: str
     slug: str
-    # Optionnel → accepte null / vide depuis le front
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -22,11 +25,20 @@ class CardBase(BaseModel):
 
 
 class CardCreate(CardBase):
+    """
+    Schéma pour créer une carte (POST /api/cards/).
+    Pas de user_id dans le body : on le fixe à 1 côté backend.
+    """
     pass
 
 
 class CardUpdate(BaseModel):
+    """
+    Schéma pour mise à jour partielle (PUT /api/cards/{id}).
+    Tout est optionnel.
+    """
     company_name: Optional[str] = None
+    slug: Optional[str] = None
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -38,6 +50,9 @@ class CardUpdate(BaseModel):
 
 
 class CardPublic(BaseModel):
+    """
+    Schéma renvoyé au front (admin + carte publique).
+    """
     id: int
     company_name: str
     slug: str
@@ -50,14 +65,24 @@ class CardPublic(BaseModel):
     tiktok: Optional[str] = None
     theme_color: Optional[str] = "#2563EB"
     qr_url: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True
 
 
-# -----------------------
-# Avis clients
-# -----------------------
+# Alias pour ne plus casser les imports qui parlent de CardOut
+class CardOut(CardPublic):
+    """
+    Compatibilité : certains endpoints utilisent encore CardOut comme response_model.
+    """
+    pass
+
+
+# -------------------------
+#  FEEDBACKS
+# -------------------------
 
 class FeedbackCreate(BaseModel):
     satisfaction: bool
@@ -74,9 +99,9 @@ class FeedbackOut(BaseModel):
         orm_mode = True
 
 
-# -----------------------
-# Demandes de devis
-# -----------------------
+# -------------------------
+#  DEMANDES DE DEVIS
+# -------------------------
 
 class QuoteCreate(BaseModel):
     name: str
@@ -97,9 +122,9 @@ class QuoteOut(BaseModel):
         orm_mode = True
 
 
-# -----------------------
-# Utilisateurs
-# -----------------------
+# -------------------------
+#  UTILISATEURS
+# -------------------------
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -115,5 +140,6 @@ class UserOut(UserBase):
 
     class Config:
         orm_mode = True
+
 
 
