@@ -242,7 +242,7 @@
             <label>Charger une carte existante via son slug</label>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <input id="load-slug" placeholder="ex. plomberie-martin" style="flex:1; max-width:260px;" />
-              <button class="btn-secondary" id="btn-load">Charger ma carte</button>
+              <button class="btn-secondary" id="btn-load" type="button">Charger ma carte</button>
             </div>
           </div>
 
@@ -304,8 +304,8 @@
           </div>
 
           <div class="btn-row">
-            <button class="btn-primary" id="btn-save">Enregistrer ma carte</button>
-            <button class="btn-secondary" type="button" onclick="openPublicCard()">Voir la carte publique</button>
+            <button class="btn-primary" id="btn-save" type="button">Enregistrer ma carte</button>
+            <button class="btn-secondary" type="button" id="btn-public">Voir la carte publique</button>
           </div>
 
           <div class="stats-row" style="margin-top:16px;">
@@ -332,7 +332,7 @@
             <span>QR Code de la carte</span>
           </div>
           <div class="card-subtitle">
-            Ce QR code pointe vers la version publique de votre SmartCard. Vous pouvez l’imprimer ou l’intégrer sur vos supports.
+            Ce QR code pointe vers la version publique de votre SmartCard.
           </div>
           <div class="qr-wrapper">
             <img id="qr-image" src="" alt="QR code SmartCard" style="display:none;" />
@@ -370,8 +370,14 @@
   </div>
 
   <script>
-    // 🔗 ADRESSE DE L’API BACKEND (Render)
-    const API_BASE = "https://maavnica-smartcard-v2.onrender.com";
+    console.log("Admin SmartCard chargé ✅");
+
+    // Base de l'API :
+    // - En local : ""  -> /api/... (même domaine)
+    // - En prod (static Render) : https://maavnica-smartcard-v2.onrender.com
+    const API_BASE = window.location.hostname.includes("maavnica-smartcard-v2-1.onrender.com")
+      ? "https://maavnica-smartcard-v2.onrender.com"
+      : "";
 
     let currentCardId = null;
     let currentSlug = null;
@@ -382,18 +388,24 @@
         alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
         return;
       }
-      window.open(`${API_BASE}/c/${slugInput}`, "_blank");
+
+      const base = API_BASE || "";
+      const url = base ? `${base}/c/${slugInput}` : `/c/${slugInput}`;
+      window.open(url, "_blank");
     }
 
     async function loadCardBySlug(slug) {
       if (!slug) return;
       try {
-        const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        console.log("Chargement de la carte pour le slug:", slug);
+
+        const res = await fetch(`${API_BASE}/api/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           alert("Aucune carte trouvée pour ce slug.");
           return;
         }
         const data = await res.json();
+        console.log("Carte chargée:", data);
         currentCardId = data.id;
         currentSlug = data.slug;
 
@@ -433,7 +445,7 @@
       feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
+        const res = await fetch(`${API_BASE}/api/${cardId}/feedback`);
         if (!res.ok) {
           feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -473,7 +485,7 @@
       quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
+        const res = await fetch(`${API_BASE}/api/${cardId}/quotes`);
         if (!res.ok) {
           quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -509,7 +521,7 @@
       const payload = {
         company_name: document.getElementById("company_name").value.trim(),
         slug: document.getElementById("slug").value.trim(),
-        google_review_link: document.getElementById("google_review_link").value.trim() || null,
+        google_review_link: document.getElementById("google_review_link").value.trim(),
         phone: document.getElementById("phone").value.trim() || null,
         whatsapp: document.getElementById("whatsapp").value.trim() || null,
         payment_link: document.getElementById("payment_link").value.trim() || null,
@@ -519,20 +531,22 @@
         theme_color: document.getElementById("theme_color").value
       };
 
-      if (!payload.company_name || !payload.slug) {
-        alert("Merci de renseigner au minimum le nom de l’entreprise et le slug.");
+      if (!payload.company_name || !payload.slug || !payload.google_review_link) {
+        alert("Merci de renseigner au minimum le nom de l’entreprise, le slug et le lien Google.");
         return;
       }
 
       try {
         let res;
         if (currentCardId) {
-          res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
+          console.log("Mise à jour de la carte", currentCardId, payload);
+          res = await fetch(`${API_BASE}/api/${currentCardId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
         } else {
+          console.log("Création d'une nouvelle carte", payload);
           res = await fetch(`${API_BASE}/api/cards/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -541,7 +555,9 @@
         }
 
         if (!res.ok) {
-          alert("Erreur lors de l’enregistrement.");
+          const txt = await res.text();
+          console.error("Erreur API", res.status, txt);
+          alert("Erreur lors de l’enregistrement (code " + res.status + ").");
           return;
         }
 
@@ -557,6 +573,7 @@
       }
     }
 
+    // === ÉCOUTEURS ===
     document.getElementById("btn-load").addEventListener("click", () => {
       const slug = document.getElementById("load-slug").value.trim();
       if (!slug) {
@@ -567,9 +584,12 @@
     });
 
     document.getElementById("btn-save").addEventListener("click", saveCard);
+    document.getElementById("btn-public").addEventListener("click", openPublicCard);
   </script>
 </body>
 </html>
+
+
 
 
 
