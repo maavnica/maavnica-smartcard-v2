@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,78 +9,73 @@ from .routers import public, cards
 from .database import Base, engine
 
 # -------------------------------------------------------------------
-# CONFIG SIMPLE POUR LE LOGIN ADMIN
+# CONFIG ADMIN SIMPLE
 # -------------------------------------------------------------------
-ADMIN_PASSWORD = "maavnica2025"  # à changer si tu veux
-SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"  # chaîne longue = mieux
+ADMIN_PASSWORD = "maavnica2025"
+SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"
 
-
 # -------------------------------------------------------------------
-# CREATION APP + DB
+# INIT DB
 # -------------------------------------------------------------------
-# Création des tables au démarrage (une fois, si elles n'existent pas)
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Maavnica SmartCard API", version="1.0.0")
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-from .routers import cards  # et les autres routers si tu en as
-# ...
-
+# -------------------------------------------------------------------
+# APP FASTAPI
+# -------------------------------------------------------------------
 app = FastAPI(
     title="Maavnica SmartCard API",
+    version="1.0.0"
 )
 
-# 👇 Autoriser le front Render + localhost
+# -------------------------------------------------------------------
+# CORS (NÉCESSAIRE POUR RENDER)
+# -------------------------------------------------------------------
 origins = [
     "http://localhost",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://maavnica-smartcard-v2-1.onrender.com",
+    "https://maavnica-smartcard-v2-1.onrender.com",   # TON FRONT RENDER
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=origins,      # OK en prod
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# routes
-app.include_router(cards.router, prefix="/api")
-
-
-# Middleware de session (pour savoir si l'admin est connecté)
+# -------------------------------------------------------------------
+# MIDDLEWARE SESSIONS (POUR LOGIN ADMIN)
+# -------------------------------------------------------------------
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 
-# Chemins de base
-BASE_DIR = Path(__file__).resolve().parents[2]   # dossier "maavnica-smartcard"
+# -------------------------------------------------------------------
+# ROUTERS API
+# -------------------------------------------------------------------
+app.include_router(public.router, prefix="/api/public", tags=["public"])
+app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
+
+# -------------------------------------------------------------------
+# PATHS FRONTEND / STATIC
+# -------------------------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parents[2]
 STATIC_DIR = BASE_DIR / "static"
 FRONTEND_DIR = BASE_DIR / "frontend"
 
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
-# Fichiers statiques (pour les QR codes notamment)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Routes API
-app.include_router(public.router, prefix="/api/public", tags=["public"])
-app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
-
-
 # -------------------------------------------------------------------
-# ROUTE DE TEST
+# ROUTES API DE TEST
 # -------------------------------------------------------------------
 @app.get("/")
 def read_root():
-  return {"message": "Maavnica SmartCard API is running"}
-
+    return {"message": "Maavnica SmartCard API is running"}
 
 # -------------------------------------------------------------------
-# LOGIN ADMIN SIMPLE
+# LOGIN ADMIN – PAGES
 # -------------------------------------------------------------------
 @app.get("/login", response_class=HTMLResponse)
 def login_page():
@@ -117,31 +111,23 @@ def login_page():
 @app.post("/login")
 def login(password: str = Form(...), request: Request = None):
     if password == ADMIN_PASSWORD:
-        # On marque l'utilisateur comme connecté dans la session
         request.session["is_admin"] = True
         return RedirectResponse("/admin", status_code=302)
 
-    # Mot de passe incorrect -> on revient sur la page de login
     return RedirectResponse("/login", status_code=302)
 
-
 # -------------------------------------------------------------------
-# PAGES FRONT
+# ROUTES FRONTEND HTML
 # -------------------------------------------------------------------
-# Servir la SmartCard publique
 @app.get("/c/{slug}", response_class=HTMLResponse)
 def serve_card_page(slug: str):
-    """
-    Renvoie la page HTML publique. Le JS récupère le slug depuis l'URL.
-    """
     html_path = FRONTEND_DIR / "public-card" / "index.html"
     return FileResponse(str(html_path))
 
 
-# Servir le mini back-office (protégé par login)
 @app.get("/admin", response_class=HTMLResponse)
-def serve_admin(request: Request):
-    # Si pas connecté -> redirection vers /login
+def admin_page(request: Request):
+    # sécurité simple
     if not request.session.get("is_admin"):
         return RedirectResponse("/login", status_code=302)
 
@@ -149,9 +135,9 @@ def serve_admin(request: Request):
     return FileResponse(str(html_path))
 
 
-# Landing page Maavnica SmartCard
 @app.get("/smartcard", response_class=HTMLResponse)
 def smartcard_landing():
     html_path = FRONTEND_DIR / "landing" / "index.html"
     return FileResponse(str(html_path))
+
 
