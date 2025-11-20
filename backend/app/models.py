@@ -1,7 +1,15 @@
-
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
-from sqlalchemy.orm import relationship
 from datetime import datetime
+
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Boolean,
+    ForeignKey,
+    Text,
+)
+from sqlalchemy.orm import relationship
 
 from .database import Base
 
@@ -14,7 +22,8 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    cards = relationship("Card", back_populates="owner")
+    # relation vers les cartes
+    cards = relationship("Card", back_populates="user")
 
 
 class Card(Base):
@@ -26,7 +35,9 @@ class Card(Base):
     company_name = Column(String, nullable=False)
     slug = Column(String, unique=True, index=True, nullable=False)
 
-    google_review_link = Column(String, nullable=False)
+    # ⬇⬇⬇ maintenant nullable=True pour éviter l'erreur NOT NULL
+    google_review_link = Column(String, nullable=True)
+
     phone = Column(String, nullable=True)
     whatsapp = Column(String, nullable=True)
     payment_link = Column(String, nullable=True)
@@ -40,7 +51,8 @@ class Card(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    owner = relationship("User", back_populates="cards")
+    # relations
+    user = relationship("User", back_populates="cards")
     feedbacks = relationship("Feedback", back_populates="card", cascade="all, delete-orphan")
     quotes = relationship("Quote", back_populates="card", cascade="all, delete-orphan")
 
@@ -71,3 +83,4 @@ class Quote(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     card = relationship("Card", back_populates="quotes")
+
