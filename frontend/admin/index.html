@@ -372,10 +372,10 @@
   <script>
     console.log("Admin SmartCard chargé ✅");
 
-    // Domaine de l'API (backend FastAPI sur Render)
+    // 👉 URL de base de l'API (Render)
     const API_BASE = "https://maavnica-smartcard-v2.onrender.com";
 
-    // Endpoints réels :
+    // ENDPOINTS réels d'après Swagger :
     // POST   /api/cards/
     // PUT    /api/cards/{card_id}
     // GET    /api/cards/by-slug/{slug}
@@ -391,8 +391,7 @@
         alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
         return;
       }
-      // On ouvre la carte publique sur le backend (et pas sur le site statique)
-      window.open(`${API_BASE}/c/${slugInput}`, "_blank");
+      window.open("/c/" + slugInput, "_blank");
     }
 
     async function loadCardBySlug(slug) {
@@ -588,4 +587,5 @@
   </script>
 </body>
 </html>
+
 
