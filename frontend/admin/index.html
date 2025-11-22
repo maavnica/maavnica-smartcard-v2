@@ -370,216 +370,212 @@
   </div>
 
   <script>
-    console.log("Admin SmartCard chargé ✅");
+  console.log("Admin SmartCard chargé ✅");
 
-    // même domaine que l’API -> on utilise des URLs relatives
-    const API_BASE = "";
+  // On reste en relatif : le front est servi par le même domaine que l'API.
+  const API_BASE = "";
 
-    let currentCardId = null;
-    let currentSlug = null;
+  let currentCardId = null;
+  let currentSlug = null;
 
-    function openPublicCard() {
-      const slugInput = document.getElementById("slug").value.trim();
-      if (!slugInput) {
-        alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
+  function openPublicCard() {
+    const slugInput = document.getElementById("slug").value.trim();
+    if (!slugInput) {
+      alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
+      return;
+    }
+    window.open("/c/" + slugInput, "_blank");
+  }
+
+  async function loadCardBySlug(slug) {
+    if (!slug) return;
+    try {
+      console.log("Chargement de la carte pour le slug:", slug);
+      const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+      if (!res.ok) {
+        alert("Aucune carte trouvée pour ce slug.");
         return;
       }
-      window.open("/c/" + slugInput, "_blank");
-    }
+      const data = await res.json();
+      console.log("Carte chargée:", data);
+      currentCardId = data.id;
+      currentSlug = data.slug;
 
-    async function loadCardBySlug(slug) {
-      if (!slug) return;
-      try {
-        console.log("Chargement de la carte pour le slug:", slug);
-        const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
-        if (!res.ok) {
-          alert("Aucune carte trouvée pour ce slug.");
-          return;
-        }
-        const data = await res.json();
-        console.log("Carte chargée:", data);
-        currentCardId = data.id;
-        currentSlug = data.slug;
-
-        document.getElementById("company_name").value = data.company_name || "";
-        document.getElementById("slug").value = data.slug || "";
-        document.getElementById("google_review_link").value = data.google_review_link || "";
-        document.getElementById("phone").value = data.phone || "";
-        document.getElementById("whatsapp").value = data.whatsapp || "";
-        document.getElementById("payment_link").value = data.payment_link || "";
-        document.getElementById("instagram").value = data.instagram || "";
-        document.getElementById("facebook").value = data.facebook || "";
-        document.getElementById("tiktok").value = data.tiktok || "";
-        if (data.theme_color) {
-          document.getElementById("theme_color").value = data.theme_color;
-        }
-
-        const qrImg = document.getElementById("qr-image");
-        if (data.qr_url) {
-          qrImg.src = data.qr_url;
-          qrImg.style.display = "inline-block";
-        } else {
-          qrImg.style.display = "none";
-        }
-
-        await Promise.all([
-          loadFeedback(data.id),
-          loadQuotes(data.id),
-        ]);
-      } catch (e) {
-        console.error(e);
-        alert("Erreur lors du chargement de la carte.");
+      document.getElementById("company_name").value = data.company_name || "";
+      document.getElementById("slug").value = data.slug || "";
+      document.getElementById("google_review_link").value = data.google_review_link || "";
+      document.getElementById("phone").value = data.phone || "";
+      document.getElementById("whatsapp").value = data.whatsapp || "";
+      document.getElementById("payment_link").value = data.payment_link || "";
+      document.getElementById("instagram").value = data.instagram || "";
+      document.getElementById("facebook").value = data.facebook || "";
+      document.getElementById("tiktok").value = data.tiktok || "";
+      if (data.theme_color) {
+        document.getElementById("theme_color").value = data.theme_color;
       }
+
+      const qrImg = document.getElementById("qr-image");
+      if (data.qr_url) {
+        qrImg.src = data.qr_url;
+        qrImg.style.display = "inline-block";
+      } else {
+        qrImg.style.display = "none";
+      }
+
+      await Promise.all([
+        loadFeedback(data.id),
+        loadQuotes(data.id),
+      ]);
+    } catch (e) {
+      console.error(e);
+      alert("Erreur lors du chargement de la carte.");
     }
+  }
 
-    async function loadFeedback(cardId) {
-      const feedbackContainer = document.getElementById("feedback-list");
-      feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
+  async function loadFeedback(cardId) {
+    const feedbackContainer = document.getElementById("feedback-list");
+    feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
-      try {
-        const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
-        if (!res.ok) {
-          feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-          return;
-        }
-        const items = await res.json();
-
-        if (!items.length) {
-          feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>';
-        } else {
-          feedbackContainer.innerHTML = "";
-          let positive = 0;
-          items.forEach(fb => {
-            if (fb.satisfaction) positive += 1;
-            const div = document.createElement("div");
-            div.className = "list-item";
-            div.innerHTML = `
-              <div class="list-title">${fb.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
-              <div class="list-meta">${fb.created_at || ""}</div>
-              <div>${fb.comment || "<i>Aucun commentaire</i>"}</div>
-            `;
-            feedbackContainer.appendChild(div);
-          });
-
-          const total = items.length;
-          const rate = total ? Math.round((positive / total) * 100) : 0;
-          document.getElementById("stat-feedback-count").textContent = total;
-          document.getElementById("stat-satisfaction-rate").textContent = total ? rate + " %" : "–";
-        }
-      } catch (e) {
-        console.error(e);
+    try {
+      const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
+      if (!res.ok) {
         feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
+        return;
       }
+      const items = await res.json();
+
+      if (!items.length) {
+        feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>';
+      } else {
+        feedbackContainer.innerHTML = "";
+        let positive = 0;
+        items.forEach(fb => {
+          if (fb.satisfaction) positive += 1;
+          const div = document.createElement("div");
+          div.className = "list-item";
+          div.innerHTML = `
+            <div class="list-title">${fb.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
+            <div class="list-meta">${fb.created_at || ""}</div>
+            <div>${fb.comment || "<i>Aucun commentaire</i>"}</div>
+          `;
+          feedbackContainer.appendChild(div);
+        });
+
+        const total = items.length;
+        const rate = total ? Math.round((positive / total) * 100) : 0;
+        document.getElementById("stat-feedback-count").textContent = total;
+        document.getElementById("stat-satisfaction-rate").textContent = total ? rate + " %" : "–";
+      }
+    } catch (e) {
+      console.error(e);
+      feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
     }
+  }
 
-    async function loadQuotes(cardId) {
-      const quotesContainer = document.getElementById("quotes-list");
-      quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
+  async function loadQuotes(cardId) {
+    const quotesContainer = document.getElementById("quotes-list");
+    quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
-      try {
-        const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
-        if (!res.ok) {
-          quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-          return;
-        }
-        const items = await res.json();
-
-        if (!items.length) {
-          quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>';
-        } else {
-          quotesContainer.innerHTML = "";
-          items.forEach(q => {
-            const div = document.createElement("div");
-            div.className = "list-item";
-            div.innerHTML = `
-              <div class="list-title">${q.name || "Sans nom"}</div>
-              <div class="list-meta">
-                ${q.phone || ""}${q.phone && q.email ? " · " : ""}${q.email || ""}${q.created_at ? " · " + q.created_at : ""}
-              </div>
-              <div>${q.message || "<i>Aucun détail fourni</i>"}</div>
-            `;
-            quotesContainer.appendChild(div);
-          });
-
-          document.getElementById("stat-quotes-count").textContent = items.length;
-        }
-      } catch (e) {
-        console.error(e);
+    try {
+      const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
+      if (!res.ok) {
         quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
+        return;
       }
+      const items = await res.json();
+
+      if (!items.length) {
+        quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>';
+      } else {
+        quotesContainer.innerHTML = "";
+        items.forEach(q => {
+          const div = document.createElement("div");
+          div.className = "list-item";
+          div.innerHTML = `
+            <div class="list-title">${q.name || "Sans nom"}</div>
+            <div class="list-meta">
+              ${q.phone || ""}${q.phone && q.email ? " · " : ""}${q.email || ""}${q.created_at ? " · " + q.created_at : ""}
+            </div>
+            <div>${q.message || "<i>Aucun détail fourni</i>"}</div>
+          `;
+          quotesContainer.appendChild(div);
+        });
+
+        document.getElementById("stat-quotes-count").textContent = items.length;
+      }
+    } catch (e) {
+      console.error(e);
+      quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
+    }
+  }
+
+  async function saveCard() {
+    const payload = {
+      company_name: document.getElementById("company_name").value.trim(),
+      slug: document.getElementById("slug").value.trim(),
+      google_review_link: document.getElementById("google_review_link").value.trim(),
+      phone: document.getElementById("phone").value.trim() || null,
+      whatsapp: document.getElementById("whatsapp").value.trim() || null,
+      payment_link: document.getElementById("payment_link").value.trim() || null,
+      instagram: document.getElementById("instagram").value.trim() || null,
+      facebook: document.getElementById("facebook").value.trim() || null,
+      tiktok: document.getElementById("tiktok").value.trim() || null,
+      theme_color: document.getElementById("theme_color").value
+    };
+
+    if (!payload.company_name || !payload.slug || !payload.google_review_link) {
+      alert("Merci de renseigner au minimum le nom de l’entreprise, le slug et le lien Google.");
+      return;
     }
 
-    async function saveCard() {
-      const payload = {
-        company_name: document.getElementById("company_name").value.trim(),
-        slug: document.getElementById("slug").value.trim(),
-        google_review_link: document.getElementById("google_review_link").value.trim(),
-        phone: document.getElementById("phone").value.trim() || null,
-        whatsapp: document.getElementById("whatsapp").value.trim() || null,
-        payment_link: document.getElementById("payment_link").value.trim() || null,
-        instagram: document.getElementById("instagram").value.trim() || null,
-        facebook: document.getElementById("facebook").value.trim() || null,
-        tiktok: document.getElementById("tiktok").value.trim() || null,
-        theme_color: document.getElementById("theme_color").value
-      };
+    try {
+      let res;
+      if (currentCardId) {
+        console.log("Mise à jour de la carte", currentCardId, payload);
+        res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        console.log("Création d'une nouvelle carte", payload);
+        res = await fetch(`${API_BASE}/api/cards/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      }
 
-      if (!payload.company_name || !payload.slug || !payload.google_review_link) {
-        alert("Merci de renseigner au minimum le nom de l’entreprise, le slug et le lien Google.");
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error("Erreur API", res.status, txt);
+        alert("Erreur lors de l’enregistrement (code " + res.status + ").");
         return;
       }
 
-      try {
-        let res;
-        if (currentCardId) {
-          console.log("Mise à jour de la carte", currentCardId, payload);
-          res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-        } else {
-          console.log("Création d'une nouvelle carte", payload);
-          res = await fetch(`${API_BASE}/api/cards/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-        }
-
-        if (!res.ok) {
-          const txt = await res.text();
-          console.error("Erreur API", res.status, txt);
-          alert("Erreur lors de l’enregistrement (code " + res.status + ").");
-          return;
-        }
-
-        const data = await res.json();
-        currentCardId = data.id;
-        currentSlug = data.slug;
-        document.getElementById("load-slug").value = data.slug;
-        alert("Carte enregistrée ✅");
-        await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
-      } catch (e) {
-        console.error(e);
-        alert("Erreur réseau lors de l’enregistrement.");
-      }
+      const data = await res.json();
+      currentCardId = data.id;
+      currentSlug = data.slug;
+      document.getElementById("load-slug").value = data.slug;
+      alert("Carte enregistrée ✅");
+      await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
+    } catch (e) {
+      console.error(e);
+      alert("Erreur réseau lors de l’enregistrement.");
     }
+  }
 
-    // === ÉCOUTEURS ===
-    document.getElementById("btn-load").addEventListener("click", () => {
-      const slug = document.getElementById("load-slug").value.trim();
-      if (!slug) {
-        alert("Merci de saisir un slug à charger.");
-        return;
-      }
-      loadCardBySlug(slug);
-    });
+  // === ÉCOUTEURS ===
+  document.getElementById("btn-load").addEventListener("click", () => {
+    const slug = document.getElementById("load-slug").value.trim();
+    if (!slug) {
+      alert("Merci de saisir un slug à charger.");
+      return;
+    }
+    loadCardBySlug(slug);
+  });
 
-    document.getElementById("btn-save").addEventListener("click", saveCard);
-    document.getElementById("btn-public").addEventListener("click", openPublicCard);
-  </script>
-</body>
-</html>
-
-
+  document.getElementById("btn-save").addEventListener("click", saveCard);
+  document.getElementById("btn-public").addEventListener("click", openPublicCard);
+</script>
 
