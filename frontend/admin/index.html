@@ -372,12 +372,15 @@
   <script>
     console.log("Admin SmartCard chargé ✅");
 
-    // Base de l'API :
-    // - En local : ""  -> /api/... (même domaine)
-    // - En prod (static Render) : https://maavnica-smartcard-v2.onrender.com
-    const API_BASE = window.location.hostname.includes("maavnica-smartcard-v2-1.onrender.com")
-      ? "https://maavnica-smartcard-v2.onrender.com"
-      : "";
+    // Domaine de l'API (backend FastAPI sur Render)
+    const API_BASE = "https://maavnica-smartcard-v2.onrender.com";
+
+    // Endpoints réels :
+    // POST   /api/cards/
+    // PUT    /api/cards/{card_id}
+    // GET    /api/cards/by-slug/{slug}
+    // GET    /api/cards/{card_id}/feedback
+    // GET    /api/cards/{card_id}/quotes
 
     let currentCardId = null;
     let currentSlug = null;
@@ -388,18 +391,15 @@
         alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
         return;
       }
-
-      const base = API_BASE || "";
-      const url = base ? `${base}/c/${slugInput}` : `/c/${slugInput}`;
-      window.open(url, "_blank");
+      // On ouvre la carte publique sur le backend (et pas sur le site statique)
+      window.open(`${API_BASE}/c/${slugInput}`, "_blank");
     }
 
     async function loadCardBySlug(slug) {
       if (!slug) return;
       try {
         console.log("Chargement de la carte pour le slug:", slug);
-
-        const res = await fetch(`${API_BASE}/api/by-slug/${encodeURIComponent(slug)}`);
+        const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           alert("Aucune carte trouvée pour ce slug.");
           return;
@@ -445,7 +445,7 @@
       feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/api/${cardId}/feedback`);
+        const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
         if (!res.ok) {
           feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -485,7 +485,7 @@
       quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
 
       try {
-        const res = await fetch(`${API_BASE}/api/${cardId}/quotes`);
+        const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
         if (!res.ok) {
           quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
           return;
@@ -540,7 +540,7 @@
         let res;
         if (currentCardId) {
           console.log("Mise à jour de la carte", currentCardId, payload);
-          res = await fetch(`${API_BASE}/api/${currentCardId}`, {
+          res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -588,8 +588,4 @@
   </script>
 </body>
 </html>
-
-
-
-
 
