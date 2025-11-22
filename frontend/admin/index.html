@@ -270,7 +270,7 @@
             </div>
           </div>
 
-          <div class="field-group" style="margin-top:8px;">
+          <div class="field-group" style="margin-top:8px%;">
             <div>
               <label>Téléphone</label>
               <input id="phone" placeholder="0600000000" />
@@ -372,15 +372,8 @@
   <script>
     console.log("Admin SmartCard chargé ✅");
 
-    // 👉 URL de base de l'API (Render)
-    const API_BASE = "https://maavnica-smartcard-v2.onrender.com";
-
-    // ENDPOINTS réels d'après Swagger :
-    // POST   /api/cards/
-    // PUT    /api/cards/{card_id}
-    // GET    /api/cards/by-slug/{slug}
-    // GET    /api/cards/{card_id}/feedback
-    // GET    /api/cards/{card_id}/quotes
+    // même domaine que l’API -> on utilise des URLs relatives
+    const API_BASE = "";
 
     let currentCardId = null;
     let currentSlug = null;
@@ -587,5 +580,6 @@
   </script>
 </body>
 </html>
+
 
 
