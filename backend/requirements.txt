@@ -7,4 +7,5 @@ qrcode
 pillow
 python-multipart
 itsdangerous
+psycopg2-binary
 
