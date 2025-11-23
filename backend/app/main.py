@@ -1,19 +1,21 @@
 from pathlib import Path
 
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
+from sqlalchemy.orm import Session
 
-from .database import Base, engine
 from .routers import public, cards
+from .database import Base, engine, get_db
+from . import models, schemas
 
 # -------------------------------------------------------------------
 # CONFIG SIMPLE POUR LE LOGIN ADMIN
 # -------------------------------------------------------------------
-ADMIN_PASSWORD = "maavnica2025"  # à changer si besoin
-SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"
+ADMIN_PASSWORD = "maavnica2025"  # à changer si tu veux
+SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"  # chaîne longue = mieux
 
 # -------------------------------------------------------------------
 # CREATION APP + DB
@@ -25,12 +27,17 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS : on autorise localhost + ton static Render
+# -------------------------------------------------------------------
+# CORS (front Render + localhost)
+# -------------------------------------------------------------------
 origins = [
     "http://localhost",
-    "http://localhost:8000",
+    "http://127.0.0.1",
     "http://127.0.0.1:8000",
-    "https://maavnica-smartcard-v2-1.onrender.com",  # static site
+    "http://localhost:8000",
+    # tes fronts Render actuels
+    "https://maavnica-smartcard-v2.onrender.com",
+    "https://maavnica-smartcard-v2-1.onrender.com",
 ]
 
 app.add_middleware(
@@ -41,32 +48,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Sessions pour le login admin
+# Middleware de session (pour savoir si l'admin est connecté)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 
-# -------------------------------------------------------------------
-# CHEMINS DE BASE + STATIC
-# -------------------------------------------------------------------
-# __file__ = backend/app/main.py
-# parents[0] = .../backend/app
-# parents[1] = .../backend
-# parents[2] = .../maavnica-smartcard (racine du projet)
-BASE_DIR = Path(__file__).resolve().parents[2]
+# Chemins de base
+BASE_DIR = Path(__file__).resolve().parents[2]   # dossier "maavnica-smartcard"
 STATIC_DIR = BASE_DIR / "static"
 FRONTEND_DIR = BASE_DIR / "frontend"
 
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
+# Fichiers statiques (pour les QR codes notamment)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# -------------------------------------------------------------------
-# ROUTES API
-# -------------------------------------------------------------------
-# API publique utilisée par la carte publique
+# Routes API "officielles"
 app.include_router(public.router, prefix="/api/public", tags=["public"])
-
-# API d’admin pour gérer les cartes
-# ⇒ endpoints : /api/cards/..., /api/cards/by-slug/{slug}, etc.
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
 
@@ -124,17 +120,14 @@ def login(password: str = Form(...), request: Request = None):
 # -------------------------------------------------------------------
 # PAGES FRONT
 # -------------------------------------------------------------------
-# Carte publique : /c/{slug}
+# Servir la SmartCard publique
 @app.get("/c/{slug}", response_class=HTMLResponse)
 def serve_card_page(slug: str):
-    """
-    Renvoie la page HTML publique. Le JS récupère le slug depuis l'URL.
-    """
     html_path = FRONTEND_DIR / "public-card" / "index.html"
     return FileResponse(str(html_path))
 
 
-# Back-office admin (protégé par login) : /admin
+# Servir le mini back-office (protégé par login)
 @app.get("/admin", response_class=HTMLResponse)
 def serve_admin(request: Request):
     if not request.session.get("is_admin"):
@@ -144,10 +137,59 @@ def serve_admin(request: Request):
     return FileResponse(str(html_path))
 
 
-# Landing page Maavnica SmartCard : /smartcard
+# Landing page Maavnica SmartCard
 @app.get("/smartcard", response_class=HTMLResponse)
 def smartcard_landing():
     html_path = FRONTEND_DIR / "landing" / "index.html"
     return FileResponse(str(html_path))
+
+
+# -------------------------------------------------------------------
+# ENDPOINTS DE COMPATIBILITÉ POUR L'ADMIN (v1)
+# -------------------------------------------------------------------
+# L'admin appelle encore :
+#   GET /api/by-slug/{slug}
+#   GET /api/{card_id}/feedback
+#   GET /api/{card_id}/quotes
+# On les branche directement sur la même base que /api/cards/...
+
+
+@app.get("/api/by-slug/{slug}", response_model=schemas.CardOut, tags=["compat"])
+def get_card_by_slug_compat(slug: str, db: Session = Depends(get_db)):
+    card = db.query(models.Card).filter(models.Card.slug == slug).first()
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    return card
+
+
+@app.get(
+    "/api/{card_id}/feedback",
+    response_model=list[schemas.FeedbackOut],
+    tags=["compat"],
+)
+def list_feedback_compat(card_id: int, db: Session = Depends(get_db)):
+    feedbacks = (
+        db.query(models.Feedback)
+        .filter(models.Feedback.card_id == card_id)
+        .order_by(models.Feedback.created_at.desc())
+        .all()
+    )
+    return feedbacks
+
+
+@app.get(
+    "/api/{card_id}/quotes",
+    response_model=list[schemas.QuoteOut],
+    tags=["compat"],
+)
+def list_quotes_compat(card_id: int, db: Session = Depends(get_db)):
+    quotes = (
+        db.query(models.Quote)
+        .filter(models.Quote.card_id == card_id)
+        .order_by(models.Quote.created_at.desc())
+        .all()
+    )
+    return quotes
+
 
 
