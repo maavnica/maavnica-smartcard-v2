@@ -1,9 +1,10 @@
-
 fastapi
 uvicorn[standard]
 sqlalchemy
 pydantic
 pydantic[email]
 qrcode
+pillow
 python-multipart
 itsdangerous
+
