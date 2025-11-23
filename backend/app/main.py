@@ -8,34 +8,60 @@ from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
 
 from .routers import public, cards
-from .database import Base, engine, get_db
+from .database import Base, engine, get_db, SessionLocal
 from . import models, schemas
 
 # -------------------------------------------------------------------
 # CONFIG SIMPLE POUR LE LOGIN ADMIN
 # -------------------------------------------------------------------
 ADMIN_PASSWORD = "maavnica2025"  # à changer si tu veux
-SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"  # chaîne longue = mieux
+SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"
 
 # -------------------------------------------------------------------
 # CREATION APP + DB
 # -------------------------------------------------------------------
 Base.metadata.create_all(bind=engine)
 
+
+# -------------------------------------------------------------------
+# AUTO-CREATION DE L'UTILISATEUR OWNER (ID = 1)
+# -------------------------------------------------------------------
+def init_default_user():
+    db = SessionLocal()
+    try:
+        # Vérifie si un user existe déjà
+        existing = db.query(models.User).first()
+        if not existing:
+            user = models.User(
+                email="owner@maavnica.com",
+                password_hash="changeme"
+            )
+            db.add(user)
+            db.commit()
+    finally:
+        db.close()
+
+
+# On initialise l’utilisateur par défaut
+init_default_user()
+
+
+# -------------------------------------------------------------------
+# INSTANCE FASTAPI
+# -------------------------------------------------------------------
 app = FastAPI(
     title="Maavnica SmartCard API",
     version="1.0.0",
 )
 
 # -------------------------------------------------------------------
-# CORS (front Render + localhost)
+# CORS
 # -------------------------------------------------------------------
 origins = [
     "http://localhost",
     "http://127.0.0.1",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    # tes fronts Render actuels
     "https://maavnica-smartcard-v2.onrender.com",
     "https://maavnica-smartcard-v2-1.onrender.com",
 ]
@@ -48,20 +74,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Middleware de session (pour savoir si l'admin est connecté)
+# Sessions (login admin)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 
-# Chemins de base
-BASE_DIR = Path(__file__).resolve().parents[2]   # dossier "maavnica-smartcard"
+# -------------------------------------------------------------------
+# STATIC & FRONT
+# -------------------------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parents[2]
 STATIC_DIR = BASE_DIR / "static"
 FRONTEND_DIR = BASE_DIR / "frontend"
 
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
-# Fichiers statiques (pour les QR codes notamment)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Routes API "officielles"
+# Routes API
 app.include_router(public.router, prefix="/api/public", tags=["public"])
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
@@ -75,7 +102,7 @@ def read_root():
 
 
 # -------------------------------------------------------------------
-# LOGIN ADMIN SIMPLE
+# LOGIN ADMIN
 # -------------------------------------------------------------------
 @app.get("/login", response_class=HTMLResponse)
 def login_page():
@@ -87,17 +114,19 @@ def login_page():
       <title>Connexion admin – Maavnica SmartCard</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
-    <body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#F3F4F6; margin:0;">
-      <div style="max-width:360px; margin:80px auto; background:white; padding:24px; border-radius:16px; box-shadow:0 10px 30px rgba(15,23,42,0.12);">
-        <h2 style="margin-top:0; margin-bottom:8px; font-size:22px;">Connexion admin</h2>
-        <p style="margin-top:0; margin-bottom:16px; color:#6B7280; font-size:14px;">
+    <body style="font-family: system-ui; background:#F3F4F6; margin:0;">
+      <div style="max-width:360px; margin:80px auto; background:white;
+           padding:24px; border-radius:16px; box-shadow:0 10px 30px rgba(15,23,42,0.12);">
+        <h2 style="margin:0 0 8px;">Connexion admin</h2>
+        <p style="margin:0 0 16px; color:#6B7280; font-size:14px;">
           Entrez le mot de passe pour accéder à l'espace d'administration.
         </p>
         <form method="POST">
           <input type="password" name="password" placeholder="Mot de passe"
-                 style="width:100%; padding:10px 12px; border-radius:8px; border:1px solid #D1D5DB; font-size:14px; box-sizing:border-box; margin-bottom:12px;" />
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #D1D5DB; margin-bottom:12px;" />
           <button type="submit"
-                  style="width:100%; padding:10px 16px; border:none; border-radius:999px; background:#2563EB; color:white; font-weight:600; cursor:pointer;">
+            style="width:100%; padding:10px; border:none; border-radius:999px;
+                   background:#2563EB; color:white; font-weight:600;">
             Se connecter
           </button>
         </form>
@@ -113,31 +142,26 @@ def login(password: str = Form(...), request: Request = None):
     if password == ADMIN_PASSWORD:
         request.session["is_admin"] = True
         return RedirectResponse("/admin", status_code=302)
-
     return RedirectResponse("/login", status_code=302)
 
 
 # -------------------------------------------------------------------
 # PAGES FRONT
 # -------------------------------------------------------------------
-# Servir la SmartCard publique
 @app.get("/c/{slug}", response_class=HTMLResponse)
 def serve_card_page(slug: str):
     html_path = FRONTEND_DIR / "public-card" / "index.html"
     return FileResponse(str(html_path))
 
 
-# Servir le mini back-office (protégé par login)
 @app.get("/admin", response_class=HTMLResponse)
 def serve_admin(request: Request):
     if not request.session.get("is_admin"):
         return RedirectResponse("/login", status_code=302)
-
     html_path = FRONTEND_DIR / "admin" / "index.html"
     return FileResponse(str(html_path))
 
 
-# Landing page Maavnica SmartCard
 @app.get("/smartcard", response_class=HTMLResponse)
 def smartcard_landing():
     html_path = FRONTEND_DIR / "landing" / "index.html"
@@ -145,15 +169,8 @@ def smartcard_landing():
 
 
 # -------------------------------------------------------------------
-# ENDPOINTS DE COMPATIBILITÉ POUR L'ADMIN (v1)
+# ENDPOINTS COMPATIBILITÉ
 # -------------------------------------------------------------------
-# L'admin appelle encore :
-#   GET /api/by-slug/{slug}
-#   GET /api/{card_id}/feedback
-#   GET /api/{card_id}/quotes
-# On les branche directement sur la même base que /api/cards/...
-
-
 @app.get("/api/by-slug/{slug}", response_model=schemas.CardOut, tags=["compat"])
 def get_card_by_slug_compat(slug: str, db: Session = Depends(get_db)):
     card = db.query(models.Card).filter(models.Card.slug == slug).first()
@@ -162,34 +179,30 @@ def get_card_by_slug_compat(slug: str, db: Session = Depends(get_db)):
     return card
 
 
-@app.get(
-    "/api/{card_id}/feedback",
-    response_model=list[schemas.FeedbackOut],
-    tags=["compat"],
-)
+@app.get("/api/{card_id}/feedback",
+         response_model=list[schemas.FeedbackOut],
+         tags=["compat"])
 def list_feedback_compat(card_id: int, db: Session = Depends(get_db)):
-    feedbacks = (
+    return (
         db.query(models.Feedback)
         .filter(models.Feedback.card_id == card_id)
         .order_by(models.Feedback.created_at.desc())
         .all()
     )
-    return feedbacks
 
 
-@app.get(
-    "/api/{card_id}/quotes",
-    response_model=list[schemas.QuoteOut],
-    tags=["compat"],
-)
+@app.get("/api/{card_id}/quotes",
+         response_model=list[schemas.QuoteOut],
+         tags=["compat"])
 def list_quotes_compat(card_id: int, db: Session = Depends(get_db)):
-    quotes = (
+    return (
         db.query(models.Quote)
         .filter(models.Quote.card_id == card_id)
         .order_by(models.Quote.created_at.desc())
         .all()
     )
-    return quotes
+
+
 
 
 
