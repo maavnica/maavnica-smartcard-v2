@@ -125,7 +125,7 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37,99,235,.35);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, .35);
     }
 
     .btn-secondary {
@@ -221,158 +221,158 @@
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="topbar">
-      <div class="logo">MAAVNICA SMARTCARD – ADMIN</div>
-      <div class="pill">Prototype interne · 2025</div>
-    </div>
+<div class="page">
+  <div class="topbar">
+    <div class="logo">MAAVNICA SMARTCARD – ADMIN</div>
+    <div class="pill">Prototype interne · 2025</div>
+  </div>
 
-    <div class="grid">
-      <!-- COLONNE GAUCHE : CONFIG CARTE + STATS -->
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <span>Configuration de la SmartCard</span>
-          </div>
-          <div class="card-subtitle">
-            Créez une nouvelle carte ou modifiez-en une existante. Utilisez le slug pour charger une carte déjà créée.
-          </div>
+  <div class="grid">
+    <!-- COLONNE GAUCHE : CONFIG CARTE + STATS -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <span>Configuration de la SmartCard</span>
+        </div>
+        <div class="card-subtitle">
+          Créez une nouvelle carte ou modifiez-en une existante. Utilisez le slug pour charger une carte déjà créée.
+        </div>
 
-          <div style="margin-bottom: 8px;">
-            <label>Charger une carte existante via son slug</label>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <input id="load-slug" placeholder="ex. plomberie-martin" style="flex:1; max-width:260px;" />
-              <button class="btn-secondary" id="btn-load" type="button">Charger ma carte</button>
-            </div>
-          </div>
-
-          <hr style="border:none; border-top:1px solid #E5E7EB; margin:12px 0;" />
-
-          <div class="field-group">
-            <div>
-              <label>Nom de l’entreprise</label>
-              <input id="company_name" placeholder="Plomberie Martin, Électricien Dupond..." />
-            </div>
-            <div>
-              <label>Slug (pour l’URL publique)</label>
-              <input id="slug" placeholder="plomberie-martin" />
-            </div>
-          </div>
-
-          <div class="field-group" style="margin-top:8px;">
-            <div>
-              <label>Lien avis Google</label>
-              <input id="google_review_link" placeholder="https://..." />
-            </div>
-            <div>
-              <label>Couleur principale</label>
-              <input id="theme_color" type="color" value="#2563EB" />
-            </div>
-          </div>
-
-          <div class="field-group" style="margin-top:8px%;">
-            <div>
-              <label>Téléphone</label>
-              <input id="phone" placeholder="0600000000" />
-            </div>
-            <div>
-              <label>WhatsApp (ex. 33600000000)</label>
-              <input id="whatsapp" placeholder="33600000000" />
-            </div>
-          </div>
-
-          <div class="field-group" style="margin-top:8px;">
-            <div>
-              <label>Lien de paiement (facultatif)</label>
-              <input id="payment_link" placeholder="https://..." />
-            </div>
-            <div>
-              <label>Instagram (facultatif)</label>
-              <input id="instagram" placeholder="https://instagram.com/..." />
-            </div>
-          </div>
-
-          <div class="field-group" style="margin-top:8px;">
-            <div>
-              <label>Facebook (facultatif)</label>
-              <input id="facebook" placeholder="https://facebook.com/..." />
-            </div>
-            <div>
-              <label>TikTok (facultatif)</label>
-              <input id="tiktok" placeholder="https://tiktok.com/@..." />
-            </div>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn-primary" id="btn-save" type="button">Enregistrer ma carte</button>
-            <button class="btn-secondary" type="button" id="btn-public">Voir la carte publique</button>
-          </div>
-
-          <div class="stats-row" style="margin-top:16px;">
-            <div class="stat-card">
-              <div class="stat-label">Avis collectés</div>
-              <div class="stat-value" id="stat-feedback-count">–</div>
-              <div class="stat-extra">Nombre total de retours rapides</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">Satisfaction</div>
-              <div class="stat-value" id="stat-satisfaction-rate">–</div>
-              <div class="stat-extra">Part de clients satisfaits</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">Demandes de devis</div>
-              <div class="stat-value" id="stat-quotes-count">–</div>
-              <div class="stat-extra">Demandes reçues via la SmartCard</div>
-            </div>
+        <div style="margin-bottom: 8px;">
+          <label>Charger une carte existante via son slug</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input id="load-slug" placeholder="ex. plomberie-martin" style="flex:1; max-width:260px;" />
+            <button class="btn-secondary" id="btn-load" type="button">Charger ma carte</button>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <span>QR Code de la carte</span>
+        <hr style="border:none; border-top:1px solid #E5E7EB; margin:12px 0;" />
+
+        <div class="field-group">
+          <div>
+            <label>Nom de l’entreprise</label>
+            <input id="company_name" placeholder="Plomberie Martin, Électricien Dupond..." />
           </div>
-          <div class="card-subtitle">
-            Ce QR code pointe vers la version publique de votre SmartCard.
+          <div>
+            <label>Slug (pour l’URL publique)</label>
+            <input id="slug" placeholder="plomberie-martin" />
           </div>
-          <div class="qr-wrapper">
-            <img id="qr-image" src="" alt="QR code SmartCard" style="display:none;" />
+        </div>
+
+        <div class="field-group" style="margin-top:8px;">
+          <div>
+            <label>Lien avis Google</label>
+            <input id="google_review_link" placeholder="https://..." />
+          </div>
+          <div>
+            <label>Couleur principale</label>
+            <input id="theme_color" type="color" value="#2563EB" />
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top:8px;">
+          <div>
+            <label>Téléphone</label>
+            <input id="phone" placeholder="0600000000" />
+          </div>
+          <div>
+            <label>WhatsApp (ex. 33600000000)</label>
+            <input id="whatsapp" placeholder="33600000000" />
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top:8px;">
+          <div>
+            <label>Lien de paiement (facultatif)</label>
+            <input id="payment_link" placeholder="https://..." />
+          </div>
+          <div>
+            <label>Instagram (facultatif)</label>
+            <input id="instagram" placeholder="https://instagram.com/..." />
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top:8px;">
+          <div>
+            <label>Facebook (facultatif)</label>
+            <input id="facebook" placeholder="https://facebook.com/..." />
+          </div>
+          <div>
+            <label>TikTok (facultatif)</label>
+            <input id="tiktok" placeholder="https://tiktok.com/@..." />
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-primary" id="btn-save" type="button">Enregistrer ma carte</button>
+          <button class="btn-secondary" type="button" id="btn-public">Voir la carte publique</button>
+        </div>
+
+        <div class="stats-row" style="margin-top:16px;">
+          <div class="stat-card">
+            <div class="stat-label">Avis collectés</div>
+            <div class="stat-value" id="stat-feedback-count">–</div>
+            <div class="stat-extra">Nombre total de retours rapides</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Satisfaction</div>
+            <div class="stat-value" id="stat-satisfaction-rate">–</div>
+            <div class="stat-extra">Part de clients satisfaits</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Demandes de devis</div>
+            <div class="stat-value" id="stat-quotes-count">–</div>
+            <div class="stat-extra">Demandes reçues via la SmartCard</div>
           </div>
         </div>
       </div>
 
-      <!-- COLONNE DROITE : AVIS & DEVIS -->
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <span>Avis & retours rapides</span>
-          </div>
-          <div class="card-subtitle">
-            Les retours envoyés depuis la carte (satisfait / pas satisfait + commentaire).
-          </div>
-          <div id="feedback-list">
-            <div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>
-          </div>
+      <div class="card">
+        <div class="card-header">
+          <span>QR Code de la carte</span>
         </div>
+        <div class="card-subtitle">
+          Ce QR code pointe vers la version publique de votre SmartCard.
+        </div>
+        <div class="qr-wrapper">
+          <img id="qr-image" src="" alt="QR code SmartCard" style="display:none;" />
+        </div>
+      </div>
+    </div>
 
-        <div class="card">
-          <div class="card-header">
-            <span>Demandes de devis</span>
-          </div>
-          <div class="card-subtitle">
-            Les demandes envoyées depuis la SmartCard (nom, contact, besoin).
-          </div>
-          <div id="quotes-list">
-            <div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>
-          </div>
+    <!-- COLONNE DROITE : AVIS & DEVIS -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <span>Avis & retours rapides</span>
+        </div>
+        <div class="card-subtitle">
+          Les retours envoyés depuis la carte (satisfait / pas satisfait + commentaire).
+        </div>
+        <div id="feedback-list">
+          <div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>Demandes de devis</span>
+        </div>
+        <div class="card-subtitle">
+          Les demandes envoyées depuis la SmartCard (nom, contact, besoin).
+        </div>
+        <div id="quotes-list">
+          <div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
+<script>
   console.log("Admin SmartCard chargé ✅");
 
-  // On reste en relatif : le front est servi par le même domaine que l'API.
+  // 👉 API sur Render
   const API_BASE = "";
 
   let currentCardId = null;
@@ -392,12 +392,16 @@
     try {
       console.log("Chargement de la carte pour le slug:", slug);
       const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+
       if (!res.ok) {
+        console.error("Réponse non OK:", res.status);
         alert("Aucune carte trouvée pour ce slug.");
         return;
       }
+
       const data = await res.json();
       console.log("Carte chargée:", data);
+
       currentCardId = data.id;
       currentSlug = data.slug;
 
@@ -539,7 +543,7 @@
         });
       } else {
         console.log("Création d'une nouvelle carte", payload);
-        res = await fetch(`${API_BASE}/api/cards/`, {
+        res = await fetch(`${API_BASE}/api/cards`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -558,6 +562,7 @@
       currentSlug = data.slug;
       document.getElementById("load-slug").value = data.slug;
       alert("Carte enregistrée ✅");
+
       await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
     } catch (e) {
       console.error(e);
@@ -578,4 +583,6 @@
   document.getElementById("btn-save").addEventListener("click", saveCard);
   document.getElementById("btn-public").addEventListener("click", openPublicCard);
 </script>
+</body>
+</html>
 
