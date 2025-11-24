@@ -5,584 +5,711 @@
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --primary: #2563EB;
+      --primary-soft: #1D4ED8;
+      --bg: #020617;
+      --card-bg: #0B1120;
+      --border: #1F2937;
+      --text-main: #0F172A;
+      --text-soft: #6B7280;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #F3F4F6;
-      margin: 0;
-      padding: 0;
+      color: var(--text-main);
     }
 
     .page {
-      max-width: 1040px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 16px 12px 32px;
     }
 
-    .topbar {
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      gap: 12px;
     }
 
-    .logo {
-      font-weight: 800;
-      letter-spacing: .15em;
-      font-size: 11px;
+    .brand {
+      font-size: 14px;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      color: #2563EB;
-    }
-
-    .pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      border: 1px solid #E5E7EB;
       color: #6B7280;
-      background: white;
     }
 
-    .grid {
+    .proto-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #E5E7EB;
+      color: #374151;
+    }
+
+    .layout {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
       gap: 16px;
+      align-items: flex-start;
     }
 
     @media (max-width: 900px) {
-      .grid {
+      .layout {
         grid-template-columns: 1fr;
       }
     }
 
     .card {
       background: white;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-      margin-bottom: 16px;
+      border-radius: 18px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      padding: 16px 16px 18px;
     }
 
-    .card-header {
+    .card-title {
       font-weight: 600;
-      margin-bottom: 8px;
       font-size: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      color: #6B7280;
-      margin-bottom: 10px;
-    }
-
-    .field-group {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .field-group {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    label {
-      font-size: 12px;
-      color: #4B5563;
-      display: block;
       margin-bottom: 4px;
     }
 
-    input, textarea {
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    input, select, textarea {
       width: 100%;
-      padding: 8px 10px;
       border-radius: 10px;
       border: 1px solid #D1D5DB;
+      padding: 8px 9px;
       font-size: 13px;
+      font-family: inherit;
       box-sizing: border-box;
       background: #F9FAFB;
     }
 
-    input[type="color"] {
-      padding: 0;
-      height: 32px;
-      cursor: pointer;
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.25);
+      background: white;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #9CA3AF;
     }
 
     textarea {
-      min-height: 60px;
+      min-height: 70px;
+      resize: vertical;
     }
 
-    .btn-primary {
-      padding: 9px 14px;
-      border-radius: 999px;
-      border: none;
-      background: #2563EB;
-      color: white;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37, 99, 235, .35);
-    }
-
-    .btn-secondary {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid #D1D5DB;
-      background: white;
-      color: #374151;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .stats-row {
+    .field-row {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
+      grid-template-columns: 1.1fr 1.1fr;
+      gap: 8px;
     }
 
-    @media (max-width: 640px) {
-      .stats-row {
+    @media (max-width: 600px) {
+      .field-row {
         grid-template-columns: 1fr;
       }
     }
 
-    .stat-card {
-      background: #F9FAFB;
-      border-radius: 12px;
-      padding: 10px 12px;
-      border: 1px solid #E5E7EB;
-      font-size: 13px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: #6B7280;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 4px;
-    }
-
-    .stat-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: #111827;
-    }
-
-    .stat-extra {
+    .small-hint {
       font-size: 11px;
       color: #6B7280;
       margin-top: 2px;
     }
 
-    .list-item {
-      border-bottom: 1px solid #E5E7EB;
-      padding: 8px 0;
+    .top-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .top-row > div {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
       font-size: 13px;
-    }
-
-    .list-item:last-child {
-      border-bottom: none;
-    }
-
-    .list-title {
       font-weight: 500;
-      margin-bottom: 2px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
     }
 
-    .list-meta {
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      color: white;
+      box-shadow: 0 12px 24px rgba(37,99,235,0.35);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #D1D5DB;
+      color: #374151;
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 10px 0 4px;
+    }
+
+    .section-sub {
       font-size: 11px;
       color: #6B7280;
-      margin-bottom: 2px;
+      margin-bottom: 8px;
     }
 
-    .qr-wrapper {
-      text-align: center;
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #E5E7EB;
+      font-size: 11px;
+      color: #4B5563;
+      background: #F9FAFB;
+    }
+
+    .pill.badge {
+      border-style: dashed;
+      border-color: #CBD5F5;
+      background: #EEF2FF;
+      color: #4338CA;
+    }
+
+    .stat {
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .stat span {
+      font-weight: 600;
+    }
+
+    .list {
       margin-top: 10px;
+      border-top: 1px solid #E5E7EB;
+      padding-top: 8px;
     }
 
-    .qr-wrapper img {
-      max-width: 160px;
-      border-radius: 14px;
-      border: 8px solid #F3F4F6;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.25);
+    .list-item {
+      padding: 6px 0;
+      border-bottom: 1px dashed #E5E7EB;
+      font-size: 12px;
+    }
+
+    .list-item strong {
+      font-weight: 600;
+    }
+
+    .list-item small {
+      color: #9CA3AF;
+      font-size: 11px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22C55E;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.28);
+      margin-right: 4px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: #22C55E;
+      color: #052E16;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      box-shadow: 0 12px 30px rgba(22,163,74,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease-out, transform .2s ease-out;
+    }
+
+    .toast.error {
+      background: #F97373;
+      color: #450A0A;
+      box-shadow: 0 12px 30px rgba(248,113,113,0.5);
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -4px);
+    }
+
+    .preview-link {
+      font-size: 12px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .preview-link span {
+      margin-left: 3px;
     }
   </style>
 </head>
 <body>
-<div class="page">
-  <div class="topbar">
-    <div class="logo">MAAVNICA SMARTCARD – ADMIN</div>
-    <div class="pill">Prototype interne · 2025</div>
-  </div>
-
-  <div class="grid">
-    <!-- COLONNE GAUCHE : CONFIG CARTE + STATS -->
-    <div>
-      <div class="card">
-        <div class="card-header">
-          <span>Configuration de la SmartCard</span>
+  <div class="page">
+    <header>
+      <div>
+        <div class="brand">MAAVNICA SMARTCARD – ADMIN</div>
+        <div style="font-size:13px; color:#374151; margin-top:2px;">
+          Pilote vos cartes pro : avis Google, contacts et demandes de devis.
         </div>
-        <div class="card-subtitle">
+      </div>
+      <div class="proto-tag">Prototype interne · 2025</div>
+    </header>
+
+    <div class="layout">
+      <!-- COLONNE GAUCHE : CONFIG CARTE -->
+      <div class="card">
+        <div class="card-title">Configuration de la SmartCard</div>
+        <div class="card-sub">
           Créez une nouvelle carte ou modifiez-en une existante. Utilisez le slug pour charger une carte déjà créée.
         </div>
 
-        <div style="margin-bottom: 8px;">
-          <label>Charger une carte existante via son slug</label>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <input id="load-slug" placeholder="ex. plomberie-martin" style="flex:1; max-width:260px;" />
-            <button class="btn-secondary" id="btn-load" type="button">Charger ma carte</button>
+        <div class="top-row">
+          <div>
+            <label>Charger une carte existante via son slug</label>
+            <input id="load-slug-input" placeholder="ex. plomberie-jules" />
+          </div>
+          <div style="flex:0 0 auto;">
+            <button class="btn btn-secondary btn-small" id="btn-load-card">Charger ma carte</button>
           </div>
         </div>
 
-        <hr style="border:none; border-top:1px solid #E5E7EB; margin:12px 0;" />
+        <hr style="border:none; border-top:1px solid #E5E7EB; margin:10px 0 14px;" />
 
-        <div class="field-group">
-          <div>
-            <label>Nom de l’entreprise</label>
-            <input id="company_name" placeholder="Plomberie Martin, Électricien Dupond..." />
-          </div>
-          <div>
-            <label>Slug (pour l’URL publique)</label>
-            <input id="slug" placeholder="plomberie-martin" />
+        <div style="margin-bottom:10px;">
+          <label>Nom de l’entreprise</label>
+          <input id="company-name" placeholder="Plomberie Jules, Électricien Dupont…" />
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label>Slug (pour l’URL publique)</label>
+          <input id="slug" placeholder="plomberie-jules" />
+          <div class="small-hint">
+            Lien public : <code>https://maavnica-smartcard-v2.onrender.com/c/&lt;slug&gt;</code>
           </div>
         </div>
 
-        <div class="field-group" style="margin-top:8px;">
+        <div style="margin-bottom:10px;">
+          <label>Lien avis Google</label>
+          <input id="google-review-link" placeholder="https://search.google.com/local/writereview?placeid=…" />
+        </div>
+
+        <div class="field-row" style="margin-bottom:10px;">
           <div>
-            <label>Lien avis Google</label>
-            <input id="google_review_link" placeholder="https://..." />
+            <label>Téléphone</label>
+            <input id="phone" placeholder="06…" />
+          </div>
+          <div>
+            <label>WhatsApp</label>
+            <input id="whatsapp" placeholder="Numéro au format international (ex : 336…)" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label>Lien de paiement sécurisé</label>
+          <input id="payment-link" placeholder="Lien Stripe / paiement en ligne (optionnel)" />
+        </div>
+
+        <div class="field-row" style="margin-bottom:10px;">
+          <div>
+            <label>Instagram</label>
+            <input id="instagram" placeholder="https://instagram.com/…" />
+          </div>
+          <div>
+            <label>Facebook</label>
+            <input id="facebook" placeholder="https://facebook.com/…" />
+          </div>
+        </div>
+
+        <div class="field-row" style="margin-bottom:10px;">
+          <div>
+            <label>TikTok</label>
+            <input id="tiktok" placeholder="https://www.tiktok.com/@…" />
           </div>
           <div>
             <label>Couleur principale</label>
-            <input id="theme_color" type="color" value="#2563EB" />
+            <input id="theme-color" type="color" value="#2563EB" />
           </div>
         </div>
 
-        <div class="field-group" style="margin-top:8px;">
-          <div>
-            <label>Téléphone</label>
-            <input id="phone" placeholder="0600000000" />
-          </div>
-          <div>
-            <label>WhatsApp (ex. 33600000000)</label>
-            <input id="whatsapp" placeholder="33600000000" />
-          </div>
+        <div style="margin-bottom:10px;">
+          <label>Style visuel de la carte</label>
+          <select id="theme">
+            <option value="apple">Apple · Clean et lumineux</option>
+            <option value="material">Material · Couleurs vives</option>
+            <option value="black-gold">Black & Gold · Premium</option>
+            <option value="artisan">Artisan · Texture chaleureuse</option>
+          </select>
         </div>
 
-        <div class="field-group" style="margin-top:8px;">
-          <div>
-            <label>Lien de paiement (facultatif)</label>
-            <input id="payment_link" placeholder="https://..." />
-          </div>
-          <div>
-            <label>Instagram (facultatif)</label>
-            <input id="instagram" placeholder="https://instagram.com/..." />
-          </div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <button class="btn btn-primary" id="btn-save-card">
+            💾 Sauvegarder ma SmartCard
+          </button>
+          <a href="#" id="preview-link" class="preview-link" target="_blank" rel="noopener">
+            <span>Prévisualiser la carte</span> ↗
+          </a>
         </div>
 
-        <div class="field-group" style="margin-top:8px;">
-          <div>
-            <label>Facebook (facultatif)</label>
-            <input id="facebook" placeholder="https://facebook.com/..." />
-          </div>
-          <div>
-            <label>TikTok (facultatif)</label>
-            <input id="tiktok" placeholder="https://tiktok.com/@..." />
-          </div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn-primary" id="btn-save" type="button">Enregistrer ma carte</button>
-          <button class="btn-secondary" type="button" id="btn-public">Voir la carte publique</button>
-        </div>
-
-        <div class="stats-row" style="margin-top:16px;">
-          <div class="stat-card">
-            <div class="stat-label">Avis collectés</div>
-            <div class="stat-value" id="stat-feedback-count">–</div>
-            <div class="stat-extra">Nombre total de retours rapides</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Satisfaction</div>
-            <div class="stat-value" id="stat-satisfaction-rate">–</div>
-            <div class="stat-extra">Part de clients satisfaits</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Demandes de devis</div>
-            <div class="stat-value" id="stat-quotes-count">–</div>
-            <div class="stat-extra">Demandes reçues via la SmartCard</div>
-          </div>
+        <div class="small-hint" style="margin-top:6px;">
+          Une fois la carte créée, vous pouvez l’utiliser sur vos devis, signatures mail, flyers, QR codes, etc.
         </div>
       </div>
 
+      <!-- COLONNE DROITE : FLUX CLIENTS -->
       <div class="card">
-        <div class="card-header">
-          <span>QR Code de la carte</span>
+        <div class="card-title">
+          Flux clients & retours
         </div>
-        <div class="card-subtitle">
-          Ce QR code pointe vers la version publique de votre SmartCard.
+        <div class="card-sub">
+          Suivez en direct les avis rapides et les demandes de devis reçus via la SmartCard.
         </div>
-        <div class="qr-wrapper">
-          <img id="qr-image" src="" alt="QR code SmartCard" style="display:none;" />
-        </div>
-      </div>
-    </div>
 
-    <!-- COLONNE DROITE : AVIS & DEVIS -->
-    <div>
-      <div class="card">
-        <div class="card-header">
-          <span>Avis & retours rapides</span>
+        <div style="margin-bottom:10px; font-size:12px; color:#4B5563;">
+          <span class="status-dot"></span>
+          <span id="current-card-label">Aucune carte sélectionnée.</span>
         </div>
-        <div class="card-subtitle">
-          Les retours envoyés depuis la carte (satisfait / pas satisfait + commentaire).
-        </div>
-        <div id="feedback-list">
-          <div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-header">
-          <span>Demandes de devis</span>
+        <div class="pill-row">
+          <div class="pill badge">Avis Google = visibilité 🟡</div>
+          <div class="pill">Avis rapide = qualité 📊</div>
+          <div class="pill">Devis = chiffre d’affaires 💶</div>
         </div>
-        <div class="card-subtitle">
-          Les demandes envoyées depuis la SmartCard (nom, contact, besoin).
+
+        <div class="section-title">Avis rapides</div>
+        <div class="section-sub">
+          Feedback 1-clic laissé par les clients après l’intervention.
         </div>
-        <div id="quotes-list">
-          <div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>
+
+        <div class="stat">
+          Total avis : <span id="feedback-count">0</span> ·
+          Satisfaits : <span id="feedback-happy">0</span> ·
+          Pas satisfaits : <span id="feedback-unhappy">0</span>
+        </div>
+
+        <div class="list" id="feedback-list">
+          <div style="font-size:12px; color:#9CA3AF;">
+            Aucun avis pour le moment. Dès qu’un client répond, il apparaîtra ici.
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:14px;">Demandes de devis</div>
+        <div class="section-sub">
+          Les demandes envoyées depuis la carte publique (nom, téléphone, description du besoin).
+        </div>
+
+        <div class="stat">
+          Total demandes : <span id="quotes-count">0</span>
+        </div>
+
+        <div class="list" id="quotes-list">
+          <div style="font-size:12px; color:#9CA3AF;">
+            Aucune demande pour le moment.
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  console.log("Admin SmartCard chargé ✅");
+  <div class="toast" id="toast"></div>
 
-  // 👉 API sur Render
-  const API_BASE = "";
-
-  let currentCardId = null;
-  let currentSlug = null;
-
-  function openPublicCard() {
-    const slugInput = document.getElementById("slug").value.trim();
-    if (!slugInput) {
-      alert("Merci de renseigner un slug avant d’ouvrir la carte publique.");
-      return;
-    }
-    window.open("/c/" + slugInput, "_blank");
-  }
-
-  async function loadCardBySlug(slug) {
-    if (!slug) return;
-    try {
-      console.log("Chargement de la carte pour le slug:", slug);
-      const res = await fetch(`${API_BASE}/api/cards/by-slug/${encodeURIComponent(slug)}`);
-
-      if (!res.ok) {
-        console.error("Réponse non OK:", res.status);
-        alert("Aucune carte trouvée pour ce slug.");
-        return;
-      }
-
-      const data = await res.json();
-      console.log("Carte chargée:", data);
-
-      currentCardId = data.id;
-      currentSlug = data.slug;
-
-      document.getElementById("company_name").value = data.company_name || "";
-      document.getElementById("slug").value = data.slug || "";
-      document.getElementById("google_review_link").value = data.google_review_link || "";
-      document.getElementById("phone").value = data.phone || "";
-      document.getElementById("whatsapp").value = data.whatsapp || "";
-      document.getElementById("payment_link").value = data.payment_link || "";
-      document.getElementById("instagram").value = data.instagram || "";
-      document.getElementById("facebook").value = data.facebook || "";
-      document.getElementById("tiktok").value = data.tiktok || "";
-      if (data.theme_color) {
-        document.getElementById("theme_color").value = data.theme_color;
-      }
-
-      const qrImg = document.getElementById("qr-image");
-      if (data.qr_url) {
-        qrImg.src = data.qr_url;
-        qrImg.style.display = "inline-block";
-      } else {
-        qrImg.style.display = "none";
-      }
-
-      await Promise.all([
-        loadFeedback(data.id),
-        loadQuotes(data.id),
-      ]);
-    } catch (e) {
-      console.error(e);
-      alert("Erreur lors du chargement de la carte.");
-    }
-  }
-
-  async function loadFeedback(cardId) {
-    const feedbackContainer = document.getElementById("feedback-list");
-    feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
-
-    try {
-      const res = await fetch(`${API_BASE}/api/cards/${cardId}/feedback`);
-      if (!res.ok) {
-        feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-        return;
-      }
-      const items = await res.json();
-
-      if (!items.length) {
-        feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucun retour pour le moment.</div>';
-      } else {
-        feedbackContainer.innerHTML = "";
-        let positive = 0;
-        items.forEach(fb => {
-          if (fb.satisfaction) positive += 1;
-          const div = document.createElement("div");
-          div.className = "list-item";
-          div.innerHTML = `
-            <div class="list-title">${fb.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
-            <div class="list-meta">${fb.created_at || ""}</div>
-            <div>${fb.comment || "<i>Aucun commentaire</i>"}</div>
-          `;
-          feedbackContainer.appendChild(div);
-        });
-
-        const total = items.length;
-        const rate = total ? Math.round((positive / total) * 100) : 0;
-        document.getElementById("stat-feedback-count").textContent = total;
-        document.getElementById("stat-satisfaction-rate").textContent = total ? rate + " %" : "–";
-      }
-    } catch (e) {
-      console.error(e);
-      feedbackContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-    }
-  }
-
-  async function loadQuotes(cardId) {
-    const quotesContainer = document.getElementById("quotes-list");
-    quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Chargement…</div>';
-
-    try {
-      const res = await fetch(`${API_BASE}/api/cards/${cardId}/quotes`);
-      if (!res.ok) {
-        quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-        return;
-      }
-      const items = await res.json();
-
-      if (!items.length) {
-        quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Aucune demande pour le moment.</div>';
-      } else {
-        quotesContainer.innerHTML = "";
-        items.forEach(q => {
-          const div = document.createElement("div");
-          div.className = "list-item";
-          div.innerHTML = `
-            <div class="list-title">${q.name || "Sans nom"}</div>
-            <div class="list-meta">
-              ${q.phone || ""}${q.phone && q.email ? " · " : ""}${q.email || ""}${q.created_at ? " · " + q.created_at : ""}
-            </div>
-            <div>${q.message || "<i>Aucun détail fourni</i>"}</div>
-          `;
-          quotesContainer.appendChild(div);
-        });
-
-        document.getElementById("stat-quotes-count").textContent = items.length;
-      }
-    } catch (e) {
-      console.error(e);
-      quotesContainer.innerHTML = '<div style="font-size:13px; color:#9CA3AF;">Erreur de chargement.</div>';
-    }
-  }
-
-  async function saveCard() {
-    const payload = {
-      company_name: document.getElementById("company_name").value.trim(),
-      slug: document.getElementById("slug").value.trim(),
-      google_review_link: document.getElementById("google_review_link").value.trim(),
-      phone: document.getElementById("phone").value.trim() || null,
-      whatsapp: document.getElementById("whatsapp").value.trim() || null,
-      payment_link: document.getElementById("payment_link").value.trim() || null,
-      instagram: document.getElementById("instagram").value.trim() || null,
-      facebook: document.getElementById("facebook").value.trim() || null,
-      tiktok: document.getElementById("tiktok").value.trim() || null,
-      theme_color: document.getElementById("theme_color").value
-    };
-
-    if (!payload.company_name || !payload.slug || !payload.google_review_link) {
-      alert("Merci de renseigner au minimum le nom de l’entreprise, le slug et le lien Google.");
-      return;
+  <script>
+    // ------------------------
+    // Helpers
+    // ------------------------
+    function showToast(message, isError = false) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.toggle("error", isError);
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    try {
-      let res;
-      if (currentCardId) {
-        console.log("Mise à jour de la carte", currentCardId, payload);
-        res = await fetch(`${API_BASE}/api/cards/${currentCardId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-      } else {
-        console.log("Création d'une nouvelle carte", payload);
-        res = await fetch(`${API_BASE}/api/cards`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-      }
+    function getApiBase() {
+      // même origine que /admin
+      return "";
+    }
 
+    let currentCardId = null;
+    let currentSlug = null;
+
+    function fillForm(card) {
+      currentCardId = card.id;
+      currentSlug = card.slug;
+
+      document.getElementById("company-name").value = card.company_name || "";
+      document.getElementById("slug").value = card.slug || "";
+      document.getElementById("google-review-link").value = card.google_review_link || "";
+      document.getElementById("phone").value = card.phone || "";
+      document.getElementById("whatsapp").value = card.whatsapp || "";
+      document.getElementById("payment-link").value = card.payment_link || "";
+      document.getElementById("instagram").value = card.instagram || "";
+      document.getElementById("facebook").value = card.facebook || "";
+      document.getElementById("tiktok").value = card.tiktok || "";
+      document.getElementById("theme-color").value = card.theme_color || "#2563EB";
+      document.getElementById("theme").value = card.theme || "apple";
+
+      document.getElementById("current-card-label").textContent =
+        `Carte chargée : ${card.company_name || "(sans nom)"} – slug : ${card.slug}`;
+
+      const previewLink = document.getElementById("preview-link");
+      previewLink.href = `/c/${encodeURIComponent(card.slug)}`;
+    }
+
+    function getCardPayload() {
+      return {
+        company_name: document.getElementById("company-name").value.trim(),
+        slug: document.getElementById("slug").value.trim(),
+        google_review_link: document.getElementById("google-review-link").value.trim() || null,
+        phone: document.getElementById("phone").value.trim() || null,
+        whatsapp: document.getElementById("whatsapp").value.trim() || null,
+        payment_link: document.getElementById("payment-link").value.trim() || null,
+        instagram: document.getElementById("instagram").value.trim() || null,
+        facebook: document.getElementById("facebook").value.trim() || null,
+        tiktok: document.getElementById("tiktok").value.trim() || null,
+        theme_color: document.getElementById("theme-color").value || "#2563EB",
+        theme: document.getElementById("theme").value || "apple"
+      };
+    }
+
+    // ------------------------
+    // API calls
+    // ------------------------
+    async function createCard() {
+      const payload = getCardPayload();
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/cards/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
       if (!res.ok) {
         const txt = await res.text();
-        console.error("Erreur API", res.status, txt);
-        alert("Erreur lors de l’enregistrement (code " + res.status + ").");
+        throw new Error(`Erreur création (${res.status}) : ${txt}`);
+      }
+      return await res.json();
+    }
+
+    async function updateCard(id) {
+      const payload = getCardPayload();
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/cards/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Erreur mise à jour (${res.status}) : ${txt}`);
+      }
+      return await res.json();
+    }
+
+    async function loadCardBySlug(slug) {
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Carte introuvable (${res.status}) : ${txt}`);
+      }
+      return await res.json();
+    }
+
+    async function fetchFeedback(cardId) {
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/${cardId}/feedback`);
+      if (!res.ok) return [];
+      return await res.json();
+    }
+
+    async function fetchQuotes(cardId) {
+      const base = getApiBase();
+      const res = await fetch(`${base}/api/${cardId}/quotes`);
+      if (!res.ok) return [];
+      return await res.json();
+    }
+
+    // ------------------------
+    // Render lists
+    // ------------------------
+    function renderFeedbackList(items) {
+      const list = document.getElementById("feedback-list");
+      list.innerHTML = "";
+      if (!items.length) {
+        list.innerHTML = '<div style="font-size:12px; color:#9CA3AF;">Aucun avis pour le moment.</div>';
+        document.getElementById("feedback-count").textContent = "0";
+        document.getElementById("feedback-happy").textContent = "0";
+        document.getElementById("feedback-unhappy").textContent = "0";
         return;
       }
 
-      const data = await res.json();
-      currentCardId = data.id;
-      currentSlug = data.slug;
-      document.getElementById("load-slug").value = data.slug;
-      alert("Carte enregistrée ✅");
+      let happy = 0, unhappy = 0;
+      for (const f of items) {
+        if (f.satisfaction) happy++; else unhappy++;
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `
+          <strong>${f.satisfaction ? "😊 Satisfait" : "🙁 Pas satisfait"}</strong>
+          <br />
+          ${f.comment ? `<span>${f.comment}</span><br />` : ""}
+          <small>${new Date(f.created_at).toLocaleString("fr-FR")}</small>
+        `;
+        list.appendChild(div);
+      }
 
-      await Promise.all([loadFeedback(data.id), loadQuotes(data.id)]);
-    } catch (e) {
-      console.error(e);
-      alert("Erreur réseau lors de l’enregistrement.");
+      document.getElementById("feedback-count").textContent = items.length.toString();
+      document.getElementById("feedback-happy").textContent = happy.toString();
+      document.getElementById("feedback-unhappy").textContent = unhappy.toString();
     }
-  }
 
-  // === ÉCOUTEURS ===
-  document.getElementById("btn-load").addEventListener("click", () => {
-    const slug = document.getElementById("load-slug").value.trim();
-    if (!slug) {
-      alert("Merci de saisir un slug à charger.");
-      return;
+    function renderQuotesList(items) {
+      const list = document.getElementById("quotes-list");
+      list.innerHTML = "";
+      if (!items.length) {
+        list.innerHTML = '<div style="font-size:12px; color:#9CA3AF;">Aucune demande pour le moment.</div>';
+        document.getElementById("quotes-count").textContent = "0";
+        return;
+      }
+
+      document.getElementById("quotes-count").textContent = items.length.toString();
+
+      for (const q of items) {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `
+          <strong>${q.name}</strong> – ${q.phone || "tél. non renseigné"}
+          <br />
+          ${q.message ? `<span>${q.message}</span><br />` : ""}
+          <small>${new Date(q.created_at).toLocaleString("fr-FR")}</small>
+        `;
+        list.appendChild(div);
+      }
     }
-    loadCardBySlug(slug);
-  });
 
-  document.getElementById("btn-save").addEventListener("click", saveCard);
-  document.getElementById("btn-public").addEventListener("click", openPublicCard);
-</script>
+    async function refreshRightColumn(cardId) {
+      if (!cardId) return;
+      try {
+        const [feedback, quotes] = await Promise.all([
+          fetchFeedback(cardId),
+          fetchQuotes(cardId)
+        ]);
+        renderFeedbackList(feedback);
+        renderQuotesList(quotes);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // ------------------------
+    // Events
+    // ------------------------
+    document.getElementById("btn-save-card").addEventListener("click", async () => {
+      const btn = document.getElementById("btn-save-card");
+      btn.disabled = true;
+      btn.textContent = "Enregistrement…";
+
+      try {
+        let card;
+        if (currentCardId) {
+          card = await updateCard(currentCardId);
+          showToast("Carte mise à jour.");
+        } else {
+          card = await createCard();
+          showToast("Carte créée avec succès.");
+        }
+        fillForm(card);
+        await refreshRightColumn(card.id);
+      } catch (e) {
+        console.error(e);
+        showToast(e.message || "Erreur lors de l’enregistrement.", true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "💾 Sauvegarder ma SmartCard";
+      }
+    });
+
+    document.getElementById("btn-load-card").addEventListener("click", async () => {
+      const slugInput = document.getElementById("load-slug-input");
+      const slug = slugInput.value.trim();
+      if (!slug) {
+        showToast("Merci de saisir un slug.", true);
+        return;
+      }
+      try {
+        const card = await loadCardBySlug(slug);
+        fillForm(card);
+        await refreshRightColumn(card.id);
+        showToast("Carte chargée.");
+      } catch (e) {
+        console.error(e);
+        showToast(e.message || "Carte introuvable.", true);
+      }
+    });
+
+    // au chargement de la page : rien, on attend que tu charges ou crées une carte
+  </script>
 </body>
 </html>
+
 
