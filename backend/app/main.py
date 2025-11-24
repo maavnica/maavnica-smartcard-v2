@@ -147,12 +147,29 @@ def serve_card(slug: str):
     return FileResponse(str(FRONTEND_DIR / "public-card" / "index.html"))
 
 
+# -------------------------------------------------------------------
+# ADMIN PAGE - DEBUG VERSION
+# -------------------------------------------------------------------
 @app.get("/admin", response_class=HTMLResponse)
-def serve_admin(request: Request):
-    if not request.session.get("is_admin"):
-        return Redir
-
-
+def serve_admin_debug():
+    # VERSION TEMPORAIRE DE TEST
+    html = """
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Admin SmartCard – Test</title>
+    </head>
+    <body style="background:#020617; color:#F9FAFB; font-family:system-ui;
+                 display:flex; align-items:center; justify-content:center;
+                 min-height:100vh; flex-direction:column;">
+      <h1>Admin SmartCard – test</h1>
+      <p>Si tu vois ce message, alors Render renvoie bien la page admin.</p>
+      <p style="font-size:12px; color:#9CA3AF;">(Version debug temporaire sans login)</p>
+    </body>
+    </html>
+    """
+    return HTMLResponse(html)
 
 
 
