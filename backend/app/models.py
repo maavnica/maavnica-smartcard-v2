@@ -14,6 +14,10 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
+# =============================================================
+#  UTILISATEURS
+# =============================================================
+
 class User(Base):
     __tablename__ = "users"
 
@@ -22,9 +26,16 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # relation vers les cartes
+    # Relations
     cards = relationship("Card", back_populates="user")
 
+    def __repr__(self) -> str:
+        return f"<User id={self.id} email={self.email!r}>"
+
+
+# =============================================================
+#  CARTES SMARTCARD
+# =============================================================
 
 class Card(Base):
     __tablename__ = "cards"
@@ -32,30 +43,53 @@ class Card(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
+    # Infos business
     company_name = Column(String, nullable=False)
     slug = Column(String, unique=True, index=True, nullable=False)
 
-    # ⬇⬇⬇ maintenant nullable=True pour éviter l'erreur NOT NULL
+    # Liens & contact
     google_review_link = Column(String, nullable=True)
-
     phone = Column(String, nullable=True)
     whatsapp = Column(String, nullable=True)
     payment_link = Column(String, nullable=True)
-
     instagram = Column(String, nullable=True)
     facebook = Column(String, nullable=True)
     tiktok = Column(String, nullable=True)
 
+    # Thème visuel (apple, material, black-gold, artisan)
+    theme = Column(String, nullable=False, default="apple")
+
+    # Couleur principale personnalisable
     theme_color = Column(String, nullable=True, default="#2563EB")
 
+    # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+    )
 
-    # relations
+    # Relations
     user = relationship("User", back_populates="cards")
-    feedbacks = relationship("Feedback", back_populates="card", cascade="all, delete-orphan")
-    quotes = relationship("Quote", back_populates="card", cascade="all, delete-orphan")
+    feedbacks = relationship(
+        "Feedback",
+        back_populates="card",
+        cascade="all, delete-orphan",
+    )
+    quotes = relationship(
+        "Quote",
+        back_populates="card",
+        cascade="all, delete-orphan",
+    )
 
+    def __repr__(self) -> str:
+        return f"<Card id={self.id} slug={self.slug!r} company_name={self.company_name!r}>"
+
+
+# =============================================================
+#  FEEDBACKS
+# =============================================================
 
 class Feedback(Base):
     __tablename__ = "feedback"
@@ -67,8 +101,16 @@ class Feedback(Base):
     comment = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # Relation
     card = relationship("Card", back_populates="feedbacks")
 
+    def __repr__(self) -> str:
+        return f"<Feedback id={self.id} card_id={self.card_id}>"
+
+
+# =============================================================
+#  DEMANDES DE DEVIS
+# =============================================================
 
 class Quote(Base):
     __tablename__ = "quotes"
@@ -82,5 +124,10 @@ class Quote(Base):
     message = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # Relation
     card = relationship("Card", back_populates="quotes")
+
+    def __repr__(self) -> str:
+        return f"<Quote id={self.id} card_id={self.card_id} name={self.name!r}>"
+
 

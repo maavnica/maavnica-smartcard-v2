@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS du thème (sera ajusté en JS selon card.theme) -->
+  <link id="theme-css" rel="stylesheet" href="/static/themes/apple.css" />
+
+  <!-- Style de base actuel (dark) -->
   <style>
     :root {
       --primary: #2563EB;
@@ -59,9 +64,10 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 0 0, rgba(255,255,255,0.15), transparent 55%),
-                  radial-gradient(circle at 100% 0, rgba(148,163,184,0.25), transparent 60%),
-                  linear-gradient(135deg, var(--primary-soft), #0B1120);
+      background:
+        radial-gradient(circle at 0 0, rgba(255,255,255,0.15), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(148,163,184,0.25), transparent 60%),
+        linear-gradient(135deg, var(--primary-soft), #0B1120);
       opacity: .96;
     }
 
@@ -246,13 +252,15 @@
       border-color: #22C55E;
       color: #BBF7D0;
     }
+
     .pill-select.active-no {
       background: rgba(239,68,68,0.16);
       border-color: #F97373;
       color: #FECACA;
     }
 
-    textarea, input {
+    textarea,
+    input {
       width: 100%;
       border-radius: 12px;
       border: 1px solid #111827;
@@ -264,7 +272,8 @@
       font-family: inherit;
     }
 
-    textarea::placeholder, input::placeholder {
+    textarea::placeholder,
+    input::placeholder {
       color: #6B7280;
       font-size: 11px;
     }
@@ -517,18 +526,25 @@
           showToast("Carte introuvable", true);
           return;
         }
+
         const card = await res.json();
 
-        // Thème couleur
+        // 1) Appliquer le thème visuel (apple, material, black-gold, artisan)
+        const theme = card.theme || "apple";
+        const themeLink = document.getElementById("theme-css");
+        if (themeLink) {
+          themeLink.href = `/static/themes/${theme}.css`;
+        }
+
+        // 2) Thème couleur personnalisé éventuel (couleur principale)
         if (card.theme_color) {
           applyThemeColor(card.theme_color);
         }
 
-        // Titre + emoji
+        // 3) Contenu de la carte
         document.getElementById("company-name").textContent = card.company_name || "Votre entreprise";
         document.getElementById("hero-emoji").textContent = guessEmoji(card);
 
-        // Sous-titre : construit en fonction des données
         const subtitleEl = document.getElementById("hero-subtitle");
         let subtitle = "Votre carte pro intelligente Maavnica.";
         if (card.phone || card.whatsapp) {
@@ -549,7 +565,7 @@
         const btnWhatsApp = document.getElementById("btn-whatsapp");
         if (card.whatsapp) {
           btnWhatsApp.disabled = false;
-          const msg = encodeURIComponent(`Bonjour, je vous contacte via votre carte Maavnica SmartCard.`);
+          const msg = encodeURIComponent("Bonjour, je vous contacte via votre carte Maavnica SmartCard.");
           btnWhatsApp.onclick = () => {
             window.open(`https://wa.me/${card.whatsapp}?text=${msg}`, "_blank");
           };
@@ -573,14 +589,14 @@
           };
         }
 
-        // Gestion Avis rapide : activer le bouton uniquement si une option est choisie
+        // Avis rapide
         let satisfaction = null;
         const pillYes = document.getElementById("pill-yes");
         const pillNo = document.getElementById("pill-no");
         const btnFeedback = document.getElementById("btn-send-feedback");
 
         function updateFeedbackState() {
-          btnFeedback.disabled = satisfaction === null;
+          btnFeedback.disabled = (satisfaction === null);
         }
 
         pillYes.addEventListener("click", () => {
@@ -602,11 +618,12 @@
           const comment = document.getElementById("feedback-comment").value.trim();
           btnFeedback.disabled = true;
           btnFeedback.textContent = "Envoi en cours…";
+
           try {
             const resp = await fetch(`/api/public/cards/${encodeURIComponent(slug)}/feedback`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ satisfaction, comment: comment || null })
+              body: JSON.stringify({ satisfaction, comment: comment || null }),
             });
             if (!resp.ok) throw new Error();
             showToast("Merci pour votre retour !");
@@ -646,8 +663,8 @@
                 name,
                 phone,
                 email: email || null,
-                message
-              })
+                message,
+              }),
             });
             if (!resp.ok) throw new Error();
             showToast("Demande de devis envoyée !");
@@ -673,6 +690,7 @@
   </script>
 </body>
 </html>
+
 
 
 

@@ -2,15 +2,14 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
-
-# -------------------------
+# =============================================================
 #  CARTES SMARTCARD
-# -------------------------
+# =============================================================
 
 class CardBase(BaseModel):
     """
     Champs communs pour une carte.
-    Ces noms DOIVENT être identiques à ceux envoyés par le front.
+    IMPORTANT : Ces noms DOIVENT être identiques à ceux envoyés par le front.
     """
     company_name: str
     slug: str
@@ -21,13 +20,16 @@ class CardBase(BaseModel):
     instagram: Optional[str] = None
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
-    theme_color: Optional[str] = "#2563EB"
+
+    # VISUEL
+    theme_color: Optional[str] = "#2563EB"  # couleur principale
+    theme: str = "apple"  # apple, material, black-gold, artisan
 
 
 class CardCreate(CardBase):
     """
     Schéma pour créer une carte (POST /api/cards/).
-    Pas de user_id dans le body : on le fixe à 1 côté backend.
+    Pas de user_id dans le body : il est fixé côté backend.
     """
     pass
 
@@ -35,7 +37,7 @@ class CardCreate(CardBase):
 class CardUpdate(BaseModel):
     """
     Schéma pour mise à jour partielle (PUT /api/cards/{id}).
-    Tout est optionnel.
+    Tous les champs sont optionnels.
     """
     company_name: Optional[str] = None
     slug: Optional[str] = None
@@ -47,6 +49,7 @@ class CardUpdate(BaseModel):
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
     theme_color: Optional[str] = None
+    theme: Optional[str] = None
 
 
 class CardPublic(BaseModel):
@@ -56,6 +59,7 @@ class CardPublic(BaseModel):
     id: int
     company_name: str
     slug: str
+
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -63,7 +67,10 @@ class CardPublic(BaseModel):
     instagram: Optional[str] = None
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
+
     theme_color: Optional[str] = "#2563EB"
+    theme: str = "apple"
+
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
@@ -72,7 +79,6 @@ class CardPublic(BaseModel):
         orm_mode = True
 
 
-# Alias pour ne plus casser les imports qui parlent de CardOut
 class CardOut(CardPublic):
     """
     Compatibilité : certains endpoints utilisent encore CardOut comme response_model.
@@ -80,9 +86,9 @@ class CardOut(CardPublic):
     pass
 
 
-# -------------------------
+# =============================================================
 #  FEEDBACKS
-# -------------------------
+# =============================================================
 
 class FeedbackCreate(BaseModel):
     satisfaction: bool
@@ -99,9 +105,9 @@ class FeedbackOut(BaseModel):
         orm_mode = True
 
 
-# -------------------------
+# =============================================================
 #  DEMANDES DE DEVIS
-# -------------------------
+# =============================================================
 
 class QuoteCreate(BaseModel):
     name: str
@@ -122,9 +128,9 @@ class QuoteOut(BaseModel):
         orm_mode = True
 
 
-# -------------------------
+# =============================================================
 #  UTILISATEURS
-# -------------------------
+# =============================================================
 
 class UserBase(BaseModel):
     email: EmailStr
