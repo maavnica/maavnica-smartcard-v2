@@ -5,164 +5,237 @@
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --primary: #2563EB;
+      --bg: #0F172A;
+      --card-bg: #020617;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #020617;
-      color: #e5e7eb;
+      background: radial-gradient(circle at top, #1E293B 0, #020617 52%);
+      color: #F9FAFB;
       min-height: 100vh;
     }
+
     .page {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 16px;
     }
+
     header {
       display: flex;
+      align-items: baseline;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
-    header h1 {
+
+    .brand {
       font-size: 18px;
-      margin: 0;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #9CA3AF;
     }
-    header span {
-      font-size: 12px;
-      color: #9ca3af;
+
+    .env-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      background: rgba(15,23,42,.9);
+      color: #E5E7EB;
     }
-    .layout {
+
+    .grid {
       display: grid;
-      grid-template-columns: 2fr 1.4fr;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
       gap: 16px;
     }
-    @media (max-width: 800px) {
-      .layout { grid-template-columns: 1fr; }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
-    .card {
+
+    .panel {
       background: #020617;
       border-radius: 16px;
-      border: 1px solid #1f2937;
-      padding: 16px;
-      box-shadow: 0 16px 40px rgba(15,23,42,0.6);
+      padding: 16px 16px 18px;
+      border: 1px solid #111827;
+      box-shadow: 0 22px 45px rgba(15,23,42,.6);
     }
-    .card h2 {
-      font-size: 15px;
-      margin: 0 0 8px;
+
+    .panel h2 {
+      margin: 0 0 4px;
+      font-size: 16px;
     }
-    .card p {
+
+    .panel p {
+      margin: 0 0 10px;
       font-size: 12px;
-      margin: 0 0 8px;
-      color: #9ca3af;
+      color: #9CA3AF;
     }
+
     label {
       display: block;
-      font-size: 11px;
+      font-size: 12px;
       margin-bottom: 4px;
-      color: #9ca3af;
+      color: #E5E7EB;
     }
-    input, textarea, select {
+
+    input, select, textarea {
       width: 100%;
       border-radius: 10px;
-      border: 1px solid #111827;
+      border: 1px solid #1F2937;
       background: #020617;
-      color: #f9fafb;
+      color: #F9FAFB;
       font-size: 13px;
-      padding: 7px 8px;
+      padding: 7px 9px;
       margin-bottom: 8px;
       font-family: inherit;
     }
-    textarea { min-height: 60px; resize: vertical; }
-    input::placeholder, textarea::placeholder { color: #6b7280; font-size: 12px; }
+
+    input::placeholder, textarea::placeholder {
+      color: #6B7280;
+      font-size: 11px;
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
 
     .row {
       display: grid;
-      grid-template-columns: 1.2fr 1.2fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
+
     @media (max-width: 600px) {
-      .row { grid-template-columns: 1fr; }
+      .row {
+        grid-template-columns: 1fr;
+      }
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 12px;
+      gap: 6px;
       border-radius: 999px;
       border: none;
       font-size: 13px;
-      font-weight: 500;
+      padding: 9px 14px;
       cursor: pointer;
-      gap: 6px;
+      font-weight: 500;
     }
+
     .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #f9fafb;
-      box-shadow: 0 12px 30px rgba(37,99,235,0.45);
+      background: linear-gradient(135deg, #2563EB, #1D4ED8);
+      color: white;
+      box-shadow: 0 14px 30px rgba(37,99,235,.45);
     }
+
     .btn-secondary {
-      background: #0b1120;
-      border: 1px solid #1f2937;
-      color: #e5e7eb;
+      background: rgba(15,23,42,.9);
+      border: 1px solid #374151;
+      color: #E5E7EB;
     }
+
     .btn:disabled {
       opacity: .5;
       cursor: default;
       box-shadow: none;
     }
 
-    .toolbar {
+    .btn-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 6px;
+      margin-bottom: 8px;
     }
+
     .hint {
       font-size: 11px;
-      color: #9ca3af;
-      margin-top: 4px;
+      color: #6B7280;
+      margin-top: 2px;
     }
 
     .section-title {
       font-size: 13px;
+      margin: 12px 0 4px;
       font-weight: 600;
-      margin: 10px 0 4px;
+      color: #E5E7EB;
     }
+
     .list {
-      margin-top: 4px;
-      max-height: 260px;
+      margin-top: 8px;
+      padding: 0;
+      list-style: none;
+      max-height: 230px;
       overflow-y: auto;
       border-radius: 10px;
       border: 1px solid #111827;
       background: #020617;
-      padding: 8px;
+    }
+
+    .list-empty {
+      padding: 10px;
+      font-size: 12px;
+      color: #6B7280;
+      text-align: center;
+    }
+
+    .item {
+      padding: 8px 10px;
+      border-bottom: 1px solid #111827;
       font-size: 12px;
     }
-    .item {
-      padding: 6px 6px;
-      border-bottom: 1px solid #111827;
+
+    .item:last-child {
+      border-bottom: none;
     }
-    .item:last-child { border-bottom: none; }
+
     .item span {
       display: block;
     }
-    .item span.meta {
-      color: #6b7280;
+
+    .badge-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
+      border-radius: 999px;
       font-size: 11px;
-      margin-top: 2px;
+      background: rgba(22,163,74,.2);
+      color: #BBF7D0;
+      border: 1px solid #22C55E;
     }
 
-    .tag {
+    .badge-ko {
       display: inline-flex;
-      padding: 2px 8px;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 7px;
       border-radius: 999px;
-      border: 1px solid #16a34a33;
-      color: #bbf7d0;
       font-size: 11px;
-      background: #052e1633;
-      margin-left: 6px;
+      background: rgba(248,113,113,.18);
+      color: #FECACA;
+      border: 1px solid #F97373;
+    }
+
+    .footer {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 10px;
+      color: #6B7280;
     }
 
     .toast {
@@ -170,146 +243,163 @@
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
-      background: #22c55e;
-      color: #052e16;
-      padding: 8px 14px;
+      background: #22C55E;
+      color: #052E16;
+      padding: 7px 14px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 500;
-      box-shadow: 0 12px 30px rgba(22,163,74,0.5);
+      box-shadow: 0 12px 30px rgba(22,163,74,.5);
       opacity: 0;
       pointer-events: none;
       transition: opacity .2s ease-out, transform .2s ease-out;
-      z-index: 50;
     }
+
     .toast.error {
-      background: #f97373;
-      color: #450a0a;
-      box-shadow: 0 12px 30px rgba(248,113,113,0.5);
+      background: #F97373;
+      color: #450A0A;
+      box-shadow: 0 12px 30px rgba(248,113,113,.5);
     }
+
     .toast.show {
       opacity: 1;
-      pointer-events: auto;
       transform: translate(-50%, -4px);
+      pointer-events: auto;
     }
-    .badge-small {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      font-size: 11px;
-      color: #9ca3af;
-      gap: 4px;
-    }
+
   </style>
 </head>
 <body>
   <div class="page">
     <header>
       <div>
-        <h1>Maavnica SmartCard – Admin</h1>
-        <span>Prototype interne 2025 – Gestion de votre carte</span>
+        <div class="brand">MAAVNICA SMARTCARD – ADMIN</div>
+        <div style="font-size:11px; color:#9CA3AF; margin-top:2px;">
+          Création / modification d'une carte · Prototype interne 2025
+        </div>
       </div>
-      <div class="badge-small">
-        <span id="status-dot">🟢</span>
-        <span id="status-text">Connecté</span>
-      </div>
+      <div class="env-tag">Instance Render · v2</div>
     </header>
 
-    <div class="layout">
-      <!-- COLONNE GAUCHE : FORMULAIRE -->
-      <div class="card">
+    <div class="grid">
+      <!-- COLONNE GAUCHE : CONFIG CARTE -->
+      <section class="panel">
         <h2>Configuration de la SmartCard</h2>
-        <p>Créez ou mettez à jour votre carte. Le slug permet de la charger et de l’afficher en public.</p>
+        <p>Crée une carte ou charge une carte existante via son slug.</p>
 
-        <!-- Charger une carte via son slug -->
-        <label for="load-slug">Charger une carte existante via son slug</label>
-        <div class="row" style="margin-bottom:8px;">
-          <input id="load-slug" placeholder="ex. plomberie-jules" />
-          <button class="btn btn-secondary" id="btn-load">Charger ma carte</button>
+        <!-- Charger par slug -->
+        <div class="row" style="margin-bottom:6px;">
+          <div>
+            <label for="load-slug">Charger une carte via son slug</label>
+            <input id="load-slug" placeholder="ex. plomberie-jules" />
+          </div>
+          <div style="display:flex; align-items:flex-end;">
+            <button class="btn btn-secondary" id="btn-load-card" style="width:100%;">
+              Charger ma carte
+            </button>
+          </div>
         </div>
 
-        <!-- Champs principaux -->
-        <label for="company-name">Nom de l’entreprise</label>
-        <input id="company-name" placeholder="Plomberie Jules, Électricien Dupont…" />
+        <div class="hint">
+          Si le slug existe déjà, la carte sera chargée et tu pourras la modifier.
+        </div>
 
-        <label for="slug">Slug (pour l’URL publique)</label>
-        <input id="slug" placeholder="plomberie-jules" />
+        <hr style="border:none; border-top:1px solid #111827; margin:12px 0;" />
 
-        <label for="google-review-link">Lien avis Google</label>
-        <input id="google-review-link" placeholder="https://search.google.com/local/writereview?placeid=…" />
+        <div>
+          <label for="company-name">Nom de l’entreprise</label>
+          <input id="company-name" placeholder="Plomberie Jules, Electricien Dupont…" />
+
+          <label for="slug">Slug (URL publique)</label>
+          <input id="slug" placeholder="plomberie-jules" />
+
+          <label for="google-link">Lien avis Google</label>
+          <input id="google-link" placeholder="https://search.google.com/local/writereview?placeid=…" />
+        </div>
 
         <div class="row">
           <div>
             <label for="phone">Téléphone</label>
-            <input id="phone" placeholder="0600000000" />
+            <input id="phone" placeholder="+33…" />
           </div>
           <div>
             <label for="whatsapp">WhatsApp</label>
-            <input id="whatsapp" placeholder="Numéro en format international (ex. 33600000000)" />
+            <input id="whatsapp" placeholder="Numéro brut, ex 33612345678" />
           </div>
         </div>
-
-        <label for="payment-link">Lien de paiement sécurisé (Stripe, etc.)</label>
-        <input id="payment-link" placeholder="https://checkout.stripe.com/…" />
 
         <div class="row">
           <div>
-            <label for="theme">Style de carte</label>
-            <select id="theme">
-              <option value="apple">Apple Clean</option>
-              <option value="material">Material Pro</option>
-              <option value="black-gold">Black &amp; Gold</option>
-              <option value="artisan">Artisan Local</option>
-            </select>
+            <label for="payment-link">Lien de paiement sécurisé</label>
+            <input id="payment-link" placeholder="https://…" />
           </div>
           <div>
             <label for="theme-color">Couleur principale</label>
-            <input id="theme-color" type="color" value="#2563eb" />
+            <input id="theme-color" placeholder="#2563EB" />
           </div>
         </div>
 
-        <div class="toolbar">
-          <button class="btn btn-primary" id="btn-save">
+        <div class="row">
+          <div>
+            <label for="instagram">Instagram</label>
+            <input id="instagram" placeholder="https://instagram.com/…" />
+          </div>
+          <div>
+            <label for="facebook">Facebook</label>
+            <input id="facebook" placeholder="https://facebook.com/…" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="tiktok">TikTok</label>
+            <input id="tiktok" placeholder="https://tiktok.com/@…" />
+          </div>
+          <div>
+            <label for="theme">Style de carte</label>
+            <select id="theme">
+              <option value="apple">Apple / minimal</option>
+              <option value="material">Material / colorée</option>
+              <option value="black-gold">Black & Gold premium</option>
+              <option value="artisan">Artisan authentique</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-save-card">
             💾 Enregistrer la carte
           </button>
-          <button class="btn btn-secondary" id="btn-open">
-            🔗 Afficher la SmartCard
-          </button>
-          <button class="btn btn-secondary" id="btn-reset">
-            🧹 Réinitialiser le formulaire
+          <button class="btn btn-secondary" id="btn-open-public">
+            🔗 Afficher la carte publique
           </button>
         </div>
+
         <div class="hint">
-          Astuce : créez d’abord la carte, puis testez l’affichage public avec le bouton « Afficher la SmartCard ».
+          Tant que tu n’as pas chargé de carte existante, un nouvel enregistrement créera une carte (user_id=1).
         </div>
-      </div>
+      </section>
 
-      <!-- COLONNE DROITE : FEEDBACK & DEVIS -->
-      <div class="card">
-        <h2>Retour clients & demandes de devis</h2>
-        <p>Ces données sont liées à la carte actuellement chargée.</p>
-
-        <div class="toolbar" style="margin-bottom:6px;">
-          <button class="btn btn-secondary" id="btn-refresh-feedback">🔁 Rafraîchir avis</button>
-          <button class="btn btn-secondary" id="btn-refresh-quotes">🔁 Rafraîchir devis</button>
-        </div>
+      <!-- COLONNE DROITE : FEEDBACK + DEVIS -->
+      <section class="panel">
+        <h2>Retours clients & demandes de devis</h2>
+        <p>
+          Après avoir chargé ou enregistré une carte, tu verras ici les avis rapides et demandes de devis reçus.
+        </p>
 
         <div class="section-title">Avis rapides</div>
-        <div class="list" id="feedback-list">
-          <div class="item">
-            <span>Chargez une carte pour voir les avis.</span>
-          </div>
-        </div>
+        <ul class="list" id="feedback-list">
+          <li class="list-empty">Aucun avis pour le moment.</li>
+        </ul>
 
-        <div class="section-title">Demandes de devis</div>
-        <div class="list" id="quotes-list">
-          <div class="item">
-            <span>Chargez une carte pour voir les demandes.</span>
-          </div>
-        </div>
-      </div>
+        <div class="section-title" style="margin-top:14px;">Demandes de devis</div>
+        <ul class="list" id="quotes-list">
+          <li class="list-empty">Aucune demande pour le moment.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer">
+      Prototype Maavnica SmartCard – Données stockées dans PostgreSQL (Render)
     </div>
   </div>
 
@@ -326,97 +416,155 @@
       setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    function getFormData() {
+    function getBaseApi() {
+      // L'admin est servi par le même domaine que l'API
+      return "";
+    }
+
+    function collectFormData() {
       return {
         company_name: document.getElementById("company-name").value.trim(),
         slug: document.getElementById("slug").value.trim(),
-        google_review_link: document.getElementById("google-review-link").value.trim() || null,
+        google_review_link: document.getElementById("google-link").value.trim() || null,
         phone: document.getElementById("phone").value.trim() || null,
         whatsapp: document.getElementById("whatsapp").value.trim() || null,
         payment_link: document.getElementById("payment-link").value.trim() || null,
-        instagram: null,
-        facebook: null,
-        tiktok: null,
-        theme: document.getElementById("theme").value,
-        theme_color: document.getElementById("theme-color").value || "#2563eb",
+        instagram: document.getElementById("instagram").value.trim() || null,
+        facebook: document.getElementById("facebook").value.trim() || null,
+        tiktok: document.getElementById("tiktok").value.trim() || null,
+        theme_color: document.getElementById("theme-color").value.trim() || "#2563EB",
+        theme: document.getElementById("theme").value || "apple",
       };
     }
 
     function fillForm(card) {
       currentCardId = card.id;
-      document.getElementById("load-slug").value = card.slug || "";
       document.getElementById("company-name").value = card.company_name || "";
       document.getElementById("slug").value = card.slug || "";
-      document.getElementById("google-review-link").value = card.google_review_link || "";
+      document.getElementById("google-link").value = card.google_review_link || "";
       document.getElementById("phone").value = card.phone || "";
       document.getElementById("whatsapp").value = card.whatsapp || "";
       document.getElementById("payment-link").value = card.payment_link || "";
+      document.getElementById("instagram").value = card.instagram || "";
+      document.getElementById("facebook").value = card.facebook || "";
+      document.getElementById("tiktok").value = card.tiktok || "";
+      document.getElementById("theme-color").value = card.theme_color || "#2563EB";
       document.getElementById("theme").value = card.theme || "apple";
-      if (card.theme_color) {
-        document.getElementById("theme-color").value = card.theme_color;
+    }
+
+    function renderFeedback(feedbacks) {
+      const list = document.getElementById("feedback-list");
+      list.innerHTML = "";
+      if (!feedbacks.length) {
+        list.innerHTML = '<li class="list-empty">Aucun avis pour le moment.</li>';
+        return;
+      }
+      feedbacks.forEach(f => {
+        const li = document.createElement("li");
+        li.className = "item";
+        const badgeClass = f.satisfaction ? "badge-ok" : "badge-ko";
+        const badgeLabel = f.satisfaction ? "Satisfait" : "Non satisfait";
+        li.innerHTML = `
+          <span class="${badgeClass}">${badgeLabel}</span>
+          <span style="margin-top:4px;">${f.comment || "<i>Aucun commentaire</i>"}</span>
+          <span style="margin-top:2px; color:#6B7280; font-size:11px;">
+            ${new Date(f.created_at).toLocaleString()}
+          </span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function renderQuotes(quotes) {
+      const list = document.getElementById("quotes-list");
+      list.innerHTML = "";
+      if (!quotes.length) {
+        list.innerHTML = '<li class="list-empty">Aucune demande pour le moment.</li>';
+        return;
+      }
+      quotes.forEach(q => {
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `
+          <span><strong>${q.name}</strong> · ${q.phone || ""}</span>
+          <span style="margin-top:2px;">${q.message || ""}</span>
+          <span style="margin-top:2px; color:#6B7280; font-size:11px;">
+            ${q.email || "Email non renseigné"} · ${new Date(q.created_at).toLocaleString()}
+          </span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    async function loadSideData(cardId) {
+      if (!cardId) return;
+      try {
+        const base = getBaseApi();
+        const [fRes, qRes] = await Promise.all([
+          fetch(`${base}/api/cards/${cardId}/feedback`),
+          fetch(`${base}/api/cards/${cardId}/quotes`),
+        ]);
+
+        if (fRes.ok) {
+          const feedbacks = await fRes.json();
+          renderFeedback(feedbacks);
+        } else {
+          renderFeedback([]);
+        }
+
+        if (qRes.ok) {
+          const quotes = await qRes.json();
+          renderQuotes(quotes);
+        } else {
+          renderQuotes([]);
+        }
+      } catch (e) {
+        console.error(e);
+        renderFeedback([]);
+        renderQuotes([]);
       }
     }
 
-    function resetForm() {
-      currentCardId = null;
-      document.getElementById("load-slug").value = "";
-      document.getElementById("company-name").value = "";
-      document.getElementById("slug").value = "";
-      document.getElementById("google-review-link").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("whatsapp").value = "";
-      document.getElementById("payment-link").value = "";
-      document.getElementById("theme").value = "apple";
-      document.getElementById("theme-color").value = "#2563eb";
-      document.getElementById("feedback-list").innerHTML =
-        '<div class="item"><span>Chargez une carte pour voir les avis.</span></div>';
-      document.getElementById("quotes-list").innerHTML =
-        '<div class="item"><span>Chargez une carte pour voir les demandes.</span></div>';
-    }
-
     async function saveCard() {
-      const data = getFormData();
+      const data = collectFormData();
       if (!data.company_name || !data.slug) {
         showToast("Nom d’entreprise et slug sont obligatoires.", true);
         return;
       }
 
-      const btn = document.getElementById("btn-save");
+      const btn = document.getElementById("btn-save-card");
       btn.disabled = true;
       btn.textContent = "Enregistrement…";
 
       try {
-        let url = "/api/cards/";
+        const base = getBaseApi();
+        let url = `${base}/api/cards/`;
         let method = "POST";
+
         if (currentCardId) {
-          url = `/api/cards/${currentCardId}`;
+          url = `${base}/api/cards/${currentCardId}`;
           method = "PUT";
         }
 
-        const resp = await fetch(url, {
+        const res = await fetch(url, {
           method,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
 
-        if (!resp.ok) {
-          showToast("Erreur API (" + resp.status + ")", true);
-          return;
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error("Erreur save:", txt);
+          throw new Error();
         }
 
-        let card = null;
-        try {
-          card = await resp.json();
-        } catch (e) {
-          showToast("Réponse vide ou invalide de l’API.", true);
-          return;
-        }
-
+        const card = await res.json();
         fillForm(card);
+        await loadSideData(card.id);
         showToast("Carte enregistrée.");
       } catch (e) {
         console.error(e);
-        showToast("Erreur réseau côté admin.", true);
+        showToast("Erreur lors de l’enregistrement.", true);
       } finally {
         btn.disabled = false;
         btn.textContent = "💾 Enregistrer la carte";
@@ -426,28 +574,33 @@
     async function loadCardBySlug() {
       const slug = document.getElementById("load-slug").value.trim();
       if (!slug) {
-        showToast("Indiquez un slug à charger.", true);
+        showToast("Indique un slug à charger.", true);
         return;
       }
 
-      const btn = document.getElementById("btn-load");
+      const btn = document.getElementById("btn-load-card");
       btn.disabled = true;
       btn.textContent = "Chargement…";
 
       try {
-        const resp = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
-        if (!resp.ok) {
-          showToast("Carte introuvable.", true);
+        const base = getBaseApi();
+        const res = await fetch(`${base}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        if (!res.ok) {
+          if (res.status === 404) {
+            showToast("Aucune carte trouvée pour ce slug.", true);
+          } else {
+            showToast("Erreur lors du chargement de la carte.", true);
+          }
           return;
         }
-        const card = await resp.json();
+        const card = await res.json();
         fillForm(card);
+        await loadSideData(card.id);
+        document.getElementById("load-slug").value = card.slug || slug;
         showToast("Carte chargée.");
-        await refreshFeedback();
-        await refreshQuotes();
       } catch (e) {
         console.error(e);
-        showToast("Erreur lors du chargement.", true);
+        showToast("Erreur de connexion à l’API.", true);
       } finally {
         btn.disabled = false;
         btn.textContent = "Charger ma carte";
@@ -457,98 +610,18 @@
     function openPublicCard() {
       const slug = document.getElementById("slug").value.trim();
       if (!slug) {
-        showToast("Il faut un slug pour afficher la carte.", true);
+        showToast("Renseigne d’abord le slug de la carte.", true);
         return;
       }
-      const url = `/c/${encodeURIComponent(slug)}`;
-      window.open(url, "_blank");
-    }
-
-    async function refreshFeedback() {
-      if (!currentCardId) {
-        showToast("Chargez d’abord une carte.", true);
-        return;
-      }
-      const container = document.getElementById("feedback-list");
-      container.innerHTML = '<div class="item"><span>Chargement…</span></div>';
-
-      try {
-        const resp = await fetch(`/api/cards/${currentCardId}/feedback`);
-        if (!resp.ok) {
-          container.innerHTML = '<div class="item"><span>Erreur lors du chargement.</span></div>';
-          return;
-        }
-        const list = await resp.json();
-        if (!list.length) {
-          container.innerHTML = '<div class="item"><span>Aucun avis pour le moment.</span></div>';
-          return;
-        }
-        container.innerHTML = "";
-        list.forEach(fb => {
-          const div = document.createElement("div");
-          div.className = "item";
-          const status = fb.satisfaction ? "👍 Satisfait" : "👎 Pas satisfait";
-          const created = new Date(fb.created_at).toLocaleString("fr-FR");
-          div.innerHTML =
-            `<span>${status}</span>` +
-            (fb.comment ? `<span>${fb.comment}</span>` : "") +
-            `<span class="meta">${created}</span>`;
-          container.appendChild(div);
-        });
-      } catch (e) {
-        console.error(e);
-        container.innerHTML = '<div class="item"><span>Erreur lors du chargement.</span></div>';
-      }
-    }
-
-    async function refreshQuotes() {
-      if (!currentCardId) {
-        showToast("Chargez d’abord une carte.", true);
-        return;
-      }
-      const container = document.getElementById("quotes-list");
-      container.innerHTML = '<div class="item"><span>Chargement…</span></div>';
-
-      try {
-        const resp = await fetch(`/api/cards/${currentCardId}/quotes`);
-        if (!resp.ok) {
-          container.innerHTML = '<div class="item"><span>Erreur lors du chargement.</span></div>';
-          return;
-        }
-        const list = await resp.json();
-        if (!list.length) {
-          container.innerHTML = '<div class="item"><span>Aucune demande de devis pour le moment.</span></div>';
-          return;
-        }
-        container.innerHTML = "";
-        list.forEach(q => {
-          const div = document.createElement("div");
-          div.className = "item";
-          const created = new Date(q.created_at).toLocaleString("fr-FR");
-          div.innerHTML =
-            `<span>${q.name || "Client"} – ${q.phone || ""}</span>` +
-            (q.message ? `<span>${q.message}</span>` : "") +
-            `<span class="meta">${created}${q.email ? " · " + q.email : ""}</span>`;
-          container.appendChild(div);
-        });
-      } catch (e) {
-        console.error(e);
-        container.innerHTML = '<div class="item"><span>Erreur lors du chargement.</span></div>';
-      }
+      window.open(`/c/${encodeURIComponent(slug)}`, "_blank");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("btn-save").addEventListener("click", saveCard);
-      document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
-      document.getElementById("btn-open").addEventListener("click", openPublicCard);
-      document.getElementById("btn-reset").addEventListener("click", resetForm);
-      document.getElementById("btn-refresh-feedback").addEventListener("click", refreshFeedback);
-      document.getElementById("btn-refresh-quotes").addEventListener("click", refreshQuotes);
-      resetForm();
+      document.getElementById("btn-save-card").addEventListener("click", saveCard);
+      document.getElementById("btn-load-card").addEventListener("click", loadCardBySlug);
+      document.getElementById("btn-open-public").addEventListener("click", openPublicCard);
       console.log("Admin SmartCard chargé ✅");
     });
   </script>
 </body>
 </html>
-
-
