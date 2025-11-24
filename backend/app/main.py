@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import text  # pour exécuter du SQL brut
 
 from .routers import public, cards
 from .database import Base, engine, get_db, SessionLocal
@@ -26,13 +27,14 @@ Base.metadata.create_all(bind=engine)
 
 
 def init_default_user():
+    """Crée l'utilisateur owner@maavnica.com si la table users est vide."""
     db = SessionLocal()
     try:
         existing = db.query(models.User).first()
         if not existing:
             user = models.User(
                 email="owner@maavnica.com",
-                password_hash="changeme"
+                password_hash="changeme",
             )
             db.add(user)
             db.commit()
@@ -84,8 +86,38 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+# Routers API
 app.include_router(public.router, prefix="/api/public", tags=["public"])
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
+
+
+# -------------------------------------------------------------------
+# ROUTE TEMPORAIRE : FIX TABLE CARDS (Render Free, pas de console SQL)
+# -------------------------------------------------------------------
+@app.get("/__fix/recreate-cards-table")
+def recreate_cards_table(db: Session = Depends(get_db)):
+    """
+    ⚠️ Route TEMPORAIRE pour corriger l'erreur "column cards.theme does not exist".
+    - Supprime la table cards si elle existe
+    - Recrée les tables selon models.py
+
+    À utiliser UNE FOIS, puis à supprimer du code.
+    """
+    try:
+        # On supprime la table cards si présente
+        db.execute(text("DROP TABLE IF EXISTS cards CASCADE;"))
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        return {"status": "error", "details": str(e)}
+
+    # On recrée les tables manquantes d'après les modèles
+    Base.metadata.create_all(bind=engine)
+
+    return {
+        "status": "ok",
+        "message": "Table 'cards' recréée avec les bonnes colonnes depuis models.py.",
+    }
 
 
 # -------------------------------------------------------------------
@@ -101,7 +133,8 @@ def root():
 # -------------------------------------------------------------------
 @app.get("/login", response_class=HTMLResponse)
 def login_page():
-    return HTMLResponse("""
+    return HTMLResponse(
+        """
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -128,7 +161,8 @@ def login_page():
   </div>
 </body>
 </html>
-""")
+"""
+    )
 
 
 @app.post("/login")
@@ -144,14 +178,16 @@ def login(password: str = Form(...), request: Request = None):
 # -------------------------------------------------------------------
 @app.get("/c/{slug}", response_class=HTMLResponse)
 def serve_card(slug: str):
+    """Page publique de la SmartCard (/c/{slug})."""
     return FileResponse(str(FRONTEND_DIR / "public-card" / "index.html"))
 
 
 @app.get("/admin", response_class=HTMLResponse)
 def serve_admin(request: Request):
-    # Protection simple par mot de passe (session)
+    """Mini back-office protégé par login simple."""
     if not request.session.get("is_admin"):
         return RedirectResponse("/login", status_code=302)
 
     html_path = FRONTEND_DIR / "admin" / "index.html"
     return FileResponse(str(html_path))
+
