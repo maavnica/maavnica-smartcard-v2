@@ -5,237 +5,222 @@
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root {
-      --primary: #2563EB;
-      --bg: #0F172A;
-      --card-bg: #020617;
-    }
-
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1E293B 0, #020617 52%);
-      color: #F9FAFB;
-      min-height: 100vh;
+      background: #020617;
+      color: #e5e7eb;
     }
 
-    .page {
+    .app {
       max-width: 1100px;
       margin: 0 auto;
       padding: 16px;
     }
 
-    header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+    h1 {
+      font-size: 20px;
+      margin: 0 0 6px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #9ca3af;
       margin-bottom: 16px;
     }
 
-    .brand {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #9CA3AF;
-    }
-
-    .env-tag {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid #374151;
-      background: rgba(15,23,42,.9);
-      color: #E5E7EB;
-    }
-
-    .grid {
+    .layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
       gap: 16px;
     }
 
-    @media (max-width: 900px) {
-      .grid {
+    @media (max-width: 840px) {
+      .layout {
         grid-template-columns: 1fr;
       }
     }
 
-    .panel {
+    .card {
       background: #020617;
       border-radius: 16px;
-      padding: 16px 16px 18px;
-      border: 1px solid #111827;
-      box-shadow: 0 22px 45px rgba(15,23,42,.6);
+      border: 1px solid #1f2937;
+      padding: 16px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.4);
     }
 
-    .panel h2 {
-      margin: 0 0 4px;
-      font-size: 16px;
-    }
-
-    .panel p {
-      margin: 0 0 10px;
-      font-size: 12px;
-      color: #9CA3AF;
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
 
     label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       margin-bottom: 4px;
-      color: #E5E7EB;
+      color: #9ca3af;
     }
 
     input, select, textarea {
       width: 100%;
       border-radius: 10px;
-      border: 1px solid #1F2937;
+      border: 1px solid #111827;
       background: #020617;
-      color: #F9FAFB;
+      color: #f9fafb;
       font-size: 13px;
       padding: 7px 9px;
       margin-bottom: 8px;
       font-family: inherit;
     }
 
-    input::placeholder, textarea::placeholder {
-      color: #6B7280;
-      font-size: 11px;
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
     }
 
     textarea {
-      min-height: 60px;
+      min-height: 70px;
       resize: vertical;
     }
 
     .row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      display: flex;
       gap: 8px;
     }
 
-    @media (max-width: 600px) {
-      .row {
-        grid-template-columns: 1fr;
-      }
+    .row > div {
+      flex: 1;
     }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
       border-radius: 999px;
       border: none;
+      padding: 8px 14px;
       font-size: 13px;
-      padding: 9px 14px;
-      cursor: pointer;
       font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #2563EB, #1D4ED8);
-      color: white;
-      box-shadow: 0 14px 30px rgba(37,99,235,.45);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #f9fafb;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
     }
 
-    .btn-secondary {
-      background: rgba(15,23,42,.9);
+    .btn-outline {
+      background: transparent;
       border: 1px solid #374151;
-      color: #E5E7EB;
+      color: #e5e7eb;
     }
 
     .btn:disabled {
-      opacity: .5;
+      opacity: 0.5;
       cursor: default;
       box-shadow: none;
     }
 
-    .btn-row {
+    .top-actions {
       display: flex;
-      flex-wrap: wrap;
       gap: 8px;
-      margin-top: 6px;
-      margin-bottom: 8px;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
     .hint {
       font-size: 11px;
-      color: #6B7280;
-      margin-top: 2px;
+      color: #9ca3af;
     }
 
-    .section-title {
-      font-size: 13px;
-      margin: 12px 0 4px;
+    .pill-input {
+      font-size: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #f9fafb;
+    }
+
+    .section-label {
+      font-size: 12px;
       font-weight: 600;
-      color: #E5E7EB;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      padding: 2px 8px;
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      color: #9ca3af;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #64748b;
+    }
+
+    .link-preview {
+      font-size: 11px;
+      color: #93c5fd;
+      word-break: break-all;
+      margin-top: 4px;
+    }
+
+    .columns-small {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
     }
 
     .list {
-      margin-top: 8px;
-      padding: 0;
-      list-style: none;
-      max-height: 230px;
-      overflow-y: auto;
-      border-radius: 10px;
+      max-height: 260px;
+      overflow: auto;
+      margin-top: 6px;
+      border-radius: 8px;
       border: 1px solid #111827;
+      padding: 6px;
+      font-size: 11px;
       background: #020617;
     }
 
-    .list-empty {
-      padding: 10px;
-      font-size: 12px;
-      color: #6B7280;
-      text-align: center;
-    }
-
     .item {
-      padding: 8px 10px;
+      padding: 4px 4px 5px;
       border-bottom: 1px solid #111827;
-      font-size: 12px;
     }
 
     .item:last-child {
       border-bottom: none;
     }
 
-    .item span {
-      display: block;
+    .item-title {
+      font-weight: 500;
+      margin-bottom: 2px;
     }
 
-    .badge-ok {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: rgba(22,163,74,.2);
-      color: #BBF7D0;
-      border: 1px solid #22C55E;
-    }
-
-    .badge-ko {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: rgba(248,113,113,.18);
-      color: #FECACA;
-      border: 1px solid #F97373;
-    }
-
-    .footer {
-      margin-top: 10px;
-      text-align: center;
+    .item-meta {
+      color: #6b7280;
       font-size: 10px;
-      color: #6B7280;
+      margin-bottom: 2px;
     }
 
     .toast {
@@ -243,94 +228,108 @@
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
-      background: #22C55E;
-      color: #052E16;
-      padding: 7px 14px;
+      background: #22c55e;
+      color: #052e16;
+      padding: 8px 14px;
       border-radius: 999px;
       font-size: 12px;
-      box-shadow: 0 12px 30px rgba(22,163,74,.5);
+      font-weight: 500;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.5);
       opacity: 0;
       pointer-events: none;
-      transition: opacity .2s ease-out, transform .2s ease-out;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
     }
 
     .toast.error {
-      background: #F97373;
-      color: #450A0A;
-      box-shadow: 0 12px 30px rgba(248,113,113,.5);
+      background: #f97373;
+      color: #450a0a;
+      box-shadow: 0 12px 30px rgba(248, 113, 113, 0.5);
     }
 
     .toast.show {
       opacity: 1;
-      transform: translate(-50%, -4px);
       pointer-events: auto;
+      transform: translate(-50%, -4px);
     }
-
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div>
-        <div class="brand">MAAVNICA SMARTCARD – ADMIN</div>
-        <div style="font-size:11px; color:#9CA3AF; margin-top:2px;">
-          Création / modification d'une carte · Prototype interne 2025
-        </div>
+  <div class="app">
+    <div>
+      <div class="tag">Maavnica SmartCard – Admin</div>
+      <h1>Configuration de la SmartCard</h1>
+      <div class="subtitle">
+        Crée ta carte ou recharge une carte existante par son slug.  
+        <span class="pill">
+          <span class="pill-dot"></span>
+          <span>Prototype interne 2025</span>
+        </span>
       </div>
-      <div class="env-tag">Instance Render · v2</div>
-    </header>
+    </div>
 
-    <div class="grid">
-      <!-- COLONNE GAUCHE : CONFIG CARTE -->
-      <section class="panel">
-        <h2>Configuration de la SmartCard</h2>
-        <p>Crée une carte ou charge une carte existante via son slug.</p>
-
-        <!-- Charger par slug -->
-        <div class="row" style="margin-bottom:6px;">
-          <div>
-            <label for="load-slug">Charger une carte via son slug</label>
-            <input id="load-slug" placeholder="ex. plomberie-jules" />
-          </div>
-          <div style="display:flex; align-items:flex-end;">
-            <button class="btn btn-secondary" id="btn-load-card" style="width:100%;">
-              Charger ma carte
-            </button>
-          </div>
+    <div class="layout">
+      <!-- COLONNE GAUCHE : FORMULAIRE -->
+      <div class="card">
+        <div class="top-actions">
+          <input id="existing-slug" class="pill-input" placeholder="Slug existant (ex. plomberie-jules)" />
+          <button class="btn btn-outline" id="btn-load">
+            Charger ma carte
+          </button>
         </div>
-
         <div class="hint">
-          Si le slug existe déjà, la carte sera chargée et tu pourras la modifier.
+          Le slug est la partie de l’URL après <code>/c/</code>. Exemple : <code>plomberie-jules</code>.
         </div>
 
-        <hr style="border:none; border-top:1px solid #111827; margin:12px 0;" />
+        <hr style="border:none;border-top:1px solid #111827;margin:10px 0;">
 
-        <div>
-          <label for="company-name">Nom de l’entreprise</label>
-          <input id="company-name" placeholder="Plomberie Jules, Electricien Dupont…" />
+        <div class="card-title">Informations principales</div>
 
-          <label for="slug">Slug (URL publique)</label>
-          <input id="slug" placeholder="plomberie-jules" />
+        <label for="company-name">Nom de l’entreprise *</label>
+        <input id="company-name" placeholder="Ex. Plomberie Jules" />
 
-          <label for="google-link">Lien avis Google</label>
-          <input id="google-link" placeholder="https://search.google.com/local/writereview?placeid=…" />
-        </div>
+        <label for="slug">Slug (URL publique) *</label>
+        <input id="slug" placeholder="ex. plomberie-jules" />
+
+        <label for="google-link">Lien avis Google</label>
+        <input id="google-link" placeholder="https://search.google.com/local/writereview?placeid=..." />
 
         <div class="row">
           <div>
             <label for="phone">Téléphone</label>
-            <input id="phone" placeholder="+33…" />
+            <input id="phone" placeholder="06..." />
           </div>
           <div>
             <label for="whatsapp">WhatsApp</label>
-            <input id="whatsapp" placeholder="Numéro brut, ex 33612345678" />
+            <input id="whatsapp" placeholder="Numéro au format international" />
           </div>
         </div>
 
+        <label for="payment-link">Lien de paiement sécurisé</label>
+        <input id="payment-link" placeholder="Lien Stripe / lien de paiement" />
+
+        <div class="section-label">Présence en ligne (facultatif)</div>
+        <div class="columns-small">
+          <div>
+            <label for="instagram">Instagram</label>
+            <input id="instagram" placeholder="@compte ou URL" />
+          </div>
+          <div>
+            <label for="facebook">Facebook</label>
+            <input id="facebook" placeholder="Page ou URL" />
+          </div>
+        </div>
+        <label for="tiktok">TikTok</label>
+        <input id="tiktok" placeholder="@compte ou URL" />
+
         <div class="row">
           <div>
-            <label for="payment-link">Lien de paiement sécurisé</label>
-            <input id="payment-link" placeholder="https://…" />
+            <label for="theme">Style de carte</label>
+            <select id="theme">
+              <option value="apple">Apple (propre et épuré)</option>
+              <option value="material">Material</option>
+              <option value="black-gold">Black & Gold</option>
+              <option value="artisan">Artisan</option>
+            </select>
           </div>
           <div>
             <label for="theme-color">Couleur principale</label>
@@ -338,74 +337,51 @@
           </div>
         </div>
 
-        <div class="row">
-          <div>
-            <label for="instagram">Instagram</label>
-            <input id="instagram" placeholder="https://instagram.com/…" />
-          </div>
-          <div>
-            <label for="facebook">Facebook</label>
-            <input id="facebook" placeholder="https://facebook.com/…" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="tiktok">TikTok</label>
-            <input id="tiktok" placeholder="https://tiktok.com/@…" />
-          </div>
-          <div>
-            <label for="theme">Style de carte</label>
-            <select id="theme">
-              <option value="apple">Apple / minimal</option>
-              <option value="material">Material / colorée</option>
-              <option value="black-gold">Black & Gold premium</option>
-              <option value="artisan">Artisan authentique</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn btn-primary" id="btn-save-card">
-            💾 Enregistrer la carte
-          </button>
-          <button class="btn btn-secondary" id="btn-open-public">
-            🔗 Afficher la carte publique
-          </button>
-        </div>
-
         <div class="hint">
-          Tant que tu n’as pas chargé de carte existante, un nouvel enregistrement créera une carte (user_id=1).
+          Tu pourras tester le rendu depuis l’URL publique de la carte.
         </div>
-      </section>
 
-      <!-- COLONNE DROITE : FEEDBACK + DEVIS -->
-      <section class="panel">
-        <h2>Retours clients & demandes de devis</h2>
-        <p>
-          Après avoir chargé ou enregistré une carte, tu verras ici les avis rapides et demandes de devis reçus.
-        </p>
+        <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+          <button class="btn btn-primary" id="btn-save">
+            Enregistrer la carte
+          </button>
+          <button class="btn btn-outline" id="btn-reset">
+            Réinitialiser le formulaire
+          </button>
+        </div>
 
-        <div class="section-title">Avis rapides</div>
-        <ul class="list" id="feedback-list">
-          <li class="list-empty">Aucun avis pour le moment.</li>
-        </ul>
+        <div id="public-link" class="link-preview"></div>
+      </div>
 
-        <div class="section-title" style="margin-top:14px;">Demandes de devis</div>
-        <ul class="list" id="quotes-list">
-          <li class="list-empty">Aucune demande pour le moment.</li>
-        </ul>
-      </section>
-    </div>
+      <!-- COLONNE DROITE : AVIS & DEVIS -->
+      <div class="card">
+        <div class="card-title">Avis & demandes de devis</div>
+        <div class="hint">
+          Quand la carte reçoit des retours clients, ils s’affichent ici pour la carte chargée.
+        </div>
 
-    <div class="footer">
-      Prototype Maavnica SmartCard – Données stockées dans PostgreSQL (Render)
+        <div class="columns-small" style="margin-top:8px;">
+          <div>
+            <div class="section-label">Avis rapides</div>
+            <div id="feedback-list" class="list">
+              <div class="hint">Aucun avis pour l’instant.</div>
+            </div>
+          </div>
+          <div>
+            <div class="section-label">Demandes de devis</div>
+            <div id="quote-list" class="list">
+              <div class="hint">Aucune demande pour l’instant.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
+    const API_BASE = "/api/cards";
     let currentCardId = null;
 
     function showToast(message, isError = false) {
@@ -416,31 +392,11 @@
       setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    function getBaseApi() {
-      // L'admin est servi par le même domaine que l'API
-      return "";
-    }
-
-    function collectFormData() {
-      return {
-        company_name: document.getElementById("company-name").value.trim(),
-        slug: document.getElementById("slug").value.trim(),
-        google_review_link: document.getElementById("google-link").value.trim() || null,
-        phone: document.getElementById("phone").value.trim() || null,
-        whatsapp: document.getElementById("whatsapp").value.trim() || null,
-        payment_link: document.getElementById("payment-link").value.trim() || null,
-        instagram: document.getElementById("instagram").value.trim() || null,
-        facebook: document.getElementById("facebook").value.trim() || null,
-        tiktok: document.getElementById("tiktok").value.trim() || null,
-        theme_color: document.getElementById("theme-color").value.trim() || "#2563EB",
-        theme: document.getElementById("theme").value || "apple",
-      };
-    }
-
     function fillForm(card) {
       currentCardId = card.id;
       document.getElementById("company-name").value = card.company_name || "";
       document.getElementById("slug").value = card.slug || "";
+      document.getElementById("existing-slug").value = card.slug || "";
       document.getElementById("google-link").value = card.google_review_link || "";
       document.getElementById("phone").value = card.phone || "";
       document.getElementById("whatsapp").value = card.whatsapp || "";
@@ -450,141 +406,53 @@
       document.getElementById("tiktok").value = card.tiktok || "";
       document.getElementById("theme-color").value = card.theme_color || "#2563EB";
       document.getElementById("theme").value = card.theme || "apple";
+
+      updatePublicLink();
+      loadFeedbackAndQuotes();
     }
 
-    function renderFeedback(feedbacks) {
-      const list = document.getElementById("feedback-list");
-      list.innerHTML = "";
-      if (!feedbacks.length) {
-        list.innerHTML = '<li class="list-empty">Aucun avis pour le moment.</li>';
+    function resetForm() {
+      currentCardId = null;
+      document.getElementById("company-name").value = "";
+      document.getElementById("slug").value = "";
+      document.getElementById("existing-slug").value = "";
+      document.getElementById("google-link").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("whatsapp").value = "";
+      document.getElementById("payment-link").value = "";
+      document.getElementById("instagram").value = "";
+      document.getElementById("facebook").value = "";
+      document.getElementById("tiktok").value = "";
+      document.getElementById("theme-color").value = "#2563EB";
+      document.getElementById("theme").value = "apple";
+      document.getElementById("public-link").textContent = "";
+      document.getElementById("feedback-list").innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
+      document.getElementById("quote-list").innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
+    }
+
+    function updatePublicLink() {
+      const slug = document.getElementById("slug").value.trim();
+      const box = document.getElementById("public-link");
+      if (!slug) {
+        box.textContent = "";
         return;
       }
-      feedbacks.forEach(f => {
-        const li = document.createElement("li");
-        li.className = "item";
-        const badgeClass = f.satisfaction ? "badge-ok" : "badge-ko";
-        const badgeLabel = f.satisfaction ? "Satisfait" : "Non satisfait";
-        li.innerHTML = `
-          <span class="${badgeClass}">${badgeLabel}</span>
-          <span style="margin-top:4px;">${f.comment || "<i>Aucun commentaire</i>"}</span>
-          <span style="margin-top:2px; color:#6B7280; font-size:11px;">
-            ${new Date(f.created_at).toLocaleString()}
-          </span>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    function renderQuotes(quotes) {
-      const list = document.getElementById("quotes-list");
-      list.innerHTML = "";
-      if (!quotes.length) {
-        list.innerHTML = '<li class="list-empty">Aucune demande pour le moment.</li>';
-        return;
-      }
-      quotes.forEach(q => {
-        const li = document.createElement("li");
-        li.className = "item";
-        li.innerHTML = `
-          <span><strong>${q.name}</strong> · ${q.phone || ""}</span>
-          <span style="margin-top:2px;">${q.message || ""}</span>
-          <span style="margin-top:2px; color:#6B7280; font-size:11px;">
-            ${q.email || "Email non renseigné"} · ${new Date(q.created_at).toLocaleString()}
-          </span>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    async function loadSideData(cardId) {
-      if (!cardId) return;
-      try {
-        const base = getBaseApi();
-        const [fRes, qRes] = await Promise.all([
-          fetch(`${base}/api/cards/${cardId}/feedback`),
-          fetch(`${base}/api/cards/${cardId}/quotes`),
-        ]);
-
-        if (fRes.ok) {
-          const feedbacks = await fRes.json();
-          renderFeedback(feedbacks);
-        } else {
-          renderFeedback([]);
-        }
-
-        if (qRes.ok) {
-          const quotes = await qRes.json();
-          renderQuotes(quotes);
-        } else {
-          renderQuotes([]);
-        }
-      } catch (e) {
-        console.error(e);
-        renderFeedback([]);
-        renderQuotes([]);
-      }
-    }
-
-    async function saveCard() {
-      const data = collectFormData();
-      if (!data.company_name || !data.slug) {
-        showToast("Nom d’entreprise et slug sont obligatoires.", true);
-        return;
-      }
-
-      const btn = document.getElementById("btn-save-card");
-      btn.disabled = true;
-      btn.textContent = "Enregistrement…";
-
-      try {
-        const base = getBaseApi();
-        let url = `${base}/api/cards/`;
-        let method = "POST";
-
-        if (currentCardId) {
-          url = `${base}/api/cards/${currentCardId}`;
-          method = "PUT";
-        }
-
-        const res = await fetch(url, {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        if (!res.ok) {
-          const txt = await res.text();
-          console.error("Erreur save:", txt);
-          throw new Error();
-        }
-
-        const card = await res.json();
-        fillForm(card);
-        await loadSideData(card.id);
-        showToast("Carte enregistrée.");
-      } catch (e) {
-        console.error(e);
-        showToast("Erreur lors de l’enregistrement.", true);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "💾 Enregistrer la carte";
-      }
+      const base = window.location.origin;
+      box.textContent = "Lien public : " + base.replace(/\/admin$/, "") + "/c/" + slug;
     }
 
     async function loadCardBySlug() {
-      const slug = document.getElementById("load-slug").value.trim();
+      const slugInput = document.getElementById("existing-slug");
+      let slug = slugInput.value.trim();
       if (!slug) {
-        showToast("Indique un slug à charger.", true);
+        showToast("Renseigne un slug à charger.", true);
         return;
       }
-
-      const btn = document.getElementById("btn-load-card");
-      btn.disabled = true;
-      btn.textContent = "Chargement…";
+      slug = slug.toLowerCase();
+      slugInput.value = slug;
 
       try {
-        const base = getBaseApi();
-        const res = await fetch(`${base}/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           if (res.status === 404) {
             showToast("Aucune carte trouvée pour ce slug.", true);
@@ -593,35 +461,137 @@
           }
           return;
         }
-        const card = await res.json();
-        fillForm(card);
-        await loadSideData(card.id);
-        document.getElementById("load-slug").value = card.slug || slug;
+        const data = await res.json();
+        fillForm(data);
         showToast("Carte chargée.");
-      } catch (e) {
-        console.error(e);
-        showToast("Erreur de connexion à l’API.", true);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Charger ma carte";
+      } catch (err) {
+        console.error(err);
+        showToast("Erreur réseau lors du chargement.", true);
       }
     }
 
-    function openPublicCard() {
-      const slug = document.getElementById("slug").value.trim();
-      if (!slug) {
-        showToast("Renseigne d’abord le slug de la carte.", true);
+    async function saveCard() {
+      const companyName = document.getElementById("company-name").value.trim();
+      let slug = document.getElementById("slug").value.trim();
+
+      if (!companyName || !slug) {
+        showToast("Nom d’entreprise et slug sont obligatoires.", true);
         return;
       }
-      window.open(`/c/${encodeURIComponent(slug)}`, "_blank");
+
+      slug = slug.toLowerCase();
+      document.getElementById("slug").value = slug;
+      document.getElementById("existing-slug").value = slug;
+
+      const payload = {
+        company_name: companyName,
+        slug,
+        google_review_link: document.getElementById("google-link").value.trim() || null,
+        phone: document.getElementById("phone").value.trim() || null,
+        whatsapp: document.getElementById("whatsapp").value.trim() || null,
+        payment_link: document.getElementById("payment-link").value.trim() || null,
+        instagram: document.getElementById("instagram").value.trim() || null,
+        facebook: document.getElementById("facebook").value.trim() || null,
+        tiktok: document.getElementById("tiktok").value.trim() || null,
+        theme: document.getElementById("theme").value || "apple",
+        theme_color: document.getElementById("theme-color").value.trim() || "#2563EB"
+      };
+
+      const btn = document.getElementById("btn-save");
+      btn.disabled = true;
+      btn.textContent = "Enregistrement…";
+
+      try {
+        let url = API_BASE + "/";
+        let method = "POST";
+
+        if (currentCardId) {
+          url = `${API_BASE}/${currentCardId}`;
+          method = "PUT";
+        }
+
+        const res = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("Erreur API:", res.status, text);
+          showToast("Erreur lors de l’enregistrement.", true);
+          return;
+        }
+
+        const data = await res.json();
+        fillForm(data);
+        showToast("Carte enregistrée.");
+      } catch (err) {
+        console.error(err);
+        showToast("Erreur réseau lors de l’enregistrement.", true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enregistrer la carte";
+      }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("btn-save-card").addEventListener("click", saveCard);
-      document.getElementById("btn-load-card").addEventListener("click", loadCardBySlug);
-      document.getElementById("btn-open-public").addEventListener("click", openPublicCard);
-      console.log("Admin SmartCard chargé ✅");
-    });
+    async function loadFeedbackAndQuotes() {
+      if (!currentCardId) return;
+
+      try {
+        const [fRes, qRes] = await Promise.all([
+          fetch(`${API_BASE}/${currentCardId}/feedback`),
+          fetch(`${API_BASE}/${currentCardId}/quotes`)
+        ]);
+
+        const feedbackList = document.getElementById("feedback-list");
+        const quoteList = document.getElementById("quote-list");
+
+        // Avis
+        if (fRes.ok) {
+          const items = await fRes.json();
+          if (!items.length) {
+            feedbackList.innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
+          } else {
+            feedbackList.innerHTML = items.map(f => `
+              <div class="item">
+                <div class="item-title">${f.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
+                ${f.comment ? `<div>${f.comment}</div>` : ""}
+                <div class="item-meta">${new Date(f.created_at).toLocaleString()}</div>
+              </div>
+            `).join("");
+          }
+        }
+
+        // Devis
+        if (qRes.ok) {
+          const items = await qRes.json();
+          if (!items.length) {
+            quoteList.innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
+          } else {
+            quoteList.innerHTML = items.map(q => `
+              <div class="item">
+                <div class="item-title">${q.name || "Client"}</div>
+                <div class="item-meta">
+                  ${q.phone ? "📞 " + q.phone + " · " : ""}${q.email ? q.email : ""}
+                </div>
+                <div>${q.message || ""}</div>
+                <div class="item-meta">${new Date(q.created_at).toLocaleString()}</div>
+              </div>
+            `).join("");
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // LISTENERS
+    document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
+    document.getElementById("btn-save").addEventListener("click", saveCard);
+    document.getElementById("btn-reset").addEventListener("click", resetForm);
+    document.getElementById("slug").addEventListener("input", updatePublicLink);
   </script>
 </body>
 </html>
+
