@@ -4,38 +4,33 @@
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- CSS du thème (sera ajusté en JS selon card.theme) -->
-  <link id="theme-css" rel="stylesheet" href="/static/themes/apple.css" />
-
-  <!-- Style de base actuel (dark) -->
   <style>
     :root {
       --primary: #2563EB;
       --primary-soft: #1D4ED8;
       --bg: #0B1120;
-      --card-bg: #020617;
-      --text-main: #F9FAFB;
-      --text-soft: #9CA3AF;
-      --border-subtle: #1F2933;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-soft: #6B7280;
+      --border-subtle: #E5E7EB;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1E293B 0, #020617 52%);
-      color: var(--text-main);
+      background: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
       min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px 8px 32px;
+      color: var(--text-main);
     }
 
     .page {
+      width: 100%;
       max-width: 480px;
-      margin: 0 auto;
-      padding: 16px 12px 32px;
     }
 
     .top-brand {
@@ -48,32 +43,18 @@
     }
 
     .card-wrapper {
-      background: #020617;
-      border-radius: 26px;
-      box-shadow: 0 24px 60px rgba(15,23,42,0.88);
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      border: 1px solid #E5E7EB;
       overflow: hidden;
-      border: 1px solid #1E293B;
     }
 
+    /* HEADER */
     .hero {
       padding: 18px 18px 16px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 0 0, rgba(255,255,255,0.15), transparent 55%),
-        radial-gradient(circle at 100% 0, rgba(148,163,184,0.25), transparent 60%),
-        linear-gradient(135deg, var(--primary-soft), #0B1120);
-      opacity: .96;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
+      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      border-bottom: 1px solid #E5E7EB;
     }
 
     .badge-row {
@@ -89,43 +70,47 @@
       gap: 6px;
       padding: 4px 9px;
       border-radius: 999px;
-      background: rgba(15,23,42,0.45);
-      border: 1px solid rgba(148,163,184,0.4);
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
       font-size: 11px;
-      color: #E5E7EB;
+      color: #111827;
     }
 
-    .badge span:first-child {
-      font-size: 13px;
-    }
+    .badge span:first-child { font-size: 13px; }
 
     .hero-title {
-      font-size: 22px;
-      font-weight: 800;
-      margin: 2px 0 4px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      margin: 4px 0 4px;
     }
 
-    .hero-emoji {
-      font-size: 22px;
+    .hero-emoji { font-size: 22px; }
+
+    .hero-title-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .hero-subtitle {
+    #company-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    #hero-subtitle {
       font-size: 12px;
-      color: #E5E7EB;
-      opacity: .9;
+      color: #4B5563;
     }
 
     .hero-footer {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #6B7280;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 12px;
-      font-size: 11px;
-      color: #E5E7EB;
-      opacity: .92;
     }
 
     .hero-footer span {
@@ -139,17 +124,15 @@
       height: 8px;
       border-radius: 999px;
       background: #22C55E;
-      box-shadow: 0 0 0 4px rgba(34,197,94,.28);
-    }
-
-    .hero-brand {
-      opacity: .8;
+      box-shadow: 0 0 0 3px rgba(34,197,94,.28);
     }
 
     .content {
       padding: 14px 14px 18px;
+      background: #FFFFFF;
     }
 
+    /* BOUTON PRINCIPAL */
     .primary-btn {
       width: 100%;
       padding: 11px 14px;
@@ -157,10 +140,10 @@
       border: none;
       font-size: 14px;
       font-weight: 600;
-      color: #F9FAFB;
+      color: #FFFFFF;
       cursor: pointer;
       background: linear-gradient(135deg, var(--primary), var(--primary-soft));
-      box-shadow: 0 16px 40px rgba(37,99,235,0.45);
+      box-shadow: 0 14px 30px rgba(37,99,235,0.35);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -174,15 +157,14 @@
       box-shadow: none;
     }
 
-    .btn-icon {
-      font-size: 15px;
-    }
+    .btn-icon { font-size: 15px; }
 
+    /* BOUTONS ACTIONS */
     .actions-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     @media (min-width: 420px) {
@@ -195,9 +177,9 @@
       width: 100%;
       padding: 9px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.45);
-      background: rgba(15,23,42,0.9);
-      color: #E5E7EB;
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+      color: #111827;
       font-size: 12px;
       cursor: pointer;
       display: inline-flex;
@@ -216,8 +198,8 @@
     .section-title {
       font-size: 13px;
       font-weight: 600;
-      margin: 12px 0 6px;
-      color: #E5E7EB;
+      margin: 14px 0 4px;
+      color: #111827;
     }
 
     .section-sub {
@@ -236,9 +218,9 @@
       flex: 1;
       padding: 8px 8px;
       border-radius: 999px;
-      border: 1px solid #1F2937;
-      background: #020617;
-      color: #E5E7EB;
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+      color: #111827;
       font-size: 12px;
       cursor: pointer;
       display: flex;
@@ -248,33 +230,31 @@
     }
 
     .pill-select.active-yes {
-      background: rgba(22,163,74,0.18);
+      background: #DCFCE7;
       border-color: #22C55E;
-      color: #BBF7D0;
+      color: #166534;
     }
 
     .pill-select.active-no {
-      background: rgba(239,68,68,0.16);
-      border-color: #F97373;
-      color: #FECACA;
+      background: #FEE2E2;
+      border-color: #EF4444;
+      color: #991B1B;
     }
 
-    textarea,
-    input {
+    textarea, input {
       width: 100%;
-      border-radius: 12px;
-      border: 1px solid #111827;
-      background: #020617;
-      color: #F9FAFB;
+      border-radius: 10px;
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+      color: #111827;
       font-size: 12px;
       padding: 8px 9px;
       box-sizing: border-box;
       font-family: inherit;
     }
 
-    textarea::placeholder,
-    input::placeholder {
-      color: #6B7280;
+    textarea::placeholder, input::placeholder {
+      color: #9CA3AF;
       font-size: 11px;
     }
 
@@ -301,8 +281,8 @@
       padding: 9px 12px;
       border-radius: 999px;
       border: none;
-      background: #1F2937;
-      color: #E5E7EB;
+      background: #111827;
+      color: #F9FAFB;
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
@@ -315,13 +295,13 @@
 
     .hint {
       font-size: 10px;
-      color: #6B7280;
+      color: #9CA3AF;
       margin-top: 4px;
     }
 
     .divider {
       border: none;
-      border-top: 1px solid #111827;
+      border-top: 1px solid #E5E7EB;
       margin: 12px 0;
     }
 
@@ -340,6 +320,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity .2s ease-out, transform .2s ease-out;
+      z-index: 50;
     }
 
     .toast.error {
@@ -358,7 +339,7 @@
       text-align: center;
       margin-top: 8px;
       font-size: 10px;
-      color: #4B5563;
+      color: #6B7280;
     }
 
     a {
@@ -374,27 +355,28 @@
     <div class="card-wrapper">
       <!-- HEADER -->
       <div class="hero">
-        <div class="hero-bg" id="hero-bg"></div>
-        <div class="hero-inner">
-          <div class="badge-row">
-            <div class="badge">
-              <span>⭐</span><span>Entreprise recommandée</span>
+        <div class="badge-row">
+          <div class="badge">
+            <span>⭐</span><span>Entreprise recommandée</span>
+          </div>
+          <div class="badge">
+            <span>📍</span><span>Service de proximité</span>
+          </div>
+        </div>
+
+        <div class="hero-title">
+          <span class="hero-emoji" id="hero-emoji">🛠️</span>
+          <div class="hero-title-text">
+            <div id="company-name">Votre entreprise</div>
+            <div id="hero-subtitle">
+              Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
             </div>
-            <div class="badge">
-              <span>📍</span><span>Service de proximité</span>
-            </div>
           </div>
-          <div class="hero-title">
-            <span class="hero-emoji" id="hero-emoji">🛠️</span>
-            <span id="company-name">Votre entreprise</span>
-          </div>
-          <div class="hero-subtitle" id="hero-subtitle">
-            Votre carte pro intelligente Maavnica&nbsp;: avis, devis et contacts en un seul endroit.
-          </div>
-          <div class="hero-footer">
-            <span><span class="hero-dot"></span>Disponible pour vos clients</span>
-            <span class="hero-brand">via Maavnica SmartCard</span>
-          </div>
+        </div>
+
+        <div class="hero-footer">
+          <span><span class="hero-dot"></span>Disponible pour vos clients</span>
+          <span>via Maavnica SmartCard</span>
         </div>
       </div>
 
@@ -526,27 +508,21 @@
           showToast("Carte introuvable", true);
           return;
         }
-
         const card = await res.json();
 
-        // 1) Appliquer le thème visuel (apple, material, black-gold, artisan)
-        const theme = card.theme || "apple";
-        const themeLink = document.getElementById("theme-css");
-        if (themeLink) {
-          themeLink.href = `/static/themes/${theme}.css`;
-        }
-
-        // 2) Thème couleur personnalisé éventuel (couleur principale)
+        // Couleur thème personnalisée
         if (card.theme_color) {
           applyThemeColor(card.theme_color);
         }
 
-        // 3) Contenu de la carte
-        document.getElementById("company-name").textContent = card.company_name || "Votre entreprise";
+        // Nom + emoji
+        document.getElementById("company-name").textContent =
+          card.company_name || "Votre entreprise";
         document.getElementById("hero-emoji").textContent = guessEmoji(card);
 
+        // Sous-titre selon les infos
         const subtitleEl = document.getElementById("hero-subtitle");
-        let subtitle = "Votre carte pro intelligente Maavnica.";
+        let subtitle = "Carte pro intelligente Maavnica.";
         if (card.phone || card.whatsapp) {
           subtitle = "Contact, avis Google et demandes de devis en un seul lien.";
         }
@@ -596,7 +572,7 @@
         const btnFeedback = document.getElementById("btn-send-feedback");
 
         function updateFeedbackState() {
-          btnFeedback.disabled = (satisfaction === null);
+          btnFeedback.disabled = satisfaction === null;
         }
 
         pillYes.addEventListener("click", () => {
@@ -618,12 +594,11 @@
           const comment = document.getElementById("feedback-comment").value.trim();
           btnFeedback.disabled = true;
           btnFeedback.textContent = "Envoi en cours…";
-
           try {
             const resp = await fetch(`/api/public/cards/${encodeURIComponent(slug)}/feedback`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ satisfaction, comment: comment || null }),
+              body: JSON.stringify({ satisfaction, comment: comment || null })
             });
             if (!resp.ok) throw new Error();
             showToast("Merci pour votre retour !");
@@ -631,11 +606,11 @@
             satisfaction = null;
             pillYes.classList.remove("active-yes");
             pillNo.classList.remove("active-no");
+            updateFeedbackState();
           } catch {
             showToast("Erreur lors de l’envoi du retour.", true);
           } finally {
             btnFeedback.textContent = "Envoyer mon retour";
-            btnFeedback.disabled = false;
           }
         });
 
@@ -663,8 +638,8 @@
                 name,
                 phone,
                 email: email || null,
-                message,
-              }),
+                message
+              })
             });
             if (!resp.ok) throw new Error();
             showToast("Demande de devis envoyée !");
@@ -690,6 +665,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
