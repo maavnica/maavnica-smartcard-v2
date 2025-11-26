@@ -1,43 +1,50 @@
 from pathlib import Path
 
-from fastapi import FastAPI, Request, Form, Depends, HTTPException
+from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
-from sqlalchemy.orm import Session
-from sqlalchemy import text  # pour exécuter du SQL brut
 
 from .routers import public, cards
-from .database import Base, engine, get_db, SessionLocal
-from . import models, schemas
+from .database import Base, engine, SessionLocal
+from . import models
 
 
-# -------------------------------------------------------------------
-# CONFIG ADMIN
-# -------------------------------------------------------------------
+# ============================================================
+# CONFIG ADMIN (simple, pour prototype)
+# ============================================================
+
 ADMIN_PASSWORD = "maavnica2025"
 SESSION_SECRET_KEY = "MAAVNICA_SUPER_SECRET_2025_CHANGE_ME"
 
 
-# -------------------------------------------------------------------
-# INIT DB
-# -------------------------------------------------------------------
+# ============================================================
+# INIT BASE DE DONNÉES
+# ============================================================
+
+# Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
 
 
-def init_default_user():
-    """Crée l'utilisateur owner@maavnica.com si la table users est vide."""
+def init_default_user() -> None:
+    """
+    Crée un utilisateur "owner" par défaut si la table users est vide.
+    Utile pour lier les cartes à user_id = 1.
+    """
     db = SessionLocal()
     try:
         existing = db.query(models.User).first()
         if not existing:
             user = models.User(
                 email="owner@maavnica.com",
-                password_hash="changeme",
+                password_hash="changeme",  # à remplacer plus tard par un vrai hash
             )
             db.add(user)
             db.commit()
+            print("[INIT] Default user created with email=owner@maavnica.com")
+        else:
+            print("[INIT] Default user already exists (id=%s)" % existing.id)
     finally:
         db.close()
 
@@ -45,18 +52,20 @@ def init_default_user():
 init_default_user()
 
 
-# -------------------------------------------------------------------
-# FASTAPI INSTANCE
-# -------------------------------------------------------------------
+# ============================================================
+# INSTANCE FASTAPI
+# ============================================================
+
 app = FastAPI(
     title="Maavnica SmartCard API",
     version="1.0.0",
 )
 
 
-# -------------------------------------------------------------------
+# ============================================================
 # CORS
-# -------------------------------------------------------------------
+# ============================================================
+
 origins = [
     "http://localhost",
     "http://127.0.0.1",
@@ -73,68 +82,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Sessions pour l'authentification admin
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 
 
-# -------------------------------------------------------------------
-# STATIC FILES
-# -------------------------------------------------------------------
+# ============================================================
+# DOSSIERS STATIC & FRONTEND
+# ============================================================
+
+# backend/app/main.py -> parents[2] = dossier racine du projet
 BASE_DIR = Path(__file__).resolve().parents[2]
 STATIC_DIR = BASE_DIR / "static"
 FRONTEND_DIR = BASE_DIR / "frontend"
 
+# S'assure que le dossier static existe (sinon FastAPI râle)
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
+
+# Fichiers statiques (CSS des thèmes, images, etc.)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 # Routers API
 app.include_router(public.router, prefix="/api/public", tags=["public"])
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
 
-# -------------------------------------------------------------------
-# ROUTE TEMPORAIRE : FIX TABLE CARDS (Render Free, pas de console SQL)
-# -------------------------------------------------------------------
-@app.get("/__fix/recreate-cards-table")
-def recreate_cards_table(db: Session = Depends(get_db)):
-    """
-    ⚠️ Route TEMPORAIRE pour corriger l'erreur "column cards.theme does not exist".
-    - Supprime la table cards si elle existe
-    - Recrée les tables selon models.py
+# ============================================================
+# ROUTE ROOT (PING)
+# ============================================================
 
-    À utiliser UNE FOIS, puis à supprimer du code.
-    """
-    try:
-        # On supprime la table cards si présente
-        db.execute(text("DROP TABLE IF EXISTS cards CASCADE;"))
-        db.commit()
-    except Exception as e:
-        db.rollback()
-        return {"status": "error", "details": str(e)}
-
-    # On recrée les tables manquantes d'après les modèles
-    Base.metadata.create_all(bind=engine)
-
-    return {
-        "status": "ok",
-        "message": "Table 'cards' recréée avec les bonnes colonnes depuis models.py.",
-    }
-
-
-# -------------------------------------------------------------------
-# ROOT
-# -------------------------------------------------------------------
 @app.get("/")
 def root():
     return {"message": "Maavnica SmartCard API is running"}
 
 
-# -------------------------------------------------------------------
-# LOGIN PAGE
-# -------------------------------------------------------------------
-@app.get("/login", response_class=HTMLResponse)
-def login_page():
-    return HTMLResponse(
-        """
+# ============================================================
+# LOGIN ADMIN (SIMPLE MOT DE PASSE)
+# ============================================================
+
+LOGIN_PAGE_HTML = """
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -162,7 +148,11 @@ def login_page():
 </body>
 </html>
 """
-    )
+
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page():
+    return HTMLResponse(LOGIN_PAGE_HTML)
 
 
 @app.post("/login")
@@ -173,18 +163,26 @@ def login(password: str = Form(...), request: Request = None):
     return RedirectResponse("/login", status_code=302)
 
 
-# -------------------------------------------------------------------
-# FRONTEND PAGES
-# -------------------------------------------------------------------
+# ============================================================
+# PAGES FRONTEND (ADMIN + CARTE PUBLIQUE)
+# ============================================================
+
 @app.get("/c/{slug}", response_class=HTMLResponse)
 def serve_card(slug: str):
-    """Page publique de la SmartCard (/c/{slug})."""
-    return FileResponse(str(FRONTEND_DIR / "public-card" / "index.html"))
+    """
+    Sert la page publique de la SmartCard.
+    Le slug est utilisé côté JS pour appeler /api/public/cards/{slug}.
+    """
+    html_path = FRONTEND_DIR / "public-card" / "index.html"
+    return FileResponse(str(html_path))
 
 
 @app.get("/admin", response_class=HTMLResponse)
 def serve_admin(request: Request):
-    """Mini back-office protégé par login simple."""
+    """
+    Sert l'interface d'administration (une seule page statique).
+    Protection simple par session.
+    """
     if not request.session.get("is_admin"):
         return RedirectResponse("/login", status_code=302)
 

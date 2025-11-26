@@ -3,59 +3,68 @@ from typing import Optional
 from datetime import datetime
 
 # =============================================================
-#  CARTES SMARTCARD
+#  SMARTCARD — BASE
 # =============================================================
 
 class CardBase(BaseModel):
     """
-    Champs communs pour une carte.
-    IMPORTANT : Ces noms DOIVENT être identiques à ceux envoyés par le front.
+    Champs communs pour la SmartCard.
+    IMPORTANT : les clés doivent correspondre exactement à celles envoyées par le front.
     """
     company_name: str
     slug: str
+
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
+
     instagram: Optional[str] = None
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
 
     # VISUEL
-    theme_color: Optional[str] = "#2563EB"  # couleur principale
-    theme: str = "apple"  # apple, material, black-gold, artisan
+    theme: str = "apple"            # apple, material, black-gold, artisan
+    theme_color: Optional[str] = "#2563EB"  # couleur dominante
 
+
+# =============================================================
+#  SMARTCARD — CRÉATION / MISE À JOUR
+# =============================================================
 
 class CardCreate(CardBase):
-    """
-    Schéma pour créer une carte (POST /api/cards/).
-    Pas de user_id dans le body : il est fixé côté backend.
-    """
+    """Schéma pour création d’une carte. Le user_id est forcé côté backend."""
     pass
 
 
 class CardUpdate(BaseModel):
     """
-    Schéma pour mise à jour partielle (PUT /api/cards/{id}).
-    Tous les champs sont optionnels.
+    Mise à jour partielle — tous les champs sont optionnels.
+    Utilisé en PUT /api/cards/{id}
     """
     company_name: Optional[str] = None
     slug: Optional[str] = None
+
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
+
     instagram: Optional[str] = None
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
-    theme_color: Optional[str] = None
-    theme: Optional[str] = None
 
+    theme: Optional[str] = None
+    theme_color: Optional[str] = None
+
+
+# =============================================================
+#  SMARTCARD — RÉPONSE API (PUBLIC + ADMIN)
+# =============================================================
 
 class CardPublic(BaseModel):
-    """
-    Schéma renvoyé au front (admin + carte publique).
-    """
+    """Schéma complet renvoyé au front (admin & carte publique)."""
+
     id: int
     company_name: str
     slug: str
@@ -64,12 +73,13 @@ class CardPublic(BaseModel):
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
+
     instagram: Optional[str] = None
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
 
-    theme_color: Optional[str] = "#2563EB"
     theme: str = "apple"
+    theme_color: Optional[str] = "#2563EB"
 
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -79,15 +89,13 @@ class CardPublic(BaseModel):
         orm_mode = True
 
 
+# Compatibilité ancienne version
 class CardOut(CardPublic):
-    """
-    Compatibilité : certains endpoints utilisent encore CardOut comme response_model.
-    """
     pass
 
 
 # =============================================================
-#  FEEDBACKS
+#  FEEDBACKS (Avis rapides)
 # =============================================================
 
 class FeedbackCreate(BaseModel):

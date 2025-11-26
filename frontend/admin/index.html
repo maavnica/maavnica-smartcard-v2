@@ -4,254 +4,8 @@
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #020617;
-      color: #e5e7eb;
-    }
-
-    .app {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    h1 {
-      font-size: 20px;
-      margin: 0 0 6px;
-    }
-
-    .subtitle {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 16px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 840px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      border: 1px solid #1f2937;
-      padding: 16px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.4);
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    label {
-      display: block;
-      font-size: 11px;
-      margin-bottom: 4px;
-      color: #9ca3af;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #111827;
-      background: #020617;
-      color: #f9fafb;
-      font-size: 13px;
-      padding: 7px 9px;
-      margin-bottom: 8px;
-      font-family: inherit;
-    }
-
-    input::placeholder,
-    textarea::placeholder {
-      color: #6b7280;
-    }
-
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .row > div {
-      flex: 1;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #f9fafb;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #374151;
-      color: #e5e7eb;
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .hint {
-      font-size: 11px;
-      color: #9ca3af;
-    }
-
-    .pill-input {
-      font-size: 12px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #f9fafb;
-    }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-
-    .pill {
-      font-size: 11px;
-      border-radius: 999px;
-      border: 1px solid #374151;
-      padding: 2px 8px;
-      display: inline-flex;
-      gap: 4px;
-      align-items: center;
-      color: #9ca3af;
-    }
-
-    .pill-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
-    }
-
-    .tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: #64748b;
-    }
-
-    .link-preview {
-      font-size: 11px;
-      color: #93c5fd;
-      word-break: break-all;
-      margin-top: 4px;
-    }
-
-    .columns-small {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 8px;
-    }
-
-    .list {
-      max-height: 260px;
-      overflow: auto;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px solid #111827;
-      padding: 6px;
-      font-size: 11px;
-      background: #020617;
-    }
-
-    .item {
-      padding: 4px 4px 5px;
-      border-bottom: 1px solid #111827;
-    }
-
-    .item:last-child {
-      border-bottom: none;
-    }
-
-    .item-title {
-      font-weight: 500;
-      margin-bottom: 2px;
-    }
-
-    .item-meta {
-      color: #6b7280;
-      font-size: 10px;
-      margin-bottom: 2px;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      background: #22c55e;
-      color: #052e16;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 500;
-      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-    }
-
-    .toast.error {
-      background: #f97373;
-      color: #450a0a;
-      box-shadow: 0 12px 30px rgba(248, 113, 113, 0.5);
-    }
-
-    .toast.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -4px);
-    }
-  </style>
+  <!-- CSS admin externe -->
+  <link rel="stylesheet" href="/static/admin/style.css" />
 </head>
 <body>
   <div class="app">
@@ -315,17 +69,20 @@
           </div>
           <div>
             <label for="facebook">Facebook</label>
-            <input id="facebook" placeholder="Page ou URL" />
+            <input id="facebook" placeholder="Page ou profil" />
+          </div>
+          <div>
+            <label for="tiktok">TikTok</label>
+            <input id="tiktok" placeholder="@compte ou URL" />
           </div>
         </div>
-        <label for="tiktok">TikTok</label>
-        <input id="tiktok" placeholder="@compte ou URL" />
 
-        <div class="row">
+        <div class="section-label">Style de la carte</div>
+        <div class="columns-small">
           <div>
-            <label for="theme">Style de carte</label>
+            <label for="theme">Thème</label>
             <select id="theme">
-              <option value="apple">Apple (propre et épuré)</option>
+              <option value="apple">Apple</option>
               <option value="material">Material</option>
               <option value="black-gold">Black & Gold</option>
               <option value="artisan">Artisan</option>
@@ -333,12 +90,17 @@
           </div>
           <div>
             <label for="theme-color">Couleur principale</label>
-            <input id="theme-color" placeholder="#2563EB" />
+            <input id="theme-color" type="color" value="#2563EB" />
           </div>
         </div>
 
         <div class="hint">
-          Tu pourras tester le rendu depuis l’URL publique de la carte.
+          Le thème contrôle le style global de la carte, la couleur principale te permet de l’adapter à la charte de ton client.
+        </div>
+
+        <div class="section-label">Rendu public</div>
+        <div class="hint">
+          La SmartCard sera rendue depuis l’URL publique de la carte.
         </div>
 
         <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
@@ -380,218 +142,9 @@
 
   <div class="toast" id="toast"></div>
 
-  <script>
-    const API_BASE = "/api/cards";
-    let currentCardId = null;
-
-    function showToast(message, isError = false) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.toggle("error", isError);
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2600);
-    }
-
-    function fillForm(card) {
-      currentCardId = card.id;
-      document.getElementById("company-name").value = card.company_name || "";
-      document.getElementById("slug").value = card.slug || "";
-      document.getElementById("existing-slug").value = card.slug || "";
-      document.getElementById("google-link").value = card.google_review_link || "";
-      document.getElementById("phone").value = card.phone || "";
-      document.getElementById("whatsapp").value = card.whatsapp || "";
-      document.getElementById("payment-link").value = card.payment_link || "";
-      document.getElementById("instagram").value = card.instagram || "";
-      document.getElementById("facebook").value = card.facebook || "";
-      document.getElementById("tiktok").value = card.tiktok || "";
-      document.getElementById("theme-color").value = card.theme_color || "#2563EB";
-      document.getElementById("theme").value = card.theme || "apple";
-
-      updatePublicLink();
-      loadFeedbackAndQuotes();
-    }
-
-    function resetForm() {
-      currentCardId = null;
-      document.getElementById("company-name").value = "";
-      document.getElementById("slug").value = "";
-      document.getElementById("existing-slug").value = "";
-      document.getElementById("google-link").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("whatsapp").value = "";
-      document.getElementById("payment-link").value = "";
-      document.getElementById("instagram").value = "";
-      document.getElementById("facebook").value = "";
-      document.getElementById("tiktok").value = "";
-      document.getElementById("theme-color").value = "#2563EB";
-      document.getElementById("theme").value = "apple";
-      document.getElementById("public-link").textContent = "";
-      document.getElementById("feedback-list").innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
-      document.getElementById("quote-list").innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
-    }
-
-    function updatePublicLink() {
-      const slug = document.getElementById("slug").value.trim();
-      const box = document.getElementById("public-link");
-      if (!slug) {
-        box.textContent = "";
-        return;
-      }
-      const base = window.location.origin;
-      box.textContent = "Lien public : " + base.replace(/\/admin$/, "") + "/c/" + slug;
-    }
-
-    async function loadCardBySlug() {
-      const slugInput = document.getElementById("existing-slug");
-      let slug = slugInput.value.trim();
-      if (!slug) {
-        showToast("Renseigne un slug à charger.", true);
-        return;
-      }
-      slug = slug.toLowerCase();
-      slugInput.value = slug;
-
-      try {
-        const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`);
-        if (!res.ok) {
-          if (res.status === 404) {
-            showToast("Aucune carte trouvée pour ce slug.", true);
-          } else {
-            showToast("Erreur lors du chargement de la carte.", true);
-          }
-          return;
-        }
-        const data = await res.json();
-        fillForm(data);
-        showToast("Carte chargée.");
-      } catch (err) {
-        console.error(err);
-        showToast("Erreur réseau lors du chargement.", true);
-      }
-    }
-
-    async function saveCard() {
-      const companyName = document.getElementById("company-name").value.trim();
-      let slug = document.getElementById("slug").value.trim();
-
-      if (!companyName || !slug) {
-        showToast("Nom d’entreprise et slug sont obligatoires.", true);
-        return;
-      }
-
-      slug = slug.toLowerCase();
-      document.getElementById("slug").value = slug;
-      document.getElementById("existing-slug").value = slug;
-
-      const payload = {
-        company_name: companyName,
-        slug,
-        google_review_link: document.getElementById("google-link").value.trim() || null,
-        phone: document.getElementById("phone").value.trim() || null,
-        whatsapp: document.getElementById("whatsapp").value.trim() || null,
-        payment_link: document.getElementById("payment-link").value.trim() || null,
-        instagram: document.getElementById("instagram").value.trim() || null,
-        facebook: document.getElementById("facebook").value.trim() || null,
-        tiktok: document.getElementById("tiktok").value.trim() || null,
-        theme: document.getElementById("theme").value || "apple",
-        theme_color: document.getElementById("theme-color").value.trim() || "#2563EB"
-      };
-
-      const btn = document.getElementById("btn-save");
-      btn.disabled = true;
-      btn.textContent = "Enregistrement…";
-
-      try {
-        let url = API_BASE + "/";
-        let method = "POST";
-
-        if (currentCardId) {
-          url = `${API_BASE}/${currentCardId}`;
-          method = "PUT";
-        }
-
-        const res = await fetch(url, {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          console.error("Erreur API:", res.status, text);
-          showToast("Erreur lors de l’enregistrement.", true);
-          return;
-        }
-
-        const data = await res.json();
-        fillForm(data);
-        showToast("Carte enregistrée.");
-      } catch (err) {
-        console.error(err);
-        showToast("Erreur réseau lors de l’enregistrement.", true);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Enregistrer la carte";
-      }
-    }
-
-    async function loadFeedbackAndQuotes() {
-      if (!currentCardId) return;
-
-      try {
-        const [fRes, qRes] = await Promise.all([
-          fetch(`${API_BASE}/${currentCardId}/feedback`),
-          fetch(`${API_BASE}/${currentCardId}/quotes`)
-        ]);
-
-        const feedbackList = document.getElementById("feedback-list");
-        const quoteList = document.getElementById("quote-list");
-
-        // Avis
-        if (fRes.ok) {
-          const items = await fRes.json();
-          if (!items.length) {
-            feedbackList.innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
-          } else {
-            feedbackList.innerHTML = items.map(f => `
-              <div class="item">
-                <div class="item-title">${f.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
-                ${f.comment ? `<div>${f.comment}</div>` : ""}
-                <div class="item-meta">${new Date(f.created_at).toLocaleString()}</div>
-              </div>
-            `).join("");
-          }
-        }
-
-        // Devis
-        if (qRes.ok) {
-          const items = await qRes.json();
-          if (!items.length) {
-            quoteList.innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
-          } else {
-            quoteList.innerHTML = items.map(q => `
-              <div class="item">
-                <div class="item-title">${q.name || "Client"}</div>
-                <div class="item-meta">
-                  ${q.phone ? "📞 " + q.phone + " · " : ""}${q.email ? q.email : ""}
-                </div>
-                <div>${q.message || ""}</div>
-                <div class="item-meta">${new Date(q.created_at).toLocaleString()}</div>
-              </div>
-            `).join("");
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    // LISTENERS
-    document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
-    document.getElementById("btn-save").addEventListener("click", saveCard);
-    document.getElementById("btn-reset").addEventListener("click", resetForm);
-    document.getElementById("slug").addEventListener("input", updatePublicLink);
-  </script>
+  <!-- JS admin externe -->
+  <script src="/static/admin/app.js"></script>
 </body>
 </html>
+
 

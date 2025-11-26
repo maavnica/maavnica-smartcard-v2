@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
@@ -9,9 +8,22 @@ from ..utils.qrcode_utils import get_or_create_qr_for_slug
 router = APIRouter()
 
 
+# =============================================================
+#  CARTE PUBLIQUE
+# =============================================================
 @router.get("/cards/{slug}", response_model=schemas.CardPublic)
-def get_public_card(slug: str, db: Session = Depends(get_db)):
-    card = db.query(models.Card).filter(models.Card.slug == slug).first()
+def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPublic:
+    """
+    Récupère une SmartCard publique à partir de son slug.
+
+    Utilisée par /c/{slug} pour afficher la carte.
+    On renvoie aussi theme et theme_color pour gérer le rendu visuel.
+    """
+    card = (
+        db.query(models.Card)
+        .filter(models.Card.slug == slug)
+        .first()
+    )
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
 
@@ -28,14 +40,36 @@ def get_public_card(slug: str, db: Session = Depends(get_db)):
         instagram=card.instagram,
         facebook=card.facebook,
         tiktok=card.tiktok,
-        theme_color=card.theme_color,
+        theme=card.theme,              # 🔴 >>> IMPORTANT : on renvoie bien le thème
+        theme_color=card.theme_color,  # couleur perso
         qr_url=qr_url,
+        created_at=card.created_at,
+        updated_at=card.updated_at,
     )
 
 
-@router.post("/cards/{slug}/feedback", response_model=schemas.FeedbackOut, status_code=201)
-def create_feedback(slug: str, feedback: schemas.FeedbackCreate, db: Session = Depends(get_db)):
-    card = db.query(models.Card).filter(models.Card.slug == slug).first()
+# =============================================================
+#  AVIS RAPIDES (public)
+# =============================================================
+@router.post(
+    "/cards/{slug}/feedback",
+    response_model=schemas.FeedbackOut,
+    status_code=201,
+)
+def create_feedback(
+    slug: str,
+    feedback: schemas.FeedbackCreate,
+    db: Session = Depends(get_db),
+) -> schemas.FeedbackOut:
+    """
+    Création d’un avis rapide (satisfait / pas satisfait + commentaire optionnel)
+    pour la carte correspondant au slug.
+    """
+    card = (
+        db.query(models.Card)
+        .filter(models.Card.slug == slug)
+        .first()
+    )
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
 
@@ -47,13 +81,30 @@ def create_feedback(slug: str, feedback: schemas.FeedbackCreate, db: Session = D
     db.add(db_feedback)
     db.commit()
     db.refresh(db_feedback)
-
     return db_feedback
 
 
-@router.post("/cards/{slug}/quote", response_model=schemas.QuoteOut, status_code=201)
-def create_quote(slug: str, quote: schemas.QuoteCreate, db: Session = Depends(get_db)):
-    card = db.query(models.Card).filter(models.Card.slug == slug).first()
+# =============================================================
+#  DEMANDES DE DEVIS (public)
+# =============================================================
+@router.post(
+    "/cards/{slug}/quote",
+    response_model=schemas.QuoteOut,
+    status_code=201,
+)
+def create_quote(
+    slug: str,
+    quote: schemas.QuoteCreate,
+    db: Session = Depends(get_db),
+) -> schemas.QuoteOut:
+    """
+    Création d’une demande de devis publique pour la carte liée à ce slug.
+    """
+    card = (
+        db.query(models.Card)
+        .filter(models.Card.slug == slug)
+        .first()
+    )
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
 
@@ -67,5 +118,6 @@ def create_quote(slug: str, quote: schemas.QuoteCreate, db: Session = Depends(ge
     db.add(db_quote)
     db.commit()
     db.refresh(db_quote)
-
     return db_quote
+
+

@@ -4,23 +4,161 @@
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     :root {
+      /* Couleurs par défaut = thème "apple" */
       --primary: #2563EB;
       --primary-soft: #1D4ED8;
-      --bg: #0B1120;
+
+      --bg-page: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
       --card-bg: #FFFFFF;
+      --card-border: #E5E7EB;
+      --hero-bg: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      --surface-subtle: #F9FAFB;
+
       --text-main: #0F172A;
       --text-soft: #6B7280;
-      --border-subtle: #E5E7EB;
+      --text-strong: #111827;
+
+      --secondary-btn-bg: #F9FAFB;
+      --secondary-btn-border: #E5E7EB;
+      --secondary-btn-text: #111827;
+
+      --input-bg: #F9FAFB;
+      --input-border: #E5E7EB;
+      --divider-color: #E5E7EB;
+      --footer-text: #6B7280;
     }
+
+    /* ----------- THEMES ----------- */
+
+    /* Thème Apple : propre & épuré (défaut) */
+    body.theme-apple {
+      --bg-page: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
+      --card-bg: #FFFFFF;
+      --card-border: #E5E7EB;
+      --hero-bg: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      --surface-subtle: #F9FAFB;
+
+      --text-main: #0F172A;
+      --text-soft: #6B7280;
+      --text-strong: #111827;
+
+      --secondary-btn-bg: #F9FAFB;
+      --secondary-btn-border: #E5E7EB;
+      --secondary-btn-text: #111827;
+
+      --input-bg: #F9FAFB;
+      --input-border: #E5E7EB;
+      --divider-color: #E5E7EB;
+      --footer-text: #6B7280;
+    }
+
+    /* Thème Material : beaucoup plus "cartes / blocs" */
+    body.theme-material {
+      --bg-page: linear-gradient(180deg, #F1F5F9 0%, #E5E7EB 40%, #E2E8F0 100%);
+      --card-bg: #FFFFFF;
+      --card-border: #CBD5E1;
+      --hero-bg: linear-gradient(135deg, #E0F2FE, #E5E7EB);
+      --surface-subtle: #F3F4FF;
+
+      --text-main: #020617;
+      --text-soft: #6B7280;
+      --text-strong: #0F172A;
+
+      --secondary-btn-bg: #E0F2FE;
+      --secondary-btn-border: #BFDBFE;
+      --secondary-btn-text: #0F172A;
+
+      --input-bg: #EFF6FF;
+      --input-border: #BFDBFE;
+      --divider-color: #E2E8F0;
+      --footer-text: #64748B;
+    }
+
+    /* Spécifique Material : card + boutons + badges plus "carrés" */
+    body.theme-material .card-wrapper {
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.20);
+    }
+    body.theme-material .hero {
+      border-bottom-width: 3px;
+    }
+    body.theme-material .badge {
+      border-radius: 6px;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+    body.theme-material .primary-btn {
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(37,99,235,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 12px;
+    }
+    body.theme-material .secondary-btn {
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    body.theme-material .pill-select {
+      border-radius: 10px;
+    }
+
+    /* Thème Black & Gold : fond sombre, accent doré */
+    body.theme-black-gold {
+      --bg-page: radial-gradient(circle at top, #0F172A 0, #020617 55%, #000000 100%);
+      --card-bg: #020617;
+      --card-border: #111827;
+      --hero-bg: linear-gradient(135deg, #020617, #111827);
+      --surface-subtle: #020617;
+
+      --text-main: #F9FAFB;
+      --text-soft: #9CA3AF;
+      --text-strong: #F9FAFB;
+
+      --secondary-btn-bg: #020617;
+      --secondary-btn-border: #1F2937;
+      --secondary-btn-text: #E5E7EB;
+
+      --input-bg: #020617;
+      --input-border: #1F2937;
+      --divider-color: #1F2937;
+      --footer-text: #9CA3AF;
+    }
+
+    /* Thème Artisan : chaleureux (ocre/terre) */
+    body.theme-artisan {
+      --bg-page: radial-gradient(circle at top, #FEF3C7 0, #FFEDD5 35%, #F3F4F6 100%);
+      --card-bg: #FFFBEB;
+      --card-border: #FDE68A;
+      --hero-bg: linear-gradient(135deg, #FEF3C7, #FFEDD5);
+      --surface-subtle: #FEF3C7;
+
+      --text-main: #78350F;
+      --text-soft: #92400E;
+      --text-strong: #7C2D12;
+
+      --secondary-btn-bg: #FEF3C7;
+      --secondary-btn-border: #FCD34D;
+      --secondary-btn-text: #7C2D12;
+
+      --input-bg: #FEF3C7;
+      --input-border: #FCD34D;
+      --divider-color: #FCD34D;
+      --footer-text: #92400E;
+    }
+
+    /* ----------- BASE STYLES ----------- */
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
+      background: var(--bg-page);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -38,7 +176,7 @@
       font-size: 11px;
       letter-spacing: .18em;
       text-transform: uppercase;
-      color: #64748B;
+      color: var(--text-soft);
       margin-bottom: 10px;
     }
 
@@ -46,15 +184,15 @@
       background: var(--card-bg);
       border-radius: 24px;
       box-shadow: 0 18px 40px rgba(15,23,42,0.16);
-      border: 1px solid #E5E7EB;
+      border: 1px solid var(--card-border);
       overflow: hidden;
     }
 
     /* HEADER */
     .hero {
       padding: 18px 18px 16px;
-      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      border-bottom: 1px solid #E5E7EB;
+      background: var(--hero-bg);
+      border-bottom: 1px solid var(--card-border);
     }
 
     .badge-row {
@@ -70,8 +208,8 @@
       gap: 6px;
       padding: 4px 9px;
       border-radius: 999px;
-      background: #FFFFFF;
-      border: 1px solid #E5E7EB;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(226,232,240,0.9);
       font-size: 11px;
       color: #111827;
     }
@@ -96,18 +234,18 @@
     #company-name {
       font-size: 20px;
       font-weight: 800;
-      color: #0F172A;
+      color: var(--text-strong);
     }
 
     #hero-subtitle {
       font-size: 12px;
-      color: #4B5563;
+      color: var(--text-soft);
     }
 
     .hero-footer {
       margin-top: 10px;
       font-size: 11px;
-      color: #6B7280;
+      color: var(--text-soft);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -129,7 +267,7 @@
 
     .content {
       padding: 14px 14px 18px;
-      background: #FFFFFF;
+      background: var(--card-bg);
     }
 
     /* BOUTON PRINCIPAL */
@@ -177,9 +315,9 @@
       width: 100%;
       padding: 9px 10px;
       border-radius: 999px;
-      border: 1px solid #E5E7EB;
-      background: #F9FAFB;
-      color: #111827;
+      border: 1px solid var(--secondary-btn-border);
+      background: var(--secondary-btn-bg);
+      color: var(--secondary-btn-text);
       font-size: 12px;
       cursor: pointer;
       display: inline-flex;
@@ -199,7 +337,7 @@
       font-size: 13px;
       font-weight: 600;
       margin: 14px 0 4px;
-      color: #111827;
+      color: var(--text-strong);
     }
 
     .section-sub {
@@ -218,9 +356,9 @@
       flex: 1;
       padding: 8px 8px;
       border-radius: 999px;
-      border: 1px solid #E5E7EB;
-      background: #F9FAFB;
-      color: #111827;
+      border: 1px solid var(--secondary-btn-border);
+      background: var(--secondary-btn-bg);
+      color: var(--secondary-btn-text);
       font-size: 12px;
       cursor: pointer;
       display: flex;
@@ -244,9 +382,9 @@
     textarea, input {
       width: 100%;
       border-radius: 10px;
-      border: 1px solid #E5E7EB;
-      background: #F9FAFB;
-      color: #111827;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text-main);
       font-size: 12px;
       padding: 8px 9px;
       box-sizing: border-box;
@@ -301,7 +439,7 @@
 
     .divider {
       border: none;
-      border-top: 1px solid #E5E7EB;
+      border-top: 1px solid var(--divider-color);
       margin: 12px 0;
     }
 
@@ -339,7 +477,7 @@
       text-align: center;
       margin-top: 8px;
       font-size: 10px;
-      color: #6B7280;
+      color: var(--footer-text);
     }
 
     a {
@@ -348,7 +486,8 @@
     }
   </style>
 </head>
-<body>
+
+<body class="theme-apple">
   <div class="page">
     <div class="top-brand">MAAVNICA SMARTCARD</div>
 
@@ -455,7 +594,8 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // Récupérer le slug depuis l'URL (/c/{slug})
+    // ----- UTILITAIRES -----
+
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
       const cIndex = parts.indexOf("c");
@@ -489,11 +629,25 @@
       return "🛠️";
     }
 
+    // applique la couleur personnalisée au thème (option payante 😉)
     function applyThemeColor(hex) {
       if (!hex || !/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) return;
       document.documentElement.style.setProperty("--primary", hex);
       document.documentElement.style.setProperty("--primary-soft", hex);
     }
+
+    function applyTheme(themeName) {
+      const allowed = ["apple", "material", "black-gold", "artisan"];
+      const normalized = (themeName || "apple").toLowerCase();
+      const finalTheme = allowed.includes(normalized) ? normalized : "apple";
+
+      allowed.forEach(t => {
+        document.body.classList.remove("theme-" + t);
+      });
+      document.body.classList.add("theme-" + finalTheme);
+    }
+
+    // ----- CHARGEMENT DE LA CARTE -----
 
     async function loadCard() {
       const slug = getSlugFromPath();
@@ -510,7 +664,10 @@
         }
         const card = await res.json();
 
-        // Couleur thème personnalisée
+        // Thème (apple, material, black-gold, artisan)
+        applyTheme(card.theme);
+
+        // Couleur principale personnalisée (option)
         if (card.theme_color) {
           applyThemeColor(card.theme_color);
         }
@@ -520,7 +677,7 @@
           card.company_name || "Votre entreprise";
         document.getElementById("hero-emoji").textContent = guessEmoji(card);
 
-        // Sous-titre selon les infos
+        // Sous-titre
         const subtitleEl = document.getElementById("hero-subtitle");
         let subtitle = "Carte pro intelligente Maavnica.";
         if (card.phone || card.whatsapp) {
@@ -528,7 +685,9 @@
         }
         subtitleEl.textContent = subtitle;
 
-        // Bouton avis Google
+        // ----- Boutons principaux -----
+
+        // Avis Google
         const btnGoogle = document.getElementById("btn-google");
         if (card.google_review_link) {
           btnGoogle.disabled = false;
@@ -541,7 +700,9 @@
         const btnWhatsApp = document.getElementById("btn-whatsapp");
         if (card.whatsapp) {
           btnWhatsApp.disabled = false;
-          const msg = encodeURIComponent("Bonjour, je vous contacte via votre carte Maavnica SmartCard.");
+          const msg = encodeURIComponent(
+            "Bonjour, je vous contacte via votre carte Maavnica SmartCard."
+          );
           btnWhatsApp.onclick = () => {
             window.open(`https://wa.me/${card.whatsapp}?text=${msg}`, "_blank");
           };
@@ -565,7 +726,7 @@
           };
         }
 
-        // Avis rapide
+        // ----- Avis rapide -----
         let satisfaction = null;
         const pillYes = document.getElementById("pill-yes");
         const pillNo = document.getElementById("pill-no");
@@ -614,7 +775,7 @@
           }
         });
 
-        // Demande de devis
+        // ----- Demande de devis -----
         const btnQuote = document.getElementById("btn-send-quote");
         btnQuote.addEventListener("click", async () => {
           const name = document.getElementById("quote-name").value.trim();
@@ -665,6 +826,7 @@
   </script>
 </body>
 </html>
+
 
 
 
