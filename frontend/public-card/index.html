@@ -2,197 +2,240 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Maavnica SmartCard – Carte pro</title>
+  <title>Maavnica SmartCard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     :root {
-      /* Couleurs par défaut = thème "apple" */
-      --primary: #2563EB;
-      --primary-soft: #1D4ED8;
+      --primary: #6366F1;
+      --primary-soft: #4F46E5;
 
-      --bg-page: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
-      --card-bg: #FFFFFF;
-      --card-border: #E5E7EB;
-      --hero-bg: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      --surface-subtle: #F9FAFB;
-
-      --text-main: #0F172A;
-      --text-soft: #6B7280;
-      --text-strong: #111827;
-
-      --secondary-btn-bg: #F9FAFB;
-      --secondary-btn-border: #E5E7EB;
-      --secondary-btn-text: #111827;
-
-      --input-bg: #F9FAFB;
-      --input-border: #E5E7EB;
-      --divider-color: #E5E7EB;
-      --footer-text: #6B7280;
-    }
-
-    /* ----------- THEMES ----------- */
-
-    /* Thème Apple : propre & épuré (défaut) */
-    body.theme-apple {
-      --bg-page: radial-gradient(circle at top, #DBEAFE 0, #EFF6FF 30%, #E5E7EB 100%);
-      --card-bg: #FFFFFF;
-      --card-border: #E5E7EB;
-      --hero-bg: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      --surface-subtle: #F9FAFB;
-
-      --text-main: #0F172A;
-      --text-soft: #6B7280;
-      --text-strong: #111827;
-
-      --secondary-btn-bg: #F9FAFB;
-      --secondary-btn-border: #E5E7EB;
-      --secondary-btn-text: #111827;
-
-      --input-bg: #F9FAFB;
-      --input-border: #E5E7EB;
-      --divider-color: #E5E7EB;
-      --footer-text: #6B7280;
-    }
-
-    /* Thème Material : beaucoup plus "cartes / blocs" */
-    body.theme-material {
-      --bg-page: linear-gradient(180deg, #F1F5F9 0%, #E5E7EB 40%, #E2E8F0 100%);
-      --card-bg: #FFFFFF;
-      --card-border: #CBD5E1;
-      --hero-bg: linear-gradient(135deg, #E0F2FE, #E5E7EB);
-      --surface-subtle: #F3F4FF;
-
-      --text-main: #020617;
-      --text-soft: #6B7280;
-      --text-strong: #0F172A;
-
-      --secondary-btn-bg: #E0F2FE;
-      --secondary-btn-border: #BFDBFE;
-      --secondary-btn-text: #0F172A;
-
-      --input-bg: #EFF6FF;
-      --input-border: #BFDBFE;
-      --divider-color: #E2E8F0;
-      --footer-text: #64748B;
-    }
-
-    /* Spécifique Material : card + boutons + badges plus "carrés" */
-    body.theme-material .card-wrapper {
-      border-radius: 16px;
-      box-shadow: 0 18px 40px rgba(15,23,42,0.20);
-    }
-    body.theme-material .hero {
-      border-bottom-width: 3px;
-    }
-    body.theme-material .badge {
-      border-radius: 6px;
-      text-transform: uppercase;
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-    }
-    body.theme-material .primary-btn {
-      border-radius: 12px;
-      box-shadow: 0 12px 28px rgba(37,99,235,0.45);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-size: 12px;
-    }
-    body.theme-material .secondary-btn {
-      border-radius: 10px;
-      font-weight: 500;
-    }
-    body.theme-material .pill-select {
-      border-radius: 10px;
-    }
-
-    /* Thème Black & Gold : fond sombre, accent doré */
-    body.theme-black-gold {
-      --bg-page: radial-gradient(circle at top, #0F172A 0, #020617 55%, #000000 100%);
-      --card-bg: #020617;
-      --card-border: #111827;
-      --hero-bg: linear-gradient(135deg, #020617, #111827);
-      --surface-subtle: #020617;
+      --bg-page: radial-gradient(circle at top, #020617 0, #020617 40%, #000000 100%);
+      --glass-bg: rgba(15, 23, 42, 0.82);
+      --glass-border: rgba(148, 163, 184, 0.35);
+      --glass-highlight: rgba(129, 140, 248, 0.25);
 
       --text-main: #F9FAFB;
       --text-soft: #9CA3AF;
-      --text-strong: #F9FAFB;
+      --text-strong: #E5E7EB;
 
-      --secondary-btn-bg: #020617;
-      --secondary-btn-border: #1F2937;
-      --secondary-btn-text: #E5E7EB;
+      --pill-positive-bg: #DCFCE7;
+      --pill-positive-border: #22C55E;
+      --pill-positive-text: #14532D;
 
-      --input-bg: #020617;
-      --input-border: #1F2937;
-      --divider-color: #1F2937;
-      --footer-text: #9CA3AF;
+      --pill-negative-bg: #FEE2E2;
+      --pill-negative-border: #EF4444;
+      --pill-negative-text: #7F1D1D;
+
+      --input-bg: rgba(15, 23, 42, 0.85);
+      --input-border: rgba(51, 65, 85, 0.9);
+      --divider-color: rgba(30, 64, 175, 0.7);
+      --footer-text: #6B7280;
     }
 
-    /* Thème Artisan : chaleureux (ocre/terre) */
+    /* APPLE / GLASS – thème par défaut */
+    body.theme-apple {
+      --primary: #6366F1;
+      --primary-soft: #4F46E5;
+      --bg-page: radial-gradient(circle at top, #020617 0, #020617 40%, #000000 100%);
+      --glass-bg: rgba(15, 23, 42, 0.82);
+      --glass-border: rgba(148, 163, 184, 0.35);
+      --glass-highlight: rgba(129, 140, 248, 0.25);
+      --text-main: #F9FAFB;
+      --text-soft: #9CA3AF;
+      --text-strong: #E5E7EB;
+    }
+
+    /* MATERIAL SAAS v2 */
+    body.theme-material {
+      --primary: #2563EB;
+      --primary-soft: #22C55E;
+      --bg-page: radial-gradient(circle at top, #0F172A 0, #020617 45%, #020617 100%);
+      --glass-bg: rgba(15, 23, 42, 0.9);
+      --glass-border: rgba(59, 130, 246, 0.5);
+      --glass-highlight: rgba(59, 130, 246, 0.25);
+      --text-main: #EFF6FF;
+      --text-soft: #9CA3AF;
+      --text-strong: #E5E7EB;
+      --pill-positive-bg: #DCFCE7;
+      --pill-positive-border: #22C55E;
+      --pill-positive-text: #14532D;
+      --pill-negative-bg: #FEE2E2;
+      --pill-negative-border: #EF4444;
+      --pill-negative-text: #7F1D1D;
+      --input-bg: rgba(15, 23, 42, 0.96);
+      --input-border: rgba(59, 130, 246, 0.6);
+    }
+
+    /* BLACK & GOLD v2 WOW */
+    body.theme-black-gold {
+      --primary: #f6c948;
+      --primary-soft: #d9a520;
+
+      --bg-page: radial-gradient(circle at 50% -20%, #2b2100 0%, #0b0b0b 40%, #000000 100%);
+      --glass-bg: rgba(20, 20, 20, 0.85);
+      --glass-border: rgba(246, 201, 72, 0.45);
+      --glass-highlight: rgba(246, 201, 72, 0.25);
+
+      --text-main: #f9f6ef;
+      --text-soft: #c8b88a;
+      --text-strong: #fff4d6;
+
+      --pill-positive-bg: #fff7da;
+      --pill-positive-border: #d4a017;
+      --pill-positive-text: #7c5e00;
+
+      --pill-negative-bg: #ffe5e5;
+      --pill-negative-border: #ff6b6b;
+      --pill-negative-text: #7f1d1d;
+
+      --input-bg: rgba(20, 20, 20, 0.95);
+      --input-border: rgba(140, 110, 20, 0.7);
+      --footer-text: #b8a874;
+    }
+
+    /* ARTISAN PRO v2 */
     body.theme-artisan {
-      --bg-page: radial-gradient(circle at top, #FEF3C7 0, #FFEDD5 35%, #F3F4F6 100%);
-      --card-bg: #FFFBEB;
-      --card-border: #FDE68A;
-      --hero-bg: linear-gradient(135deg, #FEF3C7, #FFEDD5);
-      --surface-subtle: #FEF3C7;
+      --primary: #EA580C;
+      --primary-soft: #C2410C;
+      --bg-page: radial-gradient(circle at top, #451A03 0, #1C1917 45%, #0B0F19 100%);
+      --glass-bg: rgba(24, 20, 16, 0.92);
+      --glass-border: rgba(245, 158, 11, 0.45);
+      --glass-highlight: rgba(245, 158, 11, 0.24);
+      --text-main: #FEF3C7;
+      --text-soft: #FBBF24;
+      --text-strong: #FFFBEB;
 
-      --text-main: #78350F;
-      --text-soft: #92400E;
-      --text-strong: #7C2D12;
+      --pill-positive-bg: #DCFCE7;
+      --pill-positive-border: #16A34A;
+      --pill-positive-text: #14532D;
 
-      --secondary-btn-bg: #FEF3C7;
-      --secondary-btn-border: #FCD34D;
-      --secondary-btn-text: #7C2D12;
+      --pill-negative-bg: #FEE2E2;
+      --pill-negative-border: #B91C1C;
+      --pill-negative-text: #7F1D1D;
 
-      --input-bg: #FEF3C7;
-      --input-border: #FCD34D;
-      --divider-color: #FCD34D;
-      --footer-text: #92400E;
+      --input-bg: rgba(24, 20, 16, 0.96);
+      --input-border: rgba(245, 158, 11, 0.7);
+      --footer-text: #FBBF24;
     }
-
-    /* ----------- BASE STYLES ----------- */
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-page);
       min-height: 100vh;
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 16px 8px 32px;
+      padding: 18px 10px 26px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-page);
       color: var(--text-main);
     }
 
-    .page {
+    .frame {
       width: 100%;
-      max-width: 480px;
+      max-width: 430px;
+      position: relative;
+    }
+
+    .blur-orbit {
+      position: absolute;
+      inset: -80px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 60%),
+        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.22), transparent 65%),
+        radial-gradient(circle at 50% 100%, rgba(248, 113, 113, 0.2), transparent 60%);
+      filter: blur(10px);
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-shell {
+      position: relative;
+      z-index: 1;
+      border-radius: 28px;
+      border: 1px solid var(--glass-border);
+      background:
+        radial-gradient(circle at 0% 0%, var(--glass-highlight), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.95));
+      backdrop-filter: blur(18px);
+      box-shadow:
+        0 26px 60px rgba(15, 23, 42, 0.85),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+    }
+
+    /* Black & Gold – shell plus luxueux */
+    body.theme-black-gold .card-shell {
+      box-shadow:
+        0 0 80px rgba(246, 201, 72, 0.18),
+        0 0 24px rgba(246, 201, 72, 0.1),
+        0 28px 70px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(246, 201, 72, 0.55);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(246, 201, 72, 0.18), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(246, 201, 72, 0.1), transparent 70%),
+        rgba(20, 20, 20, 0.9);
+      backdrop-filter: blur(22px);
+    }
+
+    /* Material – look plus “SaaS” */
+    body.theme-material .card-shell {
+      box-shadow:
+        0 22px 55px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+      border-radius: 24px;
+    }
+
+    /* Artisan – look plus chaleureux */
+    body.theme-artisan .card-shell {
+      box-shadow:
+        0 26px 60px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(120, 53, 15, 0.8);
     }
 
     .top-brand {
       text-align: center;
       font-size: 11px;
-      letter-spacing: .18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-soft);
       margin-bottom: 10px;
     }
 
-    .card-wrapper {
-      background: var(--card-bg);
-      border-radius: 24px;
-      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
-      border: 1px solid var(--card-border);
-      overflow: hidden;
+    .hero {
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      position: relative;
     }
 
-    /* HEADER */
-    .hero {
-      padding: 18px 18px 16px;
-      background: var(--hero-bg);
-      border-bottom: 1px solid var(--card-border);
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(129, 140, 248, 0.35), transparent 60%),
+        radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.22), transparent 70%);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    body.theme-black-gold .hero-glow {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(246, 201, 72, 0.35), transparent 60%),
+        radial-gradient(circle at 100% 0%, rgba(246, 201, 72, 0.15), transparent 70%);
+    }
+
+    body.theme-artisan .hero-glow {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.35), transparent 60%),
+        radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.18), transparent 70%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .badge-row {
@@ -206,24 +249,66 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 9px;
+      padding: 3px 9px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.96);
-      border: 1px solid rgba(226,232,240,0.9);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.5);
       font-size: 11px;
-      color: #111827;
+      color: var(--text-soft);
     }
 
     .badge span:first-child { font-size: 13px; }
 
-    .hero-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 4px 0 4px;
+    body.theme-black-gold .badge {
+      background: rgba(40, 32, 8, 0.8);
+      border: 1px solid rgba(246, 201, 72, 0.4);
+      color: #e7d6a2;
     }
 
-    .hero-emoji { font-size: 22px; }
+    body.theme-artisan .badge {
+      background: rgba(67, 20, 7, 0.9);
+      border-color: rgba(245, 158, 11, 0.65);
+      color: #FED7AA;
+    }
+
+    body.theme-material .badge {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(59, 130, 246, 0.6);
+      color: #BFDBFE;
+    }
+
+    .hero-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 0%, #FFFFFF, #9CA3AF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    body.theme-black-gold .hero-avatar {
+      background: radial-gradient(circle at 30% 0%, #fff4d6, #caa748);
+      box-shadow: 0 10px 28px rgba(246, 201, 72, 0.3);
+    }
+
+    body.theme-artisan .hero-avatar {
+      background: radial-gradient(circle at 30% 0%, #FED7AA, #C2410C);
+      box-shadow: 0 10px 26px rgba(251, 146, 60, 0.35);
+    }
+
+    body.theme-material .hero-avatar {
+      background: radial-gradient(circle at 30% 0%, #DBEAFE, #1D4ED8);
+      box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
+    }
 
     .hero-title-text {
       display: flex;
@@ -232,13 +317,13 @@
     }
 
     #company-name {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 19px;
+      font-weight: 700;
       color: var(--text-strong);
     }
 
     #hero-subtitle {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-soft);
     }
 
@@ -249,12 +334,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
 
     .hero-footer span {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     .hero-dot {
@@ -262,15 +348,13 @@
       height: 8px;
       border-radius: 999px;
       background: #22C55E;
-      box-shadow: 0 0 0 3px rgba(34,197,94,.28);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, .25);
     }
 
     .content {
-      padding: 14px 14px 18px;
-      background: var(--card-bg);
+      padding: 12px 14px 16px;
     }
 
-    /* BOUTON PRINCIPAL */
     .primary-btn {
       width: 100%;
       padding: 11px 14px;
@@ -281,62 +365,104 @@
       color: #FFFFFF;
       cursor: pointer;
       background: linear-gradient(135deg, var(--primary), var(--primary-soft));
-      box-shadow: 0 14px 30px rgba(37,99,235,0.35);
+      box-shadow: 0 18px 36px rgba(37, 99, 235, 0.55);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       margin-bottom: 10px;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
     }
 
-    .primary-btn:disabled {
-      opacity: .45;
-      cursor: default;
-      box-shadow: none;
+    .primary-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
+    }
+
+    /* Black & Gold – bouton principal or */
+    body.theme-black-gold .primary-btn {
+      background: linear-gradient(135deg, #f6d97a, #d9a520);
+      color: #4a3a00;
+      box-shadow: 0 20px 40px rgba(246, 201, 72, 0.35);
+    }
+
+    body.theme-black-gold .primary-btn:active {
+      box-shadow: 0 12px 22px rgba(246, 201, 72, 0.25);
+    }
+
+    /* Artisan – bouton accent chaud */
+    body.theme-artisan .primary-btn {
+      background: linear-gradient(135deg, #EA580C, #F97316);
+      box-shadow: 0 18px 34px rgba(248, 113, 38, 0.45);
+    }
+
+    /* Material – bouton mix bleu/vert */
+    body.theme-material .primary-btn {
+      background: linear-gradient(135deg, #2563EB, #22C55E);
+      box-shadow: 0 18px 34px rgba(37, 99, 235, 0.5);
     }
 
     .btn-icon { font-size: 15px; }
 
-    /* BOUTONS ACTIONS */
     .actions-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
-    @media (min-width: 420px) {
+    @media (max-width: 380px) {
       .actions-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
     .secondary-btn {
       width: 100%;
-      padding: 9px 10px;
+      padding: 8px 10px;
       border-radius: 999px;
-      border: 1px solid var(--secondary-btn-border);
-      background: var(--secondary-btn-bg);
-      color: var(--secondary-btn-text);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.95));
+      color: var(--text-main);
       font-size: 12px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      text-align: center;
       white-space: nowrap;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.1s;
     }
 
-    .secondary-btn:disabled {
-      opacity: .35;
-      cursor: default;
+    .secondary-btn span:first-child { font-size: 13px; }
+
+    .secondary-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.8);
+    }
+
+    body.theme-black-gold .secondary-btn {
+      background: radial-gradient(circle at top, rgba(40, 32, 8, 0.85), rgba(20, 20, 20, 0.95));
+      border: 1px solid rgba(246, 201, 72, 0.35);
+      color: #ffefc2;
+    }
+
+    body.theme-artisan .secondary-btn {
+      background: radial-gradient(circle at top, rgba(67, 20, 7, 0.9), rgba(24, 20, 16, 0.98));
+      border-color: rgba(245, 158, 11, 0.55);
+      color: #FED7AA;
+    }
+
+    body.theme-material .secondary-btn {
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 1));
+      border-color: rgba(59, 130, 246, 0.55);
+      color: #E0F2FE;
     }
 
     .section-title {
       font-size: 13px;
       font-weight: 600;
-      margin: 14px 0 4px;
+      margin: 4px 0 4px;
       color: var(--text-strong);
     }
 
@@ -352,36 +478,42 @@
       margin-bottom: 8px;
     }
 
+    @media (max-width: 380px) {
+      .pill-row { flex-direction: column; }
+    }
+
     .pill-select {
       flex: 1;
-      padding: 8px 8px;
+      padding: 7px 9px;
       border-radius: 999px;
-      border: 1px solid var(--secondary-btn-border);
-      background: var(--secondary-btn-bg);
-      color: var(--secondary-btn-text);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
       font-size: 12px;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
     }
 
+    .pill-select span:first-child { font-size: 14px; }
+
     .pill-select.active-yes {
-      background: #DCFCE7;
-      border-color: #22C55E;
-      color: #166534;
+      background: var(--pill-positive-bg);
+      border-color: var(--pill-positive-border);
+      color: var(--pill-positive-text);
     }
 
     .pill-select.active-no {
-      background: #FEE2E2;
-      border-color: #EF4444;
-      color: #991B1B;
+      background: var(--pill-negative-bg);
+      border-color: var(--pill-negative-border);
+      color: var(--pill-negative-text);
     }
 
     textarea, input {
       width: 100%;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--input-border);
       background: var(--input-bg);
       color: var(--text-main);
@@ -391,7 +523,8 @@
       font-family: inherit;
     }
 
-    textarea::placeholder, input::placeholder {
+    textarea::placeholder,
+    input::placeholder {
       color: #9CA3AF;
       font-size: 11px;
     }
@@ -407,10 +540,8 @@
       gap: 8px;
     }
 
-    @media (max-width: 420px) {
-      .form-row {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 380px) {
+      .form-row { grid-template-columns: 1fr; }
     }
 
     .submit-btn {
@@ -419,21 +550,23 @@
       padding: 9px 12px;
       border-radius: 999px;
       border: none;
-      background: #111827;
-      color: #F9FAFB;
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.9);
     }
 
     .submit-btn:disabled {
-      opacity: .4;
+      opacity: 0.4;
       cursor: default;
+      box-shadow: none;
     }
 
     .hint {
       font-size: 10px;
-      color: #9CA3AF;
+      color: var(--text-soft);
       margin-top: 4px;
     }
 
@@ -441,6 +574,49 @@
       border: none;
       border-top: 1px solid var(--divider-color);
       margin: 12px 0;
+      opacity: 0.8;
+    }
+
+    /* QR CODE SECTION */
+    .qr-section {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .qr-inner {
+      padding: 8px;
+      border-radius: 14px;
+      background: #FFFFFF;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+    }
+    .qr-inner img {
+      width: 140px;
+      height: 140px;
+      display: block;
+    }
+    body.theme-black-gold .qr-section {
+      border-color: rgba(246, 201, 72, 0.6);
+      background: rgba(24, 20, 8, 0.9);
+    }
+    body.theme-artisan .qr-section {
+      border-color: rgba(245, 158, 11, 0.7);
+      background: rgba(41, 23, 7, 0.9);
+    }
+    body.theme-material .qr-section {
+      border-color: rgba(59, 130, 246, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--footer-text);
     }
 
     .toast {
@@ -454,17 +630,17 @@
       border-radius: 999px;
       font-size: 12px;
       font-weight: 500;
-      box-shadow: 0 12px 30px rgba(22,163,74,0.5);
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.55);
       opacity: 0;
       pointer-events: none;
-      transition: opacity .2s ease-out, transform .2s ease-out;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
       z-index: 50;
     }
 
     .toast.error {
       background: #F97373;
       color: #450A0A;
-      box-shadow: 0 12px 30px rgba(248,113,113,0.5);
+      box-shadow: 0 12px 30px rgba(248, 113, 113, 0.6);
     }
 
     .toast.show {
@@ -472,75 +648,66 @@
       pointer-events: auto;
       transform: translate(-50%, -4px);
     }
-
-    .footer {
-      text-align: center;
-      margin-top: 8px;
-      font-size: 10px;
-      color: var(--footer-text);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
   </style>
 </head>
 
 <body class="theme-apple">
-  <div class="page">
+  <div class="frame">
+    <div class="blur-orbit"></div>
+
     <div class="top-brand">MAAVNICA SMARTCARD</div>
 
-    <div class="card-wrapper">
-      <!-- HEADER -->
+    <div class="card-shell">
       <div class="hero">
-        <div class="badge-row">
-          <div class="badge">
-            <span>⭐</span><span>Entreprise recommandée</span>
-          </div>
-          <div class="badge">
-            <span>📍</span><span>Service de proximité</span>
-          </div>
-        </div>
-
-        <div class="hero-title">
-          <span class="hero-emoji" id="hero-emoji">🛠️</span>
-          <div class="hero-title-text">
-            <div id="company-name">Votre entreprise</div>
-            <div id="hero-subtitle">
-              Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
+        <div class="hero-glow"></div>
+        <div class="hero-inner">
+          <div class="badge-row">
+            <div class="badge">
+              <span>⭐</span><span>Entreprise recommandée</span>
+            </div>
+            <div class="badge">
+              <span>📍</span><span>Service de proximité</span>
             </div>
           </div>
-        </div>
 
-        <div class="hero-footer">
-          <span><span class="hero-dot"></span>Disponible pour vos clients</span>
-          <span>via Maavnica SmartCard</span>
+          <div class="hero-title-row">
+            <div class="hero-avatar" id="hero-emoji">🛠️</div>
+            <div class="hero-title-text">
+              <div id="company-name">Votre entreprise</div>
+              <div id="hero-subtitle">
+                Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-footer">
+            <span><span class="hero-dot"></span>Disponible pour vos clients</span>
+            <span>via Maavnica SmartCard</span>
+          </div>
         </div>
       </div>
 
-      <!-- CONTENU -->
       <div class="content">
         <!-- BOUTON PRINCIPAL AVIS GOOGLE -->
-        <button class="primary-btn" id="btn-google" disabled>
+        <button class="primary-btn" id="btn-google">
           <span class="btn-icon">⭐</span>
           <span>Laisser un avis Google</span>
         </button>
 
         <!-- BOUTONS CONTACT / PAIEMENT -->
         <div class="actions-grid">
-          <button class="secondary-btn" id="btn-whatsapp" disabled>
+          <button class="secondary-btn" id="btn-whatsapp">
             <span>💬</span><span>WhatsApp</span>
           </button>
-          <button class="secondary-btn" id="btn-call" disabled>
+          <button class="secondary-btn" id="btn-call">
             <span>📞</span><span>Appeler</span>
           </button>
-          <button class="secondary-btn" id="btn-pay" disabled>
+          <button class="secondary-btn" id="btn-pay">
             <span>💳</span><span>Payer en ligne</span>
           </button>
         </div>
 
-        <!-- SECTION AVIS -->
+        <!-- SECTION AVIS RAPIDE -->
         <div class="section-title">Votre avis rapide</div>
         <div class="section-sub">
           En quelques secondes, dites si vous êtes satisfait de l’intervention, et laissez un mot si vous le souhaitez.
@@ -583,19 +750,34 @@
         <div class="hint">
           Vous ne serez contacté que par cet artisan, vos informations ne sont pas revendues.
         </div>
+
+        <hr class="divider" />
+
+        <!-- SECTION QR CODE -->
+        <div class="section-title">Partager la carte</div>
+        <div class="section-sub">
+          Scannez ou imprimez ce QR Code pour accéder directement à cette SmartCard.
+        </div>
+
+        <div class="qr-section">
+          <div class="qr-inner">
+            <img id="qr-image" alt="QR Code SmartCard" />
+          </div>
+        </div>
+        <div class="hint">
+          Idéal pour vos flyers, factures, cartes physiques ou vitrines.
+        </div>
       </div>
     </div>
 
     <div class="footer">
-      Carte propulsée par Maavnica SmartCard · Prototype en cours d’amélioration
+      Carte propulsée par Maavnica SmartCard · Prototype v2 “Glass”
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    // ----- UTILITAIRES -----
-
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
       const cIndex = parts.indexOf("c");
@@ -616,20 +798,66 @@
     }
 
     function guessEmoji(card) {
-      const text = ((card.company_name || card.slug || "") + "").toLowerCase();
+      const raw = (card.company_name || card.slug || "") + "";
+      const text = raw.toLowerCase();
+
+      // 🧘‍♀️ Professions bien-être / zen
+      if (
+        text.includes("sophro") ||
+        text.includes("relax") ||
+        text.includes("bien-être") || text.includes("bien etre") ||
+        text.includes("yoga") ||
+        text.includes("médit") || text.includes("medit")
+      ) {
+        return "🧘‍♀️";
+      }
+
+      // 💆 Ostéo / kiné / massage / réflexo
+      if (
+        text.includes("ostéo") || text.includes("osteo") ||
+        text.includes("kiné") || text.includes("kine") ||
+        text.includes("massage") ||
+        text.includes("massothé") || text.includes("massothe") ||
+        text.includes("reflexo") || text.includes("réflexo") || text.includes("reflexologie")
+      ) {
+        return "💆‍♀️";
+      }
+
+      // 🧠 Hypnose / thérapies brèves / coaching mental
+      if (
+        text.includes("hypno") ||
+        text.includes("thérapeute") || text.includes("therapeute") ||
+        text.includes("psy") ||
+        (text.includes("coach") && text.includes("mental"))
+      ) {
+        return "🧠";
+      }
+
+      // 🌿 Naturopathes / énergéticiens / plantes / aroma
+      if (
+        text.includes("naturo") ||
+        text.includes("énergét") || text.includes("energet") ||
+        text.includes("plantes") ||
+        text.includes("aroma") || text.includes("aromath")
+      ) {
+        return "🌿";
+      }
+
+      // Métiers "terrain"
       if (text.includes("plomb")) return "🔧";
       if (text.includes("électric") || text.includes("electric")) return "⚡";
       if (text.includes("chauff") || text.includes("clim")) return "🔥";
       if (text.includes("taxi") || text.includes("vtc")) return "🚕";
       if (text.includes("coiff") || text.includes("hair")) return "✂️";
       if (text.includes("jardin") || text.includes("paysag")) return "🌿";
-      if (text.includes("nettoy") || text.includes("ménage") || text.includes("clean")) return "🧹";
+      if (text.includes("nettoy") || text.includes("ménage") || text.includes("menage") || text.includes("clean")) return "🧹";
       if (text.includes("concierg")) return "🛎️";
       if (text.includes("immo") || text.includes("agence")) return "🏡";
+
+      // Par défaut : artisan / services généraux
       return "🛠️";
     }
 
-    // applique la couleur personnalisée au thème (option payante 😉)
     function applyThemeColor(hex) {
       if (!hex || !/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) return;
       document.documentElement.style.setProperty("--primary", hex);
@@ -647,7 +875,17 @@
       document.body.classList.add("theme-" + finalTheme);
     }
 
-    // ----- CHARGEMENT DE LA CARTE -----
+    // Génération du QR Code auto en fonction du slug
+    function updateQrCode(slug) {
+      const img = document.getElementById("qr-image");
+      if (!img || !slug) return;
+      const baseUrl = window.location.origin || "";
+      const url = baseUrl + "/c/" + encodeURIComponent(slug);
+      // QR classique noir sur fond blanc (lisible) – le cadre change avec le thème
+      img.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" 
+        + encodeURIComponent(url) 
+        + "&color=000000&bgcolor=FFFFFF";
+    }
 
     async function loadCard() {
       const slug = getSlugFromPath();
@@ -655,6 +893,11 @@
         showToast("Slug introuvable dans l’URL", true);
         return;
       }
+
+      const btnGoogle   = document.getElementById("btn-google");
+      const btnWhatsApp = document.getElementById("btn-whatsapp");
+      const btnCall     = document.getElementById("btn-call");
+      const btnPay      = document.getElementById("btn-pay");
 
       try {
         const res = await fetch(`/api/public/cards/${encodeURIComponent(slug)}`);
@@ -664,20 +907,13 @@
         }
         const card = await res.json();
 
-        // Thème (apple, material, black-gold, artisan)
         applyTheme(card.theme);
+        if (card.theme_color) applyThemeColor(card.theme_color);
 
-        // Couleur principale personnalisée (option)
-        if (card.theme_color) {
-          applyThemeColor(card.theme_color);
-        }
-
-        // Nom + emoji
         document.getElementById("company-name").textContent =
           card.company_name || "Votre entreprise";
         document.getElementById("hero-emoji").textContent = guessEmoji(card);
 
-        // Sous-titre
         const subtitleEl = document.getElementById("hero-subtitle");
         let subtitle = "Carte pro intelligente Maavnica.";
         if (card.phone || card.whatsapp) {
@@ -685,48 +921,54 @@
         }
         subtitleEl.textContent = subtitle;
 
-        // ----- Boutons principaux -----
-
         // Avis Google
-        const btnGoogle = document.getElementById("btn-google");
         if (card.google_review_link) {
-          btnGoogle.disabled = false;
           btnGoogle.onclick = () => {
             window.open(card.google_review_link, "_blank");
+          };
+        } else {
+          btnGoogle.onclick = () => {
+            showToast("Lien d’avis Google non configuré pour cette carte.", true);
           };
         }
 
         // WhatsApp
-        const btnWhatsApp = document.getElementById("btn-whatsapp");
         if (card.whatsapp) {
-          btnWhatsApp.disabled = false;
           const msg = encodeURIComponent(
             "Bonjour, je vous contacte via votre carte Maavnica SmartCard."
           );
           btnWhatsApp.onclick = () => {
             window.open(`https://wa.me/${card.whatsapp}?text=${msg}`, "_blank");
           };
+        } else {
+          btnWhatsApp.onclick = () => {
+            showToast("WhatsApp non configuré pour cette carte.", true);
+          };
         }
 
         // Appel
-        const btnCall = document.getElementById("btn-call");
         if (card.phone) {
-          btnCall.disabled = false;
           btnCall.onclick = () => {
             window.location.href = `tel:${card.phone}`;
+          };
+        } else {
+          btnCall.onclick = () => {
+            showToast("Numéro de téléphone non configuré.", true);
           };
         }
 
         // Paiement
-        const btnPay = document.getElementById("btn-pay");
         if (card.payment_link) {
-          btnPay.disabled = false;
           btnPay.onclick = () => {
             window.open(card.payment_link, "_blank");
           };
+        } else {
+          btnPay.onclick = () => {
+            showToast("Lien de paiement non configuré.", true);
+          };
         }
 
-        // ----- Avis rapide -----
+        // Avis rapide
         let satisfaction = null;
         const pillYes = document.getElementById("pill-yes");
         const pillNo = document.getElementById("pill-no");
@@ -775,7 +1017,7 @@
           }
         });
 
-        // ----- Demande de devis -----
+        // Devis
         const btnQuote = document.getElementById("btn-send-quote");
         btnQuote.addEventListener("click", async () => {
           const name = document.getElementById("quote-name").value.trim();
@@ -816,6 +1058,9 @@
           }
         });
 
+        // QR Code
+        updateQrCode(slug);
+
       } catch (e) {
         console.error(e);
         showToast("Erreur lors du chargement de la carte.", true);
@@ -826,6 +1071,9 @@
   </script>
 </body>
 </html>
+
+
+
 
 
 
