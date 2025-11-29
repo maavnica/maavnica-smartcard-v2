@@ -559,7 +559,7 @@
       background: linear-gradient(135deg, #22C55E, #4ADE80);
       margin-right: 5px;
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
-    }
+        }
 
     .content {
       padding: 12px 14px 14px;
@@ -984,18 +984,33 @@
         }
         const data = await response.json();
 
+        // 1) Thème (inclut les thèmes WOW)
         const themeClass = data.theme ? `theme-${data.theme}` : "theme-apple";
         document.body.className = themeClass;
 
-        document.getElementById("hero-title").textContent = data.name || "Votre entreprise";
-        document.getElementById("hero-subline").textContent = data.subtitle || "Maavnica SmartCard";
-        document.getElementById("hero-subtitle").textContent =
-          data.tagline || "Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.";
+        // 2) Nom d’entreprise : on essaye plusieurs champs
+        const displayName =
+          data.company_name ||
+          data.name ||
+          data.business_name ||
+          "Votre entreprise";
+
+        // 3) Sous-titre / tagline
+        const subline = data.subtitle || "Maavnica SmartCard";
+        const tagline =
+          data.tagline ||
+          "Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.";
+
+        document.getElementById("hero-title").textContent = displayName;
+        document.getElementById("hero-subline").textContent = subline;
+        document.getElementById("hero-subtitle").textContent = tagline;
 
         const emojiEl = document.getElementById("avatar-emoji");
         emojiEl.textContent = data.emoji || "🏷️";
 
-        document.getElementById("contact-name").textContent = data.contact_name || data.name || "Nom de l’entreprise";
+        // Nom de contact = nom spécifique sinon nom d’entreprise
+        document.getElementById("contact-name").textContent =
+          data.contact_name || displayName || "Nom de l’entreprise / contact";
 
         const phoneLine = document.getElementById("contact-phone-line");
         const phoneEl = document.getElementById("contact-phone");
