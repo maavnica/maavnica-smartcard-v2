@@ -9,171 +9,67 @@
     :root {
       --primary: #6366F1;
       --primary-soft: #4F46E5;
-
       --bg-page: radial-gradient(circle at top, #020617 0, #020617 40%, #000000 100%);
-      --glass-bg: rgba(15, 23, 42, 0.82);
+      --glass-bg: rgba(15, 23, 42, 0.92);
       --glass-border: rgba(148, 163, 184, 0.35);
       --glass-highlight: rgba(129, 140, 248, 0.25);
-
       --text-main: #F9FAFB;
       --text-soft: #9CA3AF;
       --text-strong: #E5E7EB;
-
       --pill-positive-bg: #DCFCE7;
       --pill-positive-border: #16A34A;
       --pill-positive-text: #14532D;
-
       --pill-negative-bg: #FEE2E2;
       --pill-negative-border: #B91C1C;
       --pill-negative-text: #7F1D1D;
-
-      --input-bg: rgba(15, 23, 42, 0.98);
+      --input-bg: rgba(15, 23, 42, 0.96);
       --input-border: rgba(129, 140, 248, 0.8);
       --footer-text: #9CA3AF;
     }
 
-    /* -----------------------
-       THEMES CLASSIQUES
-       ----------------------- */
-
+    /* Thèmes – on pourra en rajouter d'autres si besoin */
     body.theme-apple {
       --primary: #6366F1;
       --primary-soft: #4F46E5;
-      --bg-page: radial-gradient(circle at top, #020617 0, #020617 40%, #000000 100%);
-      --glass-bg: rgba(15, 23, 42, 0.82);
-      --glass-border: rgba(148, 163, 184, 0.35);
-      --glass-highlight: rgba(129, 140, 248, 0.25);
-      --text-main: #F9FAFB;
-      --text-soft: #9CA3AF;
-      --text-strong: #E5E7EB;
     }
 
     body.theme-artisan {
       --primary: #EA580C;
       --primary-soft: #C2410C;
-      --bg-page: radial-gradient(circle at top, #451A03 0, #1C1917 45%, #0B0F19 100%);
-      --glass-bg: rgba(24, 20, 16, 0.92);
-      --glass-border: rgba(245, 158, 11, 0.45);
-      --glass-highlight: rgba(245, 158, 11, 0.24);
+      --bg-page: radial-gradient(circle at top, #4A1F07 0, #1E1B16 45%, #020617 100%);
+      --glass-bg: rgba(24, 20, 16, 0.96);
+      --glass-border: rgba(251, 191, 36, 0.6);
+      --glass-highlight: rgba(251, 191, 36, 0.28);
       --text-main: #FEF3C7;
       --text-soft: #FBBF24;
       --text-strong: #FFFBEB;
-      --pill-positive-bg: #DCFCE7;
-      --pill-positive-border: #16A34A;
-      --pill-positive-text: #14532D;
-      --pill-negative-bg: #FEE2E2;
-      --pill-negative-border: #B91C1C;
-      --pill-negative-text: #7F1D1D;
-      --input-bg: rgba(24, 20, 16, 0.96);
-      --input-border: rgba(245, 158, 11, 0.7);
-      --footer-text: #FBBF24;
-    }
-
-    body.theme-material {
-      --primary: #2563EB;
-      --primary-soft: #22C55E;
-      --bg-page: radial-gradient(circle at top, #0F172A 0, #020617 45%, #020617 100%);
-      --glass-bg: rgba(15, 23, 42, 0.9);
-      --glass-border: rgba(59, 130, 246, 0.5);
-      --glass-highlight: rgba(59, 130, 246, 0.25);
-      --text-main: #EFF6FF;
-      --text-soft: #9CA3AF;
-      --text-strong: #E5E7EB;
-      --pill-positive-bg: #DCFCE7;
-      --pill-positive-border: #22C55E;
-      --pill-positive-text: #14532D;
-      --pill-negative-bg: #FEE2E2;
-      --pill-negative-border: #EF4444;
-      --pill-negative-text: #7F1D1D;
-      --input-bg: rgba(15, 23, 42, 0.96);
-      --input-border: rgba(59, 130, 246, 0.6);
-    }
-
-    body.theme-black-gold {
-      --primary: #f6c948;
-      --primary-soft: #d9a520;
-      --bg-page: radial-gradient(circle at 50% -20%, #2b2100 0%, #0b0b0b 40%, #000000 100%);
-      --glass-bg: rgba(20, 20, 20, 0.85);
-      --glass-border: rgba(246, 201, 72, 0.45);
-      --glass-highlight: rgba(246, 201, 72, 0.25);
-      --text-main: #f9f6ef;
-      --text-soft: #c8b88a;
-      --text-strong: #fff4d6;
-      --pill-positive-bg: #fff7da;
-      --pill-positive-border: #d4a017;
-      --pill-positive-text: #7c5e00;
-      --pill-negative-bg: #fef2f2;
-      --pill-negative-border: #fb7185;
-      --pill-negative-text: #9f1239;
-      --input-bg: rgba(17, 17, 14, 0.96);
-      --input-border: rgba(246, 201, 72, 0.75);
-      --footer-text: #facc15;
-    }
-
-    /* -----------------------
-       THEMES WOW
-       ----------------------- */
-
-    body.theme-artisan-wow {
-      --primary: #FB923C;
-      --primary-soft: #EA580C;
-      --bg-page: radial-gradient(circle at top, #4A1F07 0, #1E1B16 40%, #020617 100%);
-      --glass-bg: rgba(24, 20, 16, 0.95);
-      --glass-border: rgba(251, 191, 36, 0.6);
-      --glass-highlight: rgba(251, 191, 36, 0.28);
-      --text-main: #FFFBEB;
-      --text-soft: #FBBF24;
-      --text-strong: #FEF3C7;
-      --pill-positive-bg: #22C55E15;
-      --pill-positive-border: #22C55E;
-      --pill-positive-text: #BBF7D0;
-      --pill-negative-bg: #FEE2E2;
-      --pill-negative-border: #B91C1C;
-      --pill-negative-text: #7F1D1D;
-      --input-bg: rgba(24, 20, 16, 0.97);
-      --input-border: rgba(251, 191, 36, 0.8);
       --footer-text: #FACC15;
     }
 
+    body.theme-black-gold,
     body.theme-black-gold-wow {
-      --primary: #facc15;
-      --primary-soft: #f97316;
+      --primary: #FACC15;
+      --primary-soft: #F97316;
       --bg-page: radial-gradient(circle at 50% -30%, #fbbf24 0%, #1c1917 40%, #020617 100%);
       --glass-bg: rgba(16, 12, 4, 0.96);
       --glass-border: rgba(250, 204, 21, 0.7);
       --glass-highlight: rgba(251, 191, 36, 0.32);
-      --text-main: #fef6e4;
-      --text-soft: #facc15;
-      --text-strong: #ffffff;
-      --pill-positive-bg: #fef9c3;
-      --pill-positive-border: #facc15;
-      --pill-positive-text: #854d0e;
-      --pill-negative-bg: #FEF2F2;
-      --pill-negative-border: #FB7185;
-      --pill-negative-text: #9F1239;
-      --input-bg: rgba(15, 15, 10, 0.96);
-      --input-border: rgba(250, 204, 21, 0.85);
-      --footer-text: #eab308;
+      --text-main: #FEF6E4;
+      --text-soft: #FACC15;
+      --text-strong: #FFFFFF;
+      --footer-text: #EAB308;
     }
 
     body.theme-sante-wow {
       --primary: #22C55E;
       --primary-soft: #14B8A6;
       --bg-page: radial-gradient(circle at top, #022C22 0, #022C3A 40%, #020617 100%);
-      --glass-bg: rgba(6, 24, 31, 0.92);
-      --glass-border: rgba(45, 212, 191, 0.5);
-      --glass-highlight: rgba(45, 212, 191, 0.25);
+      --glass-bg: rgba(6, 24, 31, 0.94);
+      --glass-border: rgba(45, 212, 191, 0.55);
+      --glass-highlight: rgba(45, 212, 191, 0.3);
       --text-main: #ECFEFF;
       --text-soft: #A5F3FC;
       --text-strong: #CCFBF1;
-      --pill-positive-bg: #DCFCE7;
-      --pill-positive-border: #22C55E;
-      --pill-positive-text: #14532D;
-      --pill-negative-bg: #FEF2F2;
-      --pill-negative-border: #FB7185;
-      --pill-negative-text: #9F1239;
-      --input-bg: rgba(6, 24, 31, 0.96);
-      --input-border: rgba(45, 212, 191, 0.7);
       --footer-text: #A5F3FC;
     }
 
@@ -181,450 +77,660 @@
       --primary: #6366F1;
       --primary-soft: #22C55E;
       --bg-page: radial-gradient(circle at top, #020617 0, #020617 45%, #000000 100%);
-      --glass-bg: rgba(15, 23, 42, 0.95);
+      --glass-bg: rgba(15, 23, 42, 0.96);
       --glass-border: rgba(99, 102, 241, 0.6);
       --glass-highlight: rgba(99, 102, 241, 0.35);
       --text-main: #E5E7EB;
       --text-soft: #9CA3AF;
       --text-strong: #F9FAFB;
-      --pill-positive-bg: #22C55E15;
-      --pill-positive-border: #22C55E;
-      --pill-positive-text: #BBF7D0;
-      --pill-negative-bg: #FEE2E2;
-      --pill-negative-border: #EF4444;
-      --pill-negative-text: #7F1D1D;
-      --input-bg: rgba(15, 23, 42, 0.97);
-      --input-border: rgba(129, 140, 248, 0.8);
       --footer-text: #93C5FD;
     }
 
-    /* Mise en forme générale… etc. (le reste viendra en PARTIE 2) */
+    /* Layout global */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-page);
+      color: var(--text-main);
+      padding: 24px;
+    }
+
+    .frame {
+      position: relative;
+      max-width: 960px;
+      width: 100%;
+      border-radius: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.25), transparent);
+    }
+
+    .card-shell {
+      border-radius: 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+      padding: 20px 20px 16px;
+    }
+
+    .top-brand {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      border-radius: 16px;
+      padding: 16px 18px;
+      background: radial-gradient(circle at top left, var(--glass-highlight), transparent);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      margin-bottom: 20px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-soft);
+    }
+
+    .badge span:first-child {
+      font-size: 13px;
+    }
+
+    .hero-main-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 20px;
+      background: radial-gradient(circle at top left, var(--primary-soft), black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .avatar-inner {
+      font-size: 26px;
+    }
+
+    .hero-texts {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-subline {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .hero-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, #22C55E, #15803D);
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .content {
+      margin-top: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cta-block {
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.18), rgba(15, 23, 42, 0.98));
+    }
+
+    .cta-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .cta-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .button-primary,
+    .button-secondary,
+    .button-link {
+      width: 100%;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+      margin-top: 6px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      color: #0B1120;
+      font-weight: 600;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.6);
+    }
+
+    .button-secondary {
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .button-link {
+      background: transparent;
+      color: var(--text-soft);
+      border: 1px dashed rgba(148, 163, 184, 0.5);
+      font-size: 12px;
+    }
+
+    .button-primary:hover,
+    .button-secondary:hover,
+    .button-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    .button-secondary:disabled,
+    .button-primary:disabled {
+      opacity: 0.7;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--input-border);
+      padding: 7px 9px;
+      font-size: 12px;
+      background: var(--input-bg);
+      color: var(--text-main);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    textarea::placeholder,
+    input::placeholder {
+      color: rgba(148, 163, 184, 0.8);
+      font-size: 11px;
+    }
+
+    .mini-note {
+      font-size: 10px;
+      color: var(--text-soft);
+      margin-top: 8px;
+    }
+
+    .contact-card {
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top right, var(--glass-highlight), rgba(15, 23, 42, 0.98));
+    }
+
+    .contact-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .contact-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .divider {
+      border-top: 1px dashed rgba(148, 163, 184, 0.6);
+      margin: 10px 0;
+    }
+
+    .form-group {
+      margin-bottom: 8px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 3px;
+    }
+
+    .footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--footer-text);
+    }
+
+    .footer a {
+      color: var(--footer-text);
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.96);
+      color: #F9FAFB;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: none;
+      z-index: 50;
+    }
+
+    .toast.error {
+      border-color: #F97373;
+      color: #FEE2E2;
+    }
   </style>
 </head>
 
 <body class="theme-apple">
   <div class="frame">
-    <div class="blur-orbit"></div>
     <div class="top-brand">MAAVNICA SMARTCARD</div>
 
     <div class="card-shell">
 
-      <!-- ============================
-           HERO (Titre + Emoji + Sous-ligne)
-           ============================ -->
       <div class="hero">
-        <div class="hero-glow"></div>
-        <div class="hero-inner">
+        <div class="badge-row">
+          <div class="badge"><span>⭐</span><span>Entreprise recommandée</span></div>
+          <div class="badge"><span>📍</span><span>Service de proximité</span></div>
+        </div>
 
-          <div class="badge-row">
-            <div class="badge"><span>⭐</span><span>Entreprise recommandée</span></div>
-            <div class="badge"><span>📍</span><span>Service de proximité</span></div>
+        <div class="hero-main-row">
+          <div class="avatar-wrap">
+            <div class="avatar-inner" id="avatar-emoji">🏷️</div>
           </div>
 
-          <div class="hero-main-row">
-
-            <div class="avatar-wrap">
-              <div class="avatar-inner" id="avatar-emoji">🏷️</div>
+          <div class="hero-texts">
+            <div class="hero-subline" id="hero-subline">Maavnica SmartCard</div>
+            <div class="hero-title" id="hero-title">Votre entreprise</div>
+            <div class="hero-subtitle" id="hero-subtitle">
+              Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
             </div>
-
-            <div class="hero-texts">
-              <div class="hero-subline" id="hero-subline">
-                Maavnica SmartCard
-              </div>
-              <div class="hero-title" id="hero-title">
-                Votre entreprise
-              </div>
-              <div class="hero-subtitle" id="hero-subtitle">
-                Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
-              </div>
-            </div>
-
           </div>
+        </div>
 
-          <div class="hero-footer">
-            <span><span class="hero-dot"></span>Disponible pour vos clients</span>
-            <span>via Maavnica SmartCard</span>
-          </div>
-
+        <div class="hero-footer">
+          <span><span class="hero-dot"></span>Disponible pour vos clients</span>
+          <span>via Maavnica SmartCard</span>
         </div>
       </div>
 
-
-
-      <!-- ============================
-           CONTENU PRINCIPAL
-           ============================ -->
       <div class="content">
-
         <div class="grid">
 
-          <!-- ============================
-               COLONNE GAUCHE
-               ============================ -->
+          <!-- Colonne gauche -->
           <div class="col">
-
             <div class="cta-block">
-
               <div class="cta-title">Avis & contacts simplifiés</div>
               <div class="cta-sub">
-                Après chaque prestation, invitez vos clients à laisser un avis,
-                demander un devis ou vous contacter directement.
+                Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter directement.
               </div>
 
-              <!-- ============================
-                   AVIS RAPIDES (WOW + CLASSIQUE)
-                   ============================ -->
+              <div class="section-label">Votre avis rapide</div>
 
-              <div class="section-label" style="margin-top:12px;">Votre avis rapide</div>
+              <button class="button-secondary" id="btn-happy">😊 Je suis satisfait</button>
+              <button class="button-secondary" id="btn-unhappy">😐 Je ne suis pas satisfait</button>
+              <textarea id="feedback-message" placeholder="Un mot sur votre expérience (optionnel)"></textarea>
 
-              <button class="button-secondary" id="btn-happy">
-                😊 Je suis satisfait
-              </button>
-
-              <button class="button-secondary" id="btn-unhappy">
-                😐 Je ne suis pas satisfait
-              </button>
-
-              <textarea id="feedback-message"
-                placeholder="Un mot sur votre expérience (optionnel)"
-                style="margin-top:8px; font-size:12px;"></textarea>
-
-
-              <!-- ============================
-                   CTA CONTACT & AVIS GOOGLE
-                   ============================ -->
-
-              <button class="button-primary" id="btn-review">
-                ⭐ Laisser un avis Google
-              </button>
-
-              <button class="button-secondary" id="btn-whatsapp">
-                💬 Écrire sur WhatsApp
-              </button>
-
-              <button class="button-secondary" id="btn-call">
-                📞 Appeler directement
-              </button>
-
-              <button class="button-link" id="btn-payment">
-                💳 Payer en ligne (si disponible)
-              </button>
-
+              <button class="button-primary" id="btn-review">⭐ Laisser un avis Google</button>
+              <button class="button-secondary" id="btn-whatsapp">💬 Écrire sur WhatsApp</button>
+              <button class="button-secondary" id="btn-call">📞 Appeler directement</button>
+              <button class="button-link" id="btn-payment">💳 Payer en ligne (si disponible)</button>
 
               <div class="mini-note">
                 Cette SmartCard est un exemple. Votre version sera personnalisée.
               </div>
             </div>
+          </div>
 
-          </div> <!-- fin col gauche -->
-
-
-
-          <!-- ============================
-               COLONNE DROITE (DEMANDE DE DEVIS)
-               ============================ -->
+          <!-- Colonne droite -->
           <div class="col">
-
             <div class="contact-card">
-
               <div class="section-label">Coordonnées</div>
 
-              <div class="contact-title" id="contact-name">
-                Nom de l’entreprise / contact
-              </div>
+              <div class="contact-title" id="contact-name">Nom de l’entreprise / contact</div>
 
-              <div class="contact-line" id="contact-phone-line">
-                <span>📞</span>
-                <span id="contact-phone">Téléphone non renseigné</span>
+              <div class="contact-line">
+                <span>📞</span><span id="contact-phone">Téléphone non renseigné</span>
               </div>
-
-              <div class="contact-line" id="contact-email-line">
-                <span>✉️</span>
-                <span id="contact-email">Email non renseigné</span>
+              <div class="contact-line">
+                <span>✉️</span><span id="contact-email">Email non renseigné</span>
               </div>
-
-              <div class="contact-line" id="contact-site-line">
-                <span>🌐</span>
-                <span id="contact-site">Site ou lien principal</span>
+              <div class="contact-line">
+                <span>🌐</span><span id="contact-site">Site ou lien principal</span>
               </div>
 
               <div class="divider"></div>
 
-              <!-- ============================
-                   FORMULAIRE DE DEVIS
-                   ============================ -->
               <div class="section-label">Demande de devis</div>
 
               <form id="quote-form">
-
                 <div class="form-group">
                   <label for="quote-name">Nom / Prénom</label>
-                  <input type="text" id="quote-name" required>
+                  <input type="text" id="quote-name" required />
                 </div>
-
                 <div class="form-group">
                   <label for="quote-email">Email</label>
-                  <input type="email" id="quote-email" required>
+                  <input type="email" id="quote-email" required />
                 </div>
-
                 <div class="form-group">
                   <label for="quote-phone">Téléphone</label>
-                  <input type="text" id="quote-phone" placeholder="06...">
+                  <input type="text" id="quote-phone" placeholder="06..." />
                 </div>
-
                 <div class="form-group">
                   <label for="quote-message">Votre besoin en quelques mots</label>
                   <textarea id="quote-message" required></textarea>
                 </div>
-
                 <button type="submit" class="button-secondary" id="btn-quote">
                   ✉️ Envoyer ma demande de devis
                 </button>
-
               </form>
-
             </div>
+          </div>
 
-          </div> <!-- fin col droite -->
+        </div>
+      </div>
 
-        </div> <!-- fin grid -->
-
-      </div> <!-- fin content -->
-
-
-
-
-      <!-- ============================
-           PIED DE PAGE
-           ============================ -->
       <div class="footer">
         <span>SmartCard Maavnica – Prototype</span>
         <span><a href="https://maavnica.com" target="_blank">En savoir plus</a></span>
       </div>
 
-    </div> <!-- fin card-shell -->
-
-  </div> <!-- fin frame -->
+    </div>
+  </div>
 
   <div class="toast" id="toast">Message envoyé.</div>
-<script>
-/* ============================
-   TOAST MESSAGE
-   ============================ */
-function showToast(message, isError = false) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.toggle("error", isError);
-  toast.style.display = "block";
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 2500);
-}
 
-/* ============================
-   LOAD CARD (slug ou ID automatique)
-   ============================ */
-async function loadCard() {
-  const params = new URLSearchParams(window.location.search);
-
-  let slug =
-    window.location.pathname.split("/").filter(Boolean).pop() ||
-    params.get("slug");
-
-  if (!slug) slug = "demo-artisan";
-
-  const isNumericId = /^[0-9]+$/.test(slug);
-
-  const url = isNumericId
-    ? `/api/cards/${slug}`
-    : `/api/cards/by-slug/${slug}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Card not found");
-    const data = await response.json();
-
-    console.log("CARTE CHARGÉE :", data);
-
-    /* ------------------
-       THEME
-       ------------------ */
-    const themeClass = data.theme ? `theme-${data.theme}` : "theme-apple";
-    document.body.className = themeClass;
-
-    /* ------------------
-       DONNÉES ENTREPRISE
-       ------------------ */
-    const displayName =
-      data.company_name ||
-      data.name ||
-      data.business_name ||
-      "Votre entreprise";
-
-    document.getElementById("hero-title").textContent = displayName;
-    document.getElementById("contact-name").textContent = displayName;
-
-    document.getElementById("hero-subline").textContent =
-      data.subtitle || "Maavnica SmartCard";
-
-    document.getElementById("hero-subtitle").textContent =
-      data.tagline ||
-      "Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.";
-
-    document.getElementById("avatar-emoji").textContent = data.emoji || "🏷️";
-
-    /* ------------------
-       COORDONNÉES
-       ------------------ */
-    const phone = data.phone || "";
-    const email = data.email || "";
-    const website = data.website || "";
-
-    document.getElementById("contact-phone").textContent =
-      phone || "Téléphone non renseigné";
-
-    document.getElementById("contact-email").textContent =
-      email || "Email non renseigné";
-
-    document.getElementById("contact-site").textContent =
-      website || "Site ou lien principal";
-
-    /* ------------------
-       BOUTONS ACTIONS
-       ------------------ */
-
-    // Avis Google
-    const btnReview = document.getElementById("btn-review");
-    if (data.google_review_link) {
-      btnReview.onclick = () =>
-        window.open(data.google_review_link, "_blank");
-    } else {
-      btnReview.onclick = () =>
-        showToast("Lien d’avis Google non renseigné.", true);
+  <script>
+    function showToast(message, isError = false) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.toggle("error", isError);
+      toast.style.display = "block";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 2500);
     }
 
-    // WhatsApp
-    const btnWhatsApp = document.getElementById("btn-whatsapp");
-    if (data.whatsapp_number) {
-      const clean = data.whatsapp_number.replace(/[^0-9]/g, "");
-      btnWhatsApp.onclick = () => window.open(`https://wa.me/${clean}`, "_blank");
-    } else {
-      btnWhatsApp.onclick = () =>
-        showToast("Numéro WhatsApp non renseigné.", true);
-    }
+    async function loadCard() {
+      const params = new URLSearchParams(window.location.search);
+      let slug = window.location.pathname.split("/").filter(Boolean).pop() || params.get("slug");
+      if (!slug) slug = "demo-artisan";
 
-    // Appeler
-    const btnCall = document.getElementById("btn-call");
-    if (phone) {
-      btnCall.onclick = () =>
-        (window.location.href = `tel:${phone.replace(/[^0-9+]/g, "")}`);
-    } else {
-      btnCall.onclick = () =>
-        showToast("Numéro de téléphone non renseigné.", true);
-    }
+      const isNumericId = /^[0-9]+$/.test(slug);
 
-    // Paiement
-    const btnPayment = document.getElementById("btn-payment");
-    if (data.payment_link) {
-      btnPayment.style.opacity = 1;
-      btnPayment.onclick = () => window.open(data.payment_link, "_blank");
-    } else {
-      btnPayment.style.opacity = 0.6;
-      btnPayment.onclick = () =>
-        showToast("Aucun lien de paiement disponible.", true);
-    }
-
-    /* ============================
-       AVIS RAPIDES
-       ============================ */
-
-    const btnHappy = document.getElementById("btn-happy");
-    const btnUnhappy = document.getElementById("btn-unhappy");
-    const feedbackMessage = document.getElementById("feedback-message");
-
-    async function sendQuickFeedback(type) {
-      const endpoint = isNumericId
-        ? `/api/cards/${slug}/feedback`
-        : `/api/cards/by-slug/${slug}/feedback`;
-
-      const payload = {
-        feedback: type,
-        message: feedbackMessage.value || ""
-      };
+      const url = isNumericId
+        ? `/api/cards/${slug}`
+        : `/api/cards/by-slug/${slug}`;
 
       try {
-        await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Card not found");
+        const data = await response.json();
+
+        console.log("CARTE CHARGÉE :", data);
+
+        const themeClass = data.theme ? `theme-${data.theme}` : "theme-apple";
+        document.body.className = themeClass;
+
+        const displayName =
+          data.company_name ||
+          data.name ||
+          data.business_name ||
+          "Votre entreprise";
+
+        document.getElementById("hero-title").textContent = displayName;
+        document.getElementById("contact-name").textContent = displayName;
+
+        document.getElementById("hero-subline").textContent =
+          data.subtitle || "Maavnica SmartCard";
+
+        document.getElementById("hero-subtitle").textContent =
+          data.tagline ||
+          "Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.";
+
+        document.getElementById("avatar-emoji").textContent = data.emoji || "🏷️";
+
+        const phone = data.phone || "";
+        const email = data.email || "";
+        const website = data.website || "";
+
+        document.getElementById("contact-phone").textContent =
+          phone || "Téléphone non renseigné";
+
+        document.getElementById("contact-email").textContent =
+          email || "Email non renseigné";
+
+        document.getElementById("contact-site").textContent =
+          website || "Site ou lien principal";
+
+        const btnReview = document.getElementById("btn-review");
+        if (data.google_review_link) {
+          btnReview.onclick = () => window.open(data.google_review_link, "_blank");
+        } else {
+          btnReview.onclick = () => showToast("Lien d’avis Google non renseigné.", true);
+        }
+
+        const btnWhatsApp = document.getElementById("btn-whatsapp");
+        if (data.whatsapp_number) {
+          const clean = data.whatsapp_number.replace(/[^0-9]/g, "");
+          btnWhatsApp.onclick = () => window.open(`https://wa.me/${clean}`, "_blank");
+        } else {
+          btnWhatsApp.onclick = () => showToast("Numéro WhatsApp non renseigné.", true);
+        }
+
+        const btnCall = document.getElementById("btn-call");
+        if (phone) {
+          btnCall.onclick = () =>
+            (window.location.href = `tel:${phone.replace(/[^0-9+]/g, "")}`);
+        } else {
+          btnCall.onclick = () => showToast("Numéro de téléphone non renseigné.", true);
+        }
+
+        const btnPayment = document.getElementById("btn-payment");
+        if (data.payment_link) {
+          btnPayment.style.opacity = 1;
+          btnPayment.onclick = () => window.open(data.payment_link, "_blank");
+        } else {
+          btnPayment.style.opacity = 0.6;
+          btnPayment.onclick = () => showToast("Aucun lien de paiement disponible.", true);
+        }
+
+        /* Avis rapides */
+        const btnHappy = document.getElementById("btn-happy");
+        const btnUnhappy = document.getElementById("btn-unhappy");
+        const feedbackMessage = document.getElementById("feedback-message");
+
+        async function sendQuickFeedback(type) {
+          const endpoint = isNumericId
+            ? `/api/cards/${slug}/feedback`
+            : `/api/cards/by-slug/${slug}/feedback`;
+
+          const payload = {
+            feedback: type,
+            message: feedbackMessage.value || ""
+          };
+
+          try {
+            await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            feedbackMessage.value = "";
+            showToast("Merci pour votre avis !");
+          } catch (err) {
+            console.error(err);
+            showToast("Erreur lors de l’envoi de l’avis.", true);
+          }
+        }
+
+        btnHappy.onclick = () => sendQuickFeedback("happy");
+        btnUnhappy.onclick = () => sendQuickFeedback("unhappy");
+
+        /* Devis */
+        const form = document.getElementById("quote-form");
+        const btnQuote = document.getElementById("btn-quote");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          btnQuote.disabled = true;
+          btnQuote.textContent = "Envoi...";
+
+          const payload = {
+            name: document.getElementById("quote-name").value,
+            email: document.getElementById("quote-email").value,
+            phone: document.getElementById("quote-phone").value,
+            message: document.getElementById("quote-message").value,
+            card_slug: slug
+          };
+
+          const endpoint = isNumericId
+            ? `/api/cards/${slug}/quotes`
+            : `/api/cards/by-slug/${slug}/quotes`;
+
+          try {
+            await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            showToast("Demande envoyée !");
+            form.reset();
+          } catch (err) {
+            console.error(err);
+            showToast("Erreur lors de l’envoi.", true);
+          }
+
+          btnQuote.disabled = false;
+          btnQuote.textContent = "Envoyer ma demande de devis";
         });
 
-        feedbackMessage.value = "";
-        showToast("Merci pour votre avis !");
       } catch (err) {
         console.error(err);
-        showToast("Erreur lors de l’envoi de l’avis.", true);
+        showToast("Erreur lors du chargement de la carte.", true);
       }
     }
 
-    btnHappy.onclick = () => sendQuickFeedback("happy");
-    btnUnhappy.onclick = () => sendQuickFeedback("unhappy");
-
-
-    /* ============================
-       DEMANDE DE DEVIS
-       ============================ */
-
-    const form = document.getElementById("quote-form");
-    const btnQuote = document.getElementById("btn-quote");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      btnQuote.disabled = true;
-      btnQuote.textContent = "Envoi...";
-
-      const payload = {
-        name: document.getElementById("quote-name").value,
-        email: document.getElementById("quote-email").value,
-        phone: document.getElementById("quote-phone").value,
-        message: document.getElementById("quote-message").value,
-        card_slug: slug
-      };
-
-      const endpoint = isNumericId
-        ? `/api/cards/${slug}/quotes`
-        : `/api/cards/by-slug/${slug}/quotes`;
-
-      try {
-        await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        showToast("Demande envoyée !");
-        form.reset();
-      } catch (err) {
-        console.error(err);
-        showToast("Erreur lors de l’envoi.", true);
-      }
-
-      btnQuote.disabled = false;
-      btnQuote.textContent = "Envoyer ma demande de devis";
-    });
-
-  } catch (err) {
-    console.error(err);
-    showToast("Erreur lors du chargement de la carte.", true);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", loadCard);
-</script>
-
+    document.addEventListener("DOMContentLoaded", loadCard);
+  </script>
 </body>
 </html>
+
 
 
 
