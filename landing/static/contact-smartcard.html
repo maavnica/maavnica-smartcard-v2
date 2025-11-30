@@ -127,29 +127,36 @@
       <div class="container">
         <h1>Demande SmartCard / Affiliation</h1>
         <p class="subtitle">
-          Remplissez ce formulaire, votre demande sera envoyée à l’équipe Maavnica
-          (<strong>contact@maavnica.com</strong>).
+          Remplissez ce formulaire, votre demande sera envoyée par email à
+          <strong>contact@maavnica.com</strong>.
         </p>
 
         <div class="card">
-          <!-- Formulaire : ouvre le client mail de la personne
-               avec email pré-rempli vers contact@maavnica.com -->
-          <form action="mailto:contact@maavnica.com" method="POST" enctype="text/plain">
+          <!-- Formulaire envoyé en HTTPS vers formsubmit.co
+               qui renvoie le contenu à contact@maavnica.com -->
+          <form action="https://formsubmit.co/contact@maavnica.com" method="POST">
+            <!-- Options formsubmit -->
+            <input type="hidden" name="_subject" value="Demande Maavnica SmartCard / Affiliation">
+            <!-- redirection après envoi : retour sur la landing -->
+            <input type="hidden" name="_next" value="https://maavnica-landing.onrender.com/?message=ok">
+            <!-- désactiver captcha formsubmit si tu veux -->
+            <input type="hidden" name="_captcha" value="false">
+
             <div class="field">
               <label for="demande">Objet de votre demande</label>
               <select id="demande" name="Objet">
-                <option value="solo">Commande SmartCard Solo</option>
-                <option value="pro">Offre SmartCard Pro</option>
-                <option value="business">Offre SmartCard Business</option>
-                <option value="affiliation">Devenir affilié Maavnica</option>
-                <option value="autre">Autre question / information</option>
+                <option value="Commande SmartCard Solo">Commande SmartCard Solo</option>
+                <option value="Offre SmartCard Pro">Offre SmartCard Pro</option>
+                <option value="Offre SmartCard Business">Offre SmartCard Business</option>
+                <option value="Affiliation Maavnica">Devenir affilié Maavnica</option>
+                <option value="Autre question / information">Autre question / information</option>
               </select>
             </div>
 
             <div class="row-2">
               <div class="field" style="flex:1;">
                 <label for="nom">Nom / Prénom</label>
-                <input id="nom" name="Nom" required />
+                <input id="nom" name="Nom / Prénom" required />
               </div>
               <div class="field" style="flex:1;">
                 <label for="activite">Activité / Entreprise</label>
@@ -179,8 +186,8 @@
             </button>
 
             <div class="note">
-              En cliquant sur “Envoyer ma demande”, votre logiciel de messagerie s’ouvrira avec
-              un email pré-rempli à destination de <strong>contact@maavnica.com</strong>.
+              Vos informations sont transmises en HTTPS à notre prestataire de formulaire, puis envoyées à
+              <strong>contact@maavnica.com</strong>.
             </div>
           </form>
         </div>
@@ -200,13 +207,14 @@
       const select = document.getElementById("demande");
       if (!select) return;
 
-      if (offre === "pro") select.value = "pro";
-      else if (offre === "business") select.value = "business";
-      else if (offre === "affiliation") select.value = "affiliation";
-      else if (offre === "solo") select.value = "solo";
-      else if (offre) select.value = "autre";
+      if (offre === "pro") select.value = "Offre SmartCard Pro";
+      else if (offre === "business") select.value = "Offre SmartCard Business";
+      else if (offre === "affiliation") select.value = "Affiliation Maavnica";
+      else if (offre === "solo") select.value = "Commande SmartCard Solo";
+      else if (offre) select.value = "Autre question / information";
     })();
   </script>
 </body>
 </html>
+
 
