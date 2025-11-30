@@ -27,7 +27,6 @@
       --footer-text: #9CA3AF;
     }
 
-    /* Thèmes – on pourra en rajouter d'autres si besoin */
     body.theme-apple {
       --primary: #6366F1;
       --primary-soft: #4F46E5;
@@ -86,7 +85,6 @@
       --footer-text: #93C5FD;
     }
 
-    /* Layout global */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -431,6 +429,12 @@
       border-color: #F97373;
       color: #FEE2E2;
     }
+
+    /* états sélection avis rapide */
+    .button-secondary.feedback-option.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
   </style>
 </head>
 
@@ -479,9 +483,18 @@
 
               <div class="section-label">Votre avis rapide</div>
 
-              <button class="button-secondary" id="btn-happy">😊 Je suis satisfait</button>
-              <button class="button-secondary" id="btn-unhappy">😐 Je ne suis pas satisfait</button>
+              <button class="button-secondary feedback-option" id="btn-happy">
+                😊 Je suis satisfait
+              </button>
+              <button class="button-secondary feedback-option" id="btn-unhappy">
+                😐 Je ne suis pas satisfait
+              </button>
+
               <textarea id="feedback-message" placeholder="Un mot sur votre expérience (optionnel)"></textarea>
+
+              <button class="button-secondary" id="btn-send-feedback">
+                📩 Envoyer mon avis
+              </button>
 
               <button class="button-primary" id="btn-review">⭐ Laisser un avis Google</button>
               <button class="button-secondary" id="btn-whatsapp">💬 Écrire sur WhatsApp</button>
@@ -553,6 +566,10 @@
   <div class="toast" id="toast">Message envoyé.</div>
 
   <script>
+    let currentCardId = null;
+    let currentSlug = null;
+    let selectedFeedbackType = null;
+
     function showToast(message, isError = false) {
       const toast = document.getElementById("toast");
       toast.textContent = message;
@@ -568,6 +585,7 @@
       let slug = window.location.pathname.split("/").filter(Boolean).pop() || params.get("slug");
       if (!slug) slug = "demo-artisan";
 
+      currentSlug = slug;
       const isNumericId = /^[0-9]+$/.test(slug);
 
       const url = isNumericId
@@ -580,6 +598,9 @@
         const data = await response.json();
 
         console.log("CARTE CHARGÉE :", data);
+
+        // important : ID pour feedback & devis
+        currentCardId = data.id;
 
         const themeClass = data.theme ? `theme-${data.theme}` : "theme-apple";
         document.body.className = themeClass;
@@ -647,78 +668,8 @@
           btnPayment.onclick = () => showToast("Aucun lien de paiement disponible.", true);
         }
 
-        /* Avis rapides */
-        const btnHappy = document.getElementById("btn-happy");
-        const btnUnhappy = document.getElementById("btn-unhappy");
-        const feedbackMessage = document.getElementById("feedback-message");
-
-        async function sendQuickFeedback(type) {
-          const endpoint = isNumericId
-            ? `/api/cards/${slug}/feedback`
-            : `/api/cards/by-slug/${slug}/feedback`;
-
-          const payload = {
-            feedback: type,
-            message: feedbackMessage.value || ""
-          };
-
-          try {
-            await fetch(endpoint, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
-
-            feedbackMessage.value = "";
-            showToast("Merci pour votre avis !");
-          } catch (err) {
-            console.error(err);
-            showToast("Erreur lors de l’envoi de l’avis.", true);
-          }
-        }
-
-        btnHappy.onclick = () => sendQuickFeedback("happy");
-        btnUnhappy.onclick = () => sendQuickFeedback("unhappy");
-
-        /* Devis */
-        const form = document.getElementById("quote-form");
-        const btnQuote = document.getElementById("btn-quote");
-
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          btnQuote.disabled = true;
-          btnQuote.textContent = "Envoi...";
-
-          const payload = {
-            name: document.getElementById("quote-name").value,
-            email: document.getElementById("quote-email").value,
-            phone: document.getElementById("quote-phone").value,
-            message: document.getElementById("quote-message").value,
-            card_slug: slug
-          };
-
-          const endpoint = isNumericId
-            ? `/api/cards/${slug}/quotes`
-            : `/api/cards/by-slug/${slug}/quotes`;
-
-          try {
-            await fetch(endpoint, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
-
-            showToast("Demande envoyée !");
-            form.reset();
-          } catch (err) {
-            console.error(err);
-            showToast("Erreur lors de l’envoi.", true);
-          }
-
-          btnQuote.disabled = false;
-          btnQuote.textContent = "Envoyer ma demande de devis";
-        });
+        setupFeedback();
+        setupQuoteForm();
 
       } catch (err) {
         console.error(err);
@@ -726,10 +677,105 @@
       }
     }
 
+    function setupFeedback() {
+      const btnHappy = document.getElementById("btn-happy");
+      const btnUnhappy = document.getElementById("btn-unhappy");
+      const btnSend = document.getElementById("btn-send-feedback");
+      const feedbackMessage = document.getElementById("feedback-message");
+
+      function selectFeedback(type) {
+        selectedFeedbackType = type;
+        document.querySelectorAll(".feedback-option").forEach(btn => btn.classList.remove("active"));
+        if (type === "happy") btnHappy.classList.add("active");
+        if (type === "unhappy") btnUnhappy.classList.add("active");
+      }
+
+      btnHappy.onclick = () => selectFeedback("happy");
+      btnUnhappy.onclick = () => selectFeedback("unhappy");
+
+      btnSend.onclick = async () => {
+        if (!currentCardId) {
+          showToast("Carte non chargée.", true);
+          return;
+        }
+        if (!selectedFeedbackType) {
+          showToast("Choisissez d’abord si vous êtes satisfait ou non.", true);
+          return;
+        }
+
+        const endpoint = `/api/cards/${currentCardId}/feedback`;
+        const payload = {
+          feedback: selectedFeedbackType,
+          message: feedbackMessage.value || "",
+          card_slug: currentSlug
+        };
+
+        try {
+          await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          feedbackMessage.value = "";
+          selectedFeedbackType = null;
+          document.querySelectorAll(".feedback-option").forEach(btn => btn.classList.remove("active"));
+          showToast("Merci pour votre avis !");
+        } catch (err) {
+          console.error(err);
+          showToast("Erreur lors de l’envoi de l’avis.", true);
+        }
+      };
+    }
+
+    function setupQuoteForm() {
+      const form = document.getElementById("quote-form");
+      const btnQuote = document.getElementById("btn-quote");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentCardId) {
+          showToast("Carte non chargée.", true);
+          return;
+        }
+
+        btnQuote.disabled = true;
+        btnQuote.textContent = "Envoi...";
+
+        const payload = {
+          name: document.getElementById("quote-name").value,
+          email: document.getElementById("quote-email").value,
+          phone: document.getElementById("quote-phone").value,
+          message: document.getElementById("quote-message").value,
+          card_slug: currentSlug
+        };
+
+        const endpoint = `/api/cards/${currentCardId}/quotes`;
+
+        try {
+          await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          showToast("Demande envoyée !");
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          showToast("Erreur lors de l’envoi.", true);
+        }
+
+        btnQuote.disabled = false;
+        btnQuote.textContent = "Envoyer ma demande de devis";
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", loadCard);
   </script>
 </body>
 </html>
+
 
 
 
