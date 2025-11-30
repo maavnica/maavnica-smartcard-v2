@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact – Maavnica SmartCard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:#020617;
+      color:#E5E7EB;
+      line-height:1.5;
+    }
+    a { color:inherit; text-decoration:none; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+
+    header {
+      padding:14px 20px;
+      border-bottom:1px solid rgba(30,64,175,0.6);
+      background:radial-gradient(circle at top, #1E3A8A 0, #020617 70%);
+    }
+    header .inner {
+      max-width:900px;
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color:#E5E7EB;
+      font-size:13px;
+    }
+    header .title { font-weight:700; }
+    .back-link {
+      font-size:12px;
+      color:#93C5FD;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    main { flex:1; padding:40px 20px 30px; }
+    .container { max-width:900px; margin:0 auto; }
+
+    h1 { font-size:24px; font-weight:800; margin-bottom:6px; }
+    .subtitle {
+      font-size:13px;
+      color:#9CA3AF;
+      margin-bottom:24px;
+    }
+
+    .card {
+      background:#020617;
+      border-radius:22px;
+      border:1px solid rgba(30,64,175,0.75);
+      box-shadow:0 18px 50px rgba(15,23,42,0.95);
+      padding:20px 18px 22px;
+      max-width:600px;
+      margin:0 auto;
+    }
+
+    label {
+      display:block;
+      margin-bottom:4px;
+      font-size:13px;
+      color:#E5E7EB;
+    }
+    .field { margin-bottom:14px; }
+
+    select, input, textarea {
+      width:100%;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:#020617;
+      color:#E5E7EB;
+      padding:8px 10px;
+      font-size:13px;
+      outline:none;
+    }
+    textarea { min-height:90px; resize:vertical; }
+
+    .row-2 { display:flex; gap:10px; }
+    @media (max-width:640px){ .row-2 { flex-direction:column; } }
+
+    button {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      background:#22C55E;
+      color:#022C22;
+      padding:10px 18px;
+      border-radius:999px;
+      border:none;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:4px;
+      box-shadow:0 12px 30px rgba(34,197,94,0.35);
+    }
+
+    .note {
+      margin-top:10px;
+      font-size:11px;
+      color:#9CA3AF;
+    }
+
+    footer {
+      padding:10px 20px 16px;
+      font-size:11px;
+      color:#6B7280;
+      text-align:center;
+      border-top:1px solid rgba(15,23,42,0.8);
+      background:#020617;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="inner">
+        <div class="title">Maavnica SmartCard</div>
+        <a href="/" class="back-link">← Retour à la page d’accueil</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <h1>Demande SmartCard / Affiliation</h1>
+        <p class="subtitle">
+          Remplissez ce formulaire, votre demande sera envoyée à l’équipe Maavnica
+          (<strong>contact@maavnica.com</strong>).
+        </p>
+
+        <div class="card">
+          <!-- Formulaire : ouvre le client mail de la personne
+               avec email pré-rempli vers contact@maavnica.com -->
+          <form action="mailto:contact@maavnica.com" method="POST" enctype="text/plain">
+            <div class="field">
+              <label for="demande">Objet de votre demande</label>
+              <select id="demande" name="Objet">
+                <option value="solo">Commande SmartCard Solo</option>
+                <option value="pro">Offre SmartCard Pro</option>
+                <option value="business">Offre SmartCard Business</option>
+                <option value="affiliation">Devenir affilié Maavnica</option>
+                <option value="autre">Autre question / information</option>
+              </select>
+            </div>
+
+            <div class="row-2">
+              <div class="field" style="flex:1;">
+                <label for="nom">Nom / Prénom</label>
+                <input id="nom" name="Nom" required />
+              </div>
+              <div class="field" style="flex:1;">
+                <label for="activite">Activité / Entreprise</label>
+                <input id="activite" name="Activité / Entreprise" />
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div class="field" style="flex:1;">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="Email" />
+              </div>
+              <div class="field" style="flex:1;">
+                <label for="telephone">Téléphone</label>
+                <input id="telephone" name="Téléphone" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message">Votre besoin / message</label>
+              <textarea id="message" name="Message"
+                        placeholder="Expliquez en quelques lignes ce que vous souhaitez (commande, affiliation, questions…)"></textarea>
+            </div>
+
+            <button type="submit">
+              ✉️ Envoyer ma demande
+            </button>
+
+            <div class="note">
+              En cliquant sur “Envoyer ma demande”, votre logiciel de messagerie s’ouvrira avec
+              un email pré-rempli à destination de <strong>contact@maavnica.com</strong>.
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      Maavnica SmartCard – Lancement 2025 · Première brique de l’écosystème Maavnica
+    </footer>
+  </div>
+
+  <script>
+    // Pré-sélectionne l'offre en fonction du paramètre ?offre=
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const offre = (params.get("offre") || "").toLowerCase();
+      const select = document.getElementById("demande");
+      if (!select) return;
+
+      if (offre === "pro") select.value = "pro";
+      else if (offre === "business") select.value = "business";
+      else if (offre === "affiliation") select.value = "affiliation";
+      else if (offre === "solo") select.value = "solo";
+      else if (offre) select.value = "autre";
+    })();
+  </script>
+</body>
+</html>
+
