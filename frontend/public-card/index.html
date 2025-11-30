@@ -15,7 +15,7 @@
       --border-soft: rgba(148, 163, 184, 0.35);
     }
 
-    /* Thèmes */
+    /* Thèmes CLASSIQUES */
     body.theme-apple {
       --card-bg: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #020617 100%);
       --primary: #22c55e;
@@ -35,6 +35,28 @@
       --card-bg: radial-gradient(circle at top, #22c55e 0%, #14532d 35%, #020617 75%);
       --primary: #22c55e;
       --primary-soft: rgba(34, 197, 94, 0.22);
+    }
+
+    /* Thèmes EFFET WOW (démos) */
+    body.theme-wow-artisan {
+      --card-bg: radial-gradient(circle at top, #fb923c 0%, #7c2d12 40%, #020617 85%);
+      --primary: #fed7aa;
+      --primary-soft: rgba(253, 186, 116, 0.35);
+    }
+    body.theme-wow-gold {
+      --card-bg: radial-gradient(circle at top, #facc15 0%, #854d0e 35%, #020617 80%);
+      --primary: #facc15;
+      --primary-soft: rgba(250, 204, 21, 0.3);
+    }
+    body.theme-wow-health {
+      --card-bg: radial-gradient(circle at top, #38bdf8 0%, #0f172a 40%, #020617 90%);
+      --primary: #22c55e;
+      --primary-soft: rgba(34, 197, 94, 0.28);
+    }
+    body.theme-wow-saas {
+      --card-bg: radial-gradient(circle at top, #a855f7 0%, #0f172a 40%, #020617 92%);
+      --primary: #38bdf8;
+      --primary-soft: rgba(56, 189, 248, 0.35);
     }
 
     * {
@@ -640,36 +662,64 @@
       if (text.includes("nettoy") || text.includes("ménage") || text.includes("clean")) return "🧹";
       if (text.includes("concierg")) return "🛎️";
       if (text.includes("immo") || text.includes("agence")) return "🏡";
+      if (text.includes("saas") || text.includes("digital")) return "💻";
       return "🛠️";
     }
 
     function applyTheme(themeName, card) {
-      const allowed = ["apple", "material", "black-gold", "artisan"];
-      let raw = (themeName || "").toLowerCase();
+      const allowed = [
+        "apple",
+        "material",
+        "black-gold",
+        "artisan",
+        "wow-artisan",
+        "wow-gold",
+        "wow-health",
+        "wow-saas",
+      ];
 
+      let raw = (themeName || "").toLowerCase().trim();
       const slug = (card?.slug || "").toLowerCase();
       const name = (card?.company_name || "").toLowerCase();
 
-      if (
-        raw.includes("gold") ||
-        raw.includes("premium") ||
-        slug.includes("gold") ||
-        name.includes("gold")
-      ) {
-        raw = "black-gold";
+      // Cas des thèmes Effet WOW venant de l'admin
+      if (raw.includes("effet wow")) {
+        if (raw.includes("artisan")) raw = "wow-artisan";
+        else if (raw.includes("black") || raw.includes("gold")) raw = "wow-gold";
+        else if (raw.includes("sant") || raw.includes("bien") || raw.includes("ostéo") || raw.includes("osteo")) {
+          raw = "wow-health";
+        } else if (raw.includes("saas") || raw.includes("digital")) {
+          raw = "wow-saas";
+        }
+      } else {
+        // Thèmes classiques
+        if (raw.includes("black") || raw.includes("gold") || slug.includes("gold") || name.includes("gold")) {
+          raw = "black-gold";
+        } else if (raw.includes("material")) {
+          raw = "material";
+        } else if (raw.includes("artisan")) {
+          raw = "artisan";
+        } else if (raw.includes("apple")) {
+          raw = "apple";
+        }
       }
 
-      if (raw.includes("artisan")) raw = "artisan";
-      if (raw.includes("sant") || raw.includes("bien") || raw.includes("osteo")) {
-        raw = "material";
+      // Si rien de fiable, on essaye d'inférer à partir du nom / slug
+      if (!raw) {
+        if (slug.includes("gold") || name.includes("gold") || name.includes("premium")) raw = "black-gold";
+        else if (slug.includes("artisan")) raw = "artisan";
+        else if (slug.includes("saas") || name.includes("saas") || name.includes("digital")) raw = "wow-saas";
+        else if (slug.includes("sant") || name.includes("sant") || name.includes("ostéo") || name.includes("osteo")) {
+          raw = "wow-health";
+        } else raw = "apple";
       }
 
-      const finalTheme = allowed.includes(raw) ? raw : "apple";
+      if (!allowed.includes(raw)) raw = "apple";
 
       allowed.forEach((t) => {
         document.body.classList.remove("theme-" + t);
       });
-      document.body.classList.add("theme-" + finalTheme);
+      document.body.classList.add("theme-" + raw);
     }
 
     function updateQrCode(slug) {
@@ -896,6 +946,7 @@
   </script>
 </body>
 </html>
+
 
 
 
