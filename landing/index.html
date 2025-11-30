@@ -106,17 +106,6 @@
       position:relative;
     }
 
-    .hero-phone-mock iframe {
-      position:absolute;
-      top:0;
-      left:0;
-      width:125%;
-      height:125%;
-      border:none;
-      transform:scale(0.8);
-      transform-origin:top left;
-    }
-
     @media (max-width:768px){
       .hero { flex-direction:column; }
       .hero-right { order:-1; }
@@ -166,285 +155,9 @@
       font-weight:700;
       margin-bottom:6px;
     }
-
-    /* ---------- DEMOS ---------- */
-    .demo-section {
-      background:#020617;
-      padding:50px 20px 55px;
-    }
-    .demo-title-wrap {
-      text-align:center;
-      color:white;
-    }
-    .demo-title-wrap h2 {
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:6px;
-    }
-    .demo-title-wrap p {
-      font-size:13px;
-      color:#9CA3AF;
-    }
-
-    .demo-grid {
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:30px;
-      margin-top:30px;
-    }
-    @media (max-width:980px){
-      .demo-grid { grid-template-columns:1fr; }
-    }
-
-    .demo-block-title {
-      font-size:16px;
-      font-weight:700;
-      margin-bottom:6px;
-      color:white;
-      text-align:center;
-    }
-    .demo-block-sub {
-      font-size:13px;
-      color:#9CA3AF;
-      margin-bottom:12px;
-      text-align:center;
-    }
-
-    .phone-mock {
-      width:260px;
-      height:520px;
-      margin:0 auto;
-      border-radius:32px;
-      border:9px solid #020617;
-      box-shadow:0 18px 55px rgba(0,0,0,0.85);
-      overflow:hidden;
-      background:#020617;
-      position:relative;
-    }
-    .phone-mock iframe {
-      position:absolute;
-      top:0;
-      left:0;
-      width:125%;
-      height:125%;
-      border:none;
-      transform:scale(0.8);
-      transform-origin:top left;
-    }
-
-    .cta-demo {
-      margin-top:12px;
-      display:inline-block;
-      padding:9px 16px;
-      background:#1D4ED8;
-      color:white;
-      border-radius:999px;
-      font-weight:600;
-      font-size:13px;
-      transition:.2s;
-    }
-    .cta-demo:hover { opacity:.9; }
-
-    /* ---------- PRICING ---------- */
-    .pricing-section {
-      background:#F8FAFC;
-      padding:60px 20px 60px;
-    }
-    .pricing-header {
-      text-align:center;
-      margin-bottom:30px;
-    }
-    .pricing-header h2 {
-      font-size:24px;
-      font-weight:800;
-      margin-bottom:6px;
-      color:#0F172A;
-    }
-    .pricing-header p {
-      font-size:13px;
-      color:#475569;
-    }
-
-    .pricing-grid {
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:24px;
-    }
-    @media (max-width:980px){
-      .pricing-grid { grid-template-columns:1fr; }
-    }
-
-    .pricing-card {
-      background:#FFFFFF;
-      border-radius:18px;
-      border:1px solid #E2E8F0;
-      padding:22px 20px 20px;
-      box-shadow:0 12px 30px rgba(148,163,184,0.25);
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      position:relative;
-    }
-    .pricing-card.highlight {
-      border-color:#1D4ED8;
-      box-shadow:0 18px 40px rgba(37,99,235,0.25);
-      transform:translateY(-3px);
-    }
-    .badge-popular {
-      position:absolute;
-      top:12px;
-      right:16px;
-      background:#1D4ED8;
-      color:white;
-      font-size:11px;
-      padding:3px 9px;
-      border-radius:999px;
-    }
-
-    .pricing-title {
-      font-size:17px;
-      font-weight:700;
-      color:#0F172A;
-    }
-    .pricing-tagline {
-      font-size:13px;
-      color:#64748B;
-    }
-    .pricing-price {
-      font-size:22px;
-      font-weight:800;
-      margin:6px 0;
-      color:#0F172A;
-    }
-    .pricing-price span {
-      font-size:13px;
-      font-weight:400;
-      color:#64748B;
-      margin-left:4px;
-    }
-
-    .pricing-list {
-      list-style:none;
-      font-size:13px;
-      color:#475569;
-      margin-top:4px;
-      padding-left:0;
-    }
-    .pricing-list li {
-      margin-bottom:6px;
-    }
-    .pricing-list li::before {
-      content:"✔ ";
-      color:#16A34A;
-      margin-right:2px;
-    }
-
-    .pricing-cta {
-      display:block;
-      text-align:center;
-      margin-top:14px;
-      padding:10px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:600;
-      cursor:pointer;
-      transition:.2s;
-    }
-    .pricing-cta.primary-outline {
-      border:1px solid #1D4ED8;
-      color:#1D4ED8;
-      background:white;
-    }
-    .pricing-cta.primary-fill {
-      background:#1D4ED8;
-      color:white;
-      border:none;
-    }
-    .pricing-cta:hover { opacity:.9; }
-
-    .pricing-note {
-      margin-top:10px;
-      font-size:11px;
-      color:#6B7280;
-      text-align:center;
-    }
-
-    /* ---------- AFFILIATION ---------- */
-    .aff-section {
-      background:#020617;
-      padding:50px 20px 50px;
-    }
-    .aff-box {
-      background:#0B1120;
-      border-radius:20px;
-      border:1px solid #1D4ED8;
-      padding:26px 22px;
-      text-align:center;
-      color:white;
-      box-shadow:0 18px 50px rgba(15,23,42,0.9);
-    }
-    .aff-box h3 {
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:8px;
-    }
-    .aff-box p {
-      font-size:13px;
-      color:#BFDBFE;
-    }
-    .cta-affiliation {
-      display:inline-block;
-      margin-top:18px;
-      padding:12px 22px;
-      background:#22C55E;
-      color:#052E16;
-      border-radius:999px;
-      font-weight:600;
-      font-size:13px;
-      transition:.2s;
-    }
-    .cta-affiliation:hover { opacity:.9; }
-
-    /* ---------- FAQ ---------- */
-    .faq-section {
-      background:#0B1120;
-      color:white;
-      padding:45px 20px 50px;
-    }
-    .faq-section h2 {
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:20px;
-    }
-    .faq-grid {
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:20px;
-    }
-    @media (max-width:900px){
-      .faq-grid { grid-template-columns:1fr; }
-    }
-    .faq-item h4 {
-      font-size:15px;
-      margin-bottom:4px;
-      color:#E5E7EB;
-    }
-    .faq-item p {
-      font-size:13px;
-      color:#9CA3AF;
-    }
-
-    /* ---------- FOOTER ---------- */
-    footer {
-      padding:18px 20px;
-      text-align:center;
-      font-size:11px;
-      color:#64748B;
-      background:#020617;
-      border-top:1px solid rgba(15,23,42,0.9);
-    }
   </style>
 </head>
+
 <body>
 
   <!-- HERO -->
@@ -457,11 +170,11 @@
         <h1>La SmartCard qui transforme vos clients en ambassadeurs.</h1>
         <p class="hero-sub">
           Une carte pro moderne qui récolte des avis Google, génère des devis,
-          déclenche des contacts WhatsApp et se déclinera en signature mail et widget web.
+          déclenche des contacts WhatsApp et se décline en signature mail et widget web.
         </p>
 
         <div class="hero-cta-row">
-          <a href="/admin" class="cta-primary">
+          <a href="https://maavnica-smartcard-v2-1.onrender.com/admin" class="cta-primary">
             <span>Créer ma SmartCard maintenant</span><span>→</span>
           </a>
 
@@ -482,7 +195,9 @@
 
       <div class="hero-right">
         <div class="hero-phone-mock">
-          <iframe src="/c/demo-artisan"></iframe>
+          <iframe src="https://maavnica-smartcard-client.onrender.com/c/demo-artisan"
+                  style="position:absolute; top:0; left:0; width:125%; height:125%; border:none; transform:scale(0.8); transform-origin:top left;">
+          </iframe>
         </div>
       </div>
     </div>
@@ -495,6 +210,7 @@
         <h2>Tout ce qu’il faut pour une présence pro claire</h2>
         <p>Artisans, conciergeries, professions du bien-être, freelances...</p>
       </div>
+
       <div class="features">
         <div class="feature">
           <h3>⭐ Avis Google après chaque intervention</h3>
@@ -535,152 +251,234 @@
     </div>
   </section>
 
+  <!-- DEMOS SECTION -->
   <!-- DEMOS -->
-  <section class="demo-section">
+  <section class="demo-section" style="background:#020617; padding:50px 20px 55px;">
     <div class="container">
-      <div class="demo-title-wrap">
-        <h2>Aperçu des SmartCards</h2>
-        <p>Trois démos réelles : artisan, Black & Gold premium, santé / bien-être.</p>
+      <div class="demo-title-wrap" style="text-align:center; color:white;">
+        <h2 style="font-size:22px; font-weight:800; margin-bottom:6px;">
+          Aperçu des SmartCards
+        </h2>
+        <p style="font-size:13px; color:#9CA3AF;">
+          Trois démos réelles : artisan, Black & Gold premium, santé / bien-être.
+        </p>
       </div>
 
-      <div class="demo-grid">
+      <div class="demo-grid"
+           style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:30px; margin-top:30px;">
+        
+        <!-- DEMO ARTISAN -->
         <div>
-          <div class="demo-block-title">Artisan</div>
-          <div class="demo-block-sub">
+          <div class="demo-block-title" style="font-size:16px; font-weight:700; margin-bottom:6px; color:white; text-align:center;">
+            Artisan
+          </div>
+          <div class="demo-block-sub" style="font-size:13px; color:#9CA3AF; margin-bottom:12px; text-align:center;">
             Idéal pour plombiers, électriciens, multiservices, conciergeries de proximité.
           </div>
-          <div class="phone-mock">
-            <iframe src="/c/demo-artisan"></iframe>
+
+          <div class="phone-mock"
+               style="width:260px; height:520px; margin:0 auto; border-radius:32px;
+                      border:9px solid #020617; box-shadow:0 18px 55px rgba(0,0,0,0.85);
+                      overflow:hidden; background:#020617; position:relative;">
+            <iframe
+              src="https://maavnica-smartcard-client.onrender.com/c/demo-artisan"
+              style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
+                     transform:scale(0.8); transform-origin:top left;">
+            </iframe>
           </div>
+
           <div style="text-align:center;">
-            <a href="/c/demo-artisan" target="_blank" class="cta-demo">
+            <a href="https://maavnica-smartcard-client.onrender.com/c/demo-artisan"
+               target="_blank"
+               class="cta-demo"
+               style="margin-top:12px; display:inline-block; padding:9px 16px;
+                      background:#1D4ED8; color:white; border-radius:999px; font-weight:600;
+                      font-size:13px; transition:.2s;">
               Ouvrir la démo artisan →
             </a>
           </div>
         </div>
 
+        <!-- DEMO GOLD -->
         <div>
-          <div class="demo-block-title">Black & Gold premium</div>
-          <div class="demo-block-sub">
+          <div class="demo-block-title" style="font-size:16px; font-weight:700; margin-bottom:6px; color:white; text-align:center;">
+            Black & Gold premium
+          </div>
+          <div class="demo-block-sub" style="font-size:13px; color:#9CA3AF; margin-bottom:12px; text-align:center;">
             Pour conciergerie, immobilier, services haut de gamme et prestations premium.
           </div>
-          <div class="phone-mock">
-            <iframe src="/c/demo-gold"></iframe>
+
+          <div class="phone-mock"
+               style="width:260px; height:520px; margin:0 auto; border-radius:32px;
+                      border:9px solid #020617; box-shadow:0 18px 55px rgba(0,0,0,0.85);
+                      overflow:hidden; background:#020617; position:relative;">
+            <iframe
+              src="https://maavnica-smartcard-client.onrender.com/c/demo-gold"
+              style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
+                     transform:scale(0.8); transform-origin:top left;">
+            </iframe>
           </div>
+
           <div style="text-align:center;">
-            <a href="/c/demo-gold" target="_blank" class="cta-demo">
+            <a href="https://maavnica-smartcard-client.onrender.com/c/demo-gold"
+               target="_blank"
+               class="cta-demo"
+               style="margin-top:12px; display:inline-block; padding:9px 16px;
+                      background:#1D4ED8; color:white; border-radius:999px; font-weight:600;
+                      font-size:13px; transition:.2s;">
               Ouvrir la démo Black & Gold →
             </a>
           </div>
         </div>
 
+        <!-- DEMO SANTE -->
         <div>
-          <div class="demo-block-title">Santé & Bien-être</div>
-          <div class="demo-block-sub">
+          <div class="demo-block-title"
+               style="font-size:16px; font-weight:700; margin-bottom:6px; color:white; text-align:center;">
+            Santé & Bien-être
+          </div>
+          <div class="demo-block-sub" style="font-size:13px; color:#9CA3AF; margin-bottom:12px; text-align:center;">
             Parfait pour ostéopathes, sophrologues, hypnothérapeutes, naturopathes, coachs bien-être.
           </div>
-          <div class="phone-mock">
-            <iframe src="/c/demo-sante"></iframe>
+
+          <div class="phone-mock"
+               style="width:260px; height:520px; margin:0 auto; border-radius:32px;
+                      border:9px solid #020617; box-shadow:0 18px 55px rgba(0,0,0,0.85);
+                      overflow:hidden; background:#020617; position:relative;">
+            <iframe
+              src="https://maavnica-smartcard-client.onrender.com/c/demo-sante"
+              style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
+                     transform:scale(0.8); transform-origin:top left;">
+            </iframe>
           </div>
+
           <div style="text-align:center;">
-            <a href="/c/demo-sante" target="_blank" class="cta-demo">
+            <a href="https://maavnica-smartcard-client.onrender.com/c/demo-sante"
+               target="_blank"
+               class="cta-demo"
+               style="margin-top:12px; display:inline-block; padding:9px 16px;
+                      background:#1D4ED8; color:white; border-radius:999px; font-weight:600;
+                      font-size:13px; transition:.2s;">
               Ouvrir la démo bien-être →
             </a>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- PRICING -->
-  <section class="pricing-section" id="tarifs">
+  <section class="pricing-section" id="tarifs" style="background:#F8FAFC; padding:60px 20px 60px;">
     <div class="container">
-      <div class="pricing-header">
-        <h2>Un modèle hybride clair : Solo, Pro, Business</h2>
-        <p>
+
+      <div class="pricing-header" style="text-align:center; margin-bottom:30px;">
+        <h2 style="font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">
+          Un modèle hybride clair : Solo, Pro, Business
+        </h2>
+        <p style="font-size:13px; color:#475569;">
           Commencez avec une SmartCard Solo (paiement unique), puis passez en Pro ou Business pour un suivi régulier
           et les futures intégrations CRM Maavnica.
         </p>
       </div>
 
-      <div class="pricing-grid">
+      <div class="pricing-grid"
+           style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px;">
+
         <!-- SOLO -->
-        <div class="pricing-card">
-          <div class="pricing-title">Solo</div>
-          <div class="pricing-tagline">
+        <div class="pricing-card"
+             style="background:#FFFFFF; border-radius:18px; border:1px solid #E2E8F0; padding:22px 20px 20px;
+                    box-shadow:0 12px 30px rgba(148,163,184,0.25); display:flex; flex-direction:column; gap:10px;">
+          <div class="pricing-title" style="font-size:17px; font-weight:700; color:#0F172A;">
+            Solo
+          </div>
+          <div class="pricing-tagline" style="font-size:13px; color:#64748B;">
             Pour un indépendant qui veut une SmartCard pro simple et efficace.
           </div>
-          <div class="pricing-price">
-            39€ <span>HT · une fois</span>
+          <div class="pricing-price" style="font-size:22px; font-weight:800; margin:6px 0; color:#0F172A;">
+            39€ <span style="font-size:13px; font-weight:400; color:#64748B;">HT · une fois</span>
           </div>
-          <ul class="pricing-list">
+          <ul class="pricing-list" style="list-style:none; font-size:13px; color:#475569; padding-left:0;">
             <li>1 SmartCard personnalisée</li>
             <li>Avis Google, WhatsApp, appel, devis</li>
             <li>QR Code prêt à imprimer (factures, flyers, vitrine)</li>
             <li>Mise à jour gratuite en cas de changement de coordonnées</li>
           </ul>
-          <a
-            class="pricing-cta primary-outline"
-            href="/static/contact-smartcard.html?offre=solo"
-          >
+          <a href="/static/contact-smartcard.html?offre=solo"
+             class="pricing-cta primary-outline"
+             style="text-align:center; margin-top:14px; padding:10px; border-radius:999px;
+                    font-size:13px; font-weight:600; border:1px solid #1D4ED8; color:#1D4ED8;">
             Commander la formule Solo
           </a>
         </div>
 
         <!-- PRO -->
-        <div class="pricing-card highlight">
-          <div class="badge-popular">Le plus choisi</div>
-          <div class="pricing-title">Pro</div>
-          <div class="pricing-tagline">
+        <div class="pricing-card highlight"
+             style="background:#FFFFFF; border-radius:18px; border:1px solid #1D4ED8; padding:22px 20px;
+                    box-shadow:0 18px 40px rgba(37,99,235,0.25); transform:translateY(-3px); position:relative;">
+          <div class="badge-popular"
+               style="position:absolute; top:12px; right:16px; background:#1D4ED8; color:white;
+                      font-size:11px; padding:3px 9px; border-radius:999px;">
+            Le plus choisi
+          </div>
+
+          <div class="pricing-title" style="font-size:17px; font-weight:700; color:#0F172A;">
+            Pro
+          </div>
+          <div class="pricing-tagline" style="font-size:13px; color:#64748B;">
             Pour les pros qui utilisent la SmartCard au quotidien et veulent suivre les retours.
           </div>
-          <div class="pricing-price">
-            8,90€ <span>HT / mois</span>
+          <div class="pricing-price" style="font-size:22px; font-weight:800; margin:6px 0; color:#0F172A;">
+            8,90€ <span style="font-size:13px; font-weight:400; color:#64748B;">HT / mois</span>
           </div>
-          <ul class="pricing-list">
+          <ul class="pricing-list" style="list-style:none; font-size:13px; color:#475569; padding-left:0;">
             <li>Toutes les fonctionnalités de la formule Solo</li>
             <li>Thèmes premium & couleurs avancées</li>
             <li>Historique des demandes de devis et retours clients</li>
-            <li>Préparation à l’intégration CRM Maavnica (clients, interventions)</li>
-            <li>Déclinaisons SmartCard pour signature mail & widget site (prochainement)</li>
+            <li>Préparation à l’intégration CRM Maavnica</li>
+            <li>Déclinaisons SmartCard (signature mail & widget web)</li>
           </ul>
-          <a
-            class="pricing-cta primary-fill"
-            href="/static/contact-smartcard.html?offre=pro"
-          >
+          <a href="/static/contact-smartcard.html?offre=pro"
+             class="pricing-cta primary-fill"
+             style="text-align:center; margin-top:14px; padding:10px; border-radius:999px;
+                    background:#1D4ED8; color:white; font-size:13px; font-weight:600;">
             Passer en offre Pro
           </a>
         </div>
 
         <!-- BUSINESS -->
-        <div class="pricing-card">
-          <div class="pricing-title">Business</div>
-          <div class="pricing-tagline">
+        <div class="pricing-card"
+             style="background:#FFFFFF; border-radius:18px; border:1px solid #E2E8F0; padding:22px 20px 20px;
+                    box-shadow:0 12px 30px rgba(148,163,184,0.25); display:flex; flex-direction:column; gap:10px;">
+          <div class="pricing-title" style="font-size:17px; font-weight:700; color:#0F172A;">
+            Business
+          </div>
+          <div class="pricing-tagline" style="font-size:13px; color:#64748B;">
             Pour les structures avec plusieurs collaborateurs ou plusieurs sites.
           </div>
-          <div class="pricing-price">
-            19,90€ <span>HT / mois</span>
+          <div class="pricing-price" style="font-size:22px; font-weight:800; margin:6px 0; color:#0F172A;">
+            19,90€ <span style="font-size:13px; font-weight:400; color:#64748B;">HT / mois</span>
           </div>
-          <ul class="pricing-list">
-            <li>Jusqu’à 5 SmartCards (équipe, multi-sites ou multi-marques)</li>
-            <li>Gestion simplifiée des liens & coordonnées pour chaque collaborateur</li>
-            <li>Vue globale sur les demandes et retours (pré-CRM équipe)</li>
-            <li>Priorité sur les futures intégrations (paiement, automation, CRM Maavnica)</li>
+          <ul class="pricing-list" style="list-style:none; font-size:13px; color:#475569; padding-left:0;">
+            <li>Jusqu’à 5 SmartCards</li>
+            <li>Gestion simplifiée des liens par collaborateur</li>
+            <li>Vue globale des demandes & retours</li>
+            <li>Priorité sur les futures intégrations</li>
           </ul>
-          <a
-            class="pricing-cta primary-outline"
-            href="/static/contact-smartcard.html?offre=business"
-          >
+          <a href="/static/contact-smartcard.html?offre=business"
+             class="pricing-cta primary-outline"
+             style="text-align:center; margin-top:14px; padding:10px; border-radius:999px;
+                    font-size:13px; font-weight:600; border:1px solid #1D4ED8; color:#1D4ED8;">
             Discuter d’une offre Business
           </a>
         </div>
+
       </div>
 
-      <div class="pricing-note">
-        Les tarifs et fonctionnalités évolueront avec le développement de Maavnica. Les premiers clients bénéficieront d’avantages spécifiques lors des mises à jour.
+      <div class="pricing-note" style="margin-top:10px; font-size:11px; color:#6B7280; text-align:center;">
+        Les tarifs sont susceptibles d’évoluer pour les premiers clients (prix garantis à vie).
       </div>
 
-      <!-- CTA AFFILIATION DANS LA ZONE TARIFS -->
       <div style="text-align:center; margin-top:18px;">
         <a href="/static/contact-smartcard.html?offre=affiliation"
            style="display:inline-block; padding:10px 20px; border-radius:999px;
@@ -688,84 +486,115 @@
           💸 Vous avez un réseau ? Devenir affilié Maavnica
         </a>
       </div>
+
     </div>
   </section>
 
   <!-- AFFILIATION -->
-  <section class="aff-section">
+  <section class="aff-section" style="background:#020617; padding:50px 20px 50px;">
     <div class="container">
-      <div class="aff-box">
-        <h3>💸 Programme d’affiliation Maavnica</h3>
-        <p>
+      <div class="aff-box"
+           style="background:#0B1120; border-radius:20px; border:1px solid #1D4ED8; padding:26px 22px;
+                  text-align:center; color:white; box-shadow:0 18px 50px rgba(15,23,42,0.9);">
+        <h3 style="font-size:22px; font-weight:800; margin-bottom:8px;">
+          💸 Programme d’affiliation Maavnica
+        </h3>
+        <p style="font-size:13px; color:#BFDBFE;">
           Vous travaillez avec des artisans, thérapeutes, indépendants ou petites entreprises ?
-          Vous êtes agence web, consultant, coach, formateur ou créateur de contenu ?
         </p>
-        <p style="margin-top:6px;">
-          Le programme d’affiliation vous permettra de proposer la SmartCard à votre réseau et de percevoir une
-          commission sur chaque vente (Solo, Pro ou Business).
+        <p style="margin-top:6px; font-size:13px; color:#BFDBFE;">
+          Le programme d’affiliation vous permet de recommander la SmartCard à votre réseau
+          et de percevoir une commission sur chaque vente.
         </p>
-        <a
-          href="/static/contact-smartcard.html?offre=affiliation"
-          class="cta-affiliation"
-        >
+
+        <a href="/static/contact-smartcard.html?offre=affiliation"
+           class="cta-affiliation"
+           style="display:inline-block; margin-top:18px; padding:12px 22px;
+                  background:#22C55E; color:#052E16; border-radius:999px;
+                  font-weight:600; font-size:13px;">
           Je veux devenir affilié →
         </a>
       </div>
     </div>
   </section>
-
   <!-- FAQ -->
-  <section class="faq-section">
+  <section class="faq-section"
+           style="background:#0B1120; color:white; padding:45px 20px 50px;">
     <div class="container">
-      <h2>Questions fréquentes</h2>
-      <div class="faq-grid">
+      <h2 style="font-size:22px; font-weight:800; margin-bottom:20px;">
+        Questions fréquentes
+      </h2>
+
+      <div class="faq-grid"
+           style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:20px;">
+        
         <div class="faq-item">
-          <h4>📌 À quoi sert concrètement la SmartCard ?</h4>
-          <p>
-            C’est une carte pro intelligente accessible par lien ou QR Code. Vos clients peuvent laisser un avis Google,
-            vous appeler, vous écrire sur WhatsApp, demander un devis ou accéder à un lien de paiement, en un seul endroit.
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 À quoi sert concrètement la SmartCard ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            C’est une carte pro accessible via lien ou QR Code.
+            Vos clients peuvent laisser un avis Google, vous appeler, vous écrire sur WhatsApp,
+            demander un devis ou accéder à un lien de paiement, en un seul endroit.
           </p>
         </div>
+
         <div class="faq-item">
-          <h4>📌 Pour quels métiers est-ce adapté ?</h4>
-          <p>
-            Artisans, conciergeries, professions du bien-être, freelances, consultants... et, via l’offre Business,
-            toute structure avec plusieurs collaborateurs ou sites.
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 Pour quels métiers est-ce adapté ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            Artisans, conciergeries, professions du bien-être, freelances...  
+            Et via l’offre Business : équipes ou multi-sites.
           </p>
         </div>
+
         <div class="faq-item">
-          <h4>📌 Différences entre Solo, Pro et Business ?</h4>
-          <p>
-            Solo : carte unique, achat une fois. Pro : abonnement avec suivi, historique et préparation CRM.
-            Business : plusieurs cartes, vision équipe et priorité sur les futures intégrations.
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 Différences entre Solo, Pro et Business ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            Solo : carte unique, paiement une fois.  
+            Pro : abonnement mensuel avec suivi et historique.  
+            Business : plusieurs cartes + vue équipe.
           </p>
         </div>
+
         <div class="faq-item">
-          <h4>📌 Pourrai-je évoluer vers le CRM Maavnica ?</h4>
-          <p>
-            Oui. Les formules Pro et Business sont pensées comme première marche vers le futur CRM Maavnica
-            (clients, demandes, interventions, automatisations).
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 Pourrai-je évoluer vers le CRM Maavnica ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            Oui. Les formules Pro & Business évolueront vers l’intégration CRM :
+            clients, demandes, interventions, automatisations.
           </p>
         </div>
+
         <div class="faq-item">
-          <h4>📌 Comment utiliser la SmartCard au quotidien ?</h4>
-          <p>
-            Après chaque prestation, vous envoyez la carte par SMS/WhatsApp ou vous faites scanner le QR Code.
-            Vous pouvez aussi l’ajouter à vos devis, factures, flyers, réseaux sociaux et bientôt à votre signature mail.
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 Comment utiliser la SmartCard au quotidien ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            Après chaque prestation : envoyez la carte par WhatsApp/SMS  
+            ou faites scanner le QR Code (flyers, devis, factures, vitrine).
           </p>
         </div>
+
         <div class="faq-item">
-          <h4>📌 Puis-je la revendre à mes clients ?</h4>
-          <p>
-            Oui. Le programme d’affiliation permet d’intégrer la SmartCard dans vos offres
-            et de percevoir une commission sur chaque vente générée via vos recommandations.
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">
+            📌 Puis-je la revendre à mes propres clients ?
+          </h4>
+          <p style="font-size:13px; color:#9CA3AF;">
+            Oui. Le programme d’affiliation vous permet de toucher une commission
+            sur chaque vente générée via vos recommandations.
           </p>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- LIEN AFFILIATION AVANT FOOTER -->
+  <!-- Affiliation link before footer -->
   <div style="text-align:center; background:#020617; padding-bottom:10px;">
     <a href="/static/contact-smartcard.html?offre=affiliation"
        style="color:#93C5FD; text-decoration:underline; text-underline-offset:3px; font-size:13px;">
@@ -773,12 +602,15 @@
     </a>
   </div>
 
-  <footer>
+  <!-- FOOTER -->
+  <footer style="padding:18px 20px; text-align:center; font-size:11px; color:#64748B;
+                 background:#020617; border-top:1px solid rgba(15,23,42,0.9);">
     Maavnica SmartCard © 2025 – Prototype en cours de développement · Tarifs et fonctionnalités susceptibles d’évoluer
   </footer>
 
 </body>
 </html>
+
 
 
 
