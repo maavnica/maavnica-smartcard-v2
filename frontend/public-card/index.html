@@ -17,7 +17,7 @@
 
     /* Thèmes */
     body.theme-apple {
-      --card-bg: radial-gradient(circle at top, #0f172a 0%, #020617 50%, #020617 100%);
+      --card-bg: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #020617 100%);
       --primary: #22c55e;
       --primary-soft: rgba(34, 197, 94, 0.16);
     }
@@ -27,14 +27,14 @@
       --primary-soft: rgba(59, 130, 246, 0.18);
     }
     body.theme-black-gold {
-      --card-bg: radial-gradient(circle at top, #fbbf24 0%, #854d0e 25%, #020617 70%);
+      --card-bg: radial-gradient(circle at top, #fbbf24 0%, #854d0e 35%, #020617 75%);
       --primary: #fbbf24;
-      --primary-soft: rgba(251, 191, 36, 0.18);
+      --primary-soft: rgba(251, 191, 36, 0.22);
     }
     body.theme-artisan {
-      --card-bg: radial-gradient(circle at top, #22c55e 0%, #14532d 30%, #020617 70%);
+      --card-bg: radial-gradient(circle at top, #22c55e 0%, #14532d 35%, #020617 75%);
       --primary: #22c55e;
-      --primary-soft: rgba(34, 197, 94, 0.18);
+      --primary-soft: rgba(34, 197, 94, 0.22);
     }
 
     * {
@@ -45,7 +45,7 @@
 
     body {
       margin: 0;
-      background: radial-gradient(circle at top, #1f2937 0%, #020617 55%, #020617 100%);
+      background: radial-gradient(circle at top, #1f2937 0%, #020617 60%, #020617 100%);
       min-height: 100vh;
       color: var(--text-main);
       display: flex;
@@ -56,21 +56,33 @@
 
     .phone-shell {
       width: 100%;
-      max-width: 420px;
-      border-radius: 32px;
-      padding: 14px;
-      background: linear-gradient(135deg, rgba(148, 163, 184, 0.35), rgba(15, 23, 42, 0.9));
+      max-width: 480px;
+      border-radius: 34px;
+      padding: 16px;
+      background: radial-gradient(circle at top, rgba(148, 163, 184, 0.75), rgba(15, 23, 42, 0.95));
       box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.95),
-        0 0 0 1px rgba(148, 163, 184, 0.35);
+        0 26px 60px rgba(0, 0, 0, 0.95),
+        0 0 0 1px rgba(31, 41, 55, 0.8);
     }
 
     .phone-inner {
-      border-radius: 26px;
+      border-radius: 28px;
       background: var(--card-bg);
       padding: 18px 16px 18px;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
     }
 
     .status-bar {
@@ -80,12 +92,13 @@
       font-size: 10px;
       color: #6b7280;
       margin-bottom: 6px;
+      margin-top: 10px;
     }
 
     .hero {
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid rgba(148, 163, 184, 0.35);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617 55%);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), #020617 55%);
       padding: 12px 14px 12px;
       margin-bottom: 14px;
     }
@@ -105,7 +118,7 @@
       border: 1px solid rgba(148, 163, 184, 0.45);
       font-size: 11px;
       color: #e5e7eb;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.96);
     }
 
     .hero-main-row {
@@ -115,14 +128,15 @@
     }
 
     .hero-avatar {
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 999px;
       background: radial-gradient(circle at top, var(--primary), #111827);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 24px;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.9);
     }
 
     .hero-texts {
@@ -167,13 +181,31 @@
       margin-right: 4px;
     }
 
+    .hero-contacts {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+    .hero-contact-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+    .hero-contact-line span.icon {
+      width: 14px;
+      text-align: center;
+    }
+
     .main-grid {
       display: grid;
-      grid-template-columns: 1.7fr 1.4fr;
+      grid-template-columns: 1.2fr 1.1fr;
       gap: 10px;
     }
 
-    @media (max-width: 390px) {
+    @media (max-width: 430px) {
       .main-grid {
         grid-template-columns: 1fr;
       }
@@ -182,7 +214,7 @@
     .card-block {
       border-radius: 16px;
       border: 1px solid var(--border-soft);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617 60%);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), #020617 60%);
       padding: 10px 11px 11px;
     }
 
@@ -216,9 +248,9 @@
       width: 100%;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.65);
-      padding: 8px 10px;
+      padding: 7px 10px;
       font-size: 13px;
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(15, 23, 42, 0.97);
       color: #e5e7eb;
       display: flex;
       align-items: center;
@@ -233,19 +265,19 @@
     }
 
     .pill.active-yes {
-      border-color: rgba(22, 163, 74, 0.9);
-      background: radial-gradient(circle at top, rgba(16, 185, 129, 0.3), rgba(15, 23, 42, 0.95));
+      border-color: rgba(34, 197, 94, 0.95);
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.3), rgba(15, 23, 42, 0.97));
     }
     .pill.active-no {
-      border-color: rgba(248, 113, 113, 0.9);
-      background: radial-gradient(circle at top, rgba(248, 113, 113, 0.28), rgba(15, 23, 42, 0.95));
+      border-color: rgba(248, 113, 113, 0.95);
+      background: radial-gradient(circle at top, rgba(248, 113, 113, 0.3), rgba(15, 23, 42, 0.97));
     }
 
     .feedback-input {
       width: 100%;
       border-radius: 10px;
       border: 1px dashed rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.97);
       padding: 7px 9px;
       font-size: 12px;
       color: #e5e7eb;
@@ -269,7 +301,7 @@
       gap: 6px;
       cursor: pointer;
       transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
     }
     .btn-primary:disabled {
       opacity: 0.4;
@@ -278,7 +310,7 @@
     }
     .btn-primary:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
     }
 
     .btn-secondary {
@@ -286,7 +318,7 @@
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.7);
       padding: 8px 10px;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.97);
       color: #e5e7eb;
       font-size: 13px;
       font-weight: 500;
@@ -330,25 +362,6 @@
       line-height: 1.35;
     }
 
-    .contact-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .contact-line {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      font-size: 12px;
-      color: #e5e7eb;
-      margin-bottom: 4px;
-    }
-    .contact-line span:first-child {
-      width: 16px;
-      text-align: center;
-    }
-
     .divider {
       border-top: 1px dashed rgba(148, 163, 184, 0.5);
       margin: 8px 0;
@@ -365,7 +378,7 @@
 
     input,
     textarea {
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(15, 23, 42, 0.97);
       border-radius: 10px;
       border: 1px solid rgba(148, 163, 184, 0.6);
       padding: 8px 9px;
@@ -395,8 +408,8 @@
       color: var(--text-soft);
     }
     .qr-wrap img {
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       border-radius: 10px;
       background: #fff;
       object-fit: contain;
@@ -449,6 +462,7 @@
 <body class="theme-apple">
   <div class="phone-shell">
     <div class="phone-inner">
+      <div class="notch"></div>
       <div class="status-bar">Maavnica SmartCard</div>
 
       <!-- HERO / EN-TÊTE -->
@@ -468,10 +482,10 @@
           </div>
 
           <div class="hero-texts">
-            <div class="hero-subline" id="hero-subline">Maavnica SmartCard</div>
+            <div class="hero-subline">MAAVNICA SMARTCARD</div>
             <div class="hero-title" id="company-name">Votre entreprise</div>
             <div class="hero-subtitle" id="hero-subtitle">
-              Carte pro intelligente Maavnica : avis, devis et contacts en un seul endroit.
+              Contact, avis Google et demandes de devis en un seul lien.
             </div>
           </div>
         </div>
@@ -479,6 +493,22 @@
         <div class="hero-footer">
           <span><span class="hero-dot"></span>Disponible pour vos clients</span>
           <span>via Maavnica SmartCard</span>
+        </div>
+
+        <!-- Coordonnées dans le header -->
+        <div class="hero-contacts">
+          <div class="hero-contact-line" id="hero-phone-line">
+            <span class="icon">📞</span>
+            <span id="hero-phone">Téléphone non renseigné</span>
+          </div>
+          <div class="hero-contact-line" id="hero-email-line">
+            <span class="icon">✉️</span>
+            <span id="hero-email">Email non renseigné</span>
+          </div>
+          <div class="hero-contact-line" id="hero-site-line">
+            <span class="icon">🌐</span>
+            <span id="hero-site">Site ou lien principal</span>
+          </div>
         </div>
       </div>
 
@@ -532,28 +562,8 @@
           </div>
         </div>
 
-        <!-- Colonne droite : coordonnées, devis & QR -->
+        <!-- Colonne droite : devis + QR -->
         <div class="card-block">
-          <div class="section-label">Coordonnées</div>
-          <div class="contact-title" id="contact-name">Nom de l’entreprise / contact</div>
-
-          <div class="contact-line" id="contact-phone-line">
-            <span>📞</span>
-            <span id="contact-phone">Téléphone non renseigné</span>
-          </div>
-
-          <div class="contact-line" id="contact-email-line">
-            <span>✉️</span>
-            <span id="contact-email">Email non renseigné</span>
-          </div>
-
-          <div class="contact-line" id="contact-site-line">
-            <span>🌐</span>
-            <span id="contact-site">Site ou lien principal</span>
-          </div>
-
-          <div class="divider"></div>
-
           <div class="section-label">Demande de devis</div>
 
           <div class="form-row">
@@ -633,16 +643,28 @@
       return "🛠️";
     }
 
-    function applyThemeColor(hex) {
-      if (!hex || !/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) return;
-      document.documentElement.style.setProperty("--primary", hex);
-      document.documentElement.style.setProperty("--primary-soft", hex);
-    }
-
-    function applyTheme(themeName) {
+    function applyTheme(themeName, card) {
       const allowed = ["apple", "material", "black-gold", "artisan"];
-      const normalized = (themeName || "apple").toLowerCase();
-      const finalTheme = allowed.includes(normalized) ? normalized : "apple";
+      let raw = (themeName || "").toLowerCase();
+
+      const slug = (card?.slug || "").toLowerCase();
+      const name = (card?.company_name || "").toLowerCase();
+
+      if (
+        raw.includes("gold") ||
+        raw.includes("premium") ||
+        slug.includes("gold") ||
+        name.includes("gold")
+      ) {
+        raw = "black-gold";
+      }
+
+      if (raw.includes("artisan")) raw = "artisan";
+      if (raw.includes("sant") || raw.includes("bien") || raw.includes("osteo")) {
+        raw = "material";
+      }
+
+      const finalTheme = allowed.includes(raw) ? raw : "apple";
 
       allowed.forEach((t) => {
         document.body.classList.remove("theme-" + t);
@@ -676,28 +698,23 @@
         }
         const card = await res.json();
 
-        // Thème
-        applyTheme(card.theme);
-        if (card.theme_color) applyThemeColor(card.theme_color);
+        applyTheme(card.theme, card);
 
-        // Hero
-        document.getElementById("company-name").textContent =
-          card.company_name || "Votre entreprise";
+        const companyName = card.company_name || "Votre entreprise";
+        document.getElementById("company-name").textContent = companyName;
         document.getElementById("hero-emoji").textContent = guessEmoji(card);
 
         const subtitleEl = document.getElementById("hero-subtitle");
-        let subtitle = "Carte pro intelligente Maavnica.";
         if (card.phone || card.whatsapp) {
-          subtitle = "Contact, avis Google et demandes de devis en un seul lien.";
+          subtitleEl.textContent =
+            "Contact, avis Google et demandes de devis en un seul lien.";
+        } else {
+          subtitleEl.textContent = "Carte pro intelligente Maavnica.";
         }
-        subtitleEl.textContent = subtitle;
 
-        document.getElementById("contact-name").textContent =
-          card.company_name || "Nom de l’entreprise / contact";
-
-        // Coordonnées
-        const phoneLine = document.getElementById("contact-phone-line");
-        const phoneEl = document.getElementById("contact-phone");
+        // Coordonnées dans le header
+        const phoneLine = document.getElementById("hero-phone-line");
+        const phoneEl = document.getElementById("hero-phone");
         if (card.phone) {
           phoneEl.textContent = card.phone;
           phoneLine.style.opacity = "1";
@@ -706,8 +723,8 @@
           phoneLine.style.opacity = "0.7";
         }
 
-        const emailLine = document.getElementById("contact-email-line");
-        const emailEl = document.getElementById("contact-email");
+        const emailLine = document.getElementById("hero-email-line");
+        const emailEl = document.getElementById("hero-email");
         if (card.email) {
           emailEl.textContent = card.email;
           emailLine.style.opacity = "1";
@@ -716,8 +733,8 @@
           emailLine.style.opacity = "0.7";
         }
 
-        const siteLine = document.getElementById("contact-site-line");
-        const siteEl = document.getElementById("contact-site");
+        const siteLine = document.getElementById("hero-site-line");
+        const siteEl = document.getElementById("hero-site");
         if (card.website) {
           siteEl.textContent = card.website;
           siteLine.style.opacity = "1";
@@ -879,6 +896,7 @@
   </script>
 </body>
 </html>
+
 
 
 
