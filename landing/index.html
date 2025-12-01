@@ -183,6 +183,51 @@
       position:relative;
     }
 
+    /* ---------- WHAT YOU GET ---------- */
+    .what-section {
+      background:#0B1120;
+      padding:60px 20px;
+      border-top:1px solid rgba(148,163,184,0.15);
+      border-bottom:1px solid rgba(148,163,184,0.12);
+    }
+    .what-header {
+      text-align:center;
+      color:white;
+      margin-bottom:32px;
+    }
+    .what-header h2 {
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .what-header p {
+      font-size:14px;
+      color:#9CA3AF;
+    }
+    .what-grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:24px;
+    }
+    @media (max-width:768px){
+      .what-grid { grid-template-columns:1fr; }
+    }
+    .what-item {
+      background:#020617;
+      border-radius:18px;
+      border:1px solid rgba(30,64,175,0.7);
+      box-shadow:0 12px 32px rgba(15,23,42,0.85);
+      padding:18px 18px 16px;
+      color:#E5E7EB;
+      font-size:13px;
+    }
+    .what-item h3 {
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:6px;
+      color:white;
+    }
+
     /* ---------- PRICING ---------- */
     .pricing-section { background:#F8FAFC; padding:60px 20px 60px; }
     .pricing-grid {
@@ -469,6 +514,88 @@
     </div>
   </section>
 
+  <!-- WHAT YOU GET -->
+  <section class="what-section">
+    <div class="container">
+      <div class="what-header">
+        <h2>Ce que vous recevez avec votre SmartCard Maavnica</h2>
+        <p>
+          Une carte digitale prête à l’emploi et un pack complet pour l’utiliser et la partager facilement
+          avec vos clients.
+        </p>
+      </div>
+
+      <div class="what-grid">
+
+        <div class="what-item">
+          <h3>📱 SmartCard personnalisée</h3>
+          <p>
+            Votre carte digitale professionnelle, unique, avec vos informations, vos liens, vos couleurs
+            et votre activité. Accessible depuis un simple lien ou QR Code.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>🎯 Boutons de contact directs</h3>
+          <p>
+            Vos clients vous contactent en un clic : <strong>WhatsApp</strong>, <strong>appel</strong>,
+            <strong>email</strong>, <strong>site web</strong>, <strong>avis Google</strong>,
+            <strong>demande de devis</strong>. Tout est regroupé au même endroit.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>🧾 QR Code haute définition</h3>
+          <p>
+            Un QR Code prêt à être utilisé sur vos factures, flyers, cartes de visite, vitrine ou véhicule.
+            Scanné en quelques secondes, il ouvre directement votre SmartCard.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>✉️ Signature email prête à l’emploi</h3>
+          <p>
+            Un modèle simple et professionnel : « Consultez ma SmartCard : votrelien… »
+            à intégrer dans Gmail, Outlook, Mail Apple et autres outils.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>💬 Texte WhatsApp & SMS prêt</h3>
+          <p>
+            Un message pré-rédigé à envoyer à vos clients :
+            « Voici ma SmartCard pour me contacter facilement et laisser un avis… ».
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>🔧 Modifications prises en charge</h3>
+          <p>
+            Vous changez de numéro, d’adresse mail, de texte d’accueil ou d’activité ?
+            Maavnica met votre SmartCard à jour pour vous.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>🔒 Hébergement sécurisé 24/7</h3>
+          <p>
+            Votre SmartCard est hébergée sur un serveur sécurisé (HTTPS) et disponible en continu,
+            sans installation d’application pour vos clients.
+          </p>
+        </div>
+
+        <div class="what-item">
+          <h3>🧩 Compatible avec le futur CRM Maavnica</h3>
+          <p>
+            Les formules Pro & Business sont conçues pour se connecter au futur CRM Maavnica
+            (clients, demandes, interventions, automatisations).
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- PRICING -->
   <section class="pricing-section" id="tarifs">
     <div class="container">
@@ -681,6 +808,7 @@
 
 </body>
 </html>
+
 
 
 
