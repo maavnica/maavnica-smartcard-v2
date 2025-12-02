@@ -8,6 +8,19 @@ from ..database import get_db
 
 router = APIRouter()
 
+# ============================================================
+#  PROFILS METIERS AUTORISÉS
+# ============================================================
+ALLOWED_PROFILES = {
+    "artisan",
+    "digital",
+    "bien_etre",
+    "medical",
+    "immo",
+    "resto",
+    "generic",
+}
+
 
 # ============================================================
 #  CRÉATION D'UNE CARTE (ADMIN)
@@ -32,6 +45,13 @@ def create_card(
         raise HTTPException(
             status_code=400,
             detail="Ce slug est déjà utilisé par une autre carte.",
+        )
+
+    # Vérifier profil métier
+    if card.profile not in ALLOWED_PROFILES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Profil métier invalide. Profils autorisés : {', '.join(ALLOWED_PROFILES)}",
         )
 
     # IMPORTANT : on force user_id = 1 pour cette V1
@@ -73,9 +93,33 @@ def update_card(
 
     update_data = card_in.dict(exclude_unset=True)
 
+    # Vérifier que le profil envoyé est autorisé
+    if "profile" in update_data:
+        profile = update_data["profile"]
+        if profile not in ALLOWED_PROFILES:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Profil métier invalide. Profils autorisés : {', '.join(ALLOWED_PROFILES)}",
+            )
+
+    # Empêcher un nouveau slug qui existerait déjà
+    if "slug" in update_data and update_data["slug"] != db_card.slug:
+        slug_exists = (
+            db.query(models.Card)
+            .filter(models.Card.slug == update_data["slug"])
+            .first()
+        )
+        if slug_exists:
+            raise HTTPException(
+                status_code=400,
+                detail="Ce nouveau slug est déjà utilisé par une autre carte.",
+            )
+
     # Mise à jour champ par champ
     for field, value in update_data.items():
-        setattr(db_card, field, value)
+        # Sécurité : éviter d'injecter un champ inexistant
+        if hasattr(db_card, field):
+            setattr(db_card, field, value)
 
     db.commit()
     db.refresh(db_card)

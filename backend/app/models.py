@@ -47,6 +47,17 @@ class Card(Base):
     company_name = Column(String, nullable=False)
     slug = Column(String, unique=True, index=True, nullable=False)
 
+    # 🔹 NOUVEAUX CHAMPS – PROFIL & INFOS DIGITALES
+    # Type de SmartCard / profil métier :
+    # 'artisan', 'digital', 'bien_etre', 'medical', 'immo', 'resto', 'generic', etc.
+    profile = Column(String, nullable=False, default="artisan")
+
+    # Email professionnel affiché sur la carte
+    email_pro = Column(String, nullable=True)
+
+    # Site web / page principale (vitrine, booking, etc.)
+    site_web = Column(String, nullable=True)
+
     # Liens & contact
     google_review_link = Column(String, nullable=True)
     phone = Column(String, nullable=True)
@@ -84,7 +95,10 @@ class Card(Base):
     )
 
     def __repr__(self) -> str:
-        return f"<Card id={self.id} slug={self.slug!r} company_name={self.company_name!r}>"
+        return (
+            f"<Card id={self.id} slug={self.slug!r} "
+            f"company_name={self.company_name!r} profile={self.profile!r}>"
+        )
 
 
 # =============================================================

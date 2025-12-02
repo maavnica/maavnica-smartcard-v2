@@ -11,13 +11,15 @@ router = APIRouter()
 # =============================================================
 #  CARTE PUBLIQUE
 # =============================================================
+
 @router.get("/cards/{slug}", response_model=schemas.CardPublic)
 def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPublic:
     """
     Récupère une SmartCard publique à partir de son slug.
 
     Utilisée par /c/{slug} pour afficher la carte.
-    On renvoie aussi theme et theme_color pour gérer le rendu visuel.
+    On renvoie aussi theme, theme_color et le profil métier
+    pour gérer le rendu visuel côté front.
     """
     card = (
         db.query(models.Card)
@@ -33,6 +35,12 @@ def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPub
         id=card.id,
         company_name=card.company_name,
         slug=card.slug,
+
+        # 🔹 Nouveaux champs profil / contact pro
+        profile=(card.profile or "artisan"),
+        email_pro=card.email_pro,
+        site_web=card.site_web,
+
         google_review_link=card.google_review_link,
         phone=card.phone,
         whatsapp=card.whatsapp,
@@ -40,8 +48,8 @@ def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPub
         instagram=card.instagram,
         facebook=card.facebook,
         tiktok=card.tiktok,
-        theme=card.theme,              # 🔴 >>> IMPORTANT : on renvoie bien le thème
-        theme_color=card.theme_color,  # couleur perso
+        theme=card.theme,
+        theme_color=card.theme_color,
         qr_url=qr_url,
         created_at=card.created_at,
         updated_at=card.updated_at,
@@ -51,6 +59,7 @@ def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPub
 # =============================================================
 #  AVIS RAPIDES (public)
 # =============================================================
+
 @router.post(
     "/cards/{slug}/feedback",
     response_model=schemas.FeedbackOut,
@@ -87,6 +96,7 @@ def create_feedback(
 # =============================================================
 #  DEMANDES DE DEVIS (public)
 # =============================================================
+
 @router.post(
     "/cards/{slug}/quote",
     response_model=schemas.QuoteOut,
@@ -119,5 +129,6 @@ def create_quote(
     db.commit()
     db.refresh(db_quote)
     return db_quote
+
 
 

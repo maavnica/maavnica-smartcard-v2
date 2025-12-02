@@ -1,6 +1,8 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr
+
 
 # =============================================================
 #  SMARTCARD — BASE
@@ -14,6 +16,13 @@ class CardBase(BaseModel):
     company_name: str
     slug: str
 
+    # 🔹 NOUVEAUX CHAMPS — PROFIL & INFOS MÉTIER
+    #   artisan, digital, bien_etre, medical, immo, resto, generic…
+    profile: str = "artisan"
+    email_pro: Optional[str] = None
+    site_web: Optional[str] = None
+
+    # 🔹 Contact & actions
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -23,9 +32,9 @@ class CardBase(BaseModel):
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
 
-    # VISUEL
-    theme: str = "apple"            # apple, material, black-gold, artisan
-    theme_color: Optional[str] = "#2563EB"  # couleur dominante
+    # 🔹 Visuel
+    theme: str = "apple"                  # apple, material, black-gold, artisan…
+    theme_color: Optional[str] = "#2563EB"  # couleur dominante (hex)
 
 
 # =============================================================
@@ -40,10 +49,15 @@ class CardCreate(CardBase):
 class CardUpdate(BaseModel):
     """
     Mise à jour partielle — tous les champs sont optionnels.
-    Utilisé en PUT /api/cards/{id}
+    Utilisé en PUT/PATCH /api/cards/{id}
     """
     company_name: Optional[str] = None
     slug: Optional[str] = None
+
+    # 🔹 Nouveaux champs
+    profile: Optional[str] = None
+    email_pro: Optional[str] = None
+    site_web: Optional[str] = None
 
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
@@ -69,6 +83,11 @@ class CardPublic(BaseModel):
     company_name: str
     slug: str
 
+    # 🔹 Nouveaux champs
+    profile: str
+    email_pro: Optional[str]
+    site_web: Optional[str]
+
     google_review_link: Optional[str] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
@@ -86,6 +105,7 @@ class CardPublic(BaseModel):
     updated_at: Optional[datetime] = None
 
     class Config:
+        # Permet de faire `return card` directement avec un objet SQLAlchemy
         orm_mode = True
 
 

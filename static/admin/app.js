@@ -9,8 +9,13 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
+/* ============================================================
+   REMPLISSAGE DU FORMULAIRE
+============================================================ */
 function fillForm(card) {
   currentCardId = card.id;
+
+  // Champs existants
   document.getElementById("company-name").value = card.company_name || "";
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("existing-slug").value = card.slug || "";
@@ -24,11 +29,21 @@ function fillForm(card) {
   document.getElementById("theme-color").value = card.theme_color || "#2563EB";
   document.getElementById("theme").value = card.theme || "apple";
 
+  // 🔹 NOUVEAUX CHAMPS
+  document.getElementById("profile").value = card.profile || "artisan";
+  document.getElementById("email-pro").value = card.email_pro || "";
+  document.getElementById("site-web").value = card.site_web || "";
+
   updatePublicLink();
 }
 
+/* ============================================================
+   RESET DU FORMULAIRE
+============================================================ */
 function resetForm() {
   currentCardId = null;
+
+  // Champs existants
   document.getElementById("company-name").value = "";
   document.getElementById("slug").value = "";
   document.getElementById("existing-slug").value = "";
@@ -41,24 +56,39 @@ function resetForm() {
   document.getElementById("tiktok").value = "";
   document.getElementById("theme-color").value = "#2563EB";
   document.getElementById("theme").value = "apple";
+
+  // 🔹 nouveaux champs
+  document.getElementById("profile").value = "artisan";
+  document.getElementById("email-pro").value = "";
+  document.getElementById("site-web").value = "";
+
   document.getElementById("public-link").textContent = "";
   document.getElementById("feedback-list").innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
   document.getElementById("quote-list").innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
 }
 
+/* ============================================================
+   AFFICHAGE DU LIEN PUBLIC
+============================================================ */
 function updatePublicLink() {
   const slug = document.getElementById("slug").value.trim();
   const box = document.getElementById("public-link");
+
   if (!slug) {
     box.textContent = "";
     return;
   }
+
   const base = window.location.origin;
   box.textContent = "Lien public : " + base.replace(/\/admin$/, "") + "/c/" + slug;
 }
 
+/* ============================================================
+   CHARGER UNE CARTE PAR SLUG
+============================================================ */
 async function loadCardBySlug() {
   const slug = document.getElementById("existing-slug").value.trim();
+
   if (!slug) {
     showToast("Merci de renseigner un slug.", true);
     return;
@@ -81,6 +111,9 @@ async function loadCardBySlug() {
   }
 }
 
+/* ============================================================
+   SAUVEGARDE (CREATE / UPDATE)
+============================================================ */
 async function saveCard() {
   const companyName = document.getElementById("company-name").value.trim();
   let slug = document.getElementById("slug").value.trim();
@@ -94,9 +127,12 @@ async function saveCard() {
   document.getElementById("slug").value = slug;
   document.getElementById("existing-slug").value = slug;
 
+  // Payload envoyé au backend
   const payload = {
     company_name: companyName,
     slug,
+
+    // 🔹 Champs classiques
     google_review_link: document.getElementById("google-link").value.trim() || null,
     phone: document.getElementById("phone").value.trim() || null,
     whatsapp: document.getElementById("whatsapp").value.trim() || null,
@@ -105,7 +141,12 @@ async function saveCard() {
     facebook: document.getElementById("facebook").value.trim() || null,
     tiktok: document.getElementById("tiktok").value.trim() || null,
     theme: document.getElementById("theme").value || "apple",
-    theme_color: document.getElementById("theme-color").value.trim() || "#2563EB"
+    theme_color: document.getElementById("theme-color").value.trim() || "#2563EB",
+
+    // 🔹 NOUVEAUX CHAMPS
+    profile: document.getElementById("profile").value || "artisan",
+    email_pro: document.getElementById("email-pro").value.trim() || null,
+    site_web: document.getElementById("site-web").value.trim() || null
   };
 
   const btn = document.getElementById("btn-save");
@@ -148,6 +189,9 @@ async function saveCard() {
   }
 }
 
+/* ============================================================
+   CHARGEMENT AVIS + DEVIS
+============================================================ */
 async function loadFeedbackAndQuotes() {
   if (!currentCardId) return;
 
@@ -197,8 +241,11 @@ async function loadFeedbackAndQuotes() {
   }
 }
 
-// LISTENERS
+/* ============================================================
+   LISTENERS
+============================================================ */
 document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
+
