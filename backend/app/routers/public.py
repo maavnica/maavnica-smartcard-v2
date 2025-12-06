@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import Carte, Commentaire, Devis
+from ..models import Card, Feedback, Quote   # <-- corrigé
 from ..schemas import CardPublic, FeedbackCreate, QuoteCreate
 
 router = APIRouter(
@@ -12,75 +12,78 @@ router = APIRouter(
     tags=["public"],
 )
 
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------
 # Helpers
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------
 
-def _get_card_by_id_or_404(card_id: int, db: Session) -> Carte:
-    card = db.query(Carte).filter(Carte.id == card_id).first()
+def _get_card_by_id_or_404(card_id: int, db: Session) -> Card:
+    card = db.query(Card).filter(Card.id == card_id).first()
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
     return card
 
 
-def _get_card_by_slug_or_404(slug: str, db: Session) -> Carte:
-    card = db.query(Carte).filter(Carte.slug == slug).first()
+def _get_card_by_slug_or_404(slug: str, db: Session) -> Card:
+    card = db.query(Card).filter(Card.slug == slug).first()
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
     return card
 
 
-# ---------------------------------------------------------------------------
-# Public: récupération de la carte
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------
+# Récupération de carte publique
+# ---------------------------------------------------------
 
 @router.get("/cards/{slug}", response_model=CardPublic)
-def get_public_card(slug: str, db: Session = Depends(get_db)) -> CardPublic:
+def get_public_card(slug: str, db: Session = Depends(get_db)):
     return _get_card_by_slug_or_404(slug, db)
 
 
-# ---------------------------------------------------------------------------
-# Public: avis clients
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------
+# Feedback / Avis clients
+# ---------------------------------------------------------
 
 @router.post("/cards/{card_id}/feedback", status_code=status.HTTP_201_CREATED)
 def create_feedback(card_id: int, payload: FeedbackCreate, db: Session = Depends(get_db)):
+
     card = _get_card_by_id_or_404(card_id, db)
 
-    comment = Commentaire(
+    fb = Feedback(
         card_id=card.id,
-        is_positive=payload.is_positive,
-        comment=payload.comment,
-        phone=payload.phone,
-        email=payload.email,
+        satisfaction=payload.satisfaction,
+        comment=payload.comment
     )
 
-    db.add(comment)
+    db.add(fb)
     db.commit()
+    db.refresh(fb)
 
-    return {"message": "Feedback created"}
+    return {"message": "Feedback created", "id": fb.id}
 
 
-# ---------------------------------------------------------------------------
-# Public: demandes de devis
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------
+# Demande de devis
+# ---------------------------------------------------------
 
 @router.post("/cards/{card_id}/quotes", status_code=status.HTTP_201_CREATED)
 def create_quote(card_id: int, payload: QuoteCreate, db: Session = Depends(get_db)):
+
     card = _get_card_by_id_or_404(card_id, db)
 
-    quote = Devis(
+    q = Quote(
         card_id=card.id,
-        fullname=payload.fullname,
-        phone=payload.phone,
+        name=payload.name,
         email=payload.email,
-        description=payload.description,
+        phone=payload.phone,
+        message=payload.message,
     )
 
-    db.add(quote)
+    db.add(q)
     db.commit()
+    db.refresh(q)
 
-    return {"message": "Quote created"}
+    return {"message": "Quote created", "id": q.id}
+
 
 
 
