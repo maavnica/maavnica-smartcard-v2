@@ -5,66 +5,86 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
-from starlette.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles
 
-# Routes API
+# Import des routes API (à adapter si besoin)
 from app.routers import public, cards
+
 
 # --------------------------------------------------------------------
 # Chemins de base
 # --------------------------------------------------------------------
 
-# /opt/render/project/src/backend/app
-BASE_DIR = Path(__file__).resolve().parent
+# Chemin du dossier app/  ->  .../maavnica-smartcard/backend/app
+APP_DIR = Path(__file__).resolve().parent
 
-# /opt/render/project/src  (racine du projet)
-PROJECT_ROOT = BASE_DIR.parent.parent
+# Racine du projet où se trouvent backend/, static/, landing/, etc.
+# -> .../maavnica-smartcard
+PROJECT_ROOT = APP_DIR.parents[1]
 
-# /opt/render/project/src/static  (là où se trouve ton dossier "static")
+# Dossier static/ à la racine du projet
 STATIC_DIR = PROJECT_ROOT / "static"
 
+
+# --------------------------------------------------------------------
+# Création de l'application FastAPI
+# --------------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+
 
 # --------------------------------------------------------------------
 # CORS
 # --------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],      # on affinera plus tard si besoin
+    allow_origins=["*"],      # on pourra restreindre plus tard
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --------------------------------------------------------------------
-# Routes
-# --------------------------------------------------------------------
 
+# --------------------------------------------------------------------
+# Routes simples
+# --------------------------------------------------------------------
 @app.get("/", include_in_schema=False)
 async def root():
-    return {"message": "Maavnica SmartCard API is running"}
+    return {
+        "message": "Maavnica SmartCard API is running",
+        "admin_url": "/admin",
+        "static_example": "/static/admin/html/index.html",
+    }
 
-# Routes publiques (ex : /c/{slug})
+
+# --------------------------------------------------------------------
+# Inclusion des routers API
+# --------------------------------------------------------------------
+# Routes publiques (URL de cartes /c/{slug}, etc.)
 app.include_router(public.router, prefix="", tags=["public"])
 
-# Routes API pour gérer les cartes (POST /api/cards, GET /api/cards/{slug}, etc.)
+# Routes de gestion des cartes (création, liste…)
 app.include_router(cards.router, prefix="/api", tags=["cards"])
 
+
 # --------------------------------------------------------------------
-# Fichiers statiques (front admin, etc.)
+# Fichiers statiques (admin, assets…)
 # --------------------------------------------------------------------
 
-# Monte le dossier static/ à l’URL /static
+# Monte le dossier "static" de la racine sur l’URL /static
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/admin", include_in_schema=False)
 async def serve_admin():
     """
-    Redirige /admin vers la page d’admin statique.
-    Vérifie que ton fichier existe bien sous static/admin/index.html.
+    Redirige /admin vers l'interface admin statique.
+
+    Fichier attendu :
+        static/admin/index.html
     """
     return RedirectResponse(url="/static/admin/index.html")
+
+
 
 
 
