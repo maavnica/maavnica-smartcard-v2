@@ -7,22 +7,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 
-# 👉 Routes API (on n’utilise plus "admin" ici)
+# Routes API
 from app.routers import public, cards
 
 # --------------------------------------------------------------------
-# Config de base
+# Chemins de base
 # --------------------------------------------------------------------
 
+# /opt/render/project/src/backend/app
 BASE_DIR = Path(__file__).resolve().parent
-STATIC_DIR = BASE_DIR / "static"
+
+# /opt/render/project/src  (racine du projet)
+PROJECT_ROOT = BASE_DIR.parent.parent
+
+# /opt/render/project/src/static  (là où se trouve ton dossier "static")
+STATIC_DIR = PROJECT_ROOT / "static"
 
 app = FastAPI(title="Maavnica SmartCard API")
 
-# CORS (à ajuster plus tard si besoin)
+# --------------------------------------------------------------------
+# CORS
+# --------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # on ouvrira plus finement ensuite
+    allow_origins=["*"],      # on affinera plus tard si besoin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,7 +40,6 @@ app.add_middleware(
 # Routes
 # --------------------------------------------------------------------
 
-# Petite route de test (racine)
 @app.get("/", include_in_schema=False)
 async def root():
     return {"message": "Maavnica SmartCard API is running"}
@@ -40,13 +47,14 @@ async def root():
 # Routes publiques (ex : /c/{slug})
 app.include_router(public.router, prefix="", tags=["public"])
 
-# Routes API pour gérer les cartes (POST /api/cards, etc.)
+# Routes API pour gérer les cartes (POST /api/cards, GET /api/cards/{slug}, etc.)
 app.include_router(cards.router, prefix="/api", tags=["cards"])
 
 # --------------------------------------------------------------------
-# Fichiers statiques (admin front, etc.)
+# Fichiers statiques (front admin, etc.)
 # --------------------------------------------------------------------
 
+# Monte le dossier static/ à l’URL /static
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
@@ -54,11 +62,10 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 async def serve_admin():
     """
     Redirige /admin vers la page d’admin statique.
-    Si ton fichier est ailleurs, adapte simplement l’URL.
+    Vérifie que ton fichier existe bien sous static/admin/index.html.
     """
     return RedirectResponse(url="/static/admin/index.html")
-    # Exemple alternatif :
-    # return RedirectResponse(url="/static/admin.html")
+
 
 
 
