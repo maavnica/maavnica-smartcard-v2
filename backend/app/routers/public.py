@@ -1,134 +1,120 @@
-from fastapi import APIRouter, HTTPException, Depends
+# app/routes/public_cards.py
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db
-from .. import models, schemas
-from ..utils.qrcode_utils import get_or_create_qr_for_slug
+from database import get_db
+from models import Card, Feedback, Quote
+from schemas import CardPublic, FeedbackCreate, QuoteCreate
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/api/public",
+    tags=["public"],
+)
 
 
-# =============================================================
-#  CARTE PUBLIQUE
-# =============================================================
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
-@router.get("/cards/{slug}", response_model=schemas.CardPublic)
-def get_public_card(slug: str, db: Session = Depends(get_db)) -> schemas.CardPublic:
-    """
-    Récupère une SmartCard publique à partir de son slug.
-
-    Utilisée par /c/{slug} pour afficher la carte.
-    On renvoie aussi theme, theme_color et le profil métier
-    pour gérer le rendu visuel côté front.
-    """
-    card = (
-        db.query(models.Card)
-        .filter(models.Card.slug == slug)
-        .first()
-    )
+def _get_card_by_id_or_404(card_id: int, db: Session) -> Card:
+    """Récupère une carte par id ou renvoie une 404."""
+    card = db.query(Card).filter(Card.id == card_id).first()
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
-
-    qr_url = get_or_create_qr_for_slug(slug)
-
-    return schemas.CardPublic(
-        id=card.id,
-        company_name=card.company_name,
-        slug=card.slug,
-
-        # 🔹 Nouveaux champs profil / contact pro
-        profile=(card.profile or "artisan"),
-        email_pro=card.email_pro,
-        site_web=card.site_web,
-
-        google_review_link=card.google_review_link,
-        phone=card.phone,
-        whatsapp=card.whatsapp,
-        payment_link=card.payment_link,
-        instagram=card.instagram,
-        facebook=card.facebook,
-        tiktok=card.tiktok,
-        theme=card.theme,
-        theme_color=card.theme_color,
-        qr_url=qr_url,
-        created_at=card.created_at,
-        updated_at=card.updated_at,
-    )
+    return card
 
 
-# =============================================================
-#  AVIS RAPIDES (public)
-# =============================================================
+def _get_card_by_slug_or_404(slug: str, db: Session) -> Card:
+    """Récupère une carte par slug ou renvoie une 404."""
+    card = db.query(Card).filter(Card.slug == slug).first()
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    return card
+
+
+# ---------------------------------------------------------------------------
+# Public: récupération de la carte
+# ---------------------------------------------------------------------------
+
+@router.get("/cards/{slug}", response_model=CardPublic)
+def get_public_card(slug: str, db: Session = Depends(get_db)) -> CardPublic:
+    """
+    Retourne les informations publiques d'une carte à partir de son slug.
+
+    Utilisé par la page publique `/c/{slug}` qui fait un fetch vers
+    `/api/public/cards/{slug}`.
+    """
+    card = _get_card_by_slug_or_404(slug, db)
+    return card
+
+
+# ---------------------------------------------------------------------------
+# Public: avis clients
+# ---------------------------------------------------------------------------
 
 @router.post(
-    "/cards/{slug}/feedback",
-    response_model=schemas.FeedbackOut,
-    status_code=201,
+    "/cards/{card_id}/feedback",
+    status_code=status.HTTP_201_CREATED,
 )
 def create_feedback(
-    slug: str,
-    feedback: schemas.FeedbackCreate,
+    card_id: int,
+    payload: FeedbackCreate,
     db: Session = Depends(get_db),
-) -> schemas.FeedbackOut:
+) -> dict:
     """
-    Création d’un avis rapide (satisfait / pas satisfait + commentaire optionnel)
-    pour la carte correspondant au slug.
+    Crée un avis (satisfait / pas satisfait + commentaire optionnel)
+    pour une carte donnée.
     """
-    card = (
-        db.query(models.Card)
-        .filter(models.Card.slug == slug)
-        .first()
-    )
-    if not card:
-        raise HTTPException(status_code=404, detail="Card not found")
+    card = _get_card_by_id_or_404(card_id, db)
 
-    db_feedback = models.Feedback(
+    feedback = Feedback(
         card_id=card.id,
-        satisfaction=feedback.satisfaction,
-        comment=feedback.comment,
+        is_positive=payload.is_positive,
+        comment=payload.comment,
+        phone=payload.phone,
+        email=payload.email,
     )
-    db.add(db_feedback)
+
+    db.add(feedback)
     db.commit()
-    db.refresh(db_feedback)
-    return db_feedback
+    db.refresh(feedback)
+
+    return {"message": "Feedback created"}
 
 
-# =============================================================
-#  DEMANDES DE DEVIS (public)
-# =============================================================
+# ---------------------------------------------------------------------------
+# Public: demandes de devis
+# ---------------------------------------------------------------------------
 
 @router.post(
-    "/cards/{slug}/quote",
-    response_model=schemas.QuoteOut,
-    status_code=201,
+    "/cards/{card_id}/quotes",
+    status_code=status.HTTP_201_CREATED,
 )
 def create_quote(
-    slug: str,
-    quote: schemas.QuoteCreate,
+    card_id: int,
+    payload: QuoteCreate,
     db: Session = Depends(get_db),
-) -> schemas.QuoteOut:
+) -> dict:
     """
-    Création d’une demande de devis publique pour la carte liée à ce slug.
+    Crée une demande de devis liée à une carte.
     """
-    card = (
-        db.query(models.Card)
-        .filter(models.Card.slug == slug)
-        .first()
-    )
-    if not card:
-        raise HTTPException(status_code=404, detail="Card not found")
+    card = _get_card_by_id_or_404(card_id, db)
 
-    db_quote = models.Quote(
+    quote = Quote(
         card_id=card.id,
-        name=quote.name,
-        email=quote.email,
-        phone=quote.phone,
-        message=quote.message,
+        fullname=payload.fullname,
+        phone=payload.phone,
+        email=payload.email,
+        description=payload.description,
     )
-    db.add(db_quote)
+
+    db.add(quote)
     db.commit()
-    db.refresh(db_quote)
-    return db_quote
+    db.refresh(quote)
+
+    return {"message": "Quote created"}
+
 
 
 
