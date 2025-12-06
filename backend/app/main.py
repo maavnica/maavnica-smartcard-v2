@@ -7,72 +7,58 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 
-# ⬇️ Import des routes API
+# 👉 Routes API (on n’utilise plus "admin" ici)
 from app.routers import public, cards
- # public = cartes publiques /c/{slug}, admin = API d’admin
 
-
-# --- Config de base ---------------------------------------------------------
+# --------------------------------------------------------------------
+# Config de base
+# --------------------------------------------------------------------
 
 BASE_DIR = Path(__file__).resolve().parent
-# Si ton dossier "static" est à la racine du projet (comme avant sur Render) :
-STATIC_DIR = BASE_DIR.parent / "static"
+STATIC_DIR = BASE_DIR / "static"
 
-app = FastAPI(
-    title="Maavnica SmartCard API",
-    description="Backend Maavnica SmartCard (cartes publiques + admin).",
-    version="2.0.0",
-)
+app = FastAPI(title="Maavnica SmartCard API")
 
-
-# --- CORS (pour que le front / Swagger puisse appeler l’API sans blocage) ---
-
+# CORS (à ajuster plus tard si besoin)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],        # Tu pourras restreindre plus tard si tu veux
+    allow_origins=["*"],  # on ouvrira plus finement ensuite
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# --------------------------------------------------------------------
+# Routes
+# --------------------------------------------------------------------
 
-# --- Healthcheck simple -----------------------------------------------------
-
-@app.get("/", tags=["default"])
+# Petite route de test (racine)
+@app.get("/", include_in_schema=False)
 async def root():
-    """
-    Petit endpoint de santé pour vérifier que l'API tourne.
-    """
     return {"message": "Maavnica SmartCard API is running"}
 
+# Routes publiques (ex : /c/{slug})
+app.include_router(public.router, prefix="", tags=["public"])
 
-# --- Inclusion des routers --------------------------------------------------
+# Routes API pour gérer les cartes (POST /api/cards, etc.)
+app.include_router(cards.router, prefix="/api", tags=["cards"])
 
-# Routes publiques (cartes, feedback, devis, etc.)
-# → /api/public/...
-app.include_router(public.router, prefix="/api/public", tags=["public"])
+# --------------------------------------------------------------------
+# Fichiers statiques (admin front, etc.)
+# --------------------------------------------------------------------
 
-# Routes d’admin API (CRUD cartes, feedbacks, etc.)
-# → /api/admin/...
-# (le router admin a un prefix="/admin", donc chemin final = /api/admin/...)
-app.include_router(admin.router, prefix="/api", tags=["admin"])
-
-
-# --- Fichiers statiques & page admin ---------------------------------------
-
-# On sert le dossier /static (CSS, JS, admin.html, etc.)
-if STATIC_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/admin", include_in_schema=False)
 async def serve_admin():
     """
-    Redirige /admin vers la page statique d’admin.
-    Adapte le chemin si ton fichier a un autre nom / emplacement.
+    Redirige /admin vers la page d’admin statique.
+    Si ton fichier est ailleurs, adapte simplement l’URL.
     """
     return RedirectResponse(url="/static/admin/index.html")
-    # Si ton fichier est /static/admin.html → mets "/static/admin.html"
+    # Exemple alternatif :
+    # return RedirectResponse(url="/static/admin.html")
 
 
 
