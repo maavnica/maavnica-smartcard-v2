@@ -3,7 +3,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from database import get_db
+from app.database import get_db
+
 from models import Card, Feedback, Quote
 from schemas import CardPublic, FeedbackCreate, QuoteCreate
 
