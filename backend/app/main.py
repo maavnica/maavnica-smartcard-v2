@@ -8,7 +8,8 @@ from fastapi.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 
 # ⬇️ Import des routes API
-from routers import public, admin  # public = cartes publiques /c/{slug}, admin = API d’admin
+from app.routers import public, cards
+ # public = cartes publiques /c/{slug}, admin = API d’admin
 
 
 # --- Config de base ---------------------------------------------------------
