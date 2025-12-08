@@ -95,7 +95,7 @@
       color:#9CA3AF;
     }
 
-    /* ----- Mockup iPhone premium dans le hero (statique, sans iframe) ----- */
+    /* ----- Mockup iPhone premium dans le hero ----- */
     .hero-phone-mock {
       position:relative;
       width:320px;
@@ -273,107 +273,158 @@
       margin-bottom:6px;
     }
 
-    /* ---------- DEMOS (Option C modifié sans iframe) ---------- */
-    .demo-section { background:#020617; padding:50px 20px 55px; }
-    .demo-title-wrap { text-align:center; color:white; }
-    .demo-title-wrap h2 { font-size:22px; font-weight:800; margin-bottom:6px; }
-    .demo-title-wrap p { font-size:13px; color:#9CA3AF; }
+    /* ---------- DEMOS : version propre sans iframe ---------- */
+    .demo-section {
+      background:#020617;
+      padding:60px 20px 70px;
+    }
+
+    .demo-title-wrap {
+      text-align:center;
+      color:#fff;
+      max-width:650px;
+      margin:0 auto 32px;
+    }
+    .demo-title-wrap h2 {
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+    .demo-title-wrap p {
+      font-size:13px;
+      color:#9CA3AF;
+    }
 
     .demo-grid {
       display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:24px;
-      margin-top:30px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:26px;
     }
     @media (max-width:980px){
-      .demo-grid { grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:30px; }
+      .demo-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
-    @media (max-width:640px){
+    @media (max-width:700px){
       .demo-grid { grid-template-columns:1fr; }
     }
 
     .demo-card {
       background:#020617;
-      border-radius:20px;
-      border:1px solid rgba(30,64,175,0.7);
-      box-shadow:0 16px 40px rgba(15,23,42,0.9);
-      padding:14px 14px 16px;
-      color:white;
+      border-radius:22px;
+      border:1px solid rgba(30,64,175,0.8);
+      box-shadow:0 18px 50px rgba(15,23,42,0.95);
+      padding:18px 16px 18px;
+      color:#E5E7EB;
       display:flex;
       flex-direction:column;
-      gap:10px;
-    }
-    .demo-card-title {
-      font-size:16px;
-      font-weight:700;
-      text-align:center;
-    }
-    .demo-card-sub {
-      font-size:13px;
-      color:#9CA3AF;
-      text-align:center;
+      gap:14px;
     }
 
-    .demo-card-screen {
-      margin-top:6px;
-      border-radius:16px;
-      padding:18px 12px 16px;
-      background:radial-gradient(circle at top, #020617, #000);
+    .demo-card-header h3 {
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .demo-card-header p {
+      font-size:13px;
+      color:#9CA3AF;
+    }
+
+    /* Téléphone */
+    .demo-phone {
+      margin-top:4px;
+      display:flex;
+      justify-content:center;
+    }
+    .demo-phone-body {
+      position:relative;
+      width:230px;
+      max-width:100%;
+      aspect-ratio:9/18;
+      border-radius:32px;
+      padding:8px;
+      background:linear-gradient(145deg,#020617,#020617);
+      box-shadow:0 18px 40px rgba(0,0,0,0.8);
+    }
+    .demo-phone-notch {
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+      width:38%;
+      height:12px;
+      border-radius:999px;
+      background:#020617;
+    }
+    .demo-phone-screen {
+      width:100%;
+      height:100%;
+      border-radius:24px;
+      background:#020617;
+      padding:24px 16px 18px;
       display:flex;
       align-items:center;
       justify-content:center;
     }
 
-    .demo-card-preview {
-      width:210px;
-      border-radius:22px;
-      padding:12px 12px 14px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.9);
+    /* Carte à l'intérieur du téléphone */
+    .demo-smartcard {
+      width:100%;
+      border-radius:18px;
+      padding:12px 12px 10px;
+      box-shadow:0 14px 30px rgba(0,0,0,0.8);
       font-size:11px;
       display:flex;
       flex-direction:column;
       gap:6px;
     }
-    .demo-card-preview h4 {
-      font-size:13px;
-      font-weight:700;
-    }
-
-    .demo-card-artisan {
+    .demo-smartcard--artisan {
       background:linear-gradient(145deg,#f97316,#facc15);
       color:#111827;
     }
-    .demo-card-gold {
-      background:linear-gradient(145deg,#0f172a,#facc15);
-      color:#e5e7eb;
+    .demo-smartcard--gold {
+      background:linear-gradient(145deg,#111827,#facc15);
+      color:#F9FAFB;
     }
-    .demo-card-sante {
+    .demo-smartcard--sante {
       background:linear-gradient(145deg,#22c55e,#16a34a);
       color:#022c22;
     }
 
-    .demo-card-preview .card-chip-row { margin-bottom:2px; }
-    .demo-card-preview .card-chip {
+    .demo-smartcard-tags {
+      display:flex;
+      flex-wrap:wrap;
+      gap:4px;
+      margin-bottom:2px;
+    }
+    .demo-smartcard-tags span {
+      padding:3px 7px;
+      border-radius:999px;
       background:rgba(15,23,42,0.9);
       color:#F9FAFB;
+      font-size:9px;
+      font-weight:500;
     }
 
-    .demo-card-lines {
-      display:flex;
-      flex-direction:column;
-      gap:2px;
+    .demo-smartcard h4 {
+      font-size:13px;
+      font-weight:700;
+    }
+    .demo-smartcard-sub {
+      font-size:11px;
+      opacity:.9;
+    }
+    .demo-smartcard-list {
+      list-style:none;
+      padding-left:0;
       font-size:10px;
-      opacity:0.95;
     }
-    .demo-card-lines span::before {
+    .demo-smartcard-list li::before {
       content:"• ";
-      margin-right:2px;
     }
-
-    .demo-card-footer {
+    .demo-smartcard-footer {
       margin-top:4px;
       padding-top:4px;
-      border-top:1px dashed rgba(15,23,42,0.2);
+      border-top:1px dashed rgba(15,23,42,0.25);
       font-size:9px;
       display:flex;
       justify-content:space-between;
@@ -381,24 +432,31 @@
       flex-wrap:wrap;
     }
 
-    .demo-card-cta {
-      margin-top:8px;
+    /* Pied de carte */
+    .demo-card-footer {
+      margin-top:4px;
       text-align:center;
     }
-    .demo-card-cta a {
+    .demo-card-footer a {
       display:inline-block;
-      padding:8px 14px;
+      padding:9px 16px;
       border-radius:999px;
       background:#1D4ED8;
-      color:white;
+      color:#fff;
       font-size:13px;
       font-weight:600;
+      text-decoration:none;
       transition:.2s;
     }
-    .demo-card-cta a:hover {
+    .demo-card-footer a:hover {
       transform:translateY(-1px);
-      box-shadow:0 8px 22px rgba(37,99,235,0.45);
+      box-shadow:0 10px 26px rgba(37,99,235,0.5);
     }
+
+    /* Variantes de bordures (léger) */
+    .demo-card--artisan { border-color:rgba(248,250,252,0.12); }
+    .demo-card--gold    { border-color:rgba(250,204,21,0.6); }
+    .demo-card--sante   { border-color:rgba(34,197,94,0.5); }
 
     /* ---------- WHAT YOU GET ---------- */
     .what-section {
@@ -658,7 +716,7 @@
     </div>
   </section>
 
-  <!-- DEMOS (cartes statiques, plus de scroll coupé) -->
+  <!-- DEMOS – prévisualisation des SmartCards -->
   <section class="demo-section">
     <div class="container">
       <div class="demo-title-wrap">
@@ -668,98 +726,128 @@
 
       <div class="demo-grid">
 
-        <!-- DEMO ARTISAN -->
-        <div class="demo-card">
-          <div class="demo-card-title">Artisan</div>
-          <div class="demo-card-sub">
-            Idéal pour plombiers, électriciens, multiservices, conciergeries de proximité.
-          </div>
-          <div class="demo-card-screen">
-            <div class="demo-card-preview demo-card-artisan">
-              <div class="card-chip-row">
-                <div class="card-chip">⭐ Entreprise recommandée</div>
-                <div class="card-chip">🛠️ Artisan</div>
-              </div>
-              <h4>Artisan Démo</h4>
-              <div class="demo-card-lines">
-                <span>Avis Google & devis rapides</span>
-                <span>WhatsApp, appel & email en un clic</span>
-                <span>QR Code pour factures & flyers</span>
-              </div>
-              <div class="demo-card-footer">
-                <span>✉️ Email pro</span>
-                <span>🌐 Site & lien de paiement</span>
+        <!-- ARTISAN -->
+        <article class="demo-card demo-card--artisan">
+          <header class="demo-card-header">
+            <h3>Artisan</h3>
+            <p>Idéal pour plombiers, électriciens, multiservices, conciergeries de proximité.</p>
+          </header>
+
+          <div class="demo-phone">
+            <div class="demo-phone-body">
+              <div class="demo-phone-notch"></div>
+              <div class="demo-phone-screen">
+                <div class="demo-smartcard demo-smartcard--artisan">
+                  <div class="demo-smartcard-tags">
+                    <span>⭐ Entreprise recommandée</span>
+                    <span>🛠️ Artisan</span>
+                  </div>
+                  <h4>Artisan Démo</h4>
+                  <p class="demo-smartcard-sub">
+                    Contact, avis Google et demandes de devis en un seul lien.
+                  </p>
+                  <ul class="demo-smartcard-list">
+                    <li>WhatsApp, appel & email en un clic</li>
+                    <li>Avis Google après chaque intervention</li>
+                    <li>QR Code pour factures & flyers</li>
+                  </ul>
+                  <div class="demo-smartcard-footer">
+                    <span>✉️ Email pro</span>
+                    <span>🌐 Site & lien de paiement</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="demo-card-cta">
-            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-artisan" target="_blank">
+
+          <footer class="demo-card-footer">
+            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-artisan" target="_blank" rel="noopener">
               Ouvrir la démo artisan →
             </a>
-          </div>
-        </div>
+          </footer>
+        </article>
 
-        <!-- DEMO GOLD -->
-        <div class="demo-card">
-          <div class="demo-card-title">Black & Gold premium</div>
-          <div class="demo-card-sub">
-            Pour conciergerie, immobilier, services haut de gamme et prestations premium.
-          </div>
-          <div class="demo-card-screen">
-            <div class="demo-card-preview demo-card-gold">
-              <div class="card-chip-row">
-                <div class="card-chip">⭐ Entreprise recommandée</div>
-                <div class="card-chip">🏛️ Premium</div>
-              </div>
-              <h4>Votre entreprise</h4>
-              <div class="demo-card-lines">
-                <span>Image haut de gamme & rassurante</span>
-                <span>Canaux de contact centralisés</span>
-                <span>Parfait pour conciergerie & immobilier</span>
-              </div>
-              <div class="demo-card-footer">
-                <span>📍 Sites & agences</span>
-                <span>💳 Paiement sécurisé (option)</span>
+        <!-- BLACK & GOLD -->
+        <article class="demo-card demo-card--gold">
+          <header class="demo-card-header">
+            <h3>Black & Gold premium</h3>
+            <p>Pour conciergerie, immobilier, services haut de gamme et prestations premium.</p>
+          </header>
+
+          <div class="demo-phone">
+            <div class="demo-phone-body">
+              <div class="demo-phone-notch"></div>
+              <div class="demo-phone-screen">
+                <div class="demo-smartcard demo-smartcard--gold">
+                  <div class="demo-smartcard-tags">
+                    <span>⭐ Entreprise recommandée</span>
+                    <span>🏛️ Premium</span>
+                  </div>
+                  <h4>Votre entreprise</h4>
+                  <p class="demo-smartcard-sub">
+                    Image haut de gamme & rassurante, idéale pour des prestations premium.
+                  </p>
+                  <ul class="demo-smartcard-list">
+                    <li>Canaux de contact centralisés</li>
+                    <li>Parfait pour conciergerie & immobilier</li>
+                    <li>Compatible lien de paiement sécurisé</li>
+                  </ul>
+                  <div class="demo-smartcard-footer">
+                    <span>📍 Sites & agences</span>
+                    <span>💳 Paiement (option)</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="demo-card-cta">
-            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-gold" target="_blank">
+
+          <footer class="demo-card-footer">
+            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-gold" target="_blank" rel="noopener">
               Ouvrir la démo Black & Gold →
             </a>
-          </div>
-        </div>
+          </footer>
+        </article>
 
-        <!-- DEMO SANTE -->
-        <div class="demo-card">
-          <div class="demo-card-title">Santé & Bien-être</div>
-          <div class="demo-card-sub">
-            Parfait pour ostéopathes, sophrologues, hypnothérapeutes, naturopathes, coachs bien-être.
-          </div>
-          <div class="demo-card-screen">
-            <div class="demo-card-preview demo-card-sante">
-              <div class="card-chip-row">
-                <div class="card-chip">🌿 Praticien bien-être</div>
-                <div class="card-chip">📅 Sur rendez-vous</div>
-              </div>
-              <h4>Santé Démo</h4>
-              <div class="demo-card-lines">
-                <span>Prise de rendez-vous facilitée</span>
-                <span>Retour d’expérience des patients</span>
-                <span>Infos pratiques en un scan</span>
-              </div>
-              <div class="demo-card-footer">
-                <span>📍 Adresse & horaires</span>
-                <span>🔗 Site & réseau social</span>
+        <!-- SANTÉ & BIEN-ÊTRE -->
+        <article class="demo-card demo-card--sante">
+          <header class="demo-card-header">
+            <h3>Santé & Bien-être</h3>
+            <p>Parfait pour ostéopathes, sophrologues, hypnothérapeutes, naturopathes, coachs bien-être.</p>
+          </header>
+
+          <div class="demo-phone">
+            <div class="demo-phone-body">
+              <div class="demo-phone-notch"></div>
+              <div class="demo-phone-screen">
+                <div class="demo-smartcard demo-smartcard--sante">
+                  <div class="demo-smartcard-tags">
+                    <span>🌿 Praticien bien-être</span>
+                    <span>📅 Sur rendez-vous</span>
+                  </div>
+                  <h4>Santé Démo</h4>
+                  <p class="demo-smartcard-sub">
+                    Infos pratiques, prise de rendez-vous et retours patients en un seul lien.
+                  </p>
+                  <ul class="demo-smartcard-list">
+                    <li>Retour d’expérience des patients</li>
+                    <li>Accès rapide aux infos essentielles</li>
+                    <li>Parfait en fin de consultation</li>
+                  </ul>
+                  <div class="demo-smartcard-footer">
+                    <span>📍 Adresse & horaires</span>
+                    <span>🔗 Site & réseaux</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="demo-card-cta">
-            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-sante" target="_blank">
+
+          <footer class="demo-card-footer">
+            <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-sante" target="_blank" rel="noopener">
               Ouvrir la démo bien-être →
             </a>
-          </div>
-        </div>
+          </footer>
+        </article>
 
       </div>
     </div>
@@ -1075,6 +1163,7 @@
 
 </body>
 </html>
+
 
 
 
