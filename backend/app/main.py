@@ -2,12 +2,12 @@
 
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-# Import des routes API (à adapter si besoin)
+# Routes API
 from app.routers import public, cards
 
 
@@ -15,19 +15,18 @@ from app.routers import public, cards
 # Chemins de base
 # --------------------------------------------------------------------
 
-# Chemin du dossier app/  ->  .../maavnica-smartcard/backend/app
+# .../maavnica-smartcard/backend/app
 APP_DIR = Path(__file__).resolve().parent
 
-# Racine du projet où se trouvent backend/, static/, landing/, etc.
-# -> .../maavnica-smartcard
+# .../maavnica-smartcard
 PROJECT_ROOT = APP_DIR.parents[1]
 
-# Dossier static/ à la racine du projet
+# .../maavnica-smartcard/static
 STATIC_DIR = PROJECT_ROOT / "static"
 
 
 # --------------------------------------------------------------------
-# Création de l'application FastAPI
+# Application FastAPI
 # --------------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
 
@@ -37,7 +36,7 @@ app = FastAPI(title="Maavnica SmartCard API")
 # --------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],      # on pourra restreindre plus tard
+    allow_origins=["*"],          # à restreindre plus tard si besoin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,37 +51,60 @@ async def root():
     return {
         "message": "Maavnica SmartCard API is running",
         "admin_url": "/admin",
-        "static_example": "/static/admin/html/index.html",
+        "public_example": "/c/example-slug",
+        "static_admin": "/static/admin/index.html",
     }
 
 
 # --------------------------------------------------------------------
 # Inclusion des routers API
 # --------------------------------------------------------------------
-# Routes publiques (URL de cartes /c/{slug}, etc.)
+# (si public.py expose d'autres endpoints API)
 app.include_router(public.router, prefix="", tags=["public"])
 
-# Routes de gestion des cartes (création, liste…)
-app.include_router(cards.router, prefix="/api", tags=["cards"])
+# Gestion des cartes (création, update, feedback, devis…)
+# => /api/cards/...
+app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
 
 # --------------------------------------------------------------------
-# Fichiers statiques (admin, assets…)
+# Fichiers statiques (admin, carte publique, assets…)
 # --------------------------------------------------------------------
-
-# Monte le dossier "static" de la racine sur l’URL /static
+# Monte le dossier "static" à la racine sur /static
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/admin", include_in_schema=False)
 async def serve_admin():
     """
-    Redirige /admin vers l'interface admin statique.
+    Redirige /admin vers l'interface d'administration statique.
 
-    Fichier attendu :
+    Fichier :
         static/admin/index.html
     """
     return RedirectResponse(url="/static/admin/index.html")
+
+
+@app.get("/c/{slug}", include_in_schema=False)
+async def serve_public_card(slug: str):
+    """
+    Affiche la carte publique pour un slug donné.
+
+    On sert toujours le même fichier :
+        static/public-card/index.html
+
+    Le JS dans ce fichier peut utiliser le slug présent dans l'URL
+    (window.location.pathname) pour appeler l'API :
+        GET /api/cards/by-slug/{slug}
+    """
+    file_path = STATIC_DIR / "public-card" / "index.html"
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Public card template not found")
+
+    html = file_path.read_text(encoding="utf-8")
+    return HTMLResponse(html)
+
 
 
 

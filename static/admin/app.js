@@ -1,5 +1,6 @@
 const API_BASE = "/api/cards";
 let currentCardId = null;
+let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
 
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
@@ -34,6 +35,9 @@ function fillForm(card) {
   document.getElementById("email-pro").value = card.email_pro || "";
   document.getElementById("site-web").value = card.site_web || "";
 
+  // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
+  currentProfile = card.profile || "artisan";
+
   updatePublicLink();
 }
 
@@ -42,6 +46,7 @@ function fillForm(card) {
 ============================================================ */
 function resetForm() {
   currentCardId = null;
+  currentProfile = "artisan";
 
   // Champs existants
   document.getElementById("company-name").value = "";
@@ -63,8 +68,10 @@ function resetForm() {
   document.getElementById("site-web").value = "";
 
   document.getElementById("public-link").textContent = "";
-  document.getElementById("feedback-list").innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
-  document.getElementById("quote-list").innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
+  document.getElementById("feedback-list").innerHTML =
+    '<div class="hint">Aucun avis pour l’instant.</div>';
+  document.getElementById("quote-list").innerHTML =
+    '<div class="hint">Aucune demande pour l’instant.</div>';
 }
 
 /* ============================================================
@@ -149,6 +156,9 @@ async function saveCard() {
     site_web: document.getElementById("site-web").value.trim() || null
   };
 
+  // on met aussi à jour currentProfile si on change dans le formulaire
+  currentProfile = payload.profile || "artisan";
+
   const btn = document.getElementById("btn-save");
   btn.disabled = true;
   btn.textContent = "Enregistrement…";
@@ -190,7 +200,7 @@ async function saveCard() {
 }
 
 /* ============================================================
-   CHARGEMENT AVIS + DEVIS
+   CHARGEMENT AVIS + DEMANDES (devis / rdv / réservation...)
 ============================================================ */
 async function loadFeedbackAndQuotes() {
   if (!currentCardId) return;
@@ -204,36 +214,70 @@ async function loadFeedbackAndQuotes() {
     const feedbackList = document.getElementById("feedback-list");
     const quoteList = document.getElementById("quote-list");
 
+    console.log("Admin SmartCard – profil courant pour libellé :", currentProfile);
+
     // Avis
     if (fRes.ok) {
       const items = await fRes.json();
       if (!items.length) {
-        feedbackList.innerHTML = '<div class="hint">Aucun avis pour l’instant.</div>';
+        feedbackList.innerHTML =
+          '<div class="hint">Aucun avis pour l’instant.</div>';
       } else {
-        feedbackList.innerHTML = items.map(f => `
+        feedbackList.innerHTML = items
+          .map(
+            (f) => `
           <div class="item">
-            <div class="item-title">${f.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"}</div>
+            <div class="item-title">${
+              f.satisfaction ? "🙂 Satisfait" : "🙁 Pas satisfait"
+            }</div>
             ${f.comment ? `<div>${f.comment}</div>` : ""}
-            <div class="item-meta">${new Date(f.created_at).toLocaleString()}</div>
+            <div class="item-meta">${new Date(
+              f.created_at
+            ).toLocaleString()}</div>
           </div>
-        `).join("");
+        `
+          )
+          .join("");
       }
     }
 
-    // Devis
+    // 🔹 Déterminer le bon libellé en fonction du profil
+    let baseLabel = "Demande de devis";
+    const p = (currentProfile || "artisan").toLowerCase();
+
+    if (p === "resto" || p === "restaurant") {
+      baseLabel = "Demande de réservation";
+    } else if (p === "medical" || p === "bien_etre" || p === "sante") {
+      baseLabel = "Demande de rendez-vous";
+    } else if (p === "digital") {
+      baseLabel = "Demande de contact";
+    } else if (p === "immo") {
+      baseLabel = "Demande de visite / estimation";
+    } else {
+      baseLabel = "Demande de devis";
+    }
+
+    // Devis / demandes
     if (qRes.ok) {
       const items = await qRes.json();
       if (!items.length) {
-        quoteList.innerHTML = '<div class="hint">Aucune demande pour l’instant.</div>';
+        quoteList.innerHTML =
+          '<div class="hint">Aucune demande pour l’instant.</div>';
       } else {
-        quoteList.innerHTML = items.map(q => `
+        quoteList.innerHTML = items
+          .map(
+            (q) => `
           <div class="item">
-            <div class="item-title">Demande de ${q.name || "—"}</div>
-            <div>${q.phone || ""} ${q.email ? " · " + q.email : ""}</div>
+            <div class="item-title">${baseLabel} – ${q.name || "—"}</div>
+            <div>${q.phone || ""}${q.email ? " · " + q.email : ""}</div>
             <div>${q.message || ""}</div>
-            <div class="item-meta">${new Date(q.created_at).toLocaleString()}</div>
+            <div class="item-meta">${new Date(
+              q.created_at
+            ).toLocaleString()}</div>
           </div>
-        `).join("");
+        `
+          )
+          .join("");
       }
     }
   } catch (err) {
@@ -248,4 +292,6 @@ document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
+
+
 

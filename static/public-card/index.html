@@ -7,7 +7,22 @@
   <style>
     :root {
       --bg-page: #020617;
-      --card-bg: #020617;
+
+      /* Fond par défaut de la carte */
+      --card-bg: radial-gradient(
+        circle at top,
+        rgba(30, 64, 175, 0.28),
+        rgba(15, 23, 42, 0.98) 55%,
+        #020617 100%
+      );
+
+      /* Fond par défaut de la bande hero */
+      --hero-bg: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.98),
+        rgba(30, 64, 175, 0.9)
+      );
+
       --primary: #f97316;
       --primary-soft: rgba(249, 115, 22, 0.16);
       --text-main: #e5e7eb;
@@ -15,9 +30,7 @@
       --border-soft: rgba(148, 163, 184, 0.35);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -72,12 +85,8 @@
     .card {
       border-radius: 24px;
       padding: 16px 16px 14px;
-      background: radial-gradient(
-        circle at top,
-        rgba(30, 64, 175, 0.28),
-        rgba(15, 23, 42, 0.98) 55%,
-        #020617 100%
-      );
+      /* 🔄 utilise la variable de thème */
+      background: var(--card-bg);
       border: 1px solid rgba(148, 163, 184, 0.35);
       position: relative;
       overflow: hidden;
@@ -96,19 +105,13 @@
       pointer-events: none;
     }
 
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
+    .card-inner { position: relative; z-index: 1; }
 
     .hero {
       border-radius: 18px;
       padding: 12px 12px 10px;
-      background: linear-gradient(
-        135deg,
-        rgba(15, 23, 42, 0.98),
-        rgba(30, 64, 175, 0.9)
-      );
+      /* 🔄 utilise la variable de thème */
+      background: var(--hero-bg);
       border: 1px solid rgba(148, 163, 184, 0.44);
       margin-bottom: 12px;
     }
@@ -150,10 +153,7 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
     }
 
-    .hero-texts {
-      flex: 1;
-      min-width: 0;
-    }
+    .hero-texts { flex: 1; min-width: 0; }
 
     .hero-subline {
       font-size: 11px;
@@ -202,13 +202,9 @@
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
     }
 
-    .hero-meta-label {
-      font-weight: 500;
-    }
+    .hero-meta-label { font-weight: 500; }
 
-    .hero-meta-value {
-      color: rgba(148, 163, 184, 0.96);
-    }
+    .hero-meta-value { color: rgba(148, 163, 184, 0.96); }
 
     .hero-contact-line {
       display: flex;
@@ -243,9 +239,7 @@
     }
 
     @media (max-width: 380px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
+      .main-grid { grid-template-columns: 1fr; }
     }
 
     .card-block {
@@ -316,9 +310,7 @@
       box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
     }
 
-    .emoji {
-      font-size: 14px;
-    }
+    .emoji { font-size: 14px; }
 
     .feedback-input,
     .quote-input {
@@ -435,9 +427,7 @@
       font-weight: 500;
     }
 
-    .footer a:hover {
-      text-decoration: underline;
-    }
+    .footer a:hover { text-decoration: underline; }
 
     .toast {
       position: fixed;
@@ -472,45 +462,52 @@
       color: #fecaca;
     }
 
-    /***** Thèmes dynamiques *****/
+    /* Thèmes dynamiques */
     body.theme-apple {
       --card-bg: radial-gradient(circle at top, #1d4ed8 0%, #020617 70%);
+      --hero-bg: linear-gradient(135deg, #1d4ed8, #020617);
       --primary: #22c55e;
       --primary-soft: rgba(34, 197, 94, 0.22);
     }
     body.theme-material {
       --card-bg: radial-gradient(circle at top, #10b981 0%, #020617 80%);
+      --hero-bg: linear-gradient(135deg, #10b981, #064e3b);
       --primary: #f97316;
       --primary-soft: rgba(249, 115, 22, 0.22);
     }
     body.theme-black-gold {
       --card-bg: radial-gradient(circle at top, #fbbf24 0%, #854d0e 35%, #020617 75%);
+      --hero-bg: linear-gradient(135deg, #fbbf24, #92400e);
       --primary: #fbbf24;
       --primary-soft: rgba(251, 191, 36, 0.22);
     }
     body.theme-artisan {
       --card-bg: radial-gradient(circle at top, #f97316 0%, #7c2d12 40%, #020617 85%);
+      --hero-bg: linear-gradient(135deg, #f97316, #7c2d12);
       --primary: #f97316;
       --primary-soft: rgba(249, 115, 22, 0.28);
     }
-
     body.theme-wow-artisan {
       --card-bg: radial-gradient(circle at top, #fb923c 0%, #7c2d12 40%, #020617 85%);
+      --hero-bg: linear-gradient(135deg, #fed7aa, #7c2d12);
       --primary: #fde68a;
       --primary-soft: rgba(250, 204, 21, 0.28);
     }
     body.theme-wow-gold {
       --card-bg: radial-gradient(circle at top, #facc15 0%, #4b5563 40%, #020617 85%);
+      --hero-bg: linear-gradient(135deg, #facc15, #4b5563);
       --primary: #fef3c7;
       --primary-soft: rgba(254, 240, 138, 0.3);
     }
     body.theme-wow-health {
       --card-bg: radial-gradient(circle at top, #22c55e 0%, #166534 40%, #020617 85%);
+      --hero-bg: linear-gradient(135deg, #22c55e, #166534);
       --primary: #bbf7d0;
       --primary-soft: rgba(34, 197, 94, 0.3);
     }
     body.theme-wow-saas {
       --card-bg: radial-gradient(circle at top, #38bdf8 0%, #0f172a 45%, #020617 85%);
+      --hero-bg: linear-gradient(135deg, #38bdf8, #0f172a);
       --primary: #a5b4fc;
       --primary-soft: rgba(129, 140, 248, 0.32);
     }
@@ -522,7 +519,7 @@
       <div class="notch"></div>
       <div class="status-bar">Maavnica SmartCard</div>
 
-      <!-- HERO / EN-TÊTE -->
+      <!-- HERO -->
       <div class="hero">
         <div class="hero-badges">
           <div class="hero-badge" id="hero-badge-left">
@@ -572,7 +569,7 @@
 
       <!-- CONTENU PRINCIPAL -->
       <div class="main-grid">
-        <!-- Colonne gauche : avis & boutons principaux -->
+        <!-- Colonne gauche -->
         <div class="card-block">
           <div class="block-title" id="block-title-main">Avis & contacts simplifiés</div>
           <div class="block-sub">
@@ -621,7 +618,7 @@
           </div>
         </div>
 
-        <!-- Colonne droite : devis + QR -->
+        <!-- Colonne droite -->
         <div class="card-block">
           <div class="section-label" id="quote-section-label">Demande de devis</div>
 
@@ -671,6 +668,7 @@
   <div id="toast" class="toast"></div>
 
   <script>
+    /* --- Utilitaires de base --- */
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
       const cIndex = parts.indexOf("c");
@@ -693,7 +691,6 @@
     function guessEmoji(card) {
       const name = (card.company_name || "").toLowerCase();
       const slug = (card.slug || "").toLowerCase();
-
       const str = name + " " + slug;
 
       if (str.includes("plomb") || str.includes("chauffage")) return "🔧";
@@ -703,51 +700,51 @@
       if (str.includes("pizza")) return "🍕";
       if (str.includes("garage") || str.includes("auto") || str.includes("car")) return "🚗";
       if (str.includes("santé") || str.includes("medical") || str.includes("clinique")) return "🩺";
-      if (str.includes("sophro") || str.includes("bien-être") || str.includes("bien etre"))
-        return "🧘";
-      if (str.includes("immo") || str.includes("agence") || str.includes("logement"))
-        return "🏡";
+      if (str.includes("sophro") || str.includes("bien-être") || str.includes("bien etre")) return "🧘";
+      if (str.includes("immo") || str.includes("agence") || str.includes("logement")) return "🏡";
 
       return "🏷️";
     }
 
+    // 🔧 Nouvelle fonction applyTheme : utilise directement la valeur du champ "theme"
     function applyTheme(themeName, card) {
-      const allowed = [
-        "apple",
-        "material",
-        "black-gold",
-        "artisan",
-        "wow-artisan",
-        "wow-gold",
-        "wow-health",
-        "wow-saas",
-      ];
+  let raw = (themeName || "").toLowerCase().trim();
 
-      let raw = (themeName || "").toLowerCase().trim();
-      const slug = (card?.slug || "").toLowerCase();
-      const name = (card?.company_name || "").toLowerCase();
+  // Remove old theme classes
+  const classes = document.body.className
+    .split(" ")
+    .filter(c => c && !c.startsWith("theme-"));
+  document.body.className = classes.join(" ");
 
-      if (!raw || !allowed.includes(raw)) {
-        if (slug.includes("plomb") || name.includes("plomb")) {
-          raw = "artisan";
-        } else if (slug.includes("sante") || name.includes("santé")) {
-          raw = "wow-health";
-        } else if (slug.includes("digital") || slug.includes("saas")) {
-          raw = "wow-saas";
-        } else {
-          raw = "apple";
-        }
-      }
+  // Default fallback
+  if (!raw) {
+    document.body.classList.add("theme-apple");
+    return;
+  }
 
-      bodyClasses = document.body.className
-        .split(" ")
-        .filter((cls) => !cls.startsWith("theme-") || !allowed.includes(cls.replace("theme-", "")));
-      document.body.className = bodyClasses.join(" ").trim() || "";
-      allowed.forEach((t) => {
-        document.body.classList.remove("theme-" + t);
-      });
-      document.body.classList.add("theme-" + raw);
-    }
+  // Normalize string
+  let key = raw
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/–/g, "-") // normalize dashes
+    .replace(/[^a-z0-9]+/g, "-") // replace non-alphanum
+    .replace(/^-+|-+$/g, ""); // trim
+
+  // WOW themes detection
+  if (raw.includes("effet") || raw.includes("wow")) {
+    if (raw.includes("artisan")) key = "wow-artisan";
+    else if (raw.includes("gold")) key = "wow-gold";
+    else if (raw.includes("sante") || raw.includes("bien-etre") || raw.includes("bien etre"))
+      key = "wow-health";
+    else if (raw.includes("saas") || raw.includes("digital"))
+      key = "wow-saas";
+  }
+
+  // Final fallback
+  if (!key) key = "apple";
+
+  document.body.classList.add("theme-" + key);
+}
+
 
     function updateQrCode(slug) {
       const img = document.getElementById("qr-image");
@@ -760,6 +757,7 @@
         "&color=000000&bgcolor=FFFFFF";
     }
 
+    /* --- Profils --- */
     const PROFILE_CONFIG = {
       artisan: {
         mainIcon: (card) => guessEmoji(card),
@@ -850,20 +848,25 @@
       }
 
       try {
-        const res = await fetch(`/api/public/cards/${encodeURIComponent(slug)}`);
+        // Chargement de la carte par slug
+        const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           showToast("Carte introuvable", true);
           return;
         }
 
         const card = await res.json();
+        const cardId = card.id; // ⚠️ on récupère l'ID ici
 
+        // Détermination du profil
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
         CURRENT_PROFILE_CONFIG = PROFILE_CONFIG[profileKey];
 
+        // Thème depuis l'admin
         applyTheme(card.theme, card);
 
+        // Nom + icône
         const companyName = card.company_name || "Votre entreprise";
         document.getElementById("company-name").textContent = companyName;
 
@@ -874,6 +877,7 @@
             ? mainIcon(card)
             : mainIcon || guessEmoji(card);
 
+        // Sous-titre
         const subtitleEl = document.getElementById("hero-subtitle");
         if (subtitleEl) {
           subtitleEl.textContent =
@@ -881,6 +885,7 @@
             "Carte pro intelligente Maavnica.";
         }
 
+        // Badges
         const badgeLeftIcon = document.getElementById("hero-badge-left-icon");
         const badgeLeftText = document.getElementById("hero-badge-left-text");
         const badgeRightIcon = document.getElementById("hero-badge-right-icon");
@@ -897,6 +902,7 @@
             CURRENT_PROFILE_CONFIG.badgeRightText || badgeRightText.textContent;
         }
 
+        // Titres bloc gauche / devis
         const mainBlockTitle = document.getElementById("block-title-main");
         if (mainBlockTitle && CURRENT_PROFILE_CONFIG.leftBlockTitle) {
           mainBlockTitle.textContent = CURRENT_PROFILE_CONFIG.leftBlockTitle;
@@ -920,31 +926,32 @@
           availabilityNote.textContent = "";
         }
 
+        // Email / site (nouveaux champs + anciens)
         const emailLine = document.getElementById("hero-email-line");
         const emailEl = document.getElementById("hero-email");
         const siteLine = document.getElementById("hero-site-line");
         const siteEl = document.getElementById("hero-site");
 
-        const emailProvided = !!card.email;
-        const siteProvided = !!card.website;
+        const email = card.email_pro || card.email || null;
+        const website = card.site_web || card.website || null;
 
-        if (!emailProvided && !siteProvided) {
+        if (!email && !website) {
           emailEl.textContent = "Email non renseigné";
           emailLine.style.opacity = "0.7";
 
           siteEl.textContent = "Site ou lien principal";
           siteLine.style.opacity = "0.7";
         } else {
-          if (emailProvided) {
-            emailEl.textContent = card.email;
+          if (email) {
+            emailEl.textContent = email;
             emailLine.style.opacity = "1";
           } else {
             emailEl.textContent = "Email non renseigné";
             emailLine.style.opacity = "0.7";
           }
 
-          if (siteProvided) {
-            siteEl.textContent = card.website;
+          if (website) {
+            siteEl.textContent = website;
             siteLine.style.opacity = "1";
           } else {
             siteEl.textContent = "Site ou lien principal";
@@ -952,6 +959,7 @@
           }
         }
 
+        // Boutons secondaires
         const btnGoogle = document.getElementById("btn-google-review");
         if (btnGoogle) {
           if (card.google_review_link) {
@@ -967,14 +975,16 @@
 
         const btnWhats = document.getElementById("btn-whatsapp");
         if (btnWhats) {
-          if (card.whatsapp) {
+          const waNumber = card.whatsapp || card.phone;
+          if (waNumber) {
             btnWhats.disabled = false;
             btnWhats.onclick = () => {
               const base = "https://wa.me/";
               const msg = encodeURIComponent(
                 "Bonjour, je vous contacte via votre SmartCard Maavnica."
               );
-              window.open(base + card.whatsapp + "?text=" + msg, "_blank");
+              const digits = waNumber.toString().replace(/[^\d]/g, "");
+              window.open(base + digits + "?text=" + msg, "_blank");
             };
           } else {
             btnWhats.disabled = true;
@@ -1008,6 +1018,7 @@
           }
         }
 
+        // Avis
         const btnFeedback = document.getElementById("btn-send-feedback");
         if (btnFeedback) {
           let feedbackValue = null;
@@ -1031,25 +1042,45 @@
 
           btnFeedback.onclick = async () => {
             if (!feedbackValue) {
-              showToast("Merci de choisir un avis 😊");
+              showToast("Merci de choisir un avis 😊 / 😐", true);
               return;
             }
-            const comment = document.getElementById("feedback-comment").value.trim();
+
+            const comment = document
+              .getElementById("feedback-comment")
+              .value.trim();
+
             try {
               const resp = await fetch(
-                `/api/public/cards/${encodeURIComponent(slug)}/feedback`,
+                `/api/public/cards/${cardId}/feedback`,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                 body: JSON.stringify({
-  // on envoie plusieurs champs pour couvrir ce que le backend attend
-  satisfaction: feedbackValue === "yes" ? "positive" : "negative",
-  rating: feedbackValue === "yes" ? 5 : 1,
-  score: feedbackValue === "yes" ? 1 : 0,
-  comment: comment || null,
-}),
+                  body: JSON.stringify({
+                    satisfaction: feedbackValue === "yes",
+                    comment: comment || null,
+                  }),
+                }
+              );
 
+              if (!resp.ok) {
+                const err = await resp.text();
+                console.error("Erreur API feedback:", err);
+                showToast("Impossible d’envoyer votre avis.", true);
+                return;
+              }
 
+              showToast("Merci pour votre avis !");
+              document.getElementById("feedback-comment").value = "";
+              selectFeedback(null);
+            } catch (e) {
+              console.error(e);
+              showToast("Erreur réseau lors de l’envoi de l’avis.", true);
+            }
+          };
+        }
+
+        // Devis
         const btnQuote = document.getElementById("btn-send-quote");
         if (btnQuote) {
           btnQuote.onclick = async () => {
@@ -1065,7 +1096,7 @@
 
             try {
               const resp = await fetch(
-                `/api/public/cards/${encodeURIComponent(slug)}/quote`,
+                `/api/public/cards/${cardId}/quotes`,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -1077,8 +1108,16 @@
                   }),
                 }
               );
-              if (!resp.ok) throw new Error();
-              showToast(CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !");
+
+              if (!resp.ok) {
+                const err = await resp.text();
+                console.error("Erreur API quote:", err);
+                throw new Error();
+              }
+
+              showToast(
+                CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !"
+              );
               document.getElementById("quote-name").value = "";
               document.getElementById("quote-phone").value = "";
               document.getElementById("quote-email").value = "";
@@ -1090,6 +1129,7 @@
           };
         }
 
+        // QR
         updateQrCode(slug);
       } catch (e) {
         console.error(e);
@@ -1101,6 +1141,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
