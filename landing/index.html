@@ -135,145 +135,42 @@
       box-shadow:0 0 10px rgba(34,197,94,0.8);
     }
 
-    /* --- Phone flottant + halo Gold --- */
-    .hero-phone-wrapper {
+    /* Aperçu réel SmartCard dans le hero */
+    .hero-preview-wrapper {
       display:flex;
-      justify-content:center;
-    }
-    .hero-phone-halo {
-      position:relative;
-      padding:24px 30px 30px;
-      border-radius:999px;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(250,204,21,0.20) 0, transparent 55%),
-        radial-gradient(circle at 50% 120%, rgba(15,23,42,1) 0, #020617 60%);
-      box-shadow:
-        0 28px 70px rgba(0,0,0,0.95),
-        0 0 40px rgba(250,204,21,0.18);
-    }
-    .hero-phone {
-      position:relative;
-      width:260px;
-      max-width:90vw;
-      aspect-ratio:9/19.5;
-      border-radius:36px;
-      background:radial-gradient(circle at top left, #020617, #020617 55%, #000 100%);
-      padding:7px;
-      box-shadow:
-        0 18px 40px rgba(0,0,0,0.9),
-        0 0 0 1px rgba(15,23,42,0.95);
-    }
-    .hero-phone-bezel {
-      width:100%;
-      height:100%;
-      border-radius:28px;
-      background:#020617;
-      position:relative;
-      overflow:hidden;
-      padding:12px 10px 14px;
-    }
-    .hero-phone-notch {
-      position:absolute;
-      top:9px;
-      left:50%;
-      transform:translateX(-50%);
-      width:38%;
-      height:10px;
-      border-radius:999px;
-      background:#020617;
-      box-shadow:0 0 5px rgba(0,0,0,0.9);
-      z-index:3;
-    }
-    .hero-phone-buttons {
-      position:absolute;
-      width:3px;
-      border-radius:999px;
-      background:#020617;
-      opacity:0.9;
-    }
-    .hero-phone-buttons-left {
-      left:-3px;
-      top:26%;
-      height:14%;
-    }
-    .hero-phone-buttons-right {
-      right:-3px;
-      top:34%;
-      height:18%;
-    }
-
-    .hero-phone-screen {
-      position:relative;
-      width:100%;
-      height:100%;
-      border-radius:22px;
-      background:radial-gradient(circle at 50% 0%, #020617 0, #020617 35%, #000 90%);
-      display:flex;
+      flex-direction:column;
       align-items:center;
-      justify-content:center;
-      padding:6px;
-    }
-
-    /* Carte Gold plus grande */
-    .hero-card {
-      width:100%;
-      border-radius:22px;
-      padding:14px 14px 14px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.45) 0, transparent 50%),
-        linear-gradient(150deg,#fef3c7,#fde68a,#facc15,#eab308);
-      color:#111827;
-      box-shadow:
-        0 20px 45px rgba(0,0,0,0.9),
-        0 0 0 1px rgba(148,163,184,0.35);
-      font-size:11px;
-    }
-    .hero-card-header-tags {
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-bottom:8px;
-    }
-    .hero-tag-pill {
-      padding:4px 9px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.95);
-      color:#F9FAFB;
-      font-size:9px;
-      font-weight:500;
-    }
-    .hero-card-title-block { margin-bottom:6px; }
-    .hero-card-label {
-      font-size:9px;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      opacity:0.85;
-    }
-    .hero-card-title {
-      font-size:16px;
-      font-weight:800;
-      margin:2px 0 1px;
-    }
-    .hero-card-sub {
-      font-size:11px;
-      opacity:0.95;
-    }
-    .hero-card-list {
-      list-style:none;
-      padding-left:0;
-      margin:8px 0 10px;
-      font-size:10px;
-    }
-    .hero-card-list li::before { content:"• "; }
-    .hero-card-footer {
-      margin-top:4px;
-      padding-top:6px;
-      border-top:1px dashed rgba(15,23,42,0.35);
-      font-size:9px;
-      display:flex;
-      justify-content:space-between;
       gap:8px;
-      flex-wrap:wrap;
+    }
+    .hero-preview-shell {
+      border-radius:26px;
+      padding:10px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(250,204,21,0.22) 0, transparent 55%),
+        radial-gradient(circle at 120% 100%, rgba(15,23,42,1) 0, #020617 60%);
+      box-shadow:
+        0 26px 70px rgba(0,0,0,0.95),
+        0 0 40px rgba(15,23,42,0.9);
+      max-width:380px;
+      width:100%;
+    }
+    .hero-preview-inner {
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,0.4);
+      background:#020617;
+    }
+    .hero-preview-iframe {
+      width:100%;
+      height:520px;
+      border:0;
+      display:block;
+    }
+    .hero-preview-note {
+      font-size:11px;
+      color:#9CA3AF;
+      text-align:center;
+      max-width:380px;
     }
 
     @media (max-width:900px){
@@ -281,6 +178,8 @@
       .hero-right { order:-1; }
       .hero h1 { font-size:30px; }
       .hero-wrap { padding-top:60px; }
+      .hero-preview-shell { max-width:320px; }
+      .hero-preview-iframe { height:480px; }
     }
 
     /* ---------- FEATURES ---------- */
@@ -639,44 +538,19 @@
       </div>
 
       <div class="hero-right">
-        <div class="hero-phone-wrapper">
-          <div class="hero-phone-halo">
-            <div class="hero-phone">
-              <div class="hero-phone-notch"></div>
-              <div class="hero-phone-buttons hero-phone-buttons-left"></div>
-              <div class="hero-phone-buttons hero-phone-buttons-right"></div>
-
-              <div class="hero-phone-bezel">
-                <div class="hero-phone-screen">
-                  <div class="hero-card">
-                    <div class="hero-card-header-tags">
-                      <span class="hero-tag-pill">⭐ Entreprise recommandée</span>
-                      <span class="hero-tag-pill">🏛️ Premium</span>
-                    </div>
-
-                    <div class="hero-card-title-block">
-                      <div class="hero-card-label">Maavnica SmartCard</div>
-                      <div class="hero-card-title">Votre entreprise</div>
-                      <div class="hero-card-sub">
-                        Image haut de gamme & rassurante, idéale pour vos prestations premium.
-                      </div>
-                    </div>
-
-                    <ul class="hero-card-list">
-                      <li>Canaux de contact centralisés</li>
-                      <li>Parfait pour conciergerie & immobilier</li>
-                      <li>Compatible lien de paiement sécurisé</li>
-                    </ul>
-
-                    <div class="hero-card-footer">
-                      <span>🌐 Sites & agences</span>
-                      <span>💳 Paiement (option)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div><!-- /hero-phone -->
+        <div class="hero-preview-wrapper">
+          <div class="hero-preview-shell">
+            <div class="hero-preview-inner">
+              <!-- 👉 Ici, vraie SmartCard live : change demo-gold en demo-sante si tu veux -->
+              <iframe
+                class="hero-preview-iframe"
+                src="https://maavnica-smartcard-v2.onrender.com/c/demo-gold">
+              </iframe>
+            </div>
           </div>
+          <p class="hero-preview-note">
+            Aperçu réel d’une SmartCard Black &amp; Gold. Les boutons, formulaires et liens sont interactifs.
+          </p>
         </div>
       </div>
     </div>
@@ -727,7 +601,7 @@
     </div>
   </section>
 
-  <!-- DEMO SWITCHER : 3 cartes + iframe -->
+  <!-- DEMO SWITCHER -->
   <section class="demo-section" id="demos">
     <div class="container">
       <div class="demo-title-wrap">
@@ -807,9 +681,6 @@
       </div>
     </div>
   </section>
-
-  <!-- WHAT YOU GET / PRICING / AFFILIATION / FAQ / FOOTER identiques à la version précédente -->
-  <!-- (je les ai laissés en place dans le fichier complet que tu remplaces) -->
 
   <!-- WHAT YOU GET -->
   <section class="what-section">
@@ -1043,6 +914,7 @@
     </div>
   </footer>
 
+  <!-- JS : switcher des 3 cartes démo -->
   <script>
     (function () {
       const urls = {
