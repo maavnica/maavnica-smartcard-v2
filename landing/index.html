@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maavnica SmartCard – La carte pro qui fait vendre</title>
+  <title>Maavnica SmartCard – La carte digitale pro qui fait vendre</title>
+  <meta name="description"
+        content="La SmartCard Maavnica transforme chaque interaction client en opportunité : avis Google, demandes de devis, WhatsApp, rendez-vous, paiement… tout dans un seul lien." />
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -15,6 +17,7 @@
     }
     a { text-decoration:none; color:inherit; }
     img { max-width:100%; display:block; }
+
     .section { padding:60px 20px; }
     .container { max-width:1100px; margin:0 auto; }
 
@@ -398,63 +401,151 @@
       color:white;
     }
 
-    /* ---------- PRICING ---------- */
-    .pricing-section { background:#F8FAFC; padding:60px 20px 60px; }
+    /* ---------- PRICING (premium clair & centré) ---------- */
+    .pricing-section {
+      background:#F8FAFC;
+      padding:70px 20px 70px;
+    }
+
+    .pricing-section-header {
+      text-align:center;
+      margin-bottom:32px;
+    }
+
+    .pricing-section-header h2 {
+      font-size:24px;
+      font-weight:800;
+      color:#0F172A;
+      margin-bottom:6px;
+    }
+
+    .pricing-section-header p {
+      font-size:13px;
+      color:#475569;
+    }
+
+    .pricing-inner {
+      max-width:900px;
+      margin:0 auto;
+    }
+
     .pricing-grid {
       display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
+      grid-template-columns:repeat(2, minmax(0,1fr));
       gap:24px;
     }
-    @media (max-width:980px){
-      .pricing-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
+
+    @media (max-width:800px){
+      .pricing-grid {
+        grid-template-columns:1fr;
+        max-width:480px;
+        margin:0 auto;
+      }
     }
-    @media (max-width:640px){
-      .pricing-grid { grid-template-columns:1fr; }
-    }
+
     .pricing-card {
       background:#FFFFFF;
-      border-radius:18px;
+      border-radius:20px;
       border:1px solid #E2E8F0;
-      padding:22px 20px 20px;
-      box-shadow:0 12px 30px rgba(148,163,184,0.25);
+      padding:22px 22px 20px;
+      box-shadow:0 16px 40px rgba(148,163,184,0.25);
       display:flex;
       flex-direction:column;
       gap:10px;
     }
+
     .pricing-card.highlight {
       border-color:#1D4ED8;
-      box-shadow:0 18px 40px rgba(37,99,235,0.25);
-      transform:translateY(-3px);
+      box-shadow:0 18px 45px rgba(37,99,235,0.25);
       position:relative;
     }
+
     .badge-popular {
       position:absolute;
-      top:12px;
-      right:16px;
+      top:14px;
+      right:18px;
       background:#1D4ED8;
-      color:white;
+      color:#FFFFFF;
       font-size:11px;
-      padding:3px 9px;
+      padding:4px 10px;
       border-radius:999px;
     }
+
+    .pricing-title {
+      font-size:18px;
+      font-weight:700;
+      color:#0F172A;
+    }
+
+    .pricing-sub {
+      font-size:13px;
+      color:#64748B;
+    }
+
+    .pricing-price {
+      font-size:24px;
+      font-weight:800;
+      color:#0F172A;
+    }
+
+    .pricing-price span {
+      font-size:13px;
+      font-weight:400;
+      color:#64748B;
+    }
+
+    .pricing-features {
+      list-style:none;
+      padding-left:0;
+      margin:6px 0 14px;
+      font-size:13px;
+      color:#475569;
+    }
+
+    .pricing-features li {
+      margin-bottom:4px;
+    }
+
+    .pricing-cta.primary-fill,
+    .pricing-cta.primary-outline {
+      display:block;
+      text-align:center;
+      border-radius:999px;
+      padding:11px 12px;
+      font-size:13px;
+      font-weight:600;
+    }
+
     .pricing-cta.primary-fill {
       background:#1D4ED8;
-      color:white;
-      border-radius:999px;
-      padding:10px;
-      font-size:13px;
-      font-weight:600;
-      text-align:center;
-      display:block;
+      color:#FFFFFF;
     }
+
     .pricing-cta.primary-outline {
+      border:1px solid #1D4ED8;
+      color:#1D4ED8;
+      background:#FFFFFF;
+    }
+
+    .pricing-note {
+      margin-top:12px;
+      font-size:11px;
+      color:#6B7280;
+      text-align:center;
+    }
+
+    .pricing-affiliate {
+      text-align:center;
+      margin-top:18px;
+    }
+
+    .pricing-affiliate a {
+      display:inline-block;
+      padding:10px 20px;
       border-radius:999px;
-      padding:10px;
+      border:1px dashed #1D4ED8;
       font-size:13px;
       font-weight:600;
-      text-align:center;
-      display:block;
-      border:1px solid #1D4ED8;
       color:#1D4ED8;
     }
 
@@ -506,7 +597,7 @@
 
         <p class="hero-sub">
           La SmartCard qui transforme chaque interaction en opportunité :
-          avis Google, demandes de devis, WhatsApp, rendez-vous…  
+          avis Google, demandes de devis, WhatsApp, rendez-vous…<br />
           Tout dans un seul lien, personnalisé pour votre activité.
         </p>
 
@@ -532,8 +623,8 @@
         </div>
 
         <p class="hero-note">
-          Sans abonnement en formule Solo. Offres Pro & Business pour un usage régulier
-          et connecté au futur CRM Maavnica.
+          Sans engagement en formule SmartCard. Offres Business pour les équipes et un usage régulier
+          connecté au futur CRM Maavnica.
         </p>
       </div>
 
@@ -541,7 +632,7 @@
         <div class="hero-preview-wrapper">
           <div class="hero-preview-shell">
             <div class="hero-preview-inner">
-              <!-- 👉 Ici, vraie SmartCard live : change demo-gold en demo-sante si tu veux -->
+              <!-- Vraie SmartCard live – change demo-gold en demo-sante si besoin -->
               <iframe
                 class="hero-preview-iframe"
                 src="https://maavnica-smartcard-v2.onrender.com/c/demo-gold">
@@ -578,8 +669,8 @@
           <p>Nom, contact, description du besoin : vous recevez des demandes claires, prêtes à être traitées.</p>
         </div>
         <div class="feature">
-          <h3>🎨 4 thèmes premium</h3>
-          <p>Artisan, Black & Gold, Santé / Bien-être, SaaS : choisissez l’univers visuel adapté à votre activité.</p>
+          <h3>🎨 Thèmes premium</h3>
+          <p>Artisan, Black & Gold, Santé / Bien-être, services : choisissez l’univers visuel adapté à votre activité.</p>
         </div>
         <div class="feature">
           <h3>💳 Lien de paiement (option)</h3>
@@ -590,8 +681,8 @@
           <p>Un QR Code à mettre sur vos factures, flyers, vitrine. Bientôt : déclinaison en signature d’email et intégration site web.</p>
         </div>
         <div class="feature">
-          <h3>📊 Préparée pour le mini-CRM Maavnica</h3>
-          <p>Les formules Pro & Business sont pensées pour se connecter au futur CRM (clients, demandes, interventions).</p>
+          <h3>📊 Pensée pour le mini-CRM Maavnica</h3>
+          <p>Les offres Business sont prévues pour se connecter plus tard au CRM (clients, demandes, interventions).</p>
         </div>
         <div class="feature">
           <h3>🧩 Première brique de l’écosystème</h3>
@@ -601,7 +692,7 @@
     </div>
   </section>
 
-  <!-- DEMO SWITCHER -->
+  <!-- DEMO SWITCHER : 3 cartes + iframe -->
   <section class="demo-section" id="demos">
     <div class="container">
       <div class="demo-title-wrap">
@@ -721,7 +812,7 @@
         </div>
         <div class="what-item">
           <h3>🧩 Compatible futur CRM Maavnica</h3>
-          <p>Les formules Pro & Business sont pensées pour se connecter au futur CRM (clients, demandes, interventions).</p>
+          <p>Les offres Business sont pensées pour se connecter au futur CRM (clients, demandes, interventions).</p>
         </div>
       </div>
     </div>
@@ -729,87 +820,79 @@
 
   <!-- PRICING -->
   <section class="pricing-section" id="tarifs">
-  <div class="container">
-    <div style="text-align:center; margin-bottom:30px;">
-      <h2 style="font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">
-        Deux offres simples, pensées pour les pros
-      </h2>
-      <p style="font-size:13px; color:#475569;">
-        Une SmartCard pour les indépendants, un pack Business pour les équipes.
-        Les deux incluent tout ce qu’il faut pour être joignable et récolter des retours clients.
-      </p>
-    </div>
+    <div class="container pricing-inner">
 
-    <div class="pricing-grid">
-      <!-- Offre 1 : SmartCard -->
-      <div class="pricing-card highlight">
-        <div class="badge-popular">Le plus choisi</div>
-
-        <div style="font-size:17px; font-weight:700; color:#0F172A;">SmartCard</div>
-        <div style="font-size:13px; color:#64748B; margin-bottom:4px;">
-          Pour artisans, thérapeutes, freelances et indépendants qui veulent une présence pro claire.
-        </div>
-
-        <div style="font-size:22px; font-weight:800; margin:6px 0; color:#0F172A;">
-          39€ <span style="font-size:13px; font-weight:400; color:#64748B;">HT / an</span>
-        </div>
-
-        <ul style="list-style:none; font-size:13px; color:#475569; padding-left:0; margin:8px 0 14px;">
-          <li>1 SmartCard personnalisée avec vos infos et votre activité</li>
-          <li>Boutons WhatsApp, appel, email, site web, avis Google, devis</li>
-          <li>QR Code haute définition pour factures, flyers, vitrine, véhicule…</li>
-          <li>Signature email & texte WhatsApp/SMS prêts à l’emploi</li>
-          <li>Mises à jour gratuites de vos coordonnées (mail, téléphone, adresse…)</li>
-          <li>Hébergement sécurisé, sans app à installer</li>
-        </ul>
-
-        <a href="/static/contact-smartcard.html?offre=solo"
-           class="pricing-cta primary-fill">
-          Commander ma SmartCard
-        </a>
+      <div class="pricing-section-header">
+        <h2>Deux offres simples, pensées pour les pros</h2>
+        <p>
+          Une SmartCard pour les indépendants, un pack Business pour les équipes.
+          Les deux incluent tout ce qu’il faut pour être joignable et récolter des retours clients.
+        </p>
       </div>
 
-      <!-- Offre 2 : SmartCard Business -->
-      <div class="pricing-card">
-        <div style="font-size:17px; font-weight:700; color:#0F172A;">SmartCard Business</div>
-        <div style="font-size:13px; color:#64748B; margin-bottom:4px;">
-          Pour les équipes, conciergeries, salons, agences ou entreprises avec plusieurs collaborateurs.
+      <div class="pricing-grid">
+        <!-- Offre 1 : SmartCard -->
+        <div class="pricing-card highlight">
+          <div class="badge-popular">Le plus choisi</div>
+
+          <div class="pricing-title">SmartCard</div>
+          <div class="pricing-sub">
+            Pour artisans, thérapeutes, freelances et indépendants qui veulent une présence pro claire et efficace.
+          </div>
+
+          <div class="pricing-price">
+            39€ <span>HT / an</span>
+          </div>
+
+          <ul class="pricing-features">
+            <li>1 SmartCard personnalisée avec vos infos et votre activité</li>
+            <li>Boutons WhatsApp, appel, email, site web, avis Google, devis</li>
+            <li>QR Code haute définition pour factures, flyers, vitrine, véhicule…</li>
+            <li>Signature email & texte WhatsApp/SMS prêts à l’emploi</li>
+            <li>Mises à jour gratuites de vos coordonnées (mail, téléphone, adresse…)</li>
+            <li>Hébergement sécurisé, sans application à installer</li>
+          </ul>
+
+          <a href="/static/contact-smartcard.html?offre=solo"
+             class="pricing-cta primary-fill">
+            Commander ma SmartCard
+          </a>
         </div>
 
-        <div style="font-size:22px; font-weight:800; margin:6px 0; color:#0F172A;">
-          99€ <span style="font-size:13px; font-weight:400; color:#64748B;">HT / an</span>
+        <!-- Offre 2 : SmartCard Business -->
+        <div class="pricing-card">
+          <div class="pricing-title">SmartCard Business</div>
+          <div class="pricing-sub">
+            Pour les équipes, conciergeries, salons, agences ou entreprises avec plusieurs collaborateurs.
+          </div>
+
+          <div class="pricing-price">
+            99€ <span>HT / an</span>
+          </div>
+
+          <ul class="pricing-features">
+            <li>Jusqu’à 5 SmartCards dans le même pack (équipe ou multi-sites)</li>
+            <li>Thèmes & couleurs harmonisés au nom de votre entreprise</li>
+            <li>QR Codes individuels pour chaque collaborateur</li>
+            <li>Statistiques simples : volume de demandes / avis envoyés (évolution possible)</li>
+            <li>Support prioritaire et accompagnement mise en place</li>
+            <li>Prévu pour l’intégration future avec le CRM Maavnica</li>
+          </ul>
+
+          <a href="/static/contact-smartcard.html?offre=business"
+             class="pricing-cta primary-outline">
+            Discuter de l’offre Business
+          </a>
         </div>
-
-        <ul style="list-style:none; font-size:13px; color:#475569; padding-left:0; margin:8px 0 14px;">
-          <li>Jusqu’à 5 SmartCards dans le même pack (équipe ou multi-sites)</li>
-          <li>Thèmes & couleurs harmonisés au nom de votre entreprise</li>
-          <li>QR Codes pour chaque collaborateur (factures, badges, cartes papier…)</li>
-          <li>Statistiques simples : volume de demandes / avis envoyés (évolution possible)</li>
-          <li>Support prioritaire et accompagnement mise en place</li>
-          <li>Prévu pour l’intégration future avec le CRM Maavnica</li>
-        </ul>
-
-        <a href="/static/contact-smartcard.html?offre=business"
-           class="pricing-cta primary-outline">
-          Discuter de l’offre Business
-        </a>
       </div>
-    </div>
 
-    <div style="margin-top:10px; font-size:11px; color:#6B7280; text-align:center;">
-      Les tarifs pourront évoluer à l’avenir. Les premiers clients conservent leur prix tant que l’abonnement est actif.
-    </div>
+      <div class="pricing-note">
+        Les tarifs pourront évoluer à l’avenir. Les premiers clients conservent leur prix tant que l’abonnement est actif.
+      </div>
 
-    <div style="text-align:center; margin-top:18px;">
-      <a href="/affiliation"
-         style="display:inline-block; padding:10px 20px; border-radius:999px;
-                border:1px dashed #1D4ED8; font-size:13px; font-weight:600; color:#1D4ED8;">
-        💸 Vous avez un réseau ? Devenir affilié Maavnica
-      </a>
-    </div>
-  </div>
-</section>
-
+      <div class="pricing-affiliate">
+        <a href="/affiliation">
+          💸 Vous avez un réseau ? Devenir affilié Maavnica
         </a>
       </div>
     </div>
@@ -863,26 +946,28 @@
           </p>
         </div>
         <div>
-          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Solo, Pro, Business ?</h4>
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 SmartCard vs Business ?</h4>
           <p style="font-size:13px; color:#9CA3AF;">
-            Solo : carte unique, paiement une fois. Pro : abonnement mensuel avec suivi et historique.
-            Business : plusieurs cartes + vue équipe.
+            SmartCard : une carte pour un indépendant. Business : jusqu’à 5 cartes dans un même pack, avec QR Codes individuels
+            et un accompagnement dédié.
           </p>
         </div>
         <div>
           <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Vers le CRM Maavnica ?</h4>
           <p style="font-size:13px; color:#9CA3AF;">
-            Oui. Les offres Pro & Business évolueront vers l’intégration CRM (clients, demandes, interventions, automatisations).
+            Oui. Les offres Business sont conçues pour se connecter au CRM Maavnica (clients, demandes, interventions, automatisations)
+            lorsque celui-ci sera disponible.
           </p>
         </div>
         <div>
-          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Usage au quotidien ?</h4>
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Comment l’utiliser au quotidien ?</h4>
           <p style="font-size:13px; color:#9CA3AF;">
-            Après chaque prestation, envoyez la carte par WhatsApp/SMS ou faites scanner le QR Code (flyers, devis, factures, vitrine).
+            Après chaque prestation, envoyez la carte par WhatsApp/SMS ou faites scanner le QR Code
+            (flyers, devis, factures, vitrine). C’est là que la magie opère.
           </p>
         </div>
         <div>
-          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Revente à mes clients ?</h4>
+          <h4 style="font-size:15px; margin-bottom:4px; color:#E5E7EB;">📌 Puis-je la revendre à mes clients ?</h4>
           <p style="font-size:13px; color:#9CA3AF;">
             Oui. Le programme d’affiliation vous permet de toucher une commission sur chaque vente générée via vos recommandations.
           </p>
@@ -936,6 +1021,7 @@
   </script>
 </body>
 </html>
+
 
 
 
