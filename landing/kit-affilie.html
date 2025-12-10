@@ -14,9 +14,11 @@
     }
     a { color:#93C5FD; text-decoration:none; }
     a.underline { text-decoration:underline; text-underline-offset:3px; }
-
-    .page { min-height:100vh; display:flex; flex-direction:column; }
-
+    .page {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
     header {
       padding:14px 20px;
       border-bottom:1px solid rgba(30,64,175,0.7);
@@ -37,25 +39,23 @@
       text-decoration:underline;
       text-underline-offset:3px;
     }
-
     main {
       flex:1;
-      padding:30px 20px 40px;
+      padding:26px 20px 40px;
     }
     .container {
       max-width:1000px;
       margin:0 auto;
     }
-
     h1 {
       font-size:26px;
       font-weight:800;
-      margin-bottom:6px;
+      margin-bottom:8px;
     }
     h2 {
       font-size:20px;
       font-weight:700;
-      margin:26px 0 10px;
+      margin:26px 0 8px;
     }
     h3 {
       font-size:16px;
@@ -68,10 +68,10 @@
       margin-bottom:6px;
     }
     ul, ol {
+      font-size:13px;
       margin:0 0 8px 18px;
-      font-size:14px;
+      color:#CBD5F5;
     }
-
     .tag {
       display:inline-flex;
       align-items:center;
@@ -81,38 +81,65 @@
       font-size:11px;
       border:1px solid rgba(148,163,184,0.7);
       background:rgba(15,23,42,0.6);
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
     .hero {
-      margin-bottom:16px;
+      margin-bottom:18px;
     }
     .hero-sub {
       font-size:14px;
       color:#CBD5F5;
       margin-bottom:8px;
+      max-width:720px;
     }
     .hero-note {
       font-size:12px;
       color:#9CA3AF;
     }
-    .pill {
-      display:inline-block;
-      padding:3px 9px;
+    .hero-cta-row {
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .cta-primary {
+      background:#22C55E;
+      color:#052E16;
+      padding:9px 18px;
       border-radius:999px;
-      background:rgba(34,197,94,0.15);
-      color:#BBF7D0;
-      font-size:11px;
-      margin-right:6px;
+      font-weight:700;
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      box-shadow:0 10px 24px rgba(34,197,94,0.45);
+    }
+    .cta-secondary {
+      font-size:12px;
+      color:#93C5FD;
+      text-decoration:underline;
+      text-underline-offset:3px;
     }
 
+    /* layout */
     .grid-2 {
       display:grid;
       grid-template-columns:repeat(2, minmax(0,1fr));
       gap:18px;
     }
-    @media (max-width:800px){
-      .grid-2 { grid-template-columns:1fr; }
+    .grid-3 {
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
     }
+    @media (max-width:900px){
+      .grid-3 { grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width:700px){
+      .grid-2, .grid-3 { grid-template-columns:1fr; }
+    }
+
     .card {
       background:#020617;
       border-radius:16px;
@@ -128,26 +155,26 @@
       border-radius:999px;
       background:rgba(37,99,235,0.2);
       color:#BFDBFE;
-      margin-bottom:5px;
+      margin-bottom:4px;
     }
-
     .code-block {
       background:#020617;
-      border-radius:9px;
-      border:1px solid #1F2937;
-      padding:8px 10px;
-      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      border-radius:10px;
+      border:1px solid #334155;
+      padding:10px 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size:12px;
+      white-space:pre-wrap;
       color:#E5E7EB;
-      margin-bottom:10px;
-      white-space:pre-line;
     }
 
-    .section-label {
-      font-size:11px;
+    .section-title-small {
+      font-size:13px;
+      font-weight:600;
+      color:#BFDBFE;
       text-transform:uppercase;
       letter-spacing:.08em;
-      color:#9CA3AF;
+      margin-top:22px;
       margin-bottom:4px;
     }
 
@@ -165,343 +192,309 @@
   <div class="page">
     <header>
       <div class="inner">
-        <div>Kit affilié – Maavnica SmartCard</div>
-        <a href="/affiliation">← Retour à la page Affiliation</a>
+        <div>Maavnica SmartCard – Kit affilié</div>
+        <a href="/affiliation">← Retour à la page affiliation</a>
       </div>
     </header>
 
     <main>
       <div class="container">
 
-        <!-- HERO -->
+        <!-- HERO KIT -->
         <section class="hero">
           <div class="tag">
-            🎒 Kit affilié · SmartCard Maavnica
+            <span>💼 Kit affilié</span>
+            <span>SmartCard Maavnica</span>
           </div>
-          <h1>Votre kit affilié SmartCard</h1>
+          <h1>Kit affilié SmartCard Maavnica</h1>
           <p class="hero-sub">
-            Ce kit regroupe tout ce dont vous avez besoin pour présenter la SmartCard à votre réseau :
-            pitchs rapides, scripts prêts à envoyer, arguments clés, réponses aux objections et exemples
-            de messages à utiliser sur WhatsApp, SMS, email ou réseaux sociaux.
+            Ce kit vous donne tout ce dont vous avez besoin pour présenter la SmartCard à votre réseau :
+            messages prêts à envoyer, scripts WhatsApp, email, pitchs et réponses aux questions les plus fréquentes.
           </p>
+          <div class="hero-cta-row">
+            <a href="#whatsapp" class="cta-primary">
+              <span>Accéder directement aux scripts WhatsApp</span>
+              <span>↓</span>
+            </a>
+            <a href="https://smartcard.maavnica.com/#demos" class="cta-secondary" target="_blank">
+              Voir les démos SmartCard →
+            </a>
+          </div>
           <p class="hero-note">
-            <span class="pill">À utiliser librement</span>
-            Copiez-collez les textes, adaptez-les à votre ton et partagez les liens de démo :
-            <a href="https://smartcard.maavnica.com" class="underline">smartcard.maavnica.com</a>.
+            Rappel : commission standard de <strong>15€</strong> par SmartCard (39€ HT/an)
+            et <strong>30€</strong> par offre Business (99€ HT/an), selon les modalités convenues avec Maavnica.
           </p>
         </section>
 
-        <!-- 1. PITCHS -->
+        <!-- RAPPEL PRODUIT -->
         <section>
-          <div class="section-label">Section 1</div>
-          <h2>Pitchs SmartCard à utiliser à l’oral ou à l’écrit</h2>
-
-          <h3>Pitch 10 secondes</h3>
-          <div class="code-block">
-« C’est une carte digitale pro qui permet à un artisan ou un indépendant
-d’être contacté en 1 clic, de récolter plus d’avis Google et d’envoyer
-un simple lien ou QR code à ses clients. Ça s’appelle la SmartCard Maavnica. »
-          </div>
-
-          <h3>Pitch 30 secondes</h3>
-          <div class="code-block">
-« La SmartCard Maavnica est une carte digitale personnalisée avec vos infos :
-WhatsApp, téléphone, email, avis Google, demande de devis et QR code.
-En un seul lien, vos clients peuvent vous contacter, laisser un avis ou
-faire une demande de devis. Résultat : plus d’avis, plus de visibilité
-et une image beaucoup plus professionnelle. »
-          </div>
-
-          <h3>Pitch 1 minute</h3>
-          <div class="code-block">
-« Aujourd’hui, les artisans et indépendants passent beaucoup de temps à
-transmettre leurs coordonnées, leur WhatsApp, leur lien Google, leur email,
-leur site… et à demander des avis clients.
-
-La SmartCard Maavnica simplifie tout en un seul lien pro :
-
-• vos coordonnées (téléphone, WhatsApp, email),
-• votre lien d’avis Google,
-• un formulaire simple de demande de devis,
-• un QR code à mettre sur vos factures, cartes ou flyers.
-
-Vous envoyez un seul lien, et vos clients peuvent laisser un avis,
-vous écrire sur WhatsApp, vous appeler ou demander un devis.
-C’est rapide, clair et très rassurant pour eux. »
+          <h2>Rappel rapide : qu’est-ce que la SmartCard ?</h2>
+          <div class="grid-3">
+            <div class="card">
+              <div class="badge">📱 Carte digitale</div>
+              <h3>Une carte pro accessible via lien & QR Code</h3>
+              <p>
+                Une SmartCard regroupe en une seule page : les informations professionnelles, les contacts,
+                et les actions importantes (avis, devis, WhatsApp…).
+              </p>
+            </div>
+            <div class="card">
+              <div class="badge">⭐ Avis & devis</div>
+              <h3>Plus d’avis, plus de demandes</h3>
+              <p>
+                Après chaque prestation, le pro envoie sa SmartCard. Le client peut laisser un avis Google
+                ou remplir un formulaire de devis en quelques clics.
+              </p>
+            </div>
+            <div class="card">
+              <div class="badge">💳 Simple & abordable</div>
+              <h3>Un prix clair</h3>
+              <p>
+                Offre SmartCard : 39€ HT/an.  
+                Offre Business (jusqu’à 5 cartes) : 99€ HT/an.  
+                Sans application, sans engagement mensuel.
+              </p>
+            </div>
           </div>
         </section>
 
-        <!-- 2. SCRIPTS MESSAGES -->
+        <!-- SCRIPTS WHATSAPP -->
+        <section id="whatsapp">
+          <h2>1. Scripts WhatsApp prêts à envoyer</h2>
+          <p>
+            Vous pouvez copier-coller ces scripts tels quels et les ajuster avec votre prénom ou votre ton habituel.
+          </p>
+
+          <div class="section-title-small">Client potentiel (version courte)</div>
+          <div class="code-block">
+Salut ! Je te partage un outil utile pour les pros : la SmartCard Maavnica.
+Ça centralise avis Google, demandes de devis, WhatsApp, QR Code… tout en un lien.
+C’est 39€/an. Tu veux une démo ? 🙂
+          </div>
+
+          <div class="section-title-small">Client potentiel (version détaillée)</div>
+          <div class="code-block">
+Salut !
+Je te partage un outil qui aide beaucoup les pros : la SmartCard Maavnica.
+
+C’est une carte digitale qui regroupe :
+• Avis Google
+• Demandes de devis
+• WhatsApp direct
+• Contact pro
+• QR Code pour factures / flyers / vitrine
+
+Tu l’envoies à tes clients et ils peuvent te laisser un avis, demander un devis, te contacter immédiatement.
+
+👉 39€/an
+👉 Sans application
+👉 Démo : https://smartcard.maavnica.com/#demos
+          </div>
+
+          <div class="section-title-small">Recrutement affilié</div>
+          <div class="code-block">
+Tu connais beaucoup de monde dans ton travail / entourage ?
+Tu peux devenir affilié SmartCard Maavnica.
+
+Tu gagnes 15€ par SmartCard vendue et 30€ sur l’offre Business.
+Tu veux ton lien affilié ? 🙂
+https://smartcard.maavnica.com/affiliation
+          </div>
+
+          <div class="section-title-small">Ouverture de discussion (super courte)</div>
+          <div class="code-block">
+Je teste un nouveau produit pour les pros, je te montre ? 😉
+          </div>
+        </section>
+
+        <!-- PITCHS -->
         <section>
-          <div class="section-label">Section 2</div>
-          <h2>Messages prêts à envoyer (WhatsApp, SMS, Messenger…)</h2>
+          <h2>2. Pitchs à l’oral (10 secondes, 30 secondes, 2 minutes)</h2>
+          <p>
+            Ces scripts sont pensés pour être dits à l’oral (en face à face, au téléphone, en visio).
+          </p>
 
-          <div class="grid-2">
+          <div class="grid-3">
             <div class="card">
-              <h3>Script WhatsApp – 1er contact</h3>
+              <div class="badge">10 secondes</div>
+              <h3>Pitch ultra court</h3>
               <div class="code-block">
-« Salut 👋
-Je travaille avec Maavnica, une solution digitale pour artisans et indépendants.
-
-On a développé une SmartCard : une carte pro en ligne qui regroupe tout :
-avis Google, WhatsApp, téléphone, demande de devis…
-
-Voici une démo 👉 smartcard.maavnica.com
-Si ça t’intéresse je te fais une présentation rapide. »
-              </div>
-
-              <h3>Script WhatsApp – après réponse positive</h3>
-              <div class="code-block">
-« Top 👍
-La SmartCard te permet :
-
-• d’être contacté en 1 clic (WhatsApp, appel, mail),
-• d’avoir plus d’avis Google,
-• de recevoir des demandes de devis claires,
-• de partager un QR code sur tes factures / cartes.
-
-Tu veux que je t’en montre une personnalisée ? »
-              </div>
-
-              <h3>Script WhatsApp – conclusion</h3>
-              <div class="code-block">
-« Le tarif démarre à partir de 39€ (formule SmartCard Solo, paiement unique).
-
-Tu veux ta SmartCard ?
-Je t’envoie le lien pour faire la demande et on s’occupe de tout. »
+C’est une carte digitale à 39€/an qui centralise avis Google, devis, WhatsApp et QR Code.
+Simple, rapide, ultra utile aux artisans.
               </div>
             </div>
-
             <div class="card">
-              <h3>Script SMS (court)</h3>
+              <div class="badge">30 secondes</div>
+              <h3>Pitch standard</h3>
               <div class="code-block">
-« Bonjour, je me permets de vous écrire car je propose une solution simple pour artisans/pros :
-la SmartCard Maavnica.
+La SmartCard Maavnica, c’est un lien unique qui regroupe tout pour un pro :
+avis Google, WhatsApp, contact, demandes de devis, QR Code…
 
-C’est une carte digitale qui permet d’être contacté en 1 clic et
-de générer plus d’avis Google grâce à un lien ou un QR code.
+C’est hyper simple, sans application, et ça donne une image très pro.
+Ça coûte 39€/an pour une activité, et il y a une offre Business pour les équipes.
 
-Démo ici : smartcard.maavnica.com
-Souhaitez-vous plus d’infos ? »
+Je peux t’envoyer une démo si tu veux.
               </div>
-
-              <h3>Script Facebook / Messenger</h3>
+            </div>
+            <div class="card">
+              <div class="badge">≈ 2 minutes</div>
+              <h3>Pitch complet</h3>
               <div class="code-block">
-« Bonjour 👋
+Aujourd’hui, la plupart des artisans, thérapeutes et indépendants perdent des opportunités :
+leurs clients ne savent pas où laisser un avis Google, les demandes de devis arrivent de partout,
+et leurs coordonnées ne sont pas centralisées.
 
-Je propose un outil qui parle beaucoup aux artisans, thérapeutes et indépendants :
-la SmartCard Maavnica.
+La SmartCard Maavnica résout ça : un seul lien qui regroupe tous les moyens de contact,
+avec un QR Code pour les factures, flyers et véhicules.
 
-C’est une carte digitale qui regroupe vos coordonnées, votre WhatsApp,
-vos avis Google, un bouton de devis et un QR code à partager.
+Tu deviens beaucoup plus pro, tu reçois plus d’avis, plus de demandes de devis,
+et tes clients te contactent en un clic.
 
-Voici la démo : smartcard.maavnica.com
-Si vous voulez, je peux vous expliquer en 2 minutes. »
+C’est 39€/an et il n’y a aucune application à installer.
+Je peux t’envoyer une démo pour te montrer concrètement.
               </div>
+            </div>
+          </div>
+        </section>
 
-              <h3>Script email (prospection)</h3>
-              <div class="code-block">
-Objet : Votre carte digitale pour avis Google & contacts clients
+        <!-- EMAILS -->
+        <section>
+          <h2>3. Modèles d’email</h2>
+
+          <div class="section-title-small">Email de recommandation SmartCard</div>
+          <div class="code-block">
+Objet : Votre présence professionnelle, simplifiée
 
 Bonjour,
 
-Je me permets de vous contacter car nous aidons les artisans et
-indépendants à être contactés plus facilement et à obtenir davantage
-d’avis Google grâce à la SmartCard Maavnica.
+Je voulais vous recommander un outil très utile pour les indépendants, artisans, thérapeutes et petites entreprises : la SmartCard Maavnica.
 
-C’est une carte digitale personnalisée qui regroupe :
-• votre WhatsApp,
-• votre téléphone (appel en 1 clic),
-• vos avis Google,
-• un bouton de demande de devis,
-• un QR code à mettre sur facture ou flyer.
+Elle centralise tout ce dont un client a besoin :
+- Avis Google
+- Demandes de devis
+- Contact WhatsApp
+- Informations professionnelles
+- QR Code pour factures, flyers et véhicules
 
-Démo : smartcard.maavnica.com
+Tarif : 39€ HT / an
+Démo : https://smartcard.maavnica.com/#demos
 
-Souhaitez-vous une présentation rapide ?
+Si vous souhaitez en discuter ou obtenir une démo, je suis disponible.
+
+Belle journée,
+[Votre prénom]
+          </div>
+
+          <div class="section-title-small">Email de recrutement affilié</div>
+          <div class="code-block">
+Objet : Gagnez des commissions en recommandant un outil utile
+
+Bonjour,
+
+Maavnica lance un programme d’affiliation pour la SmartCard, une carte digitale professionnelle vendue 39€/an.
+
+Chaque vente réalisée via votre lien affilié vous rapporte :
+- 15€ sur l’offre SmartCard
+- 30€ sur l’offre Business
+
+Aucun engagement, aucun prérequis : vous partagez votre lien, et vous êtes rémunéré.
+
+Pour rejoindre le programme :
+https://smartcard.maavnica.com/affiliation
+
 Bien cordialement,
-[Votre prénom] – affilié Maavnica
-              </div>
-            </div>
+Maavnica
           </div>
         </section>
 
-        <!-- 3. ARGUMENTAIRE -->
+        <!-- RESEAUX SOCIAUX -->
         <section>
-          <div class="section-label">Section 3</div>
-          <h2>Argumentaire simple : 5 points clés</h2>
+          <h2>4. Textes pour les réseaux sociaux</h2>
+          <p>Utilisez ces textes pour publier sur Facebook, Instagram, LinkedIn ou dans vos stories.</p>
 
+          <div class="section-title-small">Facebook / Instagram</div>
+          <div class="code-block">
+🟦 Nouveau pour les pros : SmartCard Maavnica  
+Avis Google • Devis • WhatsApp • QR Code
+
+Une carte digitale moderne pour les artisans, thérapeutes, freelances et petites entreprises.
+
+Avec une seule SmartCard, vos clients peuvent :
+✔ Laisser un avis Google
+✔ Demander un devis
+✔ Vous contacter en 1 clic
+✔ Scanner un QR Code sur vos factures ou flyers
+
+👉 39€/an
+Démo : smartcard.maavnica.com/#demos
+          </div>
+
+          <div class="section-title-small">LinkedIn</div>
+          <div class="code-block">
+🚀 SmartCard Maavnica – L’outil simple et moderne pour améliorer sa visibilité professionnelle.
+
+✔ Avis Google en un clic
+✔ Demandes de devis simplifiées
+✔ Contact WhatsApp direct
+✔ QR Code pour factures / flyers
+✔ Signature email incluse
+
+Tarif : 39€/an
+Démo : smartcard.maavnica.com/#demos
+          </div>
+        </section>
+
+        <!-- ARGUMENTAIRE & OBJECTIONS -->
+        <section>
+          <h2>5. Argumentaire & réponses aux objections</h2>
           <div class="grid-2">
             <div class="card">
-              <h3>1. Plus d’avis Google</h3>
-              <p>
-                La SmartCard simplifie l’envoi du lien d’avis. Après la prestation,
-                le pro partage sa SmartCard : le client n’a qu’à cliquer pour laisser un avis.
-                Plus c’est simple, plus il y a d’avis.
-              </p>
-
-              <h3>2. Contact en un clic</h3>
-              <p>
-                Téléphone, WhatsApp, email : tout est centralisé. Le client ne cherche pas,
-                il clique. Cela évite les contacts perdus et rend le pro plus accessible.
-              </p>
-
-              <h3>3. Demande de devis claire</h3>
-              <p>
-                Le client remplit un petit formulaire (nom, téléphone, besoin) directement
-                depuis la SmartCard. Le pro reçoit une demande structurée, prête à traiter.
-              </p>
-            </div>
-
-            <div class="card">
-              <h3>4. QR code pratique</h3>
-              <p>
-                Chaque SmartCard peut être associée à un QR code : sur factures, flyers,
-                cartes de visite, véhicules ou vitrines. Le client scanne et tombe sur
-                la carte digitale.
-              </p>
-
-              <h3>5. Image professionnelle</h3>
-              <p>
-                Au lieu d’envoyer un simple numéro ou un lien isolé, le pro envoie un
-                mini “hub” clair, moderne et cohérent avec sa communication. Cela rassure
-                les nouveaux clients et renforce la confiance.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 4. OBJECTIONS -->
-        <section>
-          <div class="section-label">Section 4</div>
-          <h2>Objections courantes et réponses possibles</h2>
-
-          <div class="card">
-            <h3>« Je n’en ai pas besoin. »</h3>
-            <p>
-              → Réponse : « Tes clients te demandent ton numéro, ton WhatsApp,
-              ton lien Google, ton email… La SmartCard regroupe tout en un seul lien.
-              C’est plus simple pour eux et plus pro pour toi. »
-            </p>
-
-            <h3>« Je n’ai pas le temps. »</h3>
-            <p>
-              → Réponse : « Justement, tu ne fais presque rien.
-              Tu réponds à quelques questions, et Maavnica crée la carte pour toi. »
-            </p>
-
-            <h3>« Mes clients ne la regarderont pas. »</h3>
-            <p>
-              → Réponse : « Tu leur envoies la SmartCard par SMS, WhatsApp ou QR code.
-              C’est plus simple que de recopier un numéro ou de chercher un lien. » 
-            </p>
-
-            <h3>« J’ai déjà un site internet. »</h3>
-            <p>
-              → Réponse : « Parfait. La SmartCard ne remplace pas ton site, elle
-              le complète. C’est ton outil de contact rapide, que tu peux envoyer en
-              2 secondes par téléphone. »
-            </p>
-
-            <h3>« Je ne suis pas très digital. »</h3>
-            <p>
-              → Réponse : « Justement, c’est pensé pour ça. Il n’y a rien à installer,
-              rien de technique à gérer. Tu reçois juste un lien à partager. »
-            </p>
-          </div>
-        </section>
-
-        <!-- 5. RELANCES & SUIVI -->
-        <section>
-          <div class="section-label">Section 5</div>
-          <h2>Relances et suivi simple</h2>
-
-          <div class="grid-2">
-            <div class="card">
-              <h3>Relance douce (WhatsApp ou SMS)</h3>
-              <div class="code-block">
-« Tu as eu le temps de regarder la démo ?
-Si tu veux, je peux te faire faire une SmartCard personnalisée rapidement. »
-              </div>
-
-              <h3>Relance un peu plus directe</h3>
-              <div class="code-block">
-« Je te laisse le lien une dernière fois :
-smartcard.maavnica.com
-
-Honnêtement c’est un petit outil qui fait une grosse différence
-sur les avis et les contacts clients. »
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>Message après une vente</h3>
-              <div class="code-block">
-« Merci pour ta confiance 🎉
-
-Ta demande de SmartCard est bien transmise à Maavnica.
-Tu vas être recontacté(e) pour finaliser les infos à afficher sur ta carte. »
-              </div>
-
-              <h3>Message si le prospect hésite encore</h3>
-              <div class="code-block">
-« Tu peux aussi commencer simplement avec une version de base.
-L’important est d’avoir au moins un lien propre pour tes contacts
-et tes avis clients. On pourra faire évoluer ensuite. »
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 6. RAPPEL ROLE & COMMISSIONS -->
-        <section>
-          <div class="section-label">Section 6</div>
-          <h2>Votre rôle et les commissions (rappel)</h2>
-
-          <div class="grid-2">
-            <div class="card">
-              <h3>Votre rôle en tant qu’affilié</h3>
+              <h3>Arguments clés</h3>
               <ul>
-                <li>Faire découvrir la SmartCard à votre réseau.</li>
-                <li>Partager la démo et un premier message de présentation.</li>
-                <li>Rediriger vos contacts vers le formulaire de demande SmartCard.</li>
-                <li>Informer Maavnica si une vente est réalisée grâce à vous (nom du client, date…).</li>
+                <li>39€/an, prix accessible pour un pro</li>
+                <li>Utile immédiatement (avis, devis, contact)</li>
+                <li>Image plus professionnelle</li>
+                <li>Aucune application à installer</li>
+                <li>QR Code réutilisable partout</li>
+                <li>Offre Business possible pour équipes</li>
               </ul>
-              <p style="font-size:12px; color:#9CA3AF;">
-                Vous n’avez pas à gérer la technique, la mise en page ou le support client.
-                Tout cela est pris en charge par Maavnica.
-              </p>
             </div>
-
             <div class="card">
-              <h3>Structure de commissions (indicative)</h3>
+              <h3>Réponses aux objections courantes</h3>
               <ul>
-                <li>SmartCard Solo (paiement unique) : <strong>commission unitaire fixe</strong>.</li>
-                <li>Formules Pro / Business : commission mensuelle possible sur chaque abonnement.</li>
-                <li>Conditions précises confirmées par écrit avec Maavnica au moment de votre entrée dans le programme.</li>
+                <li>
+                  <strong>“Je ne suis pas très digital.”</strong><br />
+                  Justement, la SmartCard est faite pour être simple : aucun logiciel, vous recevez un lien prêt à l’emploi.
+                </li>
+                <li>
+                  <strong>“J’ai déjà une page Facebook.”</strong><br />
+                  Facebook ne centralise pas les avis Google ni les demandes de devis. La SmartCard est complémentaire.
+                </li>
+                <li>
+                  <strong>“Je n’ai pas besoin d’avis Google.”</strong><br />
+                  La plupart des clients regardent les avis avant de choisir un pro. C’est un levier important.
+                </li>
+                <li>
+                  <strong>“39€ par an, c’est beaucoup.”</strong><br />
+                  Un seul nouveau client ou un avis positif peut largement couvrir ce montant.
+                </li>
               </ul>
-              <p style="font-size:12px; color:#9CA3AF;">
-                L’objectif est de construire un partenariat gagnant-gagnant sur la durée :
-                plus vous recommandez la SmartCard, plus vous pouvez générer un revenu complémentaire.
-              </p>
             </div>
           </div>
         </section>
 
-        <!-- 7. CONCLUSION -->
+        <!-- CONCLUSION -->
         <section>
-          <div class="section-label">Section 7</div>
-          <h2>En résumé : comment utiliser ce kit</h2>
-          <ol>
-            <li>Choisissez un ou deux pitchs que vous aimez.</li>
-            <li>Envoyez un premier message (WhatsApp / SMS / Messenger) avec le lien de démo.</li>
-            <li>Répondez aux questions avec l’argumentaire et les réponses aux objections.</li>
-            <li>Redirigez vers le formulaire de demande SmartCard ou vers la landing SmartCard.</li>
-            <li>Informez Maavnica des ventes réalisées via vous pour le suivi de vos commissions.</li>
-          </ol>
-          <p style="font-size:13px; color:#9CA3AF; margin-top:6px;">
-            Pour toute question ou pour ajuster le kit à votre façon de travailler,
-            vous pouvez écrire à <a href="mailto:contact@maavnica.com" class="underline">contact@maavnica.com</a>.
+          <h2>6. Liens utiles à garder</h2>
+          <ul>
+            <li>Démo des SmartCards : <a href="https://smartcard.maavnica.com/#demos" class="underline" target="_blank">https://smartcard.maavnica.com/#demos</a></li>
+            <li>Page affiliation : <a href="/affiliation" class="underline">https://smartcard.maavnica.com/affiliation</a></li>
+            <li>Site SmartCard : <a href="/" class="underline">https://smartcard.maavnica.com/</a></li>
+          </ul>
+
+          <p style="font-size:13px; color:#9CA3AF; margin-top:8px;">
+            Si vous avez besoin d’un script adapté à un métier spécifique (artisan, thérapeute, conciergerie, etc.),
+            vous pouvez en faire la demande à Maavnica pour obtenir un message personnalisé.
           </p>
         </section>
 
@@ -509,8 +502,9 @@ et tes avis clients. On pourra faire évoluer ensuite. »
     </main>
 
     <footer>
-      © 2025 Maavnica SmartCard – Kit affilié. Reproduction réservée dans le cadre du programme d’affiliation.
+      © 2025 Maavnica SmartCard – Kit affilié · Tous droits réservés.
     </footer>
   </div>
 </body>
 </html>
+
