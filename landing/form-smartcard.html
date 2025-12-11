@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulaire de création SmartCard – Maavnica</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+      background:#020617;
+      color:#E5E7EB;
+      line-height:1.6;
+    }
+    a { color:#93C5FD; text-decoration:none; }
+    a.underline { text-decoration:underline; text-underline-offset:3px; }
+    .page {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    header {
+      padding:14px 20px;
+      border-bottom:1px solid rgba(30,64,175,0.7);
+      background:radial-gradient(circle at top, #1E3A8A 0, #020617 70%);
+    }
+    header .inner {
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      color:#E5E7EB;
+    }
+    header .inner a {
+      font-size:12px;
+      color:#BFDBFE;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+    main {
+      flex:1;
+      padding:26px 20px 40px;
+    }
+    .container {
+      max-width:980px;
+      margin:0 auto;
+    }
+    h1 {
+      font-size:26px;
+      font-weight:800;
+      margin-bottom:8px;
+      color:#E2E8F0;
+    }
+    h2 {
+      font-size:20px;
+      font-weight:700;
+      margin:26px 0 8px;
+    }
+    h3 {
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    p {
+      font-size:14px;
+      color:#CBD5F5;
+      margin-bottom:6px;
+    }
+    .tag {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:4px 10px;
+      font-size:11px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:rgba(15,23,42,0.6);
+      margin-bottom:10px;
+    }
+    .hero-sub {
+      font-size:14px;
+      color:#CBD5F5;
+      margin-bottom:6px;
+      max-width:720px;
+    }
+    .hero-note {
+      font-size:12px;
+      color:#9CA3AF;
+      margin-top:6px;
+    }
+
+    .form-wrapper {
+      margin-top:20px;
+      background:#020617;
+      border-radius:18px;
+      border:1px solid rgba(37,99,235,0.7);
+      box-shadow:0 20px 60px rgba(15,23,42,0.95);
+      padding:20px 18px 18px;
+    }
+
+    form {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:16px 18px;
+      margin-top:10px;
+    }
+    @media (max-width:760px){
+      form { grid-template-columns:1fr; }
+    }
+    label {
+      font-size:12px;
+      color:#CBD5F5;
+      display:block;
+      margin-bottom:4px;
+    }
+    .hint {
+      font-size:11px;
+      color:#9CA3AF;
+      margin-top:2px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select {
+      width:100%;
+      border-radius:10px;
+      border:1px solid #334155;
+      background:#020617;
+      color:#E5E7EB;
+      padding:8px 10px;
+      font-size:13px;
+      outline:none;
+    }
+    textarea {
+      min-height:90px;
+      resize:vertical;
+    }
+    input[type="file"] {
+      width:100%;
+      font-size:12px;
+      color:#E5E7EB;
+    }
+    .full-row { grid-column:1 / -1; }
+
+    .radio-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      font-size:13px;
+      color:#E5E7EB;
+      margin-top:2px;
+    }
+    .radio-row label {
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:5px;
+      font-size:13px;
+      color:#E5E7EB;
+    }
+
+    .checkbox-row {
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      font-size:12px;
+      color:#94A3B8;
+    }
+    .checkbox-row input {
+      margin-top:3px;
+    }
+
+    .submit-row {
+      grid-column:1 / -1;
+      text-align:right;
+      margin-top:4px;
+    }
+    button[type="submit"] {
+      background:#22C55E;
+      color:#052E16;
+      padding:9px 20px;
+      border-radius:999px;
+      border:none;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 10px 25px rgba(34,197,94,0.45);
+    }
+
+    .section-label {
+      grid-column:1 / -1;
+      font-size:12px;
+      font-weight:600;
+      color:#BFDBFE;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-top:10px;
+      margin-bottom:2px;
+    }
+
+    footer {
+      padding:12px 20px 16px;
+      font-size:11px;
+      color:#9CA3AF;
+      text-align:center;
+      border-top:1px solid rgba(15,23,42,0.9);
+      background:#020617;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="inner">
+        <div>Maavnica SmartCard – Formulaire de création</div>
+        <a href="/">← Retour au site</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section>
+          <div class="tag">
+            <span>📝 Formulaire SmartCard</span>
+            <span>Personnalisation de votre carte</span>
+          </div>
+          <h1>Informations pour créer votre SmartCard</h1>
+          <p class="hero-sub">
+            Merci pour votre confiance 🌟<br>
+            Ce formulaire nous permet de personnaliser votre SmartCard à votre image :
+            coordonnées, liens, activité, style graphique, QR Code…
+          </p>
+          <p class="hero-note">
+            ⏱ Durée : environ <strong>2 minutes</strong> · Votre SmartCard sera livrée sous <strong>24 heures</strong>
+            après réception de ce formulaire.
+          </p>
+        </section>
+
+        <section class="form-wrapper">
+          <h2 style="margin-top:0;">Formulaire de personnalisation</h2>
+          <p style="font-size:13px; color:#CBD5F5; margin-bottom:10px;">
+            Merci de remplir les informations ci-dessous avec le plus de précision possible.
+            Vous pourrez demander des ajustements ensuite si nécessaire.
+          </p>
+
+          <form action="https://formsubmit.co/contact@maavnica.com"
+                method="POST"
+                enctype="multipart/form-data">
+
+            <!-- Options FormSubmit -->
+            <input type="hidden" name="_subject" value="Nouveau formulaire SmartCard (client)">
+            <input type="hidden" name="_template" value="table">
+            <!-- Redirection après envoi : tu pourras adapter si besoin -->
+            <input type="hidden" name="_next" value="https://smartcard.maavnica.com/success-smartcard">
+
+            <!-- SECTION 1 : INFOS GENERALES -->
+            <div class="section-label">Informations générales</div>
+
+            <div>
+              <label for="nom">Prénom & Nom *</label>
+              <input type="text" id="nom" name="Nom complet" required>
+            </div>
+
+            <div>
+              <label for="entreprise">Nom de votre entreprise</label>
+              <input type="text" id="entreprise" name="Entreprise">
+            </div>
+
+            <div>
+              <label for="activite">Votre activité / profession *</label>
+              <input type="text" id="activite" name="Activité / Profession" placeholder="Ex : multiservices, ostéopathe, conciergerie…" required>
+            </div>
+
+            <div>
+              <label for="region">Ville / Région *</label>
+              <input type="text" id="region" name="Ville / Région" required>
+            </div>
+
+            <!-- SECTION 2 : COORDONNEES -->
+            <div class="section-label">Coordonnées à afficher</div>
+
+            <div>
+              <label for="email">Email professionnel *</label>
+              <input type="email" id="email" name="Email professionnel" required>
+            </div>
+
+            <div>
+              <label for="tel">Numéro de téléphone *</label>
+              <input type="tel" id="tel" name="Téléphone" placeholder="+33..." required>
+            </div>
+
+            <div>
+              <label for="whatsapp">Numéro WhatsApp (si différent)</label>
+              <input type="tel" id="whatsapp" name="WhatsApp">
+              <div class="hint">Laissez vide si identique au numéro de téléphone ci-dessus.</div>
+            </div>
+
+            <div>
+              <label for="site">Site web (facultatif)</label>
+              <input type="url" id="site" name="Site web" placeholder="https://">
+            </div>
+
+            <!-- SECTION 3 : AVIS & DEVIS -->
+            <div class="section-label">Avis Google & demandes de devis</div>
+
+            <div class="full-row">
+              <label for="google">Lien vers votre fiche Google Avis *</label>
+              <input type="url" id="google" name="Lien Avis Google" placeholder="https://..." required>
+              <div class="hint">
+                Exemple : lien direct pour laisser un avis Google. Si vous n’en avez pas, indiquez « je n’ai pas de lien ».
+              </div>
+            </div>
+
+            <div class="full-row">
+              <label>Souhaitez-vous activer le bouton &quot;Demander un devis&quot; ? *</label>
+              <div class="radio-row">
+                <label><input type="radio" name="Activer demandes de devis" value="Oui" required> Oui</label>
+                <label><input type="radio" name="Activer demandes de devis" value="Non"> Non</label>
+              </div>
+              <div class="hint">
+                Si oui, les demandes seront envoyées vers l’email indiqué ci-dessous.
+              </div>
+            </div>
+
+            <div class="full-row">
+              <label for="email-devis">Email pour recevoir les demandes de devis</label>
+              <input type="email" id="email-devis" name="Email pour les devis"
+                     placeholder="Email où vous souhaitez recevoir les demandes">
+            </div>
+
+            <!-- SECTION 4 : RESEAUX SOCIAUX -->
+            <div class="section-label">Réseaux sociaux (facultatif)</div>
+
+            <div>
+              <label for="instagram">Instagram</label>
+              <input type="text" id="instagram" name="Instagram" placeholder="@votrepseudo ou lien profil">
+            </div>
+
+            <div>
+              <label for="facebook">Facebook</label>
+              <input type="text" id="facebook" name="Facebook" placeholder="Nom de page ou lien">
+            </div>
+
+            <div>
+              <label for="linkedin">LinkedIn</label>
+              <input type="text" id="linkedin" name="LinkedIn" placeholder="Lien profil ou page">
+            </div>
+
+            <div></div> <!-- pour équilibrer la grille -->
+
+            <!-- SECTION 5 : STYLE & VISUEL -->
+            <div class="section-label">Style & visuel de votre SmartCard</div>
+
+            <div>
+              <label for="theme">Thème souhaité *</label>
+              <select id="theme" name="Thème SmartCard" required>
+                <option value="">Sélectionnez un thème…</option>
+                <option value="Artisan">Artisan</option>
+                <option value="Black & Gold">Black & Gold (premium)</option>
+                <option value="Santé & bien-être">Santé & Bien-être</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="logo">Logo ou photo professionnelle</label>
+              <input type="file" id="logo" name="Logo / Photo">
+              <div class="hint">Formats acceptés : JPG, PNG. Optionnel mais conseillé.</div>
+            </div>
+
+            <div class="full-row">
+              <label for="preferences">Couleurs souhaitées ou demandes particulières</label>
+              <textarea id="preferences" name="Préférences & demandes"
+                        placeholder="Ex : couleur dominante, éléments à mettre en avant, ordre des boutons, texte spécifique…"></textarea>
+            </div>
+
+            <!-- SECTION 6 : VALIDATION -->
+            <div class="section-label">Validation</div>
+
+            <div class="full-row">
+              <div class="checkbox-row">
+                <input type="checkbox" id="validation" name="Validation informations" required>
+                <label for="validation">
+                  Je confirme que les informations fournies sont exactes et j’autorise Maavnica à créer ma SmartCard
+                  à partir de ces éléments. Je pourrai demander des ajustements par la suite.
+                </label>
+              </div>
+            </div>
+
+            <div class="submit-row">
+              <button type="submit">Envoyer mes informations SmartCard</button>
+            </div>
+          </form>
+
+          <p style="font-size:11px; color:#64748B; margin-top:10px;">
+            Vos informations sont transmises uniquement à Maavnica pour la création de votre SmartCard.
+            Vous pouvez demander la suppression de vos données à tout moment à l’adresse
+            <a href="mailto:contact@maavnica.com" class="underline">contact@maavnica.com</a>.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      © 2025 Maavnica SmartCard – Formulaire de création · Tous droits réservés.
+    </footer>
+  </div>
+</body>
+</html>
