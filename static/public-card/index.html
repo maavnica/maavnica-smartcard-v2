@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte publique</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
   <style>
     :root {
       --bg-page: #020617;
 
-      /* Fond par défaut de la carte */
       --card-bg: radial-gradient(
         circle at top,
         rgba(30, 64, 175, 0.28),
@@ -16,7 +16,6 @@
         #020617 100%
       );
 
-      /* Fond par défaut de la bande hero */
       --hero-bg: linear-gradient(
         135deg,
         rgba(15, 23, 42, 0.98),
@@ -28,6 +27,13 @@
       --text-main: #e5e7eb;
       --text-soft: #9ca3af;
       --border-soft: rgba(148, 163, 184, 0.35);
+    }
+
+    /* ✅ Anti tronquage global */
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     * { box-sizing: border-box; }
@@ -45,22 +51,18 @@
       padding: 16px;
     }
 
- .phone-shell {
-  max-width: 420px;
-  width: 100%;
-  box-sizing: border-box; /* 🔑 clé anti-tronquage */
-
-  border-radius: 32px;
-  padding: 12px;
-  background: radial-gradient(circle at top, #111827, #020617);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-  position: relative;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-
-  margin: 0 auto; /* ✅ centrage propre */
-}
-
-
+    .phone-shell {
+      max-width: 420px;
+      width: 100%;
+      border-radius: 32px;
+      padding: 12px;
+      background: radial-gradient(circle at top, #111827, #020617);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      position: relative;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      margin: 0 auto;
+      overflow: hidden; /* ✅ évite tout débordement visuel */
+    }
 
     .phone-inner {
       border-radius: 26px;
@@ -92,7 +94,6 @@
     .card {
       border-radius: 24px;
       padding: 16px 16px 14px;
-      /* 🔄 utilise la variable de thème */
       background: var(--card-bg);
       border: 1px solid rgba(148, 163, 184, 0.35);
       position: relative;
@@ -117,10 +118,10 @@
     .hero {
       border-radius: 18px;
       padding: 12px 12px 10px;
-      /* 🔄 utilise la variable de thème */
       background: var(--hero-bg);
       border: 1px solid rgba(148, 163, 184, 0.44);
       margin-bottom: 12px;
+      overflow: hidden; /* ✅ sécurité */
     }
 
     .hero-badges {
@@ -139,12 +140,14 @@
       font-size: 11px;
       color: #e5e7eb;
       background: rgba(15, 23, 42, 0.96);
+      max-width: 100%;
     }
 
     .hero-main-row {
       display: flex;
       gap: 10px;
       align-items: center;
+      min-width: 0; /* ✅ important pour ellipsis */
     }
 
     .hero-avatar {
@@ -158,6 +161,7 @@
       font-size: 26px;
       border: 1px solid rgba(248, 250, 252, 0.35);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      flex: 0 0 auto;
     }
 
     .hero-texts { flex: 1; min-width: 0; }
@@ -193,12 +197,14 @@
       font-size: 11px;
       color: rgba(209, 213, 219, 0.9);
       margin-top: 4px;
+      min-width: 0;
     }
 
     .hero-line {
       display: flex;
       align-items: center;
       gap: 6px;
+      min-width: 0;
     }
 
     .dot-green {
@@ -207,12 +213,14 @@
       border-radius: 999px;
       background-color: #22c55e;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+      flex: 0 0 auto;
     }
 
     .hero-meta-label { font-weight: 500; }
 
     .hero-meta-value { color: rgba(148, 163, 184, 0.96); }
 
+    /* ✅ FIX PRINCIPAL : éviter le débordement Email/Site */
     .hero-contact-line {
       display: flex;
       gap: 10px;
@@ -220,12 +228,17 @@
       margin-top: 6px;
       font-size: 11px;
       color: rgba(209, 213, 219, 0.9);
+      min-width: 0;
+      flex-wrap: wrap; /* ✅ */
     }
 
     .hero-contact-item {
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      min-width: 0;
+      max-width: 100%;
+      flex: 1 1 160px; /* ✅ autorise retour ligne */
     }
 
     .hero-contact-item span:last-child {
@@ -233,6 +246,12 @@
         "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
       color: rgba(209, 213, 219, 0.96);
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;          /* ✅ */
+      text-overflow: ellipsis;   /* ✅ */
+      white-space: nowrap;       /* ✅ */
+      display: inline-block;     /* ✅ */
     }
 
     .hero-contact-item.dimmed span:last-child {
@@ -243,6 +262,7 @@
       display: grid;
       grid-template-columns: 1.1fr 1fr;
       gap: 10px;
+      min-width: 0;
     }
 
     @media (max-width: 380px) {
@@ -255,6 +275,7 @@
       background: rgba(15, 23, 42, 0.96);
       border: 1px solid rgba(148, 163, 184, 0.35);
       font-size: 12px;
+      min-width: 0;
     }
 
     .block-title {
@@ -281,6 +302,7 @@
       display: flex;
       gap: 6px;
       margin-bottom: 6px;
+      min-width: 0;
     }
 
     .pill {
@@ -297,6 +319,7 @@
       padding: 6px 10px;
       cursor: pointer;
       transition: all 0.15s ease-out;
+      min-width: 0;
     }
 
     .pill:hover {
@@ -330,6 +353,7 @@
       font-size: 12px;
       resize: vertical;
       min-height: 36px;
+      max-width: 100%;
     }
 
     .feedback-input::placeholder,
@@ -361,6 +385,7 @@
       box-shadow: 0 12px 30px var(--primary-soft);
       margin-top: 6px;
       transition: all 0.15s ease-out;
+      max-width: 100%;
     }
 
     .btn-primary:hover {
@@ -383,6 +408,7 @@
       cursor: pointer;
       margin-top: 6px;
       transition: all 0.15s ease-out;
+      max-width: 100%;
     }
 
     .btn-link:hover:not(:disabled) {
@@ -410,6 +436,7 @@
       align-items: center;
       font-size: 11px;
       color: rgba(148, 163, 184, 0.96);
+      min-width: 0;
     }
 
     .qr-wrap img {
@@ -419,6 +446,7 @@
       border: 1px solid rgba(148, 163, 184, 0.6);
       background: white;
       padding: 4px;
+      flex: 0 0 auto;
     }
 
     .footer {
@@ -520,6 +548,7 @@
     }
   </style>
 </head>
+
 <body class="theme-apple">
   <div class="phone-shell">
     <div class="phone-inner">
@@ -675,7 +704,6 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    /* --- Utilitaires de base --- */
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
       const cIndex = parts.indexOf("c");
@@ -690,9 +718,7 @@
       toast.textContent = message;
       toast.classList.toggle("error", isError);
       toast.classList.add("show");
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2600);
+      setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
     function guessEmoji(card) {
@@ -713,45 +739,35 @@
       return "🏷️";
     }
 
-    // 🔧 Nouvelle fonction applyTheme : utilise directement la valeur du champ "theme"
     function applyTheme(themeName, card) {
-  let raw = (themeName || "").toLowerCase().trim();
+      let raw = (themeName || "").toLowerCase().trim();
 
-  // Remove old theme classes
-  const classes = document.body.className
-    .split(" ")
-    .filter(c => c && !c.startsWith("theme-"));
-  document.body.className = classes.join(" ");
+      const classes = document.body.className
+        .split(" ")
+        .filter(c => c && !c.startsWith("theme-"));
+      document.body.className = classes.join(" ");
 
-  // Default fallback
-  if (!raw) {
-    document.body.classList.add("theme-apple");
-    return;
-  }
+      if (!raw) {
+        document.body.classList.add("theme-apple");
+        return;
+      }
 
-  // Normalize string
-  let key = raw
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
-    .replace(/–/g, "-") // normalize dashes
-    .replace(/[^a-z0-9]+/g, "-") // replace non-alphanum
-    .replace(/^-+|-+$/g, ""); // trim
+      let key = raw
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/–/g, "-")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 
-  // WOW themes detection
-  if (raw.includes("effet") || raw.includes("wow")) {
-    if (raw.includes("artisan")) key = "wow-artisan";
-    else if (raw.includes("gold")) key = "wow-gold";
-    else if (raw.includes("sante") || raw.includes("bien-etre") || raw.includes("bien etre"))
-      key = "wow-health";
-    else if (raw.includes("saas") || raw.includes("digital"))
-      key = "wow-saas";
-  }
+      if (raw.includes("effet") || raw.includes("wow")) {
+        if (raw.includes("artisan")) key = "wow-artisan";
+        else if (raw.includes("gold")) key = "wow-gold";
+        else if (raw.includes("sante") || raw.includes("bien-etre") || raw.includes("bien etre")) key = "wow-health";
+        else if (raw.includes("saas") || raw.includes("digital")) key = "wow-saas";
+      }
 
-  // Final fallback
-  if (!key) key = "apple";
-
-  document.body.classList.add("theme-" + key);
-}
-
+      if (!key) key = "apple";
+      document.body.classList.add("theme-" + key);
+    }
 
     function updateQrCode(slug) {
       const img = document.getElementById("qr-image");
@@ -764,7 +780,6 @@
         "&color=000000&bgcolor=FFFFFF";
     }
 
-    /* --- Profils --- */
     const PROFILE_CONFIG = {
       artisan: {
         mainIcon: (card) => guessEmoji(card),
@@ -772,8 +787,7 @@
         badgeLeftText: "Entreprise recommandée",
         badgeRightIcon: "📍",
         badgeRightText: "Service de proximité",
-        heroSubtitle:
-          "Contact, avis Google et demandes de devis en un seul lien.",
+        heroSubtitle: "Contact, avis Google et demandes de devis en un seul lien.",
         leftBlockTitle: "Avis & contacts simplifiés",
         quoteSectionLabel: "Demande de devis",
         quoteButtonLabel: "Envoyer ma demande de devis",
@@ -785,8 +799,7 @@
         badgeLeftText: "Profil digital",
         badgeRightIcon: "🛒",
         badgeRightText: "Produit en ligne",
-        heroSubtitle:
-          "Présentation, contact et accès direct à vos liens digitaux en un seul endroit.",
+        heroSubtitle: "Présentation, contact et accès direct à vos liens digitaux en un seul endroit.",
         leftBlockTitle: "Contact & actions rapides",
         quoteSectionLabel: "Demande de contact / démo",
         quoteButtonLabel: "Envoyer ma demande de démo",
@@ -798,8 +811,7 @@
         badgeLeftText: "Praticien bien-être",
         badgeRightIcon: "📅",
         badgeRightText: "Sur rendez-vous",
-        heroSubtitle:
-          "Retours clients, prises de rendez-vous et informations en un seul lien.",
+        heroSubtitle: "Retours clients, prises de rendez-vous et informations en un seul lien.",
         leftBlockTitle: "Avis & ressentis de vos clients",
         quoteSectionLabel: "Demande de rendez-vous",
         quoteButtonLabel: "Envoyer ma demande de rendez-vous",
@@ -811,8 +823,7 @@
         badgeLeftText: "Professionnel de santé",
         badgeRightIcon: "📅",
         badgeRightText: "Sur rendez-vous",
-        heroSubtitle:
-          "Coordonnées, informations et prises de rendez-vous en un seul lien.",
+        heroSubtitle: "Coordonnées, informations et prises de rendez-vous en un seul lien.",
         leftBlockTitle: "Avis & retours patients",
         quoteSectionLabel: "Demande de rendez-vous",
         quoteButtonLabel: "Envoyer ma demande de rendez-vous",
@@ -824,8 +835,7 @@
         badgeLeftText: "Agence / Conseiller immo",
         badgeRightIcon: "📍",
         badgeRightText: "Biens à proximité",
-        heroSubtitle:
-          "Contact, avis et demandes de visite ou d’estimation en un seul lien.",
+        heroSubtitle: "Contact, avis et demandes de visite ou d’estimation en un seul lien.",
         leftBlockTitle: "Avis & contacts simplifiés",
         quoteSectionLabel: "Demande de visite / estimation",
         quoteButtonLabel: "Envoyer ma demande",
@@ -855,7 +865,6 @@
       }
 
       try {
-        // Chargement de la carte par slug
         const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           showToast("Carte introuvable", true);
@@ -863,17 +872,14 @@
         }
 
         const card = await res.json();
-        const cardId = card.id; // ⚠️ on récupère l'ID ici
+        const cardId = card.id;
 
-        // Détermination du profil
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
         CURRENT_PROFILE_CONFIG = PROFILE_CONFIG[profileKey];
 
-        // Thème depuis l'admin
         applyTheme(card.theme, card);
 
-        // Nom + icône
         const companyName = card.company_name || "Votre entreprise";
         document.getElementById("company-name").textContent = companyName;
 
@@ -884,32 +890,24 @@
             ? mainIcon(card)
             : mainIcon || guessEmoji(card);
 
-        // Sous-titre
         const subtitleEl = document.getElementById("hero-subtitle");
         if (subtitleEl) {
           subtitleEl.textContent =
-            CURRENT_PROFILE_CONFIG.heroSubtitle ||
-            "Carte pro intelligente Maavnica.";
+            CURRENT_PROFILE_CONFIG.heroSubtitle || "Carte pro intelligente Maavnica.";
         }
 
-        // Badges
         const badgeLeftIcon = document.getElementById("hero-badge-left-icon");
         const badgeLeftText = document.getElementById("hero-badge-left-text");
         const badgeRightIcon = document.getElementById("hero-badge-right-icon");
         const badgeRightText = document.getElementById("hero-badge-right-text");
 
         if (badgeLeftIcon && badgeLeftText && badgeRightIcon && badgeRightText) {
-          badgeLeftIcon.textContent =
-            CURRENT_PROFILE_CONFIG.badgeLeftIcon || "⭐";
-          badgeLeftText.textContent =
-            CURRENT_PROFILE_CONFIG.badgeLeftText || badgeLeftText.textContent;
-          badgeRightIcon.textContent =
-            CURRENT_PROFILE_CONFIG.badgeRightIcon || "📍";
-          badgeRightText.textContent =
-            CURRENT_PROFILE_CONFIG.badgeRightText || badgeRightText.textContent;
+          badgeLeftIcon.textContent = CURRENT_PROFILE_CONFIG.badgeLeftIcon || "⭐";
+          badgeLeftText.textContent = CURRENT_PROFILE_CONFIG.badgeLeftText || badgeLeftText.textContent;
+          badgeRightIcon.textContent = CURRENT_PROFILE_CONFIG.badgeRightIcon || "📍";
+          badgeRightText.textContent = CURRENT_PROFILE_CONFIG.badgeRightText || badgeRightText.textContent;
         }
 
-        // Titres bloc gauche / devis
         const mainBlockTitle = document.getElementById("block-title-main");
         if (mainBlockTitle && CURRENT_PROFILE_CONFIG.leftBlockTitle) {
           mainBlockTitle.textContent = CURRENT_PROFILE_CONFIG.leftBlockTitle;
@@ -917,8 +915,7 @@
 
         const quoteSectionLabel = document.getElementById("quote-section-label");
         if (quoteSectionLabel && CURRENT_PROFILE_CONFIG.quoteSectionLabel) {
-          quoteSectionLabel.textContent =
-            CURRENT_PROFILE_CONFIG.quoteSectionLabel;
+          quoteSectionLabel.textContent = CURRENT_PROFILE_CONFIG.quoteSectionLabel;
         }
 
         const quoteBtn = document.getElementById("btn-send-quote");
@@ -926,14 +923,9 @@
           quoteBtn.textContent = "📝 " + CURRENT_PROFILE_CONFIG.quoteButtonLabel;
         }
 
-        const availabilityNote = document.getElementById(
-          "hero-availability-note"
-        );
-        if (availabilityNote) {
-          availabilityNote.textContent = "";
-        }
+        const availabilityNote = document.getElementById("hero-availability-note");
+        if (availabilityNote) availabilityNote.textContent = "";
 
-        // Email / site (nouveaux champs + anciens)
         const emailLine = document.getElementById("hero-email-line");
         const emailEl = document.getElementById("hero-email");
         const siteLine = document.getElementById("hero-site-line");
@@ -945,35 +937,20 @@
         if (!email && !website) {
           emailEl.textContent = "Email non renseigné";
           emailLine.style.opacity = "0.7";
-
           siteEl.textContent = "Site ou lien principal";
           siteLine.style.opacity = "0.7";
         } else {
-          if (email) {
-            emailEl.textContent = email;
-            emailLine.style.opacity = "1";
-          } else {
-            emailEl.textContent = "Email non renseigné";
-            emailLine.style.opacity = "0.7";
-          }
-
-          if (website) {
-            siteEl.textContent = website;
-            siteLine.style.opacity = "1";
-          } else {
-            siteEl.textContent = "Site ou lien principal";
-            siteLine.style.opacity = "0.7";
-          }
+          emailEl.textContent = email || "Email non renseigné";
+          emailLine.style.opacity = email ? "1" : "0.7";
+          siteEl.textContent = website || "Site ou lien principal";
+          siteLine.style.opacity = website ? "1" : "0.7";
         }
 
-        // Boutons secondaires
         const btnGoogle = document.getElementById("btn-google-review");
         if (btnGoogle) {
           if (card.google_review_link) {
             btnGoogle.disabled = false;
-            btnGoogle.onclick = () => {
-              window.open(card.google_review_link, "_blank", "noopener");
-            };
+            btnGoogle.onclick = () => window.open(card.google_review_link, "_blank", "noopener");
           } else {
             btnGoogle.disabled = true;
             btnGoogle.onclick = null;
@@ -987,9 +964,7 @@
             btnWhats.disabled = false;
             btnWhats.onclick = () => {
               const base = "https://wa.me/";
-              const msg = encodeURIComponent(
-                "Bonjour, je vous contacte via votre SmartCard Maavnica."
-              );
+              const msg = encodeURIComponent("Bonjour, je vous contacte via votre SmartCard Maavnica.");
               const digits = waNumber.toString().replace(/[^\d]/g, "");
               window.open(base + digits + "?text=" + msg, "_blank");
             };
@@ -1003,9 +978,7 @@
         if (btnCall) {
           if (card.phone) {
             btnCall.disabled = false;
-            btnCall.onclick = () => {
-              window.location.href = "tel:" + card.phone;
-            };
+            btnCall.onclick = () => window.location.href = "tel:" + card.phone;
           } else {
             btnCall.disabled = true;
             btnCall.onclick = null;
@@ -1016,16 +989,13 @@
         if (btnPay) {
           if (card.payment_link) {
             btnPay.disabled = false;
-            btnPay.onclick = () => {
-              window.open(card.payment_link, "_blank", "noopener");
-            };
+            btnPay.onclick = () => window.open(card.payment_link, "_blank", "noopener");
           } else {
             btnPay.disabled = true;
             btnPay.onclick = null;
           }
         }
 
-        // Avis
         const btnFeedback = document.getElementById("btn-send-feedback");
         if (btnFeedback) {
           let feedbackValue = null;
@@ -1040,12 +1010,8 @@
             }
           }
 
-          if (pillYes) {
-            pillYes.onclick = () => selectFeedback("yes");
-          }
-          if (pillNo) {
-            pillNo.onclick = () => selectFeedback("no");
-          }
+          if (pillYes) pillYes.onclick = () => selectFeedback("yes");
+          if (pillNo) pillNo.onclick = () => selectFeedback("no");
 
           btnFeedback.onclick = async () => {
             if (!feedbackValue) {
@@ -1053,22 +1019,17 @@
               return;
             }
 
-            const comment = document
-              .getElementById("feedback-comment")
-              .value.trim();
+            const comment = document.getElementById("feedback-comment").value.trim();
 
             try {
-              const resp = await fetch(
-                `/api/public/cards/${cardId}/feedback`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    satisfaction: feedbackValue === "yes",
-                    comment: comment || null,
-                  }),
-                }
-              );
+              const resp = await fetch(`/api/public/cards/${cardId}/feedback`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  satisfaction: feedbackValue === "yes",
+                  comment: comment || null,
+                }),
+              });
 
               if (!resp.ok) {
                 const err = await resp.text();
@@ -1087,7 +1048,6 @@
           };
         }
 
-        // Devis
         const btnQuote = document.getElementById("btn-send-quote");
         if (btnQuote) {
           btnQuote.onclick = async () => {
@@ -1102,19 +1062,11 @@
             }
 
             try {
-              const resp = await fetch(
-                `/api/public/cards/${cardId}/quotes`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name,
-                    phone,
-                    email: email || null,
-                    message,
-                  }),
-                }
-              );
+              const resp = await fetch(`/api/public/cards/${cardId}/quotes`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, phone, email: email || null, message }),
+              });
 
               if (!resp.ok) {
                 const err = await resp.text();
@@ -1122,9 +1074,7 @@
                 throw new Error();
               }
 
-              showToast(
-                CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !"
-              );
+              showToast(CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !");
               document.getElementById("quote-name").value = "";
               document.getElementById("quote-phone").value = "";
               document.getElementById("quote-email").value = "";
@@ -1136,7 +1086,6 @@
           };
         }
 
-        // QR
         updateQrCode(slug);
       } catch (e) {
         console.error(e);
