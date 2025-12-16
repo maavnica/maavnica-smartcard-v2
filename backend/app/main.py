@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 
 # Routes API
 from app.routers import public, cards
@@ -29,6 +30,26 @@ STATIC_DIR = PROJECT_ROOT / "static"
 # Application FastAPI
 # --------------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+
+        # Sécurité basique (safe)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+
+        # Évite des comportements étranges en webview / QR
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+
+        # Cache maîtrisé
+        path = request.url.path
+        if path.startswith("/static/"):
+            response.headers["Cache-Control"] = "public, max-age=604800, immutable"
+        else:
+            response.headers["Cache-Control"] = "no-store"
+
+        return response
 
 
 # --------------------------------------------------------------------
@@ -41,6 +62,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(SecurityHeadersMiddleware)
 
 
 # --------------------------------------------------------------------
