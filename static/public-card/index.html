@@ -1030,7 +1030,8 @@
             const comment = document.getElementById("feedback-comment").value.trim();
 
             try {
-              const resp = await fetch(`/api/public/cards/${cardId}/feedback`, {
+              const resp = await fetch(`/api/cards/${cardId}/feedback`, {
+
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -1070,7 +1071,8 @@
             }
 
             try {
-              const resp = await fetch(`/api/public/cards/${cardId}/quotes`, {
+              const resp = await fetch(`/api/cards/${cardId}/quotes`, {
+
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, phone, email: email || null, message }),
