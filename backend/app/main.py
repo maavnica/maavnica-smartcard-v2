@@ -64,7 +64,9 @@ app.include_router(public.router, prefix="", tags=["public"])
 
 # Gestion des cartes (création, update, feedback, devis…)
 # => /api/cards/...
-app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
+app.include_router(public.router, prefix="/api/public", tags=["public"])
+
+
 
 
 # --------------------------------------------------------------------
