@@ -1030,15 +1030,16 @@
             const comment = document.getElementById("feedback-comment").value.trim();
 
             try {
-              const resp = await fetch(`/api/cards/${cardId}/feedback`, {
-
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  satisfaction: feedbackValue === "yes",
-                  comment: comment || null,
-                }),
-              });
+              const resp = await fetch(`/api/public/cards/${cardId}/feedback`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    satisfaction: isSatisfied,
+    comment: comment || null
+  })
+})
 
               if (!resp.ok) {
                 const err = await resp.text();
@@ -1071,12 +1072,19 @@
             }
 
             try {
-              const resp = await fetch(`/api/cards/${cardId}/quotes`, {
+              const resp = await fetch(`/api/public/cards/${cardId}/quotes`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name,
+    email,
+    phone,
+    message
+  })
+})
 
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, phone, email: email || null, message }),
-              });
 
               if (!resp.ok) {
                 const err = await resp.text();
