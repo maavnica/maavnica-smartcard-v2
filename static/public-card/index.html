@@ -429,25 +429,35 @@
       line-height: 1.4;
     }
 
-   .qr-wrap {
-  margin-top: 10px;
+.qr-wrap {
+  margin-top: 12px;
   display: flex;
-  gap: 8px;
-  align-items: flex-start;   /* mieux pour le texte */
+  align-items: center;
+  justify-content: center;   /* 👈 centrage visuel */
+  gap: 10px;
   font-size: 11px;
-  color: rgba(148, 163, 184, 0.96);
-  min-width: 0;              /* 🔑 autorise le wrap */
+  color: rgba(148, 163, 184, 0.95);
+  text-align: left;
+  width: 100%;
 }
 
 .qr-wrap img {
-  width: 62px;               /* 🔻 légèrement plus petit */
+  width: 62px;               /* 👈 un poil plus petit */
   height: 62px;
   border-radius: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.5);
   background: white;
   padding: 4px;
-  flex: 0 0 auto;
+  flex-shrink: 0;
 }
+
+.qr-wrap span,
+.qr-wrap p {
+  max-width: 150px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
 
 /* 🔑 Texte à côté du QR */
 .qr-wrap > div {
