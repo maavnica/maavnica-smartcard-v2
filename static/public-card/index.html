@@ -1036,9 +1036,10 @@
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-    satisfaction: isSatisfied,
-    comment: comment || null
-  })
+  satisfaction: feedbackValue,   // "yes" ou "no"
+  comment: comment || null
+})
+
 })
 
               if (!resp.ok) {
