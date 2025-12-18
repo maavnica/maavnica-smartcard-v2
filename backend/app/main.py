@@ -83,7 +83,8 @@ async def root():
 # --------------------------------------------------------------------
 # API publique (lecture)
 # => /api/public/...
-app.include_router(public.router, prefix="/api/public", tags=["public"])
+app.include_router(public.router, tags=["public"])
+
 
 # API admin / cartes (CRUD + feedback + devis…)
 # => /api/cards/...
