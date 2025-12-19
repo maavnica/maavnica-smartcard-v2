@@ -4,12 +4,17 @@ import ssl
 from email.message import EmailMessage
 
 
+def clean(value: str | None) -> str:
+    return value.strip() if value else ""
+
+
 def send_email(to_email: str, subject: str, text: str) -> bool:
-    host = os.getenv("SMTP_HOST", "")
+    host = clean(os.getenv("SMTP_HOST"))
     port = int(os.getenv("SMTP_PORT", "465"))
-    user = os.getenv("SMTP_USER", "")
-    password = os.getenv("SMTP_PASS", "")
-    from_email = os.getenv("SMTP_FROM", user)
+    user = clean(os.getenv("SMTP_USER"))
+    password = clean(os.getenv("SMTP_PASS"))
+    from_email = clean(os.getenv("SMTP_FROM")) or user
+    to_email = clean(to_email)
 
     if not all([host, port, user, password, from_email, to_email]):
         print("[MAIL] SKIP: config SMTP incomplète")
@@ -33,5 +38,6 @@ def send_email(to_email: str, subject: str, text: str) -> bool:
     except Exception as e:
         print(f"[MAIL] ERROR -> {to_email} | {e}")
         return False
+
 
 
