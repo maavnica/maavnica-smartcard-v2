@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from html import escape
+import re
 
 from app.database import get_db
 from app.models import Card, Feedback, Quote
@@ -84,6 +85,94 @@ def notify_pro(background_tasks: BackgroundTasks, card: Card, subject: str, text
     if not card.email_pro:
         return
     background_tasks.add_task(send_email, card.email_pro, subject, text, html)
+
+
+# -------------------------------------------------------------------
+# Libellés dynamiques selon le métier (card.profile)
+# -------------------------------------------------------------------
+
+def _norm_profile(profile: str | None) -> str:
+    p = (profile or "").strip().lower()
+    # normalisation légère (suffisante pour matching)
+    p = p.replace("é", "e").replace("è", "e").replace("ê", "e").replace("à", "a").replace("ç", "c")
+    p = re.sub(r"\s+", " ", p)
+    return p
+
+
+def lead_labels_for_profile(profile: str | None) -> dict:
+    """
+    Retourne les libellés email (titre/sujet/CTA) selon le métier (card.profile).
+    Fallback universel: "Demande de contact / démo".
+    """
+    p = _norm_profile(profile)
+
+    # 1) ARTISANS / CHANTIER -> DEVIS
+    devis_keywords = {
+        "artisan", "plombier", "electricien", "chauffagiste", "clim", "climatisation",
+        "menuisier", "serrurier", "carreleur", "macon", "peintre", "couvreur",
+        "charpentier", "vitrier", "jardinier", "paysagiste", "renovation", "renov",
+        "btp", "garage", "garagiste", "mecanicien", "mecanique", "depannage",
+        "travaux", "intervention", "installateur",
+    }
+    if any(k in p for k in devis_keywords):
+        return {
+            "kind": "devis",
+            "title": "Nouvelle demande de devis",
+            "subject_prefix": "📩 Nouvelle demande de devis",
+            "section_label": "Demande de devis",
+            "subtitle": "Un prospect vous a envoyé une demande de devis depuis votre SmartCard.",
+            "cta": "Voir la demande",
+        }
+
+    # 2) BEAUTÉ / SANTÉ / BIEN-ÊTRE -> RDV
+    rdv_keywords = {
+        "coiffeur", "coiffeuse", "barbier", "estheticienne", "esthetique", "beaute",
+        "massage", "kine", "osteopathe", "osteo", "therapeute", "naturopathe",
+        "coach sportif", "bien etre", "spa", "onglerie",
+    }
+    if any(k in p for k in rdv_keywords):
+        return {
+            "kind": "rdv",
+            "title": "Nouvelle demande de rendez-vous",
+            "subject_prefix": "📅 Nouvelle demande de rendez-vous",
+            "section_label": "Demande de rendez-vous",
+            "subtitle": "Un prospect souhaite prendre rendez-vous via votre SmartCard.",
+            "cta": "Voir la demande",
+        }
+
+    # 3) RESTAURATION / HÔTELLERIE -> RÉSERVATION
+    resa_keywords = {"restaurant", "brasserie", "snack", "traiteur", "hotel", "bar", "cafe"}
+    if any(k in p for k in resa_keywords):
+        return {
+            "kind": "reservation",
+            "title": "Nouvelle demande de réservation",
+            "subject_prefix": "🍽️ Nouvelle demande de réservation",
+            "section_label": "Demande de réservation",
+            "subtitle": "Un prospect a demandé une réservation via votre SmartCard.",
+            "cta": "Voir la demande",
+        }
+
+    # 4) IMMOBILIER -> INFO / VISITE
+    immo_keywords = {"immobilier", "agent immobilier", "agence immobiliere", "syndic", "location", "vente"}
+    if any(k in p for k in immo_keywords):
+        return {
+            "kind": "immo",
+            "title": "Nouvelle demande d’information",
+            "subject_prefix": "🏠 Nouvelle demande d’information",
+            "section_label": "Demande d’information",
+            "subtitle": "Un prospect vous a contacté via votre SmartCard.",
+            "cta": "Voir la demande",
+        }
+
+    # 5) DEFAULT -> CONTACT / DÉMO
+    return {
+        "kind": "contact",
+        "title": "Nouvelle demande de contact / démo",
+        "subject_prefix": "📨 Nouvelle demande de contact / démo",
+        "section_label": "Demande de contact / démo",
+        "subtitle": "Un prospect vous a contacté via votre SmartCard.",
+        "cta": "Voir le contact",
+    }
 
 
 @router.get("/cards/{slug}", response_model=CardPublic)
@@ -185,13 +274,15 @@ def create_quote(
     db.commit()
     db.refresh(quote)
 
+    labels = lead_labels_for_profile(getattr(card, "profile", None))
     prospect_email = payload.email or "(non renseigné)"
 
     # TEXTE (fallback)
     text = (
-        "📩 Nouvelle demande de devis via votre SmartCard Maavnica\n\n"
+        f"{labels['title']} via votre SmartCard Maavnica\n\n"
         f"Entreprise : {card.company_name}\n"
-        f"Carte : {_card_url(card)}\n\n"
+        f"Carte : {_card_url(card)}\n"
+        f"Métier (profil) : {getattr(card, 'profile', '') or '(non renseigné)'}\n\n"
         "Coordonnées du prospect :\n"
         f"- Nom : {payload.name}\n"
         f"- Téléphone : {payload.phone}\n"
@@ -204,13 +295,14 @@ def create_quote(
     body_html = f"""
       <div style="margin:0 0 10px 0;">
         <b>Entreprise :</b> {escape(card.company_name)}<br/>
-        <b>Carte :</b> <a href="{escape(_card_url(card))}" style="color:#93c5fd;text-decoration:none;">{escape(_card_url(card))}</a>
+        <b>Carte :</b> <a href="{escape(_card_url(card))}" style="color:#93c5fd;text-decoration:none;">{escape(_card_url(card))}</a><br/>
+        <b>Métier (profil) :</b> {escape(getattr(card, "profile", "") or "—")}
       </div>
 
       <div style="background:rgba(2,6,23,.35);border:1px solid rgba(148,163,184,.22);
                   border-radius:14px;padding:12px;">
         <div style="font-size:12px;color:rgba(148,163,184,.95);text-transform:uppercase;letter-spacing:.12em;">
-          Demande de devis
+          {escape(labels["section_label"])}
         </div>
 
         <div style="margin-top:8px;font-size:14px;">
@@ -227,23 +319,23 @@ def create_quote(
         </div>
 
         <div style="margin-top:12px;color:rgba(148,163,184,.92);font-size:12px;">
-          Conseil : recontactez ce prospect rapidement pour maximiser vos chances.
+          Conseil : recontactez rapidement ce prospect pour maximiser vos chances.
         </div>
       </div>
     """
 
     html = _base_email_html(
-        title="Nouvelle demande de devis",
-        subtitle="Un prospect vous a envoyé une demande depuis votre SmartCard.",
+        title=labels["title"],
+        subtitle=labels["subtitle"],
         body_html=body_html,
         cta_url=_card_url(card),
-        cta_label="Voir la SmartCard",
+        cta_label=labels["cta"],
     )
 
     notify_pro(
         background_tasks,
         card,
-        subject=f"📩 Nouvelle demande de devis – {card.company_name}",
+        subject=f"{labels['subject_prefix']} – {card.company_name}",
         text=text,
         html=html,
     )
