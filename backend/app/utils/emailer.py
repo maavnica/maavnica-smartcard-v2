@@ -1,58 +1,72 @@
+# backend/app/utils/emailer.py
 import os
-import smtplib
-from email.message import EmailMessage
+import json
+import urllib.request
+import urllib.error
 
 
-def _clean(v: str) -> str:
-    # évite les erreurs "Header values may not contain linefeed..."
-    return (v or "").strip().replace("\r", "").replace("\n", "")
+def _get_env(name: str, default: str = "") -> str:
+    return (os.getenv(name, default) or "").strip()
 
 
 def send_email(to_email: str, subject: str, text: str) -> None:
-    host = _clean(os.getenv("SMTP_HOST", ""))
-    port = int(_clean(os.getenv("SMTP_PORT", "587")) or "587")
-    user = _clean(os.getenv("SMTP_USER", ""))
-    password = _clean(os.getenv("SMTP_PASS", ""))
-    from_email = _clean(os.getenv("SMTP_FROM", user))
-    use_tls = _clean(os.getenv("SMTP_TLS", "true")).lower() in ("1", "true", "yes", "on")
-    use_ssl = _clean(os.getenv("SMTP_SSL", "false")).lower() in ("1", "true", "yes", "on")
+    """
+    Envoi d'email via l'API Brevo (HTTP) -> compatible Render (SMTP bloqué).
+    Variables Render à définir :
+      - BREVO_API_KEY
+      - SMTP_FROM (ex: contact@maavnica.com)
+      - SMTP_FROM_NAME (optionnel, ex: Maavnica SmartCard)
+    """
+    api_key = _get_env("BREVO_API_KEY")
+    from_email = _get_env("SMTP_FROM")
+    from_name = _get_env("SMTP_FROM_NAME", "Maavnica SmartCard")
 
-    to_email = _clean(to_email)
-    subject = _clean(subject)
+    to_email = (to_email or "").strip()
+    subject = (subject or "").strip()
+    text = (text or "").strip()
 
-    if not (host and user and password and from_email and to_email):
-        print("[MAIL] SMTP non configuré -> email ignoré")
+    if not api_key:
+        print("[MAIL] BREVO_API_KEY manquant -> email non envoyé")
+        return
+    if not from_email:
+        print("[MAIL] SMTP_FROM manquant -> email non envoyé")
+        return
+    if not to_email:
+        print("[MAIL] destinataire vide -> email non envoyé")
         return
 
-    msg = EmailMessage()
-    msg["From"] = from_email
-    msg["To"] = to_email
-    msg["Subject"] = subject
-    msg.set_content(text)
+    payload = {
+        "sender": {"email": from_email, "name": from_name},
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "textContent": text,
+    }
+
+    req = urllib.request.Request(
+        url="https://api.brevo.com/v3/smtp/email",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "accept": "application/json",
+            "content-type": "application/json",
+            "api-key": api_key,
+        },
+        method="POST",
+    )
 
     try:
-        timeout = 20
-
-        # Règles simples :
-        # - 465 => SSL direct
-        # - sinon => SMTP + (STARTTLS si activé)
-        if use_ssl or port == 465:
-            with smtplib.SMTP_SSL(host, port, timeout=timeout) as server:
-                server.login(user, password)
-                server.send_message(msg)
-        else:
-            with smtplib.SMTP(host, port, timeout=timeout) as server:
-                server.ehlo()
-                if use_tls:
-                    server.starttls()
-                    server.ehlo()
-                server.login(user, password)
-                server.send_message(msg)
-
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            # on consomme la réponse pour éviter des warnings
+            resp.read()
         print(f"[MAIL] OK -> {to_email}")
-
+    except urllib.error.HTTPError as e:
+        try:
+            body = e.read().decode("utf-8", errors="ignore")
+        except Exception:
+            body = ""
+        print(f"[MAIL] HTTPError {e.code} -> {to_email} | {body}")
     except Exception as e:
-        print(f"[MAIL] ERREUR -> {to_email} | {type(e).__name__}: {e}")
+        print(f"[MAIL] ERROR -> {to_email} | {e}")
+
 
 
 
