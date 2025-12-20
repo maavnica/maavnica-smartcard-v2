@@ -38,6 +38,7 @@ def notify_pro(
 ):
     if not card.email_pro:
         return
+
     background_tasks.add_task(
         send_email,
         card.email_pro,
@@ -79,17 +80,25 @@ def create_feedback(
     db.commit()
     db.refresh(feedback)
 
-    # 🔔 Email au pro
+    satisfaction_label = "👍 Positif" if payload.satisfaction else "👎 Négatif"
+
+    email_message = (
+        "⭐ NOUVEL AVIS REÇU VIA VOTRE SMARTCARD MAAVNICA\n\n"
+        f"Entreprise : {card.company_name}\n"
+        f"Carte : https://maavnica-smartcard-v2.onrender.com/c/{card.slug}\n\n"
+        f"Satisfaction : {satisfaction_label}\n"
+        f"Commentaire :\n"
+        f"{payload.comment or '(Aucun commentaire laissé)'}\n\n"
+        "—\n"
+        "Maavnica SmartCard\n"
+        "Vous recevez cet email car un client a interagi avec votre carte."
+    )
+
     notify_pro(
         background_tasks,
         card,
-        subject=f"🔔 Nouvel avis sur votre SmartCard – {card.company_name}",
-        message=(
-            f"Vous avez reçu un nouvel avis.\n\n"
-            f"Satisfaction : {'Oui' if payload.satisfaction else 'Non'}\n"
-            f"Commentaire : {payload.comment or '(aucun)'}\n\n"
-            f"Carte : https://maavnica-smartcard-v2.onrender.com/c/{card.slug}"
-        ),
+        subject=f"⭐ Nouvel avis reçu – {card.company_name}",
+        message=email_message,
     )
 
     return {"message": "Feedback created", "id": feedback.id}
@@ -122,19 +131,26 @@ def create_quote(
     db.commit()
     db.refresh(quote)
 
-    # 🔔 Email au pro
+    email_message = (
+        "📩 NOUVELLE DEMANDE DE DEVIS VIA VOTRE SMARTCARD MAAVNICA\n\n"
+        f"Entreprise : {card.company_name}\n"
+        f"Carte : https://maavnica-smartcard-v2.onrender.com/c/{card.slug}\n\n"
+        "Coordonnées du prospect :\n"
+        f"- Nom : {payload.name}\n"
+        f"- Téléphone : {payload.phone}\n"
+        f"- Email : {payload.email or '(non renseigné)'}\n\n"
+        "Message du prospect :\n"
+        f"{payload.message}\n\n"
+        "👉 Conseil : recontactez rapidement ce prospect pour maximiser vos chances.\n\n"
+        "—\n"
+        "Maavnica SmartCard"
+    )
+
     notify_pro(
         background_tasks,
         card,
         subject=f"📩 Nouvelle demande de devis – {card.company_name}",
-        message=(
-            f"Nouvelle demande de devis reçue.\n\n"
-            f"Nom : {payload.name}\n"
-            f"Téléphone : {payload.phone}\n"
-            f"Email : {payload.email or '(non renseigné)'}\n\n"
-            f"Message :\n{payload.message}\n\n"
-            f"Carte : https://maavnica-smartcard-v2.onrender.com/c/{card.slug}"
-        ),
+        message=email_message,
     )
 
     return {"message": "Quote created", "id": quote.id}
