@@ -1,24 +1,28 @@
 import os
 import smtplib
-import ssl
 from email.message import EmailMessage
 
 
-def clean(value: str | None) -> str:
-    return value.strip() if value else ""
+def _clean(v: str) -> str:
+    # évite les erreurs "Header values may not contain linefeed..."
+    return (v or "").strip().replace("\r", "").replace("\n", "")
 
 
-def send_email(to_email: str, subject: str, text: str) -> bool:
-    host = clean(os.getenv("SMTP_HOST"))
-    port = int(os.getenv("SMTP_PORT", "465"))
-    user = clean(os.getenv("SMTP_USER"))
-    password = clean(os.getenv("SMTP_PASS"))
-    from_email = clean(os.getenv("SMTP_FROM")) or user
-    to_email = clean(to_email)
+def send_email(to_email: str, subject: str, text: str) -> None:
+    host = _clean(os.getenv("SMTP_HOST", ""))
+    port = int(_clean(os.getenv("SMTP_PORT", "587")) or "587")
+    user = _clean(os.getenv("SMTP_USER", ""))
+    password = _clean(os.getenv("SMTP_PASS", ""))
+    from_email = _clean(os.getenv("SMTP_FROM", user))
+    use_tls = _clean(os.getenv("SMTP_TLS", "true")).lower() in ("1", "true", "yes", "on")
+    use_ssl = _clean(os.getenv("SMTP_SSL", "false")).lower() in ("1", "true", "yes", "on")
 
-    if not all([host, port, user, password, from_email, to_email]):
-        print("[MAIL] SKIP: config SMTP incomplète")
-        return False
+    to_email = _clean(to_email)
+    subject = _clean(subject)
+
+    if not (host and user and password and from_email and to_email):
+        print("[MAIL] SMTP non configuré -> email ignoré")
+        return
 
     msg = EmailMessage()
     msg["From"] = from_email
@@ -27,17 +31,28 @@ def send_email(to_email: str, subject: str, text: str) -> bool:
     msg.set_content(text)
 
     try:
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(host, port, context=context, timeout=20) as server:
-            server.login(user, password)
-            server.send_message(msg)
+        timeout = 20
+
+        # Règles simples :
+        # - 465 => SSL direct
+        # - sinon => SMTP + (STARTTLS si activé)
+        if use_ssl or port == 465:
+            with smtplib.SMTP_SSL(host, port, timeout=timeout) as server:
+                server.login(user, password)
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(host, port, timeout=timeout) as server:
+                server.ehlo()
+                if use_tls:
+                    server.starttls()
+                    server.ehlo()
+                server.login(user, password)
+                server.send_message(msg)
 
         print(f"[MAIL] OK -> {to_email}")
-        return True
 
     except Exception as e:
-        print(f"[MAIL] ERROR -> {to_email} | {e}")
-        return False
+        print(f"[MAIL] ERREUR -> {to_email} | {type(e).__name__}: {e}")
 
 
 
