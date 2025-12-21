@@ -1,630 +1,119 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Devenez affilié SmartCard – Maavnica</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
-      background:#020617;
-      color:#E5E7EB;
-      line-height:1.6;
-    }
-    a { color:#93C5FD; text-decoration:none; }
-    a.underline { text-decoration:underline; text-underline-offset:3px; }
-    .page {
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    header {
-      padding:14px 20px;
-      border-bottom:1px solid rgba(30,64,175,0.7);
-      background:radial-gradient(circle at top, #1E3A8A 0, #020617 70%);
-    }
-    header .inner {
-      max-width:1000px;
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:13px;
-      color:#E5E7EB;
-    }
-    header .inner a {
-      font-size:12px;
-      color:#BFDBFE;
-      text-decoration:underline;
-      text-underline-offset:3px;
-    }
-    main {
-      flex:1;
-      padding:30px 20px 40px;
-    }
-    .container {
-      max-width:1000px;
-      margin:0 auto;
-    }
-    h1 {
-      font-size:26px;
-      font-weight:800;
-      margin-bottom:10px;
-    }
-    h2 {
-      font-size:20px;
-      font-weight:700;
-      margin:26px 0 10px;
-    }
-    h3 {
-      font-size:16px;
-      font-weight:700;
-      margin-bottom:6px;
-    }
-    p {
-      font-size:14px;
-      color:#E5E7EB;
-      margin-bottom:6px;
-    }
-    ul {
-      margin:0 0 10px 18px;
-      font-size:14px;
-    }
-    .tag {
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      border-radius:999px;
-      padding:4px 10px;
-      font-size:11px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:rgba(15,23,42,0.6);
-      margin-bottom:8px;
-    }
-    .hero {
-      margin-bottom:24px;
-    }
-    .hero-top {
-      display:flex;
-      flex-wrap:wrap;
-      gap:24px;
-      align-items:center;
-    }
-    .hero-left { flex:1.3; min-width:260px; }
-    .hero-right { flex:0.9; min-width:260px; }
+  <meta charset="UTF-8">
+  <title>Programme d’affiliation – Maavnica SmartCard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rejoignez le programme d’affiliation Maavnica SmartCard et recommandez une solution digitale utile aux indépendants.">
 
-    .hero-sub {
-      font-size:14px;
-      color:#CBD5F5;
-      margin-bottom:10px;
-    }
-    .hero-cta-row {
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      margin-top:6px;
-      margin-bottom:8px;
-    }
-    .cta-primary {
-      background:#22C55E;
-      color:#052E16;
-      padding:10px 20px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:13px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      box-shadow:0 10px 28px rgba(34,197,94,0.5);
-    }
-    .cta-secondary {
-      font-size:12px;
-      color:#93C5FD;
-      text-decoration:underline;
-      text-underline-offset:3px;
-    }
-    .hero-note {
-      font-size:12px;
-      color:#9CA3AF;
-    }
-    .hero-right-box {
-      background:#020617;
-      border-radius:18px;
-      border:1px solid rgba(148,163,184,0.5);
-      padding:14px 14px 12px;
-      box-shadow:0 15px 40px rgba(15,23,42,0.9);
-      font-size:13px;
-    }
-    .hero-right-box h3 {
-      font-size:15px;
-      margin-bottom:4px;
-    }
-    .hero-right-box ul {
-      margin-left:16px;
-      color:#CBD5F5;
-    }
-
-    /* grids & cards */
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:18px;
-    }
-    .grid-2 {
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:18px;
-    }
-    @media (max-width:900px){
-      .grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
-      .grid-2 { grid-template-columns:1fr; }
-      .hero-top { flex-direction:column; }
-    }
-    @media (max-width:640px){
-      .grid { grid-template-columns:1fr; }
-    }
-    .card {
-      background:#020617;
-      border-radius:16px;
-      border:1px solid rgba(51,65,85,0.8);
-      padding:16px 14px 14px;
-      box-shadow:0 10px 26px rgba(15,23,42,0.9);
-      font-size:13px;
-    }
-    .badge {
-      display:inline-block;
-      font-size:11px;
-      padding:2px 8px;
-      border-radius:999px;
-      background:rgba(37,99,235,0.2);
-      color:#BFDBFE;
-      margin-bottom:5px;
-    }
-
-    /* demo phones */
-    .demo-grid {
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:20px;
-      margin-top:18px;
-    }
-    @media (max-width:900px){
-      .demo-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
-    }
-    @media (max-width:640px){
-      .demo-grid { grid-template-columns:1fr; }
-    }
-    .phone-mock {
-      width:230px;
-      height:460px;
-      margin:0 auto;
-      border-radius:30px;
-      border:9px solid #020617;
-      box-shadow:0 16px 45px rgba(0,0,0,0.85);
-      overflow:hidden;
-      background:#020617;
-      position:relative;
-    }
-
-    /* form */
-    .form-section {
-      margin-top:30px;
-      background:#020617;
-      border-radius:18px;
-      border:1px solid rgba(37,99,235,0.7);
-      box-shadow:0 20px 60px rgba(15,23,42,0.95);
-      padding:20px 18px 18px;
-    }
-    form {
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:14px 18px;
-      margin-top:10px;
-    }
-    @media (max-width:700px){
-      form { grid-template-columns:1fr; }
-    }
-    label {
-      font-size:12px;
-      color:#CBD5F5;
-      display:block;
-      margin-bottom:4px;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    textarea,
-    select {
-      width:100%;
-      border-radius:10px;
-      border:1px solid #334155;
-      background:#020617;
-      color:#E5E7EB;
-      padding:8px 10px;
-      font-size:13px;
-      outline:none;
-    }
-    textarea { min-height:90px; resize:vertical; }
-    .full-row { grid-column:1 / -1; }
-    .checkbox-row {
-      display:flex;
-      gap:8px;
-      align-items:flex-start;
-      font-size:11px;
-      color:#94A3B8;
-    }
-    .checkbox-row input { margin-top:3px; }
-    .submit-row {
-      grid-column:1 / -1;
-      text-align:right;
-      margin-top:4px;
-    }
-    button[type="submit"] {
-      background:#22C55E;
-      color:#052E16;
-      padding:9px 18px;
-      border-radius:999px;
-      border:none;
-      font-size:13px;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow:0 10px 25px rgba(34,197,94,0.45);
-    }
-
-    footer {
-      padding:12px 20px 16px;
-      font-size:11px;
-      color:#9CA3AF;
-      text-align:center;
-      border-top:1px solid rgba(15,23,42,0.9);
-      background:#020617;
-    }
-  </style>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
-  <div class="page">
-    <header>
-      <div class="inner">
-        <div>Maavnica SmartCard – Affiliation</div>
-        <a href="/">← Retour au site principal</a>
-      </div>
-    </header>
 
-    <main>
-      <div class="container">
+<body class="dark-theme">
 
-        <!-- HERO AFFILIATION -->
-        <section class="hero">
-          <div class="tag">
-            <span>💸 Programme d’affiliation</span>
-            <span>SmartCard Maavnica</span>
-          </div>
-          <div class="hero-top">
-            <div class="hero-left">
-              <h1>Devenez affilié SmartCard Maavnica</h1>
-              <p class="hero-sub">
-                Recommandez la SmartCard à votre réseau (artisans, indépendants, bien-être, petites entreprises)
-                et gagnez une commission sur chaque carte vendue, sans gérer la technique ni la partie administrative.
-              </p>
+<header class="hero">
+  <div class="hero-content">
+    <h1>Programme d’affiliation<br>Maavnica SmartCard</h1>
 
-              <div class="hero-cta-row">
-                <a href="#form-affilie" class="cta-primary">
-                  <span>Devenir affilié maintenant</span>
-                  <span>→</span>
-                </a>
-                <a href="#demo" class="cta-secondary">Voir les démos SmartCard</a>
-              </div>
+    <p class="hero-subtitle">
+      Recommandez une SmartCard professionnelle aux indépendants et
+      <strong>percevez une commission sur chaque vente validée</strong>.
+    </p>
 
-              <div class="hero-note">
-                Commission standard : <strong>15€</strong> par SmartCard (39€ HT/an) et
-                <strong>30€</strong> par offre Business (99€ HT/an).<br />
-                Des bonus peuvent être étudiés à partir de 10 ventes par mois.
-              </div>
-            </div>
+    <p class="hero-note">
+      Programme ouvert sur validation — nous privilégions les affiliés de confiance
+      et les recommandations qualitatives.
+    </p>
 
-            <div class="hero-right">
-              <div class="hero-right-box">
-                <h3>Votre rôle en tant qu’affilié</h3>
-                <p>
-                  Vous présentez la SmartCard à votre réseau (clients, contacts, communauté) à l’aide du kit digital fourni.
-                  Maavnica s’occupe :
-                </p>
-                <ul>
-                  <li>de la création et de la personnalisation de la carte,</li>
-                  <li>des échanges techniques avec le client,</li>
-                  <li>de la livraison, des mises à jour et du suivi,</li>
-                  <li>de la facturation et du support.</li>
-                </ul>
-                <p style="font-size:12px; color:#9CA3AF;">
-                  Vous vous concentrez sur ce que vous faites le mieux : la recommandation et la mise en relation.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- POURQUOI DEVENIR AFFILIE -->
-        <section>
-          <h2>Pourquoi devenir affilié SmartCard Maavnica ?</h2>
-          <div class="grid">
-            <div class="card">
-              <div class="badge">💰 Revenus complémentaires</div>
-              <h3>Un produit simple à vendre</h3>
-              <p>
-                La SmartCard répond à un besoin clair : être contacté facilement, récolter des avis Google
-                et recevoir des demandes de devis. Avec un prix de 39€ HT/an, les artisans et indépendants
-                comprennent très vite l’intérêt et passent à l’action.
-              </p>
-            </div>
-            <div class="card">
-              <div class="badge">📲 100% digital</div>
-              <h3>Rien à installer, rien à développer</h3>
-              <p>
-                Vous n’avez pas besoin de coder ni de gérer la technique. Tout est pris en charge par Maavnica :
-                mise en page, hébergement, mises à jour, QR Code et accompagnement client.
-              </p>
-            </div>
-            <div class="card">
-              <div class="badge">🧰 Kit complet</div>
-              <h3>Scripts & visuels fournis</h3>
-              <p>
-                Vous recevez un kit digital avec des messages prêts à envoyer, des scripts WhatsApp,
-                des pitchs courts, un argumentaire et des visuels partageables sur les réseaux sociaux.
-              </p>
-            </div>
-            <div class="card">
-              <div class="badge">🤝 Accompagnement</div>
-              <h3>Un interlocuteur unique</h3>
-              <p>
-                Un contact direct avec Maavnica pour les questions, ajustements ou demandes spécifiques.
-                Votre rôle est valorisé et suivi.
-              </p>
-            </div>
-            <div class="card">
-              <div class="badge">📈 Potentiel récurrent</div>
-              <h3>Des ventes qui peuvent se répéter</h3>
-              <p>
-                La SmartCard peut être déployée sur plusieurs collaborateurs, sites ou activités.
-                Un même client peut évoluer vers l’offre Business, ce qui augmente vos commissions.
-              </p>
-            </div>
-            <div class="card">
-              <div class="badge">🌍 Évolutif</div>
-              <h3>Première brique Maavnica</h3>
-              <p>
-                La SmartCard est la porte d’entrée de l’écosystème Maavnica (CRM, conciergerie, paiement, etc.).
-                En rejoignant le programme maintenant, vous êtes positionné dès les débuts.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- DEMOS -->
-        <section id="demo" style="margin-top:32px;">
-          <h2>Voir les démos SmartCard</h2>
-          <p>
-            Voici trois SmartCards types (artisan, premium, bien-être) que vous pouvez montrer à vos contacts.
-            Vous pouvez les ouvrir en plein écran pour vos présentations.
-          </p>
-
-          <div class="demo-grid" style="margin-top:18px;">
-            <div>
-              <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Artisan</div>
-              <p style="font-size:12px; color:#9CA3AF; margin-bottom:8px;">
-                Idéal pour multiservices, plombiers, électriciens…
-              </p>
-              <div class="phone-mock">
-                <iframe
-                  src="https://maavnica-smartcard-v2.onrender.com/c/demo-artisan"
-                  style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
-                         transform:scale(0.8); transform-origin:top left;">
-                </iframe>
-              </div>
-              <div style="text-align:center; margin-top:8px;">
-                <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-artisan"
-                   target="_blank"
-                   class="underline"
-                   style="font-size:12px;">Ouvrir la démo artisan →</a>
-              </div>
-            </div>
-
-            <div>
-              <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Black & Gold premium</div>
-              <p style="font-size:12px; color:#9CA3AF; margin-bottom:8px;">
-                Adapté conciergerie, immobilier, services haut de gamme.
-              </p>
-              <div class="phone-mock">
-                <iframe
-                  src="https://maavnica-smartcard-v2.onrender.com/c/demo-gold"
-                  style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
-                         transform:scale(0.8); transform-origin:top left%;">
-                </iframe>
-              </div>
-              <div style="text-align:center; margin-top:8px;">
-                <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-gold"
-                   target="_blank"
-                   class="underline"
-                   style="font-size:12px;">Ouvrir la démo Black & Gold →</a>
-              </div>
-            </div>
-
-            <div>
-              <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Santé & bien-être</div>
-              <p style="font-size:12px; color:#9CA3AF; margin-bottom:8px;">
-                Pour ostéopathes, coachs, thérapeutes, praticiens bien-être.
-              </p>
-              <div class="phone-mock">
-                <iframe
-                  src="https://maavnica-smartcard-v2.onrender.com/c/demo-sante"
-                  style="position:absolute; top:0; left:0; width:125%; height:125%; border:none;
-                         transform:scale(0.8); transform-origin:top left;">
-                </iframe>
-              </div>
-              <div style="text-align:center; margin-top:8px;">
-                <a href="https://maavnica-smartcard-v2.onrender.com/c/demo-sante"
-                   target="_blank"
-                   class="underline"
-                   style="font-size:12px;">Ouvrir la démo bien-être →</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- COMMISSIONS & FONCTIONNEMENT -->
-        <section style="margin-top:32px;">
-          <h2>Commissions & fonctionnement</h2>
-          <div class="grid-2" style="margin-top:10px;">
-            <div class="card">
-              <h3>Base de commissions</h3>
-              <ul>
-                <li>🟢 <strong>15€</strong> par SmartCard vendue (offre 39€ HT/an)</li>
-                <li>🔵 <strong>30€</strong> par SmartCard Business vendue (offre 99€ HT/an)</li>
-                <li>📌 Des bonus peuvent être étudiés au-delà de 10 ventes par mois.</li>
-              </ul>
-              <p style="font-size:12px; color:#9CA3AF;">
-                Les modalités exactes (versements, seuil minimum, format des rapports) sont confirmées par écrit
-                lors de votre intégration au programme d’affiliation.
-              </p>
-            </div>
-            <div class="card">
-              <h3>Comment ça se passe concrètement ?</h3>
-              <ol style="margin-left:18px; font-size:14px;">
-                <li>Vous vous inscrivez en tant qu’affilié via le formulaire ci-dessous.</li>
-                <li>Vous recevez votre lien affilié et un kit digital (scripts, visuels, liens de démo).</li>
-                <li>Vous partagez la SmartCard à votre réseau (WhatsApp, email, réseaux sociaux, bouche-à-oreille…).</li>
-                <li>Maavnica gère la création, la personnalisation, la facturation et le support client.</li>
-                <li>Vous êtes informé des ventes réalisées via vous, et de vos commissions.</li>
-              </ol>
-            </div>
-          </div>
-        </section>
-
-        <!-- FAQ COURTE AFFILIE -->
-        <section style="margin-top:30px;">
-          <h2>Questions fréquentes des futurs affiliés</h2>
-          <div class="grid-2" style="margin-top:10px;">
-            <div class="card">
-              <h3>Combien de temps ça me prend ?</h3>
-              <p>
-                Vous pouvez commencer en quelques heures. Vous recevez des scripts prêts à envoyer,
-                vous n’avez qu’à partager les liens et expliquer la SmartCard avec les démos fournies.
-              </p>
-            </div>
-            <div class="card">
-              <h3>Est-ce que je dois faire du support ?</h3>
-              <p>
-                Non. Maavnica prend en charge la technique, la création, les modifications et le support client.
-                Vous êtes rémunéré pour votre rôle d’apporteur et de recommandation.
-              </p>
-            </div>
-            <div class="card">
-              <h3>Comment sont suivies les ventes ?</h3>
-              <p>
-                Les ventes sont associées à votre nom via votre lien affilié et, si besoin, par un code ou une mention
-                lors de la prise de contact. À terme, un suivi encore plus automatisé pourra être mis en place.
-              </p>
-            </div>
-            <div class="card">
-              <h3>Est-ce réservé à un type de profil ?</h3>
-              <p>
-                Non. Le programme est ouvert aux indépendants, consultants, créateurs de contenu,
-                agences, apporteurs d’affaires, ou toute personne avec un réseau d’artisans ou de pros.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- FORMULAIRE AFFILIE -->
-        <section id="form-affilie" class="form-section">
-          <h2>Formulaire de demande d’affiliation</h2>
-          <p style="font-size:13px; color:#CBD5F5;">
-            Remplissez ce formulaire pour être recontacté et recevoir votre kit affilié SmartCard Maavnica.
-          </p>
-
-          <form action="https://formsubmit.co/contact@maavnica.com" method="POST">
-            <!-- FormSubmit options -->
-            <input type="hidden" name="_subject" value="Nouvelle demande d'affiliation SmartCard Maavnica">
-            <input type="hidden" name="_template" value="table">
-            <!-- Tu pourras changer cette redirection vers /kit-affilie.html quand la page existera -->
-            <input type="hidden" name="_next" value="https://smartcard.maavnica.com/kit-affilie">
-
-            <div>
-              <label for="prenom">Prénom *</label>
-              <input type="text" id="prenom" name="Prénom" required>
-            </div>
-            <div>
-              <label for="nom">Nom *</label>
-              <input type="text" id="nom" name="Nom" required>
-            </div>
-
-            <div>
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="Email" required>
-            </div>
-            <div>
-              <label for="tel">Téléphone</label>
-              <input type="tel" id="tel" name="Téléphone" placeholder="+33...">
-            </div>
-
-            <div class="full-row">
-              <label for="reseaux">Réseaux sur lesquels vous êtes actif (Facebook, Instagram, TikTok, LinkedIn...)</label>
-              <input type="text" id="reseaux" name="Réseaux principaux" placeholder="@votrepseudo ou liens de profil">
-            </div>
-
-            <div>
-              <label for="secteur">Votre secteur / profil *</label>
-              <select id="secteur" name="Profil affilié" required>
-                <option value="">Sélectionnez...</option>
-                <option value="Agence / consultant">Agence / consultant</option>
-                <option value="Créateur de contenu">Créateur de contenu</option>
-                <option value="Indépendant / Freelance">Indépendant / Freelance</option>
-                <option value="Apporteur d'affaires">Apporteur d'affaires</option>
-                <option value="Autre">Autre</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="pays">Pays / ville</label>
-              <input type="text" id="pays" name="Localisation" placeholder="Ex : France, Auxerre / Nicaragua, Granada">
-            </div>
-
-            <div class="full-row">
-              <label for="comment">Comment pensez-vous promouvoir la SmartCard ? *</label>
-              <textarea id="comment" name="Méthode de promotion" required
-                        placeholder="Ex : réseau d'artisans, clients en accompagnement, communauté en ligne, etc."></textarea>
-            </div>
-
-            <div class="full-row">
-              <div class="checkbox-row">
-                <input type="checkbox" id="cgv-aff" name="CGV affilié" required>
-                <label for="cgv-aff">
-                  J’accepte d’être contacté par Maavnica dans le cadre du programme d’affiliation SmartCard
-                  et je comprends que les modalités de commission seront précisées par écrit.
-                </label>
-              </div>
-            </div>
-
-            <div class="submit-row">
-              <button type="submit">Envoyer ma demande</button>
-            </div>
-          </form>
-
-          <p style="font-size:11px; color:#64748B; margin-top:8px;">
-            Les informations saisies sont utilisées uniquement pour vous recontacter au sujet du programme d’affiliation.
-            Vous pouvez demander la suppression de vos données à tout moment à l’adresse
-            <a href="mailto:contact@maavnica.com" class="underline">contact@maavnica.com</a>.
-          </p>
-        </section>
-
-      </div>
-    </main>
-
-    <footer>
-      © 2025 Maavnica SmartCard – Programme d’affiliation · Tous droits réservés.
-    </footer>
+    <a href="#form-affiliation" class="cta-primary">
+      Rejoindre le programme d’affiliation
+    </a>
   </div>
+</header>
+
+<main>
+
+<section class="section">
+  <h2>Pourquoi recommander la SmartCard Maavnica&nbsp;?</h2>
+
+  <ul class="features-list">
+    <li>✔️ Une solution réellement utile aux indépendants</li>
+    <li>✔️ Avis Google, WhatsApp, appels, paiements, demandes clients</li>
+    <li>✔️ Demandes de contact, devis ou rendez-vous selon le métier</li>
+    <li>✔️ Notifications email automatiques pour chaque interaction</li>
+    <li>✔️ Aucun support client à gérer pour l’affilié</li>
+  </ul>
+</section>
+
+<section class="section">
+  <h2>Comment fonctionne l’affiliation&nbsp;?</h2>
+
+  <ol class="steps">
+    <li>Vous recommandez la SmartCard Maavnica à votre réseau</li>
+    <li>Le prospect découvre le produit via votre lien affilié</li>
+    <li>Il souscrit à une offre SmartCard</li>
+    <li>La vente est vérifiée et validée côté Maavnica</li>
+    <li>Vous percevez votre commission</li>
+  </ol>
+
+  <p class="info-note">
+    Dans cette première version, le suivi des ventes se fait via un lien affilié personnalisé
+    et une validation manuelle côté Maavnica.  
+    Chaque vente est confirmée avant commission.
+  </p>
+</section>
+
+<section class="section">
+  <h2>Démos SmartCard</h2>
+
+  <p>
+    Voici des exemples concrets de SmartCards que vous pouvez présenter à vos prospects.
+  </p>
+
+  <div class="demo-grid">
+    <iframe src="https://maavnica-smartcard-v2.onrender.com/c/demo-artisan" loading="lazy"></iframe>
+    <iframe src="https://maavnica-smartcard-v2.onrender.com/c/demo-gold" loading="lazy"></iframe>
+    <iframe src="https://maavnica-smartcard-v2.onrender.com/c/demo-sante" loading="lazy"></iframe>
+  </div>
+</section>
+
+<section class="section" id="form-affiliation">
+  <h2>Demande d’inscription</h2>
+
+  <p>
+    Intéressé pour devenir affilié Maavnica SmartCard&nbsp;?  
+    Présentez-nous votre profil et votre réseau.
+  </p>
+
+  <form action="https://formsubmit.co/contact@maavnica.com" method="POST" class="affiliate-form">
+    <input type="hidden" name="_subject" value="Nouvelle demande d’affiliation SmartCard">
+    <input type="hidden" name="_captcha" value="false">
+
+    <input type="text" name="Nom" placeholder="Votre nom" required>
+    <input type="email" name="Email" placeholder="Votre email" required>
+    <input type="text" name="Activité" placeholder="Votre activité / réseau">
+    <textarea name="Message" placeholder="Expliquez comment vous comptez recommander la SmartCard"></textarea>
+
+    <button type="submit" class="cta-primary">
+      Envoyer ma demande
+    </button>
+  </form>
+</section>
+
+<section class="section">
+  <a href="https://smartcard.maavnica.com/" class="back-link">
+    ← Retour au site SmartCard
+  </a>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>
+    © 2025 Maavnica — L’écosystème digital des indépendants.
+  </p>
+</footer>
+
 </body>
 </html>
 
