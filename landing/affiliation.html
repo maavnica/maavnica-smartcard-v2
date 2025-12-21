@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programme d’affiliation — Maavnica SmartCard</title>
+  <title>Affiliation — Maavnica SmartCard</title>
   <meta name="description" content="Recommandez Maavnica SmartCard et percevez une commission sur chaque vente validée." />
 
   <style>
@@ -11,7 +11,6 @@
       --bg0:#070b18;
       --bg1:#0b1330;
       --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.08);
       --stroke:rgba(255,255,255,.12);
       --text:#eaf0ff;
       --muted:rgba(234,240,255,.72);
@@ -19,9 +18,8 @@
       --brand1:#2f6bff;
       --brand2:#ffb01f;
       --ok:#30d18a;
-      --shadow:0 20px 60px rgba(0,0,0,.45);
-      --radius:18px;
-      --radius2:24px;
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --r:18px;
       --max:1080px;
     }
 
@@ -29,12 +27,11 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background:
         radial-gradient(1200px 700px at 15% 10%, rgba(47,107,255,.25), transparent 55%),
         radial-gradient(900px 600px at 85% 20%, rgba(255,176,31,.18), transparent 55%),
-        radial-gradient(1100px 800px at 50% 100%, rgba(80,120,255,.10), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
@@ -42,29 +39,20 @@
     a{color:inherit}
     .wrap{padding:28px 16px 56px}
     .container{max-width:var(--max); margin:0 auto}
+
     .topbar{
       display:flex; align-items:center; justify-content:space-between; gap:14px;
       margin-bottom:18px;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      text-decoration:none;
-    }
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none}
     .logo{
-      width:42px; height:42px; border-radius:14px;
-      background:
-        linear-gradient(135deg, rgba(47,107,255,.95), rgba(47,107,255,.35)),
-        radial-gradient(18px 18px at 70% 30%, rgba(255,176,31,.75), transparent 65%);
+      width:42px;height:42px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(47,107,255,.95), rgba(47,107,255,.35));
       border:1px solid rgba(255,255,255,.15);
       box-shadow: 0 10px 30px rgba(47,107,255,.18);
       position:relative;
     }
-    .logo:after{
-      content:"";
-      position:absolute; inset:10px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.18);
-    }
+    .logo:after{content:""; position:absolute; inset:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18)}
     .brand b{letter-spacing:.12em}
     .brand small{display:block; color:var(--muted2); margin-top:2px}
 
@@ -83,11 +71,9 @@
       background:linear-gradient(135deg, rgba(47,107,255,.95), rgba(47,107,255,.55));
       box-shadow: 0 16px 40px rgba(47,107,255,.22);
     }
-    .btn.primary:hover{filter:saturate(1.1)}
-    .btn.ghost{background:transparent}
 
     .hero{
-      border-radius:var(--radius2);
+      border-radius:24px;
       border:1px solid rgba(255,255,255,.10);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
@@ -106,12 +92,10 @@
       position:relative;
       padding:26px 22px;
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.15fr .85fr;
       gap:18px;
     }
-    @media (max-width: 860px){
-      .hero-inner{grid-template-columns:1fr}
-    }
+    @media (max-width: 900px){ .hero-inner{grid-template-columns:1fr} }
 
     .tag{
       display:inline-flex; align-items:center; gap:10px;
@@ -121,7 +105,6 @@
       border:1px solid rgba(255,255,255,.12);
       color:var(--muted);
       font-size:12px;
-      letter-spacing:.02em;
     }
     h1{
       margin:12px 0 10px;
@@ -133,11 +116,11 @@
       color:var(--muted);
       font-size: 15.5px;
       line-height:1.5;
-      max-width: 70ch;
+      max-width: 75ch;
     }
     .cta-row{display:flex; gap:10px; flex-wrap:wrap}
 
-    .kpis{
+    .panel{
       display:grid; gap:12px;
       padding:18px;
       border-radius:18px;
@@ -146,33 +129,25 @@
       backdrop-filter: blur(10px);
       align-content:start;
     }
-    .kpis .k{
-      display:flex; align-items:flex-start; gap:10px;
+    .k{
       padding:12px;
       border-radius:16px;
       background:rgba(255,255,255,.05);
       border:1px solid rgba(255,255,255,.10);
     }
-    .dot{
-      width:10px; height:10px; border-radius:50%;
-      margin-top:4px;
-      background:var(--ok);
-      box-shadow: 0 0 0 6px rgba(48,209,138,.12);
-      flex: 0 0 auto;
-    }
     .k b{display:block}
-    .k small{display:block; color:var(--muted2); margin-top:3px; line-height:1.35}
+    .k small{display:block; color:var(--muted2); margin-top:4px; line-height:1.35}
 
     .grid{
-      margin-top:18px;
+      margin-top:16px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:14px;
     }
-    @media (max-width: 860px){ .grid{grid-template-columns:1fr} }
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
 
     .card{
-      border-radius:var(--radius);
+      border-radius:var(--r);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
       box-shadow: 0 14px 40px rgba(0,0,0,.35);
@@ -180,46 +155,49 @@
     }
     .card h2{margin:0 0 10px; font-size:18px}
     .card p{margin:0 0 12px; color:var(--muted); line-height:1.55}
-    ul{margin:0; padding-left:18px; color:var(--muted)}
-    li{margin:8px 0}
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color:var(--muted);
-      font-size:12px;
+
+    .list{margin:0; padding-left:18px; color:var(--muted)}
+    .list li{margin:8px 0}
+
+    .highlight{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:stretch;
+      margin-top:10px;
     }
-    .steps{counter-reset: step}
-    .steps li{
-      list-style:none;
-      margin:10px 0;
-      padding-left:0;
-      display:flex; gap:10px;
+    .box{
+      flex:1 1 220px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      padding:14px;
     }
-    .steps li::before{
-      counter-increment: step;
-      content: counter(step);
-      width:26px; height:26px;
-      border-radius:10px;
-      display:inline-flex; align-items:center; justify-content:center;
-      background:rgba(47,107,255,.20);
-      border:1px solid rgba(47,107,255,.35);
-      color:var(--text);
-      flex: 0 0 auto;
-      margin-top:1px;
-    }
+    .box .label{color:var(--muted2); font-size:12px}
+    .box .value{font-size:22px; margin-top:6px; font-weight:700}
+    .box .note{color:var(--muted2); font-size:12px; margin-top:6px; line-height:1.4}
 
     .footer{
       margin-top:18px;
-      padding:18px 12px 0;
       color:var(--muted2);
       font-size:12px;
       text-align:center;
     }
     .footer a{color:var(--text); text-decoration:underline; text-underline-offset:3px}
+    .sep{height:1px;background:rgba(255,255,255,.10); margin:12px 0}
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono"; color:rgba(234,240,255,.9)}
   </style>
+
+  <script>
+    // === À MODIFIER ===
+    const FORM_URL = "https://forms.gle/TON-LIEN-ICI";
+    const COMMISSION_EUR = 20; // ex: 20€ par vente validée
+    // ===================
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("[data-form-link]").forEach(a => a.setAttribute("href", FORM_URL));
+      document.querySelectorAll("[data-commission]").forEach(el => el.textContent = COMMISSION_EUR + "€");
+      document.querySelectorAll("[data-example-10]").forEach(el => el.textContent = (COMMISSION_EUR * 10) + "€");
+      document.querySelectorAll("[data-example-25]").forEach(el => el.textContent = (COMMISSION_EUR * 25) + "€");
+    });
+  </script>
 </head>
 
 <body>
@@ -231,101 +209,123 @@
           <div class="logo" aria-hidden="true"></div>
           <div>
             <b>MAAVNICA</b>
-            <small>Programme d’affiliation SmartCard</small>
+            <small>Affiliation SmartCard</small>
           </div>
         </a>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
-          <a class="btn ghost" href="/">← Retour au site</a>
-          <a class="btn primary" href="#rejoindre">Rejoindre</a>
+          <a class="btn" href="/">← Retour au site</a>
+          <a class="btn primary" data-form-link href="#">Devenir affilié</a>
         </div>
       </div>
 
       <section class="hero">
         <div class="hero-inner">
           <div>
-            <span class="tag">💼 Commission par vente validée • Programme sur validation</span>
-            <h1>Recommandez Maavnica SmartCard.<br/>Percevez une commission.</h1>
+            <span class="tag">🤝 Programme sur validation • Commissions simples • Recommandation qualitative</span>
+            <h1>Recommandez Maavnica SmartCard<br/>et gagnez <span data-commission></span> par vente.</h1>
+
             <p class="sub">
-              Vous partagez un lien affilié. Un indépendant crée sa SmartCard. Après validation,
-              vous êtes rémunéré(e). Simple, propre, traçable.
+              Vous partagez votre lien affilié. Un indépendant crée sa SmartCard.
+              Quand la vente est <b>validée</b>, vous recevez votre commission.
+              <br/><span style="color:var(--muted2)">Pas de blabla : une règle claire, un process propre.</span>
             </p>
 
-            <div class="cta-row" id="rejoindre">
-              <!-- Mets ici ton lien (Google Form / Tally / Typeform / etc.) -->
-              <a class="btn primary" href="https://forms.gle/" target="_blank" rel="noreferrer">🧾 Demander à rejoindre</a>
-              <a class="btn" href="#fonctionnement">Voir comment ça marche</a>
+            <div class="cta-row">
+              <a class="btn primary" data-form-link href="#">🧾 Devenir affilié (inscription)</a>
+              <a class="btn" href="#combien">Voir combien je gagne</a>
+              <a class="btn" href="#process">Comment ça marche</a>
             </div>
 
-            <p style="margin:12px 0 0; color:var(--muted2); font-size:12.5px">
-              🔎 Nous privilégions les affiliés de confiance et les recommandations qualitatives.
+            <div class="sep"></div>
+
+            <p style="margin:0; color:var(--muted2); font-size:12.5px; line-height:1.5">
+              📌 Inscription sur validation : nous privilégions les affiliés sérieux (pros, réseaux locaux, apporteurs d’affaires, créateurs).
             </p>
           </div>
 
-          <aside class="kpis" aria-label="Points clés">
+          <aside class="panel" aria-label="Points clés">
             <div class="k">
-              <span class="dot"></span>
-              <div>
-                <b>Produit facile à recommander</b>
-                <small>Carte digitale premium, QR, avis, WhatsApp, paiement, demandes clients…</small>
-              </div>
+              <b>Produit facile à vendre</b>
+              <small>Une carte digitale premium, QR, avis, WhatsApp, paiement, demandes clients…</small>
             </div>
             <div class="k">
-              <span class="dot"></span>
-              <div>
-                <b>Notifications automatiques</b>
-                <small>Chaque interaction importante peut être transmise au pro par email (avis, demande, etc.).</small>
-              </div>
+              <b>Suivi simple (V1)</b>
+              <small>Tracking par lien affilié + validation manuelle côté Maavnica.</small>
             </div>
             <div class="k">
-              <span class="dot"></span>
-              <div>
-                <b>Validation côté Maavnica</b>
-                <small>On vérifie la vente avant de confirmer la commission.</small>
-              </div>
+              <b>Paiement commission</b>
+              <small>À chaque vente validée. Délai indicatif : 7–30 jours selon contrôle.</small>
             </div>
           </aside>
         </div>
       </section>
 
       <div class="grid">
-        <section class="card">
-          <h2>Pourquoi recommander la SmartCard Maavnica ?</h2>
+        <section class="card" id="combien">
+          <h2>Combien je gagne ?</h2>
           <p>
-            Une solution vraiment utile aux indépendants : elle transforme un simple QR en levier de business.
+            Commission <b>fixe</b> (simple et lisible) : <b><span data-commission></span></b> par vente SmartCard validée.
           </p>
-          <ul>
-            <li>⭐ Avis Google + avis rapide intégré</li>
-            <li>💬 WhatsApp / appels / liens utiles</li>
-            <li>📩 Demandes clients (contact / devis / rendez-vous selon le métier)</li>
-            <li>🔔 Notifications email automatiques</li>
-            <li>🧘 Aucun support client à gérer pour l’affilié</li>
-          </ul>
+
+          <div class="highlight">
+            <div class="box">
+              <div class="label">1 vente validée</div>
+              <div class="value"><span data-commission></span></div>
+              <div class="note">Versée après validation.</div>
+            </div>
+
+            <div class="box">
+              <div class="label">10 ventes / mois</div>
+              <div class="value"><span data-example-10></span></div>
+              <div class="note">Recommandation réseau (artisans, commerces…).</div>
+            </div>
+
+            <div class="box">
+              <div class="label">25 ventes / mois</div>
+              <div class="value"><span data-example-25></span></div>
+              <div class="note">Profil agence / apporteur / partenaire.</div>
+            </div>
+          </div>
+
+          <p style="margin-top:12px; color:var(--muted2); font-size:12.5px; line-height:1.5">
+            Tu veux un modèle en % plutôt qu’en fixe ? On pourra basculer facilement, mais le fixe est plus “plug & play” au lancement.
+          </p>
         </section>
 
-        <section class="card" id="fonctionnement">
-          <h2>Comment fonctionne l’affiliation ?</h2>
-          <p class="pill">⚙️ Version 1 — suivi simple & validation manuelle</p>
-          <ul class="steps">
-            <li>Vous recommandez Maavnica SmartCard à votre réseau.</li>
-            <li>Le prospect découvre le produit via votre lien affilié.</li>
-            <li>Il souscrit à une offre SmartCard.</li>
-            <li>La vente est vérifiée et validée côté Maavnica.</li>
-            <li>Vous percevez votre commission.</li>
+        <section class="card" id="process">
+          <h2>Comment ça marche (simple)</h2>
+          <ul class="list">
+            <li>Tu t’inscris via le formulaire (validation rapide).</li>
+            <li>On te donne un <b>lien affilié</b> (ex : <code>smartcard.maavnica.com/?ref=TONCODE</code>).</li>
+            <li>Tu recommandes à ton réseau (pros, artisans, TPE).</li>
+            <li>On valide la vente (anti-fraude + conformité).</li>
+            <li>Tu reçois ta commission.</li>
           </ul>
-          <p style="margin-top:12px; color:var(--muted2); font-size:12.5px; line-height:1.5">
-            (Optionnel) Si tu veux, on peut ajouter ensuite : tableau de bord affilié, tracking automatique, codes promo.
-          </p>
+
+          <div class="sep"></div>
+
+          <h2>Conditions (claires)</h2>
+          <ul class="list">
+            <li>Commissions versées uniquement sur ventes <b>validées</b>.</li>
+            <li>Pas d’auto-achat / fraude / spam (sinon refus).</li>
+            <li>Programme ouvert : priorité aux recommandations qualitatives.</li>
+          </ul>
+
+          <div style="margin-top:14px">
+            <a class="btn primary" data-form-link href="#">✅ Devenir affilié maintenant</a>
+          </div>
         </section>
       </div>
 
       <section class="card" style="margin-top:14px">
-        <h2>Démos SmartCard</h2>
-        <p>Tu peux renvoyer vers tes démos publiques (3 cartes) ou vers une page dédiée.</p>
-        <div class="cta-row">
-          <a class="btn" href="/#demos">Voir les démos</a>
-          <a class="btn" href="/static/contact-smartcard.html">Créer une SmartCard</a>
-        </div>
+        <h2>Ressources (pour t’aider à vendre)</h2>
+        <p>Après validation, tu reçois :</p>
+        <ul class="list">
+          <li>1 lien affilié + ton code</li>
+          <li>1 mini kit de messages (WhatsApp / email)</li>
+          <li>1 page démo (cartes exemple) + arguments</li>
+        </ul>
       </section>
 
       <div class="footer">
