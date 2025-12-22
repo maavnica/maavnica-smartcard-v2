@@ -11,13 +11,11 @@
       --bg0:#050814;
       --bg1:#071029;
       --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
       --stroke: rgba(148,163,184,.22);
       --text:#e5e7eb;
       --muted: rgba(226,232,240,.78);
       --brand:#7c3aed;
       --brand2:#22c55e;
-      --warn:#f59e0b;
       --shadow: 0 18px 55px rgba(0,0,0,.55);
       --r: 18px;
     }
@@ -135,12 +133,11 @@
       margin-top: 10px;
       color: rgba(226,232,240,.72);
       font-size: 13px;
+      line-height: 1.5;
     }
     .mini b{ color: rgba(226,232,240,.95); }
 
-    .side{
-      display:grid; gap:12px;
-    }
+    .side{ display:grid; gap:12px; }
     .kpi{
       border:1px solid var(--stroke);
       border-radius: var(--r);
@@ -177,7 +174,7 @@
     li{ margin: 8px 0; line-height:1.5; }
 
     .pricing{
-      display:grid; grid-template-columns: repeat(3, 1fr);
+      display:grid; grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 12px;
     }
@@ -237,39 +234,39 @@
 
     <div class="hero">
       <div class="hcard">
-        <div class="badge">💸 Commission • Recommandations de confiance</div>
-        <h1>Recommandez Maavnica SmartCard<br/>et percevez une commission.</h1>
+        <div class="badge">💸 Programme d’affiliation • Maavnica SmartCard</div>
+        <h1>Recommandez Maavnica SmartCard<br/>et recevez une commission.</h1>
         <p class="sub">
-          Vous partagez votre lien, le prospect découvre la SmartCard, et vous êtes rémunéré(e) sur chaque vente validée.
-          <br/>Aucune gestion client : Maavnica s’occupe de la livraison.
+          Vous recommandez, nous livrons. Chaque vente confirmée déclenche votre commission.
+          <br/>La SmartCard est une carte digitale premium (QR + page pro) qui transforme chaque scan en opportunité.
         </p>
 
         <div class="ctaRow">
-          <a class="btn primary" href="/static/contact-smartcard.html?offre=affiliation">✅ Demander à devenir affilié</a>
+          <a class="btn primary" href="/static/contact-smartcard.html?offre=affiliation">✅ Rejoindre le programme</a>
           <a class="btn secondary" href="/static/contact-smartcard.html?offre=solo">🚀 Commander une SmartCard</a>
         </div>
 
         <p class="mini">
-          🔔 <b>Bonus</b> : la SmartCard envoie des alertes email au pro (avis / demande / contact) dès qu’un prospect agit.
+          🔔 Le professionnel reçoit automatiquement des alertes email lorsque des prospects cliquent, laissent un avis ou envoient une demande.
         </p>
       </div>
 
       <div class="side">
         <div class="kpi">
-          <p class="t">Pourquoi ça marche</p>
-          <p class="d">Produit simple, “wow”, utile aux indépendants. Une fois la carte en circulation, elle génère des contacts (QR, lien, partage).</p>
-          <div class="tag">✅ Conversion naturelle</div>
+          <p class="t">Simple et efficace</p>
+          <p class="d">Vous partagez un lien. Le prospect découvre l’offre. Maavnica gère la livraison et le support.</p>
+          <div class="tag">✅ Aucun support client</div>
         </div>
 
         <div class="kpi">
-          <p class="t">Validation & paiement</p>
-          <p class="d">Dans cette V1, les ventes sont validées côté Maavnica avant commission (qualité + anti-fraude).</p>
-          <div class="tag">🔒 Paiement après validation</div>
+          <p class="t">Qualité & validation</p>
+          <p class="d">Les ventes sont confirmées côté Maavnica (qualité + anti-fraude) avant paiement de la commission.</p>
+          <div class="tag">🔒 Commission après validation</div>
         </div>
 
         <div class="kpi">
-          <p class="t">Pour qui ?</p>
-          <p class="d">Commerçants, artisans, indépendants, réseaux pro, BNI, agences, imprimeurs…</p>
+          <p class="t">Pour votre réseau</p>
+          <p class="d">Indépendants, artisans, commerçants, réseaux pro, imprimeurs, agences…</p>
           <div class="tag">🤝 Recommandation B2B</div>
         </div>
       </div>
@@ -279,10 +276,10 @@
       <div class="card">
         <h2>Pourquoi recommander la SmartCard Maavnica ?</h2>
         <ul>
-          <li>Une solution réellement utile : QR + page pro + actions (avis / demande / contact)</li>
-          <li>Notifications email automatiques côté professionnel</li>
-          <li>Image premium (Black & Gold, démos métiers)</li>
-          <li>Vous n’avez pas de support client à gérer</li>
+          <li>Carte digitale premium (QR + page pro + actions)</li>
+          <li>Notifications email automatiques pour le professionnel</li>
+          <li>Idéal pour générer des avis, des demandes et des contacts</li>
+          <li>Produit simple à expliquer et facile à diffuser</li>
         </ul>
       </div>
 
@@ -293,38 +290,31 @@
           <li>2) Maavnica vous fournit un lien / code affilié</li>
           <li>3) Vous recommandez dans votre réseau</li>
           <li>4) Vente confirmée → commission due</li>
-          <li>5) Paiement de la commission selon le cycle convenu</li>
+          <li>5) Paiement selon le cycle convenu</li>
         </ul>
       </div>
     </div>
 
     <div class="section card">
-      <h2>Commission recommandée (à ajuster)</h2>
+      <h2>Rémunération</h2>
       <div class="pricing">
         <div class="price">
-          <div class="badge2">Solo</div>
-          <p class="name">Vente SmartCard Solo</p>
+          <div class="badge2">SOLO</div>
+          <p class="name">SmartCard Solo — 39€ / an</p>
           <p class="gain">20€</p>
-          <p class="hint">Commission fixe par vente validée.<br/>Idéal volume (réseaux, imprimeurs).</p>
+          <p class="hint">Commission fixe par vente confirmée.<br/>Idéal pour les recommandations en volume.</p>
         </div>
 
         <div class="price">
-          <div class="badge2">Pro</div>
-          <p class="name">Vente SmartCard Pro</p>
+          <div class="badge2">BUSINESS</div>
+          <p class="name">SmartCard Business — 99€ / an (5 cartes)</p>
           <p class="gain">35€</p>
-          <p class="hint">Plus de valeur → meilleure commission.<br/>Parfait pour recommandations qualifiées.</p>
-        </div>
-
-        <div class="price">
-          <div class="badge2">Pack / Multi</div>
-          <p class="name">Commande “multi cartes”</p>
-          <p class="gain">Sur devis</p>
-          <p class="hint">Pour associations, réseaux, franchises.<br/>Commission négociée selon volume.</p>
+          <p class="hint">Commission fixe par vente confirmée.<br/>Parfait pour recommandations qualifiées / packs.</p>
         </div>
       </div>
 
       <p class="mini" style="margin-top:12px;">
-        👉 Tu peux aussi passer en % (ex: 20%) mais la commission fixe est souvent plus simple à comprendre.
+        Les commissions sont versées uniquement sur les ventes validées côté Maavnica.
       </p>
     </div>
 
@@ -346,5 +336,6 @@
   </div>
 </body>
 </html>
+
 
 
