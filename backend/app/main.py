@@ -23,7 +23,8 @@ APP_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = APP_DIR.parents[1]
 
 # .../maavnica-smartcard/static
-STATIC_DIR = PROJECT_ROOT / "static"
+STATIC_DIR = PROJECT_ROOT / "backend" / "static"
+
 
 
 # --------------------------------------------------------------------
