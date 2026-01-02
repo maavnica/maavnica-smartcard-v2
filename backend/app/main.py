@@ -22,15 +22,16 @@ APP_DIR = Path(__file__).resolve().parent
 # .../maavnica-smartcard
 PROJECT_ROOT = APP_DIR.parents[1]
 
-# .../maavnica-smartcard/static
+# .../maavnica-smartcard/backend/static
 STATIC_DIR = PROJECT_ROOT / "backend" / "static"
-
 
 
 # --------------------------------------------------------------------
 # Application FastAPI
 # --------------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
@@ -86,7 +87,6 @@ async def root():
 # => /api/public/...
 app.include_router(public.router, tags=["public"])
 
-
 # API admin / cartes (CRUD + feedback + devis…)
 # => /api/cards/...
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
@@ -101,8 +101,11 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 @app.get("/admin", include_in_schema=False)
 async def serve_admin():
-    """Redirige /admin vers l'interface d'administration statique."""
-    return RedirectResponse(url="/static/admin/index.html")
+    """Sert directement l'interface d'administration statique."""
+    file_path = STATIC_DIR / "admin" / "index.html"
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Admin UI not found")
+    return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
 
 # IMPORTANT: les scanners QR / webviews font souvent un HEAD avant GET
@@ -122,6 +125,7 @@ async def serve_public_card(slug: str):
 
     # FileResponse gère mieux les headers, le cache, et HEAD automatiquement
     return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
+
 
 
 
