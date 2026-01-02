@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse, FileResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -12,23 +12,22 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from app.routers import public, cards
 
 
-# --------------------------------------------------------------------
-# Chemins de base
-# --------------------------------------------------------------------
+# ------------------------------------------------------------
+# Paths (robuste local + Render)
+# ------------------------------------------------------------
+APP_DIR = Path(__file__).resolve().parent        # .../backend/app
+BACKEND_DIR = APP_DIR.parent                    # .../backend
+STATIC_DIR = BACKEND_DIR / "static"             # .../backend/static
 
-# .../maavnica-smartcard/backend/app
-APP_DIR = Path(__file__).resolve().parent
-
-# .../maavnica-smartcard
-PROJECT_ROOT = APP_DIR.parents[1]
-
-# .../maavnica-smartcard/backend/static
-STATIC_DIR = PROJECT_ROOT / "backend" / "static"
+# Fallback si tu lances depuis la racine d'un mono-repo (ancien layout)
+if not STATIC_DIR.exists():
+    # .../maavnica-smartcard/static
+    STATIC_DIR = BACKEND_DIR.parent / "static"
 
 
-# --------------------------------------------------------------------
-# Application FastAPI
-# --------------------------------------------------------------------
+# ------------------------------------------------------------
+# App
+# ------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
 
 
@@ -36,17 +35,12 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
 
-        # Sécurité basique (safe)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
 
-        # Évite des comportements étranges en webview / QR
-        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
-
-        # Cache maîtrisé
-        path = request.url.path
-        if path.startswith("/static/"):
+        # Cache: immutable pour les assets statiques, no-store pour le reste
+        if request.url.path.startswith("/static/"):
             response.headers["Cache-Control"] = "public, max-age=604800, immutable"
         else:
             response.headers["Cache-Control"] = "no-store"
@@ -54,9 +48,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
-# --------------------------------------------------------------------
-# CORS (ok pour dev / prototype ; à restreindre ensuite)
-# --------------------------------------------------------------------
+# CORS (ok pour proto/dev ; à restreindre ensuite)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -67,39 +59,43 @@ app.add_middleware(
 app.add_middleware(SecurityHeadersMiddleware)
 
 
-# --------------------------------------------------------------------
-# Routes simples
-# --------------------------------------------------------------------
+# ------------------------------------------------------------
+# Health / Root
+# ------------------------------------------------------------
 @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
 async def root():
     return {
         "message": "Maavnica SmartCard API is running",
         "admin_url": "/admin",
-        "public_example": "/c/example-slug",
         "static_admin": "/static/admin/index.html",
+        "public_example": "/c/example-slug",
     }
 
 
-# --------------------------------------------------------------------
-# Inclusion des routers API
-# --------------------------------------------------------------------
+# ------------------------------------------------------------
+# API routers
+# ------------------------------------------------------------
 # API publique (lecture)
-# => /api/public/...
 app.include_router(public.router, tags=["public"])
 
 # API admin / cartes (CRUD + feedback + devis…)
-# => /api/cards/...
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
 
-# --------------------------------------------------------------------
-# Fichiers statiques (admin, carte publique, assets…)
-# --------------------------------------------------------------------
-# Monte le dossier "static" à la racine sur /static
+# ------------------------------------------------------------
+# Static files
+# ------------------------------------------------------------
+if not STATIC_DIR.exists():
+    # Important : on échoue clairement si Render ne voit pas les fichiers
+    raise RuntimeError(f"STATIC_DIR not found: {STATIC_DIR}")
+
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
-@app.get("/admin", include_in_schema=False)
+# ------------------------------------------------------------
+# Admin UI
+# ------------------------------------------------------------
+@app.api_route("/admin", methods=["GET", "HEAD"], include_in_schema=False)
 async def serve_admin():
     """Sert directement l'interface d'administration statique."""
     file_path = STATIC_DIR / "admin" / "index.html"
@@ -108,22 +104,18 @@ async def serve_admin():
     return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
 
-# IMPORTANT: les scanners QR / webviews font souvent un HEAD avant GET
+# ------------------------------------------------------------
+# Public card (QR)
+# ------------------------------------------------------------
 @app.api_route("/c/{slug}", methods=["GET", "HEAD"], include_in_schema=False)
 async def serve_public_card(slug: str):
     """
     Affiche la carte publique pour un slug donné.
-
-    On sert toujours le template :
-        static/public-card/index.html
-
-    Le JS du template récupère le slug depuis l'URL et charge les données via API.
+    Le template est statique ; le JS récupère le slug via l'URL et charge les données via l'API.
     """
     file_path = STATIC_DIR / "public-card" / "index.html"
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")
-
-    # FileResponse gère mieux les headers, le cache, et HEAD automatiquement
     return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
 
