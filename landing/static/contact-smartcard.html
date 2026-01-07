@@ -16,6 +16,18 @@
       color:var(--txt);
     }
     .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 70px}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin:0 0 14px;
+      color:#9bbcff;
+      text-decoration:none;
+      font-size:14px;
+      opacity:.85;
+    }
+    .back-link:hover{opacity:1;text-decoration:underline}
+
     header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
     .logo{
       width:42px;height:42px;border-radius:12px;background:#0e1830;border:1px solid var(--line);
@@ -278,6 +290,13 @@
 </head>
 <body>
   <div class="wrap">
+
+    <!-- ✅ Retour landing -->
+    <a href="https://smartcard.maavnica.com" class="back-link"
+       onclick="if(history.length>1){history.back(); return false;}">
+      ← Retour à la présentation
+    </a>
+
     <header>
       <div class="logo">M</div>
       <div>
@@ -350,10 +369,9 @@
         </form>
       </section>
 
-      <!-- RIGHT: SmartCard Demo (refait, prêt) -->
+      <!-- RIGHT: SmartCard Demo -->
       <section class="card">
-       <div class="badge">APERÇU SMARTCARD</div>
-
+        <div class="badge">APERÇU SMARTCARD</div>
 
         <div class="phone">
           <div class="phone-notch"></div>
@@ -397,11 +415,9 @@
                 </div>
 
                 <input class="sc-input" placeholder="Un mot sur votre expérience (optionnel)" />
-
                 <div class="sc-cta">✨ Envoyer mon avis</div>
 
                 <div class="panel-subtitle" style="margin-top:14px;">AUTRES FAÇONS DE VOUS CONTACTER</div>
-
                 <div class="action-btn">⭐ Laisser un avis Google</div>
                 <div class="action-btn">💬 Écrire sur WhatsApp</div>
                 <div class="action-btn">📞 Appeler directement</div>
@@ -506,11 +522,9 @@
       const full = `${(prenom.value||"Julie").trim()} ${(nom.value||"Martin").trim()}`.trim();
       if (demoName) demoName.textContent = full || "Julie Martin";
 
-      // On affiche l'email saisi (sinon exemple)
       const em = (email.value || "contact@exemple.com").trim();
       if (demoEmail) demoEmail.textContent = em || "contact@exemple.com";
 
-      // (Entreprise : on pourrait l’afficher dans la desc si tu veux)
       const ent = (entreprise.value || "").trim();
       const desc = document.getElementById("demoDesc");
       if (desc) {
@@ -567,4 +581,5 @@
 </script>
 </body>
 </html>
+
 
