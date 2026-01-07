@@ -8,8 +8,12 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
+
+
 # Routes API
 from app.routers import public, cards
+from app.routers.stripe_webhook import router as stripe_webhook_router
+
 
 
 # ------------------------------------------------------------
@@ -29,6 +33,8 @@ if not STATIC_DIR.exists():
 # App
 # ------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+app.include_router(stripe_webhook_router)
+
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):

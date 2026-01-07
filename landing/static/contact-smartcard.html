@@ -1,220 +1,570 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Contact – Maavnica SmartCard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commander votre SmartCard — Maavnica</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:#020617;
-      color:#E5E7EB;
-      line-height:1.5;
+    :root{
+      --bg:#050a13; --card:#0b1220; --line:#14213a; --txt:#eaf1ff; --mut:#aab7d6;
+      --ok:#25d366;
     }
-    a { color:inherit; text-decoration:none; }
-    .page { min-height:100vh; display:flex; flex-direction:column; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:linear-gradient(180deg,#050a13 0%, #070f1f 100%);
+      color:var(--txt);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 70px}
+    header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .logo{
+      width:42px;height:42px;border-radius:12px;background:#0e1830;border:1px solid var(--line);
+      display:grid;place-items:center;font-weight:800;
+    }
+    h1{margin:0;font-size:22px}
+    .sub{margin:6px 0 0;color:var(--mut);font-size:14px;line-height:1.35}
 
-    header {
-      padding:14px 20px;
-      border-bottom:1px solid rgba(30,64,175,0.6);
-      background:radial-gradient(circle at top, #1E3A8A 0, #020617 70%);
-    }
-    header .inner {
-      max-width:900px;
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      color:#E5E7EB;
-      font-size:13px;
-    }
-    header .title { font-weight:700; }
-    .back-link {
-      font-size:12px;
-      color:#93C5FD;
-      text-decoration:underline;
-      text-underline-offset:3px;
-    }
+    .grid{display:grid;grid-template-columns: 1.05fr 0.95fr; gap:16px; margin-top:18px}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
 
-    main { flex:1; padding:40px 20px 30px; }
-    .container { max-width:900px; margin:0 auto; }
-
-    h1 { font-size:24px; font-weight:800; margin-bottom:6px; }
-    .subtitle {
-      font-size:13px;
-      color:#9CA3AF;
-      margin-bottom:24px;
+    .card{
+      background:rgba(11,18,32,.82);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
-
-    .card {
-      background:#020617;
-      border-radius:22px;
-      border:1px solid rgba(30,64,175,0.75);
-      box-shadow:0 18px 50px rgba(15,23,42,0.95);
-      padding:20px 18px 22px;
-      max-width:600px;
-      margin:0 auto;
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line); background:#0e1830; color:var(--mut);
+      font-size:12px; font-weight:700; letter-spacing:.2px;
+      margin-bottom:10px;
     }
+    .offerTitle{font-size:18px;margin:0 0 6px}
+    .priceLine{color:var(--mut);margin:0 0 12px;font-size:13px}
+    .miniList{margin:0;padding-left:18px;color:var(--mut);font-size:13px;line-height:1.55}
+    .miniList li{margin:6px 0}
 
-    label {
-      display:block;
-      margin-bottom:4px;
-      font-size:13px;
-      color:#E5E7EB;
-    }
-    .field { margin-bottom:14px; }
-
-    select, input, textarea {
+    label{display:block;font-size:12px;color:var(--mut);margin:10px 0 6px}
+    input, textarea{
       width:100%;
-      border-radius:10px;
-      border:1px solid rgba(148,163,184,0.7);
-      background:#020617;
-      color:#E5E7EB;
-      padding:8px 10px;
-      font-size:13px;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0a1428;
+      color:var(--txt);
       outline:none;
     }
-    textarea { min-height:90px; resize:vertical; }
+    textarea{min-height:92px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
 
-    .row-2 { display:flex; gap:10px; }
-    @media (max-width:640px){ .row-2 { flex-direction:column; } }
-
-    button {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      background:#22C55E;
-      color:#022C22;
-      padding:10px 18px;
-      border-radius:999px;
-      border:none;
-      font-size:14px;
-      font-weight:600;
+    .btn{
+      width:100%;
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #1f3566;
+      background:#0f234a;
+      color:#fff;
+      font-weight:800;
       cursor:pointer;
-      margin-top:4px;
-      box-shadow:0 12px 30px rgba(34,197,94,0.35);
+    }
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .hint{color:var(--mut);font-size:12px;margin-top:10px;line-height:1.4}
+
+    .okbox{
+      display:none;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(37,211,102,.35);
+      background:rgba(37,211,102,.08);
+      color:#dfffe9;
+      font-size:13px;
+    }
+    .okbox strong{color:#ffffff}
+
+    /* === Phone SmartCard demo (droite) === */
+    .phone{
+      max-width: 430px;
+      margin: 8px auto 0;
+      border-radius: 46px;
+      border: 1px solid var(--line);
+      background: radial-gradient(1200px 600px at 50% -200px, rgba(90,140,255,.22), transparent 60%),
+                  #050a13;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      padding: 16px;
+      position: relative;
+    }
+    .phone-notch{
+      position:absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+    .phone-screen{
+      margin-top: 18px;
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,.07);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(10,20,40,.65), rgba(5,10,19,.9));
+    }
+    .sc-top{ padding: 14px; border-bottom: 1px solid rgba(255,255,255,.07); }
+
+    .sc-tabs{ display:flex; gap:10px; justify-content:center; margin-bottom: 10px; }
+    .tab{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(0,0,0,.18);
+      color: var(--mut);
+      font-weight: 800;
+      white-space:nowrap;
+    }
+    .tab.active{ color:#fff; background: rgba(50,90,200,.25); border-color: rgba(80,130,255,.35); }
+
+    .sc-hero{
+      border-radius: 18px;
+      border: 1px solid rgba(80,130,255,.35);
+      background: linear-gradient(180deg, rgba(30,70,170,.55), rgba(10,25,60,.55));
+      padding: 14px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .hero-title{ font-size: 11px; letter-spacing: .18em; color: rgba(255,255,255,.75); }
+    .hero-name{ font-size: 18px; font-weight: 1000; margin-top: 6px; }
+    .hero-desc{ color: rgba(255,255,255,.8); font-size: 12px; margin-top: 6px; line-height: 1.3; }
+    .hero-status{ margin-top: 10px; font-size: 12px; color: rgba(255,255,255,.85); }
+    .hero-line{ margin-top: 8px; font-size: 12px; color: rgba(255,255,255,.85); word-break:break-word; }
+    .hero-avatar{
+      width: 54px; height: 54px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      display:grid; place-items:center;
+      font-size: 22px;
+      flex:0 0 auto;
     }
 
-    .note {
-      margin-top:10px;
-      font-size:11px;
-      color:#9CA3AF;
+    .sc-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 14px;
+    }
+    @media (max-width: 980px){
+      .sc-grid{ grid-template-columns: 1fr; }
     }
 
-    footer {
-      padding:10px 20px 16px;
-      font-size:11px;
-      color:#6B7280;
+    .sc-panel{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+      padding: 12px;
+    }
+
+    .panel-title{ font-weight: 900; font-size: 12px; letter-spacing:.06em; margin-bottom: 8px; }
+    .panel-text{ font-size: 12px; color: var(--mut); line-height: 1.35; margin-bottom: 10px; }
+    .panel-subtitle{
+      font-size: 11px;
+      color: rgba(255,255,255,.75);
+      letter-spacing: .12em;
+      margin: 10px 0 8px;
+    }
+
+    .quick-row{ display:flex; gap:10px; }
+    .chip{
+      flex: 1;
+      border-radius: 999px;
+      padding: 10px 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color:#fff;
+      font-weight: 900;
+      font-size: 11px;
       text-align:center;
-      border-top:1px solid rgba(15,23,42,0.8);
-      background:#020617;
+      cursor:default;
     }
+
+    .sc-input{
+      width:100%;
+      margin-top: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--txt);
+      outline: none;
+      font-size: 12px;
+    }
+
+    .sc-cta{
+      width:100%;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(120,255,170,.35);
+      background: rgba(30,200,110,.20);
+      color: #fff;
+      font-weight: 1000;
+      text-align:center;
+      cursor:default;
+    }
+    .sc-cta.alt{
+      border-color: rgba(255,170,70,.40);
+      background: rgba(255,150,40,.18);
+    }
+
+    .action-btn{
+      width:100%;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color:#fff;
+      font-weight: 900;
+      font-size: 12px;
+      text-align:center;
+      cursor:default;
+    }
+
+    .panel-foot{ margin-top: 10px; font-size: 11px; color: var(--mut); line-height: 1.3; }
+
+    .panel-privacy{
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--mut);
+      line-height: 1.3;
+    }
+
+    .qrbox{
+      margin-top: 12px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .qr{
+      width: 84px;
+      height: 84px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px) 0 0 / 8px 8px,
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px) 0 0 / 8px 8px,
+        rgba(0,0,0,.18);
+      flex:0 0 auto;
+    }
+    .qrtext{ font-size: 11px; color: var(--mut); line-height: 1.3; }
+
+    .sc-bottom{
+      padding: 12px 14px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      text-align:center;
+      font-size: 11px;
+      color: var(--mut);
+    }
+    .sc-bottom .link{ color: rgba(120,255,170,.9); font-weight: 900; }
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="wrap">
     <header>
-      <div class="inner">
-        <div class="title">Maavnica SmartCard</div>
-        <a href="/" class="back-link">← Retour à la page d’accueil</a>
+      <div class="logo">M</div>
+      <div>
+        <h1>Commander votre SmartCard</h1>
+        <p class="sub">Remplis le formulaire, puis tu seras redirigé vers le paiement Stripe pour finaliser la commande.</p>
       </div>
     </header>
 
-    <main>
-      <div class="container">
-        <h1>Demande SmartCard / Affiliation</h1>
-        <p class="subtitle">
-          Remplissez ce formulaire, votre demande sera envoyée par email à
-          <strong>contact@maavnica.com</strong>.
-        </p>
+    <div class="grid">
+      <!-- LEFT: Form (on garde) -->
+      <section class="card">
+        <div class="badge" id="badgeOffre">OFFRE</div>
+        <h2 class="offerTitle" id="offerTitle">SmartCard Solo</h2>
+        <p class="priceLine" id="offerPrice">39€ HT / an</p>
 
-        <div class="card">
-          <!-- Formulaire envoyé en HTTPS vers formsubmit.co
-               qui renvoie le contenu à contact@maavnica.com -->
-          <form action="https://formsubmit.co/maavnica@gmail.com" method="POST">
-            <!-- Options formsubmit -->
-            <input type="hidden" name="_subject" value="Demande Maavnica SmartCard / Affiliation">
-            <!-- redirection après envoi : retour sur la landing -->
-            <input type="hidden" name="_next" value="https://maavnica-landing.onrender.com/?message=ok">
-            <!-- désactiver captcha formsubmit si tu veux -->
-            <input type="hidden" name="_captcha" value="false">
+        <ul class="miniList" id="offerBullets">
+          <li>1 SmartCard (QR code + liens essentiels)</li>
+          <li>Configuration sur mesure à partir de tes infos</li>
+          <li>Livraison rapide + support</li>
+        </ul>
 
-            <div class="field">
-              <label for="demande">Objet de votre demande</label>
-              <select id="demande" name="Objet">
-                <option value="Commande SmartCard Solo">Commande SmartCard Solo</option>
-                <option value="Offre SmartCard Pro">Offre SmartCard Pro</option>
-                <option value="Offre SmartCard Business">Offre SmartCard Business</option>
-                <option value="Affiliation Maavnica">Devenir affilié Maavnica</option>
-                <option value="Autre question / information">Autre question / information</option>
-              </select>
+        <!-- FORM (FormSubmit) -->
+        <form id="orderForm" action="https://formsubmit.co/contact@maavnica.com" method="POST">
+          <input type="hidden" name="_subject" value="Nouvelle commande SmartCard (pré-paiement)" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+
+          <!-- Champs cachés utiles -->
+          <input type="hidden" name="offre" id="fieldOffre" value="solo" />
+          <input type="hidden" name="redirect_stripe" id="fieldStripe" value="" />
+
+          <div class="row">
+            <div>
+              <label>Prénom</label>
+              <input name="prenom" id="prenom" required placeholder="Ex: Julie" />
             </div>
+            <div>
+              <label>Nom</label>
+              <input name="nom" id="nom" required placeholder="Ex: Martin" />
+            </div>
+          </div>
 
-            <div class="row-2">
-              <div class="field" style="flex:1;">
-                <label for="nom">Nom / Prénom</label>
-                <input id="nom" name="Nom / Prénom" required />
+          <div class="row">
+            <div>
+              <label>Email</label>
+              <input type="email" name="email" id="email" required placeholder="ex: julie@exemple.com" />
+            </div>
+            <div>
+              <label>Téléphone</label>
+              <input name="telephone" id="telephone" placeholder="Optionnel" />
+            </div>
+          </div>
+
+          <label>Nom de l’entreprise / activité</label>
+          <input name="entreprise" id="entreprise" placeholder="Ex: Plomberie Martin" />
+
+          <label>Ta demande (liens à intégrer, réseaux, Google Avis, WhatsApp, etc.)</label>
+          <textarea name="demande" id="demande" placeholder="Décris ce que tu veux sur ta SmartCard…"></textarea>
+
+          <button class="btn" id="submitBtn" type="submit">Envoyer & payer sur Stripe</button>
+
+          <div class="okbox" id="okbox">
+            ✅ <strong>Formulaire envoyé.</strong><br/>
+            Redirection vers Stripe en cours pour finaliser le paiement…
+          </div>
+
+          <p class="hint">
+            Le paiement finalise la commande. Après paiement, tu reçois un email de confirmation + les prochaines étapes.
+          </p>
+        </form>
+      </section>
+
+      <!-- RIGHT: SmartCard Demo (refait, prêt) -->
+      <section class="card">
+       <div class="badge">APERÇU SMARTCARD</div>
+
+
+        <div class="phone">
+          <div class="phone-notch"></div>
+
+          <div class="phone-screen">
+            <div class="sc-top">
+              <div class="sc-tabs">
+                <span class="tab active">💡 Profil digital</span>
+                <span class="tab">🛍️ Produit en ligne</span>
               </div>
-              <div class="field" style="flex:1;">
-                <label for="activite">Activité / Entreprise</label>
-                <input id="activite" name="Activité / Entreprise" />
+
+              <div class="sc-hero">
+                <div class="hero-left">
+                  <div class="hero-title">MAAVNICA SMARTCARD</div>
+                  <div class="hero-name" id="demoName">Julie Martin</div>
+                  <div class="hero-desc" id="demoDesc">
+                    Présentation, contact et accès direct à vos liens digitaux en un seul endroit.
+                  </div>
+                  <div class="hero-status">🟢 Disponible pour vos clients</div>
+
+                  <div class="hero-line">✉️ <span id="demoEmail">contact@exemple.com</span></div>
+                  <div class="hero-line">🌐 <span id="demoSite">https://maavnica.com</span></div>
+                </div>
+
+                <div class="hero-avatar" aria-hidden="true">🪪</div>
               </div>
             </div>
 
-            <div class="row-2">
-              <div class="field" style="flex:1;">
-                <label for="email">Email</label>
-                <input id="email" type="email" name="Email" />
+            <div class="sc-grid">
+              <!-- Colonne gauche -->
+              <div class="sc-panel">
+                <div class="panel-title">Contact & actions rapides</div>
+                <div class="panel-text">
+                  Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
+                </div>
+
+                <div class="panel-subtitle">VOTRE AVIS RAPIDE</div>
+                <div class="quick-row">
+                  <div class="chip">😊 Je suis satisfait</div>
+                  <div class="chip">😕 Je ne suis pas satisfait</div>
+                </div>
+
+                <input class="sc-input" placeholder="Un mot sur votre expérience (optionnel)" />
+
+                <div class="sc-cta">✨ Envoyer mon avis</div>
+
+                <div class="panel-subtitle" style="margin-top:14px;">AUTRES FAÇONS DE VOUS CONTACTER</div>
+
+                <div class="action-btn">⭐ Laisser un avis Google</div>
+                <div class="action-btn">💬 Écrire sur WhatsApp</div>
+                <div class="action-btn">📞 Appeler directement</div>
+                <div class="action-btn">💳 Payer en ligne (si disponible)</div>
+
+                <div class="panel-foot">
+                  Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
+                </div>
               </div>
-              <div class="field" style="flex:1;">
-                <label for="telephone">Téléphone</label>
-                <input id="telephone" name="Téléphone" required />
+
+              <!-- Colonne droite -->
+              <div class="sc-panel">
+                <div class="panel-title">DEMANDE DE CONTACT / DÉMO</div>
+
+                <input class="sc-input" placeholder="Votre nom *" />
+                <input class="sc-input" placeholder="Téléphone *" />
+                <input class="sc-input" placeholder="Email (facultatif)" />
+                <textarea class="sc-input" style="min-height:90px;resize:none" placeholder="Votre besoin en quelques mots *"></textarea>
+
+                <div class="sc-cta alt">📩 Envoyer ma demande de démo</div>
+
+                <div class="panel-privacy">
+                  Vous ne serez contacté que par ce professionnel. Vos informations ne sont ni revendues ni partagées.
+                </div>
+
+                <div class="qrbox">
+                  <div class="qr"></div>
+                  <div class="qrtext">
+                    QR à scanner après intervention, sur vos devis ou vos factures.<br/>
+                    Lien unique relié à cette carte.
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="field">
-              <label for="message">Votre besoin / message</label>
-              <textarea id="message" name="Message"
-                        placeholder="Expliquez en quelques lignes ce que vous souhaitez (commande, affiliation, questions…)"></textarea>
+            <div class="sc-bottom">
+              SmartCard Maavnica — Prototype · <span class="link">En savoir plus</span>
             </div>
-
-            <button type="submit">
-              ✉️ Envoyer ma demande
-            </button>
-
-            <div class="note">
-              Vos informations sont transmises en HTTPS à notre prestataire de formulaire, puis envoyées à
-              <strong>contact@maavnica.com</strong>.
-            </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </main>
 
-    <footer>
-      Maavnica SmartCard – Lancement 2025 · Première brique de l’écosystème Maavnica
-    </footer>
+        <p class="hint" style="margin-top:12px">
+          Aperçu de la SmartCard finale (design + blocs + actions). Le contenu sera personnalisé avec les infos de ton client.
+        </p>
+      </section>
+    </div>
   </div>
 
-  <script>
-    // Pré-sélectionne l'offre en fonction du paramètre ?offre=
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      const offre = (params.get("offre") || "").toLowerCase();
-      const select = document.getElementById("demande");
-      if (!select) return;
+<script>
+  // ✅ Liens Stripe
+  const STRIPE_SOLO_URL = "https://buy.stripe.com/bJeeV60xObXdf1AcSp4Rq00";
+  const STRIPE_BUSINESS_URL = "https://buy.stripe.com/bJe8wIcgwe5l3iScSp4Rq01";
 
-      if (offre === "pro") select.value = "Offre SmartCard Pro";
-      else if (offre === "business") select.value = "Offre SmartCard Business";
-      else if (offre === "affiliation") select.value = "Affiliation Maavnica";
-      else if (offre === "solo") select.value = "Commande SmartCard Solo";
-      else if (offre) select.value = "Autre question / information";
-    })();
-  </script>
+  function getOffre() {
+    const u = new URL(window.location.href);
+    const offre = (u.searchParams.get("offre") || "solo").toLowerCase();
+    return (offre === "business") ? "business" : "solo";
+  }
+
+  function setOfferUI(offre){
+    const badge = document.getElementById("badgeOffre");
+    const title = document.getElementById("offerTitle");
+    const price = document.getElementById("offerPrice");
+    const bullets = document.getElementById("offerBullets");
+    const fieldOffre = document.getElementById("fieldOffre");
+    const fieldStripe = document.getElementById("fieldStripe");
+
+    if(offre === "business"){
+      badge.textContent = "OFFRE BUSINESS";
+      title.textContent = "SmartCard Business";
+      price.textContent = "99€ HT / an (5 cartes)";
+      bullets.innerHTML = `
+        <li>Pack de 5 SmartCards (idéal équipe / multi-activités)</li>
+        <li>Configuration sur mesure + support</li>
+        <li>Livraison rapide + prochaines étapes après paiement</li>`;
+      fieldOffre.value = "business";
+      fieldStripe.value = STRIPE_BUSINESS_URL;
+    } else {
+      badge.textContent = "OFFRE SOLO";
+      title.textContent = "SmartCard Solo";
+      price.textContent = "39€ HT / an";
+      bullets.innerHTML = `
+        <li>1 SmartCard (QR code + liens essentiels)</li>
+        <li>Configuration sur mesure à partir de tes infos</li>
+        <li>Livraison rapide + support</li>`;
+      fieldOffre.value = "solo";
+      fieldStripe.value = STRIPE_SOLO_URL;
+    }
+  }
+
+  // Live update dans l’aperçu SmartCard (droite)
+  function bindPreview(){
+    const prenom = document.getElementById("prenom");
+    const nom = document.getElementById("nom");
+    const entreprise = document.getElementById("entreprise");
+    const email = document.getElementById("email");
+
+    const demoName = document.getElementById("demoName");
+    const demoEmail = document.getElementById("demoEmail");
+
+    function update(){
+      const full = `${(prenom.value||"Julie").trim()} ${(nom.value||"Martin").trim()}`.trim();
+      if (demoName) demoName.textContent = full || "Julie Martin";
+
+      // On affiche l'email saisi (sinon exemple)
+      const em = (email.value || "contact@exemple.com").trim();
+      if (demoEmail) demoEmail.textContent = em || "contact@exemple.com";
+
+      // (Entreprise : on pourrait l’afficher dans la desc si tu veux)
+      const ent = (entreprise.value || "").trim();
+      const desc = document.getElementById("demoDesc");
+      if (desc) {
+        desc.textContent = ent
+          ? `${ent} — Présentation, contact et accès direct à vos liens digitaux en un seul endroit.`
+          : `Présentation, contact et accès direct à vos liens digitaux en un seul endroit.`;
+      }
+    }
+
+    [prenom, nom, entreprise, email].forEach(el => el.addEventListener("input", update));
+    update();
+  }
+
+  // Intercept submit: feedback + envoi FormSubmit + redirect Stripe
+  function setupSubmitRedirect(){
+    const form = document.getElementById("orderForm");
+    const btn = document.getElementById("submitBtn");
+    const okbox = document.getElementById("okbox");
+    const fieldStripe = document.getElementById("fieldStripe");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const stripeUrl = (fieldStripe.value || "").trim();
+      if(!stripeUrl){
+        alert("Lien Stripe manquant.");
+        return;
+      }
+
+      btn.disabled = true;
+      okbox.style.display = "block";
+
+      try {
+        const fd = new FormData(form);
+        await fetch(form.action, {
+          method: "POST",
+          body: fd,
+          headers: { "Accept": "application/json" }
+        });
+      } catch (err) {
+        // si erreur réseau, on redirige quand même vers Stripe
+      } finally {
+        window.location.href = stripeUrl;
+      }
+    });
+  }
+
+  (function init(){
+    const offre = getOffre();
+    setOfferUI(offre);
+    bindPreview();
+    setupSubmitRedirect();
+  })();
+</script>
 </body>
 </html>
-
 
