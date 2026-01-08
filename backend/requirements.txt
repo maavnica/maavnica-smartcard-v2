@@ -8,6 +8,7 @@ pillow
 python-multipart
 itsdangerous
 psycopg2-binary
-stripe>=10.0.0,<11.0.0
+stripe==14.1.0
+
 
 
