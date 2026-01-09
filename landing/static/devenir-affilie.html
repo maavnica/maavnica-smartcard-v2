@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Devenir affilié — Maavnica SmartCard</title>
+  <meta name="description" content="Inscrivez-vous au programme affilié Maavnica SmartCard et gagnez une commission sur chaque vente validée." />
+
+  <style>
+    :root{
+      --bg0:#050a13;
+      --bg1:#070f1f;
+      --card:#0b1830;
+      --card2:#081326;
+      --line:rgba(255,255,255,.08);
+      --text:#eaf2ff;
+      --muted:rgba(255,255,255,.72);
+      --muted2:rgba(255,255,255,.55);
+      --accent:#ffcf4a;
+      --ok:#26d07c;
+      --radius:18px;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --shadow2:0 10px 30px rgba(0,0,0,.45);
+      --max:1120px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 650px at 15% 0%, rgba(70,120,255,.18), transparent 60%),
+        radial-gradient(900px 520px at 80% 10%, rgba(255,205,80,.12), transparent 55%),
+        radial-gradient(900px 520px at 50% 90%, rgba(32,210,255,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 56px}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      padding:10px 12px; border:1px solid var(--line); border-radius:14px;
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow2);
+    }
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      font-weight:800;
+    }
+    .brand strong{display:block; font-size:14px; letter-spacing:.3px}
+    .brand span{display:block; font-size:12px; color:var(--muted2)}
+    .nav{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      height:44px; padding:0 16px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      transition:.15s transform ease, .15s opacity ease, .15s background ease;
+      box-shadow:var(--shadow2);
+      font-weight:650;
+    }
+    .btn:hover{transform:translateY(-1px); background:rgba(255,255,255,.06)}
+    .btn.primary{
+      border-color:rgba(255,207,74,.32);
+      background:linear-gradient(180deg, rgba(255,207,74,.22), rgba(255,207,74,.10));
+    }
+    .btn.primary:hover{background:linear-gradient(180deg, rgba(255,207,74,.28), rgba(255,207,74,.12))}
+    .hero{
+      margin-top:12px;
+      padding:22px 18px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow:var(--shadow);
+    }
+    .hero h1{
+      margin:0 0 6px;
+      font-size: clamp(26px, 3.2vw, 40px);
+      letter-spacing:.2px;
+    }
+    .hero p{margin:0; color:var(--muted); max-width:70ch; line-height:1.5}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:16px 16px 10px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .card .hd h2{margin:0; font-size:16px; letter-spacing:.25px}
+    .card .hd .hint{margin:2px 0 0; color:var(--muted2); font-size:12px}
+    .card .bd{padding:16px}
+    .steps{display:grid; gap:10px}
+    .step{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:12px; border:1px solid var(--line);
+      border-radius:14px; background:rgba(0,0,0,.12);
+    }
+    .chip{
+      width:28px; height:28px; border-radius:10px; display:grid; place-items:center;
+      background:rgba(255,207,74,.14);
+      border:1px solid rgba(255,207,74,.25);
+      font-weight:800; color:#ffe8a6;
+      flex:0 0 auto;
+    }
+    .step b{display:block; margin-bottom:2px}
+    .step p{margin:0; color:var(--muted); font-size:13px; line-height:1.4}
+    .pricing{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    @media (max-width:520px){
+      .pricing{grid-template-columns:1fr}
+    }
+    .price{
+      padding:14px; border:1px solid var(--line); border-radius:16px;
+      background:rgba(0,0,0,.12);
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:11px; letter-spacing:.4px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      margin-bottom:8px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .price .name{margin:0 0 6px; font-size:15px; font-weight:800}
+    .price .desc{margin:0 0 10px; color:var(--muted2); font-size:12px; line-height:1.4}
+    .gain{
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:linear-gradient(180deg, rgba(38,208,124,.18), rgba(38,208,124,.06));
+      border:1px solid rgba(38,208,124,.26);
+    }
+    .gain .amt{font-size:18px; font-weight:900; color:#bff7dd}
+    .gain .lab{font-size:12px; color:rgba(255,255,255,.70)}
+    .mini{
+      margin:10px 0 0;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    form{display:grid; gap:10px}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width:520px){ .row{grid-template-columns:1fr} }
+
+    label{font-size:12px; color:var(--muted2); margin-left:6px}
+    input, textarea, select{
+      width:100%;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      padding:12px 12px;
+      outline:none;
+      box-shadow:none;
+    }
+    textarea{min-height:110px; resize:vertical}
+    input::placeholder, textarea::placeholder{color:rgba(255,255,255,.35)}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:4px}
+    .submit{
+      border:none;
+      background:linear-gradient(180deg, rgba(255,207,74,.95), rgba(255,166,0,.92));
+      color:#1a1405;
+      font-weight:900;
+      height:48px;
+      padding:0 18px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow:0 14px 40px rgba(255,190,40,.18);
+    }
+    .submit:hover{opacity:.96; transform:translateY(-1px)}
+    .fine{
+      font-size:12px; color:var(--muted2); line-height:1.45;
+      border-top:1px solid var(--line); padding-top:12px; margin-top:12px;
+    }
+    .kpis{
+      display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:14px;
+    }
+    @media (max-width:780px){ .kpis{grid-template-columns:1fr} }
+    .kpi{
+      padding:12px; border:1px solid var(--line); border-radius:16px;
+      background:rgba(0,0,0,.12);
+    }
+    .kpi b{display:block; margin-bottom:2px}
+    .kpi span{color:var(--muted); font-size:13px}
+    footer{
+      margin-top:18px;
+      color:rgba(255,255,255,.45);
+      font-size:12px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <a class="brand" href="https://smartcard.maavnica.com">
+        <div class="logo">M</div>
+        <div>
+          <strong>Maavnica SmartCard</strong>
+          <span>Programme d’affiliation</span>
+        </div>
+      </a>
+      <div class="nav">
+        <a class="btn" href="https://smartcard.maavnica.com">← Retour au site</a>
+        <a class="btn primary" href="#form">Devenir affilié</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1>Gagnez de l’argent en recommandant la SmartCard Maavnica</h1>
+      <p>
+        Vous recommandez la SmartCard à vos contacts (artisans, TPE, indépendants),
+        nous gérons la production et le support. Vous touchez une commission sur chaque vente validée.
+      </p>
+
+      <div class="kpis">
+        <div class="kpi"><b>✅ Gratuit</b><span>Inscription sans engagement</span></div>
+        <div class="kpi"><b>⚡ Simple</b><span>Vous recommandez, on s’occupe du reste</span></div>
+        <div class="kpi"><b>💳 Paiement</b><span>Commissions versées sur ventes confirmées</span></div>
+      </div>
+    </section>
+
+    <div class="grid">
+
+      <!-- GAUCHE : explications + commissions -->
+      <section class="card">
+        <div class="hd">
+          <div>
+            <h2>Comment ça marche</h2>
+            <div class="hint">En 4 étapes, sans complexité.</div>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="steps">
+            <div class="step">
+              <div class="chip">1</div>
+              <div>
+                <b>Vous vous inscrivez</b>
+                <p>On valide votre profil et on vous envoie les liens + supports.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="chip">2</div>
+              <div>
+                <b>Vous recommandez</b>
+                <p>À votre réseau : artisans, indépendants, TPE, conciergeries, etc.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="chip">3</div>
+              <div>
+                <b>Vente confirmée</b>
+                <p>Nous produisons la SmartCard et confirmons la commande.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="chip">4</div>
+              <div>
+                <b>Vous touchez votre commission</b>
+                <p>Versement sur les ventes validées côté Maavnica.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <h2 style="margin:0 0 8px; font-size:16px">Rémunération</h2>
+          <div class="pricing">
+            <div class="price">
+              <div class="badge">OFFRE SOLO</div>
+              <p class="name">SmartCard Solo — 39€ / an</p>
+              <p class="desc">1 SmartCard (QR code + liens essentiels). Idéal pour recommandations en volume.</p>
+              <div class="gain">
+                <div class="lab">Commission</div>
+                <div class="amt">20€</div>
+              </div>
+            </div>
+
+            <div class="price">
+              <div class="badge">OFFRE BUSINESS</div>
+              <p class="name">SmartCard Business — 99€ / an</p>
+              <p class="desc">Pack (jusqu’à 5 cartes). Parfait pour pros, équipes, ou recommandations qualifiées.</p>
+              <div class="gain">
+                <div class="lab">Commission</div>
+                <div class="amt">35€</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="mini">
+            Les commissions sont versées uniquement sur les ventes validées côté Maavnica.
+          </p>
+        </div>
+      </section>
+
+      <!-- DROITE : formulaire -->
+      <section class="card" id="form">
+        <div class="hd">
+          <div>
+            <h2>Inscription affilié</h2>
+            <div class="hint">Réponse rapide par email.</div>
+          </div>
+        </div>
+        <div class="bd">
+
+          <!-- FormSubmit -->
+          <form action="https://formsubmit.co/contact@maavnica.com" method="POST">
+            <!-- anti-spam -->
+            <input type="text" name="_honey" style="display:none">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Nouvelle inscription affilié — Maavnica SmartCard">
+            <input type="hidden" name="_template" value="table">
+
+            <!-- redirect après envoi -->
+            <input type="hidden" name="_next" value="https://smartcard.maavnica.com/devenir-affilie-merci.html">
+
+            <!-- champs -->
+            <div class="row">
+              <div>
+                <label>Prénom *</label>
+                <input name="prenom" required placeholder="Ex: Julie" />
+              </div>
+              <div>
+                <label>Nom *</label>
+                <input name="nom" required placeholder="Ex: Martin" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label>Email *</label>
+                <input type="email" name="email" required placeholder="ex: julie@exemple.com" />
+              </div>
+              <div>
+                <label>Téléphone (optionnel)</label>
+                <input name="telephone" placeholder="Ex: 06 00 00 00 00" />
+              </div>
+            </div>
+
+            <div>
+              <label>Ville / Région (optionnel)</label>
+              <input name="zone" placeholder="Ex: Auxerre / Bourgogne" />
+            </div>
+
+            <div>
+              <label>Comment comptez-vous recommander ? (optionnel)</label>
+              <textarea name="canal" placeholder="Ex: réseau pro, artisans, réseaux sociaux, partenaires, etc."></textarea>
+            </div>
+
+            <div class="actions">
+              <button class="submit" type="submit">✨ S’inscrire au programme affilié</button>
+              <a class="btn" href="https://smartcard.maavnica.com">Retour au site</a>
+            </div>
+
+            <div class="fine">
+              Vos informations sont utilisées uniquement pour vous contacter au sujet du programme affilié.
+              Aucune donnée n’est revendue ni partagée.
+            </div>
+          </form>
+
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      © Maavnica — SmartCard • Programme d’affiliation
+    </footer>
+
+  </div>
+</body>
+</html>
