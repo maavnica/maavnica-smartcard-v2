@@ -18,6 +18,9 @@ function fillForm(card) {
 
   // Champs existants
   document.getElementById("company-name").value = card.company_name || "";
+document.getElementById("first-name").value = card.first_name || "";
+document.getElementById("last-name").value = card.last_name || "";
+
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
@@ -50,6 +53,9 @@ function resetForm() {
 
   // Champs existants
   document.getElementById("company-name").value = "";
+document.getElementById("first-name").value = "";
+document.getElementById("last-name").value = "";
+
   document.getElementById("slug").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
@@ -136,6 +142,8 @@ async function saveCard() {
 
   // Payload envoyé au backend
   const payload = {
+ first_name: document.getElementById("first-name")?.value.trim() || null,
+  last_name: document.getElementById("last-name")?.value.trim() || null,
     company_name: companyName,
     slug,
 
