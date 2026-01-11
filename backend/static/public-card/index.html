@@ -724,7 +724,7 @@
       </div>
 
       <div class="footer">
-        SmartCard Maavnica – Prototype
+        SmartCard Maavnica
         ·
         <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">En savoir plus</a>
       </div>
@@ -910,25 +910,54 @@
 
         applyTheme(card.theme, card);
 
-        const companyName = card.company_name || "Votre entreprise";
-        const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
-        const last = (card.last_name || card.nom || card.lastname || "").toString().trim();
-        const fullName = `${first} ${last}`.trim();
+        const companyName = (card.company_name || "Votre entreprise").toString().trim();
 
-        const personEl = document.getElementById("person-name");
-        const companyEl = document.getElementById("company-name");
+// On supporte 2 formats SANS changer le backend :
+// 1) Si first_name/last_name existent (future-proof) -> on les affiche
+// 2) Sinon, on permet de saisir dans "Nom de l’entreprise / activité" : "Prénom Nom — Entreprise"
+function splitDisplayName(raw) {
+  const s = (raw || "").toString().trim();
+  if (!s) return { person: "", company: "" };
 
-        if (fullName) {
-          if (personEl) personEl.textContent = fullName;
-          if (companyEl) {
-            companyEl.textContent = companyName;
-            companyEl.style.display = "";
-          }
-        } else {
-          // fallback: pas de nom/prénom -> on affiche juste l’entreprise en grand
-          if (personEl) personEl.textContent = companyName;
-          if (companyEl) companyEl.style.display = "none";
-        }
+  // Séparateurs acceptés : "—" (recommandé), "|" ou " - " (avec espaces)
+  // On évite le "-" simple pour ne pas casser les noms composés.
+  const parts = s.split(/\s+(?:—|\|)\s+|\s-\s/).map(x => x.trim()).filter(Boolean);
+
+  if (parts.length >= 2) {
+    return { person: parts[0], company: parts.slice(1).join(" — ") };
+  }
+  return { person: s, company: "" };
+}
+
+const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
+const last  = (card.last_name  || card.nom    || card.lastname  || "").toString().trim();
+const fullName = `${first} ${last}`.trim();
+
+const personEl = document.getElementById("person-name");
+const companyEl = document.getElementById("company-name");
+
+if (fullName) {
+  // Format "pro" : prénom/nom en gros + entreprise dessous
+  if (personEl) personEl.textContent = fullName;
+  if (companyEl) {
+    companyEl.textContent = companyName;
+    companyEl.style.display = "";
+  }
+} else {
+  // Format "simple" : on split company_name si l’utilisateur a mis "Nom — Entreprise"
+  const d = splitDisplayName(companyName);
+
+  if (personEl) personEl.textContent = d.person || companyName;
+
+  if (companyEl) {
+    if (d.company) {
+      companyEl.textContent = d.company;
+      companyEl.style.display = "";
+    } else {
+      companyEl.style.display = "none";
+    }
+  }
+}
 
         const heroEmojiEl = document.getElementById("hero-emoji");
         const mainIcon = CURRENT_PROFILE_CONFIG.mainIcon;
