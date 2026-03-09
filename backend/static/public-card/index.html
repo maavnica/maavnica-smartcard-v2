@@ -669,6 +669,7 @@
           <button class="btn-link" id="btn-google-review">
             ⭐ Laisser un avis Google
           </button>
+          <a class="btn-link" id="btn-add-contact" href="#">👤 Ajouter au contact</a>
           <button class="btn-link" id="btn-whatsapp">
             💬 Écrire sur WhatsApp
           </button>
@@ -1070,6 +1071,11 @@ if (fullName) {
             btnPay.disabled = true;
             btnPay.onclick = null;
           }
+        }
+
+        const btnAddContact = document.getElementById("btn-add-contact");
+        if (btnAddContact) {
+          btnAddContact.href = "/api/public/cards/" + encodeURIComponent(slug) + "/vcard";
         }
 
         const btnFeedback = document.getElementById("btn-send-feedback");

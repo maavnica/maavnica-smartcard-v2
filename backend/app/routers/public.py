@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from html import escape
 import re
@@ -28,6 +29,49 @@ def get_card_by_slug_or_404(slug: str, db: Session) -> Card:
 
 def _card_url(card: Card) -> str:
     return f"https://maavnica-smartcard-v2.onrender.com/c/{card.slug}"
+
+
+def _vcard_escape(s: str) -> str:
+    """Échappe les caractères spéciaux pour vCard 3.0 (\\ ; \\n)."""
+    if not s:
+        return ""
+    return (
+        s.replace("\\", "\\\\")
+        .replace(";", "\\;")
+        .replace("\n", "\\n")
+        .replace("\r", "")
+    )
+
+
+def _build_vcard(card: Card) -> str:
+    """
+    Construit une vCard (.vcf) à partir des champs existants du modèle Card.
+    Utilise : company_name (nom complet), phone, email_pro, site_web.
+    """
+    # Nom complet : le modèle n'a pas first_name/last_name, on utilise company_name
+    name = (card.company_name or "").strip()
+    if not name:
+        name = "SmartCard"
+    n_escaped = _vcard_escape(name)
+    fn_escaped = _vcard_escape(name)
+
+    lines = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        f"N:{n_escaped};;;",
+        f"FN:{fn_escaped}",
+    ]
+    if name:
+        lines.append(f"ORG:{_vcard_escape(name)}")
+    if card.phone and card.phone.strip():
+        lines.append(f"TEL;TYPE=CELL,VOICE:{_vcard_escape(card.phone.strip())}")
+    if card.email_pro and card.email_pro.strip():
+        lines.append(f"EMAIL;TYPE=INTERNET:{_vcard_escape(card.email_pro.strip())}")
+    if card.site_web and card.site_web.strip():
+        lines.append(f"URL:{_vcard_escape(card.site_web.strip())}")
+    lines.append("END:VCARD")
+
+    return "\r\n".join(lines)
 
 
 def _base_email_html(title: str, subtitle: str, body_html: str, cta_url: str, cta_label: str) -> str:
@@ -178,6 +222,19 @@ def lead_labels_for_profile(profile: str | None) -> dict:
 @router.get("/cards/{slug}", response_model=CardPublic)
 def get_public_card(slug: str, db: Session = Depends(get_db)):
     return get_card_by_slug_or_404(slug, db)
+
+
+@router.get("/cards/{slug}/vcard")
+def get_vcard(slug: str, db: Session = Depends(get_db)):
+    """Télécharge une vCard (.vcf) avec les infos principales de la carte."""
+    card = get_card_by_slug_or_404(slug, db)
+    vcard = _build_vcard(card)
+    filename = f"{card.slug}.vcf"
+    return Response(
+        content=vcard,
+        media_type="text/vcard",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.post("/cards/{card_id}/feedback", status_code=status.HTTP_201_CREATED)
