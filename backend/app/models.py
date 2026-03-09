@@ -67,9 +67,10 @@ class Card(Base):
     facebook = Column(String, nullable=True)
     tiktok = Column(String, nullable=True)
 
+    # Visuel
+    avatar_url = Column(String, nullable=True)  # URL de la photo / du logo
     # Thème visuel (apple, material, black-gold, artisan)
     theme = Column(String, nullable=False, default="apple")
-
     # Couleur principale personnalisable
     theme_color = Column(String, nullable=True, default="#2563EB")
 

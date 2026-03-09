@@ -33,6 +33,7 @@ class CardBase(BaseModel):
     tiktok: Optional[str] = None
 
     # 🔹 Visuel
+    avatar_url: Optional[str] = None
     theme: str = "apple"                  # apple, material, black-gold, artisan…
     theme_color: Optional[str] = "#2563EB"  # couleur dominante (hex)
 
@@ -68,6 +69,7 @@ class CardUpdate(BaseModel):
     facebook: Optional[str] = None
     tiktok: Optional[str] = None
 
+    avatar_url: Optional[str] = None
     theme: Optional[str] = None
     theme_color: Optional[str] = None
 
@@ -99,6 +101,8 @@ class CardPublic(BaseModel):
 
     theme: str = "apple"
     theme_color: Optional[str] = "#2563EB"
+
+    avatar_url: Optional[str] = None
 
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None

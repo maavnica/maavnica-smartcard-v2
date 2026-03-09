@@ -164,6 +164,14 @@
       flex: 0 0 auto;
     }
 
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      object-fit: cover;
+      display: none;
+    }
+
     .hero-texts { flex: 1; min-width: 0; }
 
     .hero-subline {
@@ -596,7 +604,8 @@
         </div>
 
         <div class="hero-main-row">
-          <div class="hero-avatar">
+          <div class="hero-avatar" aria-label="Photo ou logo">
+            <img id="hero-avatar-img" alt="Photo ou logo" loading="lazy" />
             <span id="hero-emoji">🏷️</span>
           </div>
 
@@ -642,6 +651,10 @@
             Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
           </div>
 
+          <button class="btn-link" id="btn-call">
+            📞 Appeler directement
+          </button>
+
           <div class="section-label">Votre avis rapide</div>
           <div class="pill-row">
             <button class="pill" id="pill-yes">
@@ -672,9 +685,6 @@
           <a class="btn-link" id="btn-add-contact" href="#">👤 Ajouter au contact</a>
           <button class="btn-link" id="btn-whatsapp">
             💬 Écrire sur WhatsApp
-          </button>
-          <button class="btn-link" id="btn-call">
-            📞 Appeler directement
           </button>
           <button class="btn-link" id="btn-pay" disabled>
             💳 Payer en ligne (si disponible)
@@ -961,11 +971,43 @@ if (fullName) {
 }
 
         const heroEmojiEl = document.getElementById("hero-emoji");
+        const avatarImg = document.getElementById("hero-avatar-img");
         const mainIcon = CURRENT_PROFILE_CONFIG.mainIcon;
-        heroEmojiEl.textContent =
+        const avatarUrl = (
+          card.logo_url ||
+          card.photo_url ||
+          card.image_url ||
+          card.avatar_url ||
+          ""
+        ).toString().trim();
+
+        const computeIcon = () =>
           typeof mainIcon === "function"
             ? mainIcon(card)
             : mainIcon || guessEmoji(card);
+
+        if (avatarImg && avatarUrl) {
+          avatarImg.src = avatarUrl;
+          avatarImg.style.display = "block";
+          if (heroEmojiEl) {
+            heroEmojiEl.style.display = "none";
+          }
+          avatarImg.onerror = () => {
+            avatarImg.style.display = "none";
+            if (heroEmojiEl) {
+              heroEmojiEl.textContent = computeIcon();
+              heroEmojiEl.style.display = "block";
+            }
+          };
+        } else {
+          if (avatarImg) {
+            avatarImg.style.display = "none";
+          }
+          if (heroEmojiEl) {
+            heroEmojiEl.textContent = computeIcon();
+            heroEmojiEl.style.display = "block";
+          }
+        }
 
         const subtitleEl = document.getElementById("hero-subtitle");
         if (subtitleEl) {
@@ -1092,8 +1134,25 @@ if (fullName) {
             }
           }
 
-          if (pillYes) pillYes.onclick = () => selectFeedback("yes");
-          if (pillNo) pillNo.onclick = () => selectFeedback("no");
+          if (pillYes) {
+            pillYes.onclick = () => {
+              selectFeedback("yes");
+              const reviewUrl = (card.google_review_link || "").toString().trim();
+              if (reviewUrl) {
+                window.open(reviewUrl, "_blank", "noopener");
+              }
+            };
+          }
+
+          if (pillNo) {
+            pillNo.onclick = () => {
+              selectFeedback("no");
+              const commentEl = document.getElementById("feedback-comment");
+              if (commentEl) {
+                commentEl.focus();
+              }
+            };
+          }
 
           btnFeedback.onclick = async () => {
             if (!feedbackValue) {
