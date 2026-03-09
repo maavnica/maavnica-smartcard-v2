@@ -37,6 +37,7 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("profile").value = card.profile || "artisan";
   document.getElementById("email-pro").value = card.email_pro || "";
   document.getElementById("site-web").value = card.site_web || "";
+  document.getElementById("avatar-url").value = card.avatar_url || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
@@ -72,6 +73,7 @@ document.getElementById("last-name").value = "";
   document.getElementById("profile").value = "artisan";
   document.getElementById("email-pro").value = "";
   document.getElementById("site-web").value = "";
+  document.getElementById("avatar-url").value = "";
 
   document.getElementById("public-link").textContent = "";
   document.getElementById("feedback-list").innerHTML =
@@ -161,7 +163,8 @@ async function saveCard() {
     // 🔹 NOUVEAUX CHAMPS
     profile: document.getElementById("profile").value || "artisan",
     email_pro: document.getElementById("email-pro").value.trim() || null,
-    site_web: document.getElementById("site-web").value.trim() || null
+    site_web: document.getElementById("site-web").value.trim() || null,
+    avatar_url: document.getElementById("avatar-url").value.trim() || null
   };
 
   // on met aussi à jour currentProfile si on change dans le formulaire
