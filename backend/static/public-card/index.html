@@ -990,22 +990,10 @@ if (fullName) {
 
         if (avatarImg && avatarUrl) {
           avatarImg.src = avatarUrl;
-          console.warn("[DEBUG] avatarImg.src après assignation:", avatarImg.src);
           avatarImg.style.display = "block";
-          if (heroEmojiEl) {
-            heroEmojiEl.style.display = "none";
-          }
-          avatarImg.onload = () => {
-            console.warn("[DEBUG] Image profil chargée avec succès:", avatarImg.src);
-          };
-          avatarImg.onerror = () => {
-            console.warn("[DEBUG] Échec du chargement de l'image profil. avatarImg.src:", avatarImg.src);
-            avatarImg.style.display = "none";
-            if (heroEmojiEl) {
-              heroEmojiEl.textContent = computeIcon();
-              heroEmojiEl.style.display = "block";
-            }
-          };
+          avatarImg.style.opacity = "1";
+          avatarImg.style.visibility = "visible";
+          if (heroEmojiEl) heroEmojiEl.style.display = "none";
         } else {
           if (avatarImg) {
             avatarImg.style.display = "none";
