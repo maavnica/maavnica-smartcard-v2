@@ -993,7 +993,21 @@ if (fullName) {
           avatarImg.style.display = "block";
           avatarImg.style.opacity = "1";
           avatarImg.style.visibility = "visible";
-          if (heroEmojiEl) heroEmojiEl.style.display = "none";
+          avatarImg.style.position = "relative";
+          avatarImg.style.zIndex = "1";
+          if (heroEmojiEl) {
+            heroEmojiEl.style.display = "none";
+            heroEmojiEl.style.visibility = "hidden";
+          }
+          avatarImg.onerror = () => {
+            console.warn("[DEBUG] Échec du chargement de l'image profil. avatarImg.src:", avatarImg.src);
+            avatarImg.style.display = "none";
+            if (heroEmojiEl) {
+              heroEmojiEl.textContent = computeIcon();
+              heroEmojiEl.style.display = "block";
+              heroEmojiEl.style.visibility = "visible";
+            }
+          };
         } else {
           if (avatarImg) {
             avatarImg.style.display = "none";
@@ -1001,6 +1015,7 @@ if (fullName) {
           if (heroEmojiEl) {
             heroEmojiEl.textContent = computeIcon();
             heroEmojiEl.style.display = "block";
+            heroEmojiEl.style.visibility = "visible";
           }
         }
 
