@@ -981,6 +981,8 @@ if (fullName) {
           ""
         ).toString().trim();
 
+        console.warn("[DEBUG] avatarUrl:", avatarUrl, "card.avatar_url:", card.avatar_url, "card.logo_url:", card.logo_url, "card.photo_url:", card.photo_url, "card.image_url:", card.image_url);
+
         const computeIcon = () =>
           typeof mainIcon === "function"
             ? mainIcon(card)
@@ -988,11 +990,16 @@ if (fullName) {
 
         if (avatarImg && avatarUrl) {
           avatarImg.src = avatarUrl;
+          console.warn("[DEBUG] avatarImg.src après assignation:", avatarImg.src);
           avatarImg.style.display = "block";
           if (heroEmojiEl) {
             heroEmojiEl.style.display = "none";
           }
+          avatarImg.onload = () => {
+            console.warn("[DEBUG] Image profil chargée avec succès:", avatarImg.src);
+          };
           avatarImg.onerror = () => {
+            console.warn("[DEBUG] Échec du chargement de l'image profil. avatarImg.src:", avatarImg.src);
             avatarImg.style.display = "none";
             if (heroEmojiEl) {
               heroEmojiEl.textContent = computeIcon();
