@@ -92,6 +92,12 @@ def update_card(
         )
 
     update_data = card_in.dict(exclude_unset=True)
+    import logging
+    logging.getLogger(__name__).warning(
+        "[DEBUG] update_card update_data keys=%s avatar_url=%s",
+        list(update_data.keys()),
+        update_data.get("avatar_url"),
+    )
 
     # Vérifier que le profil envoyé est autorisé
     if "profile" in update_data:
