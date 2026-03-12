@@ -167,13 +167,6 @@
     }
 
     .hero-avatar img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
       display: none;
     }
 
@@ -979,49 +972,34 @@ if (fullName) {
           const heroAvatarEl = document.querySelector(".hero-avatar");
           const heroEmojiEl = document.getElementById("hero-emoji");
           const avatarImg = document.getElementById("hero-avatar-img");
-          const mainIcon = CURRENT_PROFILE_CONFIG.mainIcon;
-          const avatarUrl = (
-            card.logo_url ||
-            card.photo_url ||
-            card.image_url ||
-            card.avatar_url ||
-            ""
-          ).toString().trim();
+          const avatarUrl = (card.avatar_url && String(card.avatar_url).trim()) || "";
 
-          console.warn("[DEBUG] avatarUrl:", avatarUrl, "card.avatar_url:", card.avatar_url, "card.logo_url:", card.logo_url, "card.photo_url:", card.photo_url, "card.image_url:", card.image_url);
-
-          const computeIcon = () =>
-            typeof mainIcon === "function"
-              ? mainIcon(card)
-              : mainIcon || guessEmoji(card);
+          const getEmoji = () =>
+            typeof CURRENT_PROFILE_CONFIG.mainIcon === "function"
+              ? CURRENT_PROFILE_CONFIG.mainIcon(card)
+              : CURRENT_PROFILE_CONFIG.mainIcon || guessEmoji(card);
 
           const showEmoji = () => {
             if (heroAvatarEl) heroAvatarEl.style.backgroundImage = "";
             if (avatarImg) avatarImg.style.display = "none";
             if (heroEmojiEl) {
-              heroEmojiEl.textContent = computeIcon();
+              heroEmojiEl.textContent = getEmoji();
               heroEmojiEl.style.display = "block";
               heroEmojiEl.style.visibility = "visible";
             }
           };
 
           if (avatarUrl && heroAvatarEl) {
-            if (heroEmojiEl) {
-              heroEmojiEl.style.display = "none";
-              heroEmojiEl.style.visibility = "hidden";
-            }
+            if (heroEmojiEl) heroEmojiEl.style.display = "none";
             if (avatarImg) avatarImg.style.display = "none";
             const img = new Image();
             img.onload = () => {
-              heroAvatarEl.style.backgroundImage = `url(${avatarUrl})`;
+              heroAvatarEl.style.backgroundImage = `url("${avatarUrl}")`;
               heroAvatarEl.style.backgroundSize = "cover";
               heroAvatarEl.style.backgroundPosition = "center";
               heroAvatarEl.style.backgroundRepeat = "no-repeat";
             };
-            img.onerror = () => {
-              console.warn("[DEBUG] Échec du chargement de l'image profil. avatarUrl:", avatarUrl);
-              showEmoji();
-            };
+            img.onerror = showEmoji;
             img.src = avatarUrl;
           } else {
             showEmoji();
