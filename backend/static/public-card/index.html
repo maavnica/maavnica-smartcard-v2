@@ -974,6 +974,27 @@ if (fullName) {
           const avatarImg = document.getElementById("hero-avatar-img");
           const avatarUrl = (card.avatar_url && String(card.avatar_url).trim()) || "";
 
+          console.warn("[DEBUG AVATAR BLOCK]", {
+            hasHeroAvatarEl: !!heroAvatarEl,
+            hasHeroEmojiEl: !!heroEmojiEl,
+            hasAvatarImg: !!avatarImg,
+            avatarUrl: card.avatar_url
+          });
+
+          if (heroAvatarEl) {
+            heroAvatarEl.style.outline = "3px solid red";
+            heroAvatarEl.style.backgroundColor = "yellow";
+          }
+          if (card.avatar_url && heroAvatarEl) {
+            heroAvatarEl.style.backgroundImage = `url("${card.avatar_url}")`;
+            heroAvatarEl.style.backgroundSize = "cover";
+            heroAvatarEl.style.backgroundPosition = "center";
+            heroAvatarEl.style.backgroundRepeat = "no-repeat";
+            heroAvatarEl.style.outline = "4px solid lime";
+          }
+          if (heroEmojiEl && card.avatar_url) heroEmojiEl.style.display = "none";
+          if (avatarImg) avatarImg.style.display = "none";
+
           const getEmoji = () =>
             typeof CURRENT_PROFILE_CONFIG.mainIcon === "function"
               ? CURRENT_PROFILE_CONFIG.mainIcon(card)
