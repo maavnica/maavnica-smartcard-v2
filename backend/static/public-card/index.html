@@ -151,14 +151,11 @@
     }
 
     .hero-avatar {
+      position: relative;
       width: 46px;
       height: 46px;
       border-radius: 50%;
       overflow: hidden;
-      background-color: #111827;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -167,7 +164,23 @@
       flex: 0 0 auto;
     }
 
-    #hero-avatar-fallback {
+    .hero-avatar-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
+    }
+
+    .hero-avatar-img.is-loaded {
+      display: block;
+    }
+
+    .hero-avatar-fallback {
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -177,6 +190,10 @@
       font-weight: 700;
       font-size: 14px;
       background: radial-gradient(circle at 30% 0, #f97316, #111827);
+    }
+
+    .hero-avatar-fallback.is-hidden {
+      display: none;
     }
 
     .hero-texts { flex: 1; min-width: 0; }
@@ -612,7 +629,8 @@
 
         <div class="hero-main-row">
           <div class="hero-avatar" aria-label="Photo ou logo">
-            <div id="hero-avatar-fallback">AH</div>
+            <img id="hero-avatar-img" class="hero-avatar-img" alt="" />
+            <span id="hero-avatar-fallback" class="hero-avatar-fallback">MC</span>
           </div>
 
           <div class="hero-texts">
@@ -977,31 +995,44 @@ if (fullName) {
 }
 
         const runAvatarBlock = () => {
-          const heroAvatarEl = document.querySelector(".hero-avatar");
-          const heroAvatarFallback = document.getElementById("hero-avatar-fallback");
-          const avatarUrl = (card.avatar_url || "").toString().trim();
+          const container = document.querySelector(".hero-avatar");
+          const imgEl = document.getElementById("hero-avatar-img");
+          const fallbackEl = document.getElementById("hero-avatar-fallback");
+          if (!container || !imgEl || !fallbackEl) return;
 
-          if (avatarUrl && heroAvatarEl) {
-            heroAvatarEl.style.backgroundImage = `url("${avatarUrl}")`;
-            if (heroAvatarFallback) heroAvatarFallback.style.display = "none";
-          } else {
-            if (heroAvatarEl) heroAvatarEl.style.backgroundImage = "none";
-            if (heroAvatarFallback) {
-              const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
-              const last = (card.last_name || card.nom || card.lastname || "").toString().trim();
-              const company = (card.company_name || "").toString().trim();
-              let initials = "";
-              if (first || last) {
-                initials = ((first[0] || "") + (last[0] || "")).toUpperCase() || (first + last).slice(0, 2).toUpperCase();
-              } else if (company) {
-                initials = company.slice(0, 2).toUpperCase();
-              } else {
-                initials = "MC";
-              }
-              heroAvatarFallback.textContent = initials;
-              heroAvatarFallback.style.display = "flex";
+          const getInitials = () => {
+            const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
+            const last = (card.last_name || card.nom || card.lastname || "").toString().trim();
+            const company = (card.company_name || "").toString().trim();
+            if (first || last) {
+              const s = ((first[0] || "") + (last[0] || "")).toUpperCase();
+              return s || (first + last).slice(0, 2).toUpperCase();
             }
+            if (company) return company.slice(0, 2).toUpperCase();
+            return "MC";
+          };
+
+          const showImage = () => {
+            imgEl.classList.add("is-loaded");
+            fallbackEl.classList.add("is-hidden");
+          };
+
+          const showFallback = () => {
+            imgEl.classList.remove("is-loaded");
+            imgEl.removeAttribute("src");
+            fallbackEl.textContent = getInitials();
+            fallbackEl.classList.remove("is-hidden");
+          };
+
+          const avatarUrl = (card.avatar_url || "").toString().trim();
+          if (!avatarUrl) {
+            showFallback();
+            return;
           }
+
+          imgEl.onload = showImage;
+          imgEl.onerror = showFallback;
+          imgEl.src = avatarUrl;
         };
 
         document.addEventListener("DOMContentLoaded", runAvatarBlock);
