@@ -151,49 +151,34 @@
     }
 
     .hero-avatar {
-      position: relative;
       width: 46px;
       height: 46px;
-      border-radius: 50%;
+      position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background-color: #111827;
       border: 1px solid rgba(248, 250, 252, 0.35);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-      flex: 0 0 auto;
     }
 
-    .hero-avatar-img {
-      position: absolute;
-      inset: 0;
+    #hero-avatar-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 50%;
       display: none;
     }
 
-    .hero-avatar-img.is-loaded {
-      display: block;
-    }
-
-    .hero-avatar-fallback {
+    #hero-avatar-fallback {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      height: 100%;
       color: white;
       font-weight: 700;
       font-size: 14px;
       background: radial-gradient(circle at 30% 0, #f97316, #111827);
-    }
-
-    .hero-avatar-fallback.is-hidden {
-      display: none;
     }
 
     .hero-texts { flex: 1; min-width: 0; }
@@ -615,7 +600,6 @@
     <div class="phone-inner">
       <div class="notch"></div>
       <div class="status-bar">Maavnica SmartCard</div>
-      <div style="color:#ff4d4f;font-size:12px;font-weight:700;">BUILD AVATAR TEST 12/03</div>
 
       <!-- HERO -->
       <div class="hero">
@@ -630,8 +614,8 @@
 
         <div class="hero-main-row">
           <div class="hero-avatar" aria-label="Photo ou logo">
-            <img id="hero-avatar-img" class="hero-avatar-img" alt="" />
-            <span id="hero-avatar-fallback" class="hero-avatar-fallback">MC</span>
+            <img id="hero-avatar-img" alt="" />
+            <span id="hero-avatar-fallback">MC</span>
           </div>
 
           <div class="hero-texts">
@@ -996,10 +980,11 @@ if (fullName) {
 }
 
         const runAvatarBlock = () => {
-          const container = document.querySelector(".hero-avatar");
-          const imgEl = document.getElementById("hero-avatar-img");
-          const fallbackEl = document.getElementById("hero-avatar-fallback");
-          if (!container || !imgEl || !fallbackEl) return;
+          const avatarImg = document.getElementById("hero-avatar-img");
+          const avatarFallback = document.getElementById("hero-avatar-fallback");
+          if (!avatarImg || !avatarFallback) return;
+
+          const avatarUrl = (card.avatar_url || "").toString().trim();
 
           const getInitials = () => {
             const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
@@ -1014,26 +999,25 @@ if (fullName) {
           };
 
           const showImage = () => {
-            imgEl.classList.add("is-loaded");
-            fallbackEl.classList.add("is-hidden");
+            avatarImg.style.display = "block";
+            avatarFallback.style.display = "none";
           };
 
           const showFallback = () => {
-            imgEl.classList.remove("is-loaded");
-            imgEl.removeAttribute("src");
-            fallbackEl.textContent = getInitials();
-            fallbackEl.classList.remove("is-hidden");
+            avatarImg.style.display = "none";
+            avatarImg.removeAttribute("src");
+            avatarFallback.textContent = getInitials();
+            avatarFallback.style.display = "flex";
           };
 
-          const avatarUrl = (card.avatar_url || "").toString().trim();
           if (!avatarUrl) {
             showFallback();
             return;
           }
 
-          imgEl.onload = showImage;
-          imgEl.onerror = showFallback;
-          imgEl.src = avatarUrl;
+          avatarImg.onload = showImage;
+          avatarImg.onerror = showFallback;
+          avatarImg.src = avatarUrl;
         };
 
         document.addEventListener("DOMContentLoaded", runAvatarBlock);
