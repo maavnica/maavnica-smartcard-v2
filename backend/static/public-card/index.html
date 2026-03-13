@@ -979,7 +979,7 @@ if (fullName) {
   }
 }
 
-        const runAvatarBlock = () => {
+        function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
           const avatarFallback = document.getElementById("hero-avatar-fallback");
           if (!avatarImg || !avatarFallback) return;
@@ -1018,12 +1018,9 @@ if (fullName) {
           avatarImg.onload = showImage;
           avatarImg.onerror = showFallback;
           avatarImg.src = avatarUrl;
-        };
-
-        document.addEventListener("DOMContentLoaded", runAvatarBlock);
-        if (document.readyState !== "loading") {
-          runAvatarBlock();
         }
+
+        runAvatarBlock(card);
 
         const subtitleEl = document.getElementById("hero-subtitle");
         if (subtitleEl) {
