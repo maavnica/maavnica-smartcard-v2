@@ -998,11 +998,6 @@ if (fullName) {
             return "MC";
           };
 
-          const showImage = () => {
-            avatarImg.style.display = "block";
-            avatarFallback.style.display = "none";
-          };
-
           const showFallback = () => {
             avatarImg.style.display = "none";
             avatarImg.removeAttribute("src");
@@ -1011,12 +1006,21 @@ if (fullName) {
           };
 
           if (!avatarUrl) {
-            showFallback();
+            avatarImg.style.display = "none";
+            avatarFallback.style.display = "flex";
+            avatarFallback.textContent = getInitials();
             return;
           }
 
-          avatarImg.onload = showImage;
-          avatarImg.onerror = showFallback;
+          avatarImg.onload = () => {
+            avatarImg.style.display = "block";
+            avatarFallback.style.display = "none";
+          };
+          avatarImg.onerror = () => {
+            avatarImg.style.display = "none";
+            avatarFallback.style.display = "flex";
+            showFallback();
+          };
           avatarImg.src = avatarUrl;
         }
 
