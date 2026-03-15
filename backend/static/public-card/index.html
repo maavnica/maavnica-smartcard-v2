@@ -1012,16 +1012,47 @@ if (fullName) {
             return;
           }
 
+          console.warn("[AVATAR before src]", {
+            avatarUrl,
+            complete: avatarImg.complete,
+            currentSrc: avatarImg.currentSrc,
+            naturalWidth: avatarImg.naturalWidth,
+            naturalHeight: avatarImg.naturalHeight
+          });
+
+          avatarImg.onload = null;
+          avatarImg.onerror = null;
+          avatarImg.removeAttribute("src");
+
           avatarImg.onload = () => {
+            console.warn("[AVATAR onload]", {
+              src: avatarImg.currentSrc || avatarImg.src,
+              complete: avatarImg.complete,
+              naturalWidth: avatarImg.naturalWidth,
+              naturalHeight: avatarImg.naturalHeight
+            });
             avatarImg.style.display = "block";
             avatarFallback.style.display = "none";
           };
+
           avatarImg.onerror = () => {
+            console.warn("[AVATAR onerror]", {
+              src: avatarImg.currentSrc || avatarImg.src,
+              complete: avatarImg.complete,
+              naturalWidth: avatarImg.naturalWidth,
+              naturalHeight: avatarImg.naturalHeight
+            });
             avatarImg.style.display = "none";
             avatarFallback.style.display = "flex";
             showFallback();
           };
-          avatarImg.src = avatarUrl;
+
+          avatarImg.src = avatarUrl + (avatarUrl.includes("?") ? "&" : "?") + "cb=" + Date.now();
+
+          console.warn("[AVATAR src assigned]", {
+            src: avatarImg.src,
+            complete: avatarImg.complete
+          });
         }
 
         runAvatarBlock(card);
