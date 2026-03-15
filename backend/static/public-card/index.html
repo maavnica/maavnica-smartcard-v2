@@ -163,10 +163,13 @@
     }
 
     #hero-avatar-img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: none;
+      z-index: 2;
     }
 
     #hero-avatar-fallback {
@@ -179,6 +182,7 @@
       font-weight: 700;
       font-size: 14px;
       background: radial-gradient(circle at 30% 0, #f97316, #111827);
+      z-index: 1;
     }
 
     .hero-texts { flex: 1; min-width: 0; }
@@ -1008,6 +1012,7 @@ if (fullName) {
           if (!avatarUrl) {
             avatarImg.style.display = "none";
             avatarFallback.style.display = "flex";
+            avatarFallback.style.zIndex = "1";
             avatarFallback.textContent = getInitials();
             return;
           }
@@ -1032,7 +1037,11 @@ if (fullName) {
               naturalHeight: avatarImg.naturalHeight
             });
             avatarImg.style.display = "block";
+            avatarImg.style.position = "absolute";
+            avatarImg.style.inset = "0";
+            avatarImg.style.zIndex = "2";
             avatarFallback.style.display = "none";
+            avatarFallback.style.zIndex = "1";
           };
 
           avatarImg.onerror = () => {
@@ -1044,6 +1053,7 @@ if (fullName) {
             });
             avatarImg.style.display = "none";
             avatarFallback.style.display = "flex";
+            avatarFallback.style.zIndex = "1";
             showFallback();
           };
 
