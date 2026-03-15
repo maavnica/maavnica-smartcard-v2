@@ -14,6 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from app.routers import public, cards
 from app.routers.stripe_webhook import router as stripe_webhook_router
 from app.routers.checkout import router as checkout_router
+from app.routers.upload import router as upload_router
 
 
 
@@ -29,6 +30,10 @@ STATIC_DIR = BACKEND_DIR / "static"             # .../backend/static
 if not STATIC_DIR.exists():
     # .../maavnica-smartcard/static
     STATIC_DIR = BACKEND_DIR.parent / "static"
+
+# Dossier uploads (avatar) : créé au démarrage pour être prêt (local + Render)
+UPLOADS_DIR = STATIC_DIR / "uploads"
+UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ------------------------------------------------------------
@@ -92,6 +97,9 @@ app.include_router(public.router, tags=["public"])
 
 # API admin / cartes (CRUD + feedback + devis…)
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
+
+# Upload avatar (admin)
+app.include_router(upload_router, prefix="/api/upload", tags=["upload"])
 
 
 # ------------------------------------------------------------

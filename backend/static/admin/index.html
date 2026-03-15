@@ -77,8 +77,12 @@
         <label for="site-web">Site web</label>
         <input id="site-web" placeholder="https://votre-site.com" />
 
-        <label for="avatar-url">Photo / Logo (URL)</label>
-        <input id="avatar-url" type="text" placeholder="https://monsite.com/logo.png" />
+        <label for="avatar-url">Photo / Logo</label>
+        <div class="avatar-upload-row">
+          <input id="avatar-file" type="file" accept=".jpg,.jpeg,.png,.webp" />
+          <span class="avatar-upload-hint">ou coller une URL ci-dessous</span>
+        </div>
+        <input id="avatar-url" type="text" placeholder="https://... ou /static/uploads/..." />
 
         <!-- FIN NOUVELLE SECTION -->
 

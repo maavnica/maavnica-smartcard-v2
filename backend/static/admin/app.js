@@ -74,6 +74,8 @@ document.getElementById("last-name").value = "";
   document.getElementById("email-pro").value = "";
   document.getElementById("site-web").value = "";
   document.getElementById("avatar-url").value = "";
+  const avatarFile = document.getElementById("avatar-file");
+  if (avatarFile) avatarFile.value = "";
 
   document.getElementById("public-link").textContent = "";
   document.getElementById("feedback-list").innerHTML =
@@ -301,10 +303,67 @@ async function loadFeedbackAndQuotes() {
 /* ============================================================
    LISTENERS
 ============================================================ */
+/* ============================================================
+   UPLOAD AVATAR (fichier → URL)
+============================================================ */
+const UPLOAD_AVATAR_URL = "/api/upload/avatar";
+const ALLOWED_AVATAR_EXT = [".jpg", ".jpeg", ".png", ".webp"];
+
+function hasAllowedAvatarExt(filename) {
+  if (!filename) return false;
+  const ext = "." + (filename.split(".").pop() || "").toLowerCase();
+  return ALLOWED_AVATAR_EXT.includes(ext);
+}
+
+async function uploadAvatarFile(file) {
+  const res = await fetch(UPLOAD_AVATAR_URL, {
+    method: "POST",
+    body: (() => {
+      const fd = new FormData();
+      fd.append("file", file);
+      return fd;
+    })(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || "Échec de l’upload.");
+  }
+  return res.json();
+}
+
+function initAvatarUpload() {
+  const fileInput = document.getElementById("avatar-file");
+  const urlInput = document.getElementById("avatar-url");
+  if (!fileInput || !urlInput) return;
+
+  fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!hasAllowedAvatarExt(file.name)) {
+      showToast("Format non accepté. Utilisez : .jpg, .jpeg, .png ou .webp", true);
+      fileInput.value = "";
+      return;
+    }
+    try {
+      const data = await uploadAvatarFile(file);
+      urlInput.value = data.url || "";
+      showToast("Image envoyée. Pensez à enregistrer la carte.");
+      fileInput.value = "";
+    } catch (err) {
+      showToast(err.message || "Erreur lors de l’upload.", true);
+      fileInput.value = "";
+    }
+  });
+}
+
+/* ============================================================
+   LISTENERS
+============================================================ */
 document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
+initAvatarUpload();
 
 
 

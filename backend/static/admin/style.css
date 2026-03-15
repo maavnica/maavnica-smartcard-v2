@@ -174,6 +174,21 @@ input:focus, select:focus{
   border-color: rgba(96,165,250,.45);
 }
 
+.avatar-upload-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.avatar-upload-row input[type="file"]{
+  width: auto;
+  padding: 8px 10px;
+}
+.avatar-upload-hint{
+  font-size: 11px;
+  color: var(--muted);
+}
+
 .row{
   display:grid;
   grid-template-columns: 1fr 1fr;
