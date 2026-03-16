@@ -455,6 +455,20 @@
       box-shadow: 0 0 0 1px var(--primary-soft);
     }
 
+    .share-row {
+      display: none;
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .share-row .btn-link {
+      flex: 1 1 48%;
+      font-size: 11px;
+      padding: 6px 8px;
+    }
+
     .btn-link:disabled {
       opacity: 0.5;
       cursor: default;
@@ -669,6 +683,9 @@
           <div class="block-sub">
             Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
           </div>
+          <div class="hint">
+            Avis Google · Contact rapide · Demande de devis
+          </div>
 
           <button class="btn-link" id="btn-call">
             📞 Appeler directement
@@ -715,6 +732,20 @@
 
           <div class="hint">
             Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
+          </div>
+
+          <div class="section-label" style="margin-top:10px;">Partager cette carte après la prestation</div>
+          <button class="btn-primary" id="btn-share-card-main">
+            📲 Envoyer ma carte au client
+          </button>
+          <div class="hint" style="margin-top:4px;">
+            Après chaque prestation, envoyez votre carte pour recevoir un avis ou être recontacté facilement.
+          </div>
+          <div class="share-row" id="share-card-options">
+            <button class="btn-link" id="btn-share-wa">WhatsApp</button>
+            <button class="btn-link" id="btn-share-sms">SMS</button>
+            <button class="btn-link" id="btn-share-copy">Copier le lien</button>
+            <button class="btn-link" id="btn-share-email">Email</button>
           </div>
         </div>
 
@@ -1316,6 +1347,67 @@ if (fullName) {
         }
 
         updateQrCode(slug);
+
+        const btnShareMain = document.getElementById("btn-share-card-main");
+        const shareRow = document.getElementById("share-card-options");
+        const btnShareWa = document.getElementById("btn-share-wa");
+        const btnShareSms = document.getElementById("btn-share-sms");
+        const btnShareCopy = document.getElementById("btn-share-copy");
+        const btnShareEmail = document.getElementById("btn-share-email");
+
+        const cardPublicUrl =
+          (window.location.origin || "") + "/c/" + encodeURIComponent(slug);
+        const shareMessage =
+          "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
+          cardPublicUrl;
+
+        if (btnShareMain && shareRow) {
+          shareRow.style.display = "none";
+          btnShareMain.onclick = () => {
+            const isHidden = shareRow.style.display === "none" || !shareRow.style.display;
+            shareRow.style.display = isHidden ? "flex" : "none";
+          };
+        }
+
+        if (btnShareWa) {
+          btnShareWa.onclick = () => {
+            const url =
+              "https://wa.me/?text=" + encodeURIComponent(shareMessage);
+            window.open(url, "_blank", "noopener");
+          };
+        }
+
+        if (btnShareSms) {
+          btnShareSms.onclick = () => {
+            const body = encodeURIComponent(shareMessage);
+            const smsUrl = "sms:?&body=" + body;
+            window.location.href = smsUrl;
+          };
+        }
+
+        if (btnShareCopy) {
+          btnShareCopy.onclick = async () => {
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(cardPublicUrl);
+                showToast("Lien copié dans le presse-papier.");
+              } else {
+                window.prompt("Copiez ce lien :", cardPublicUrl);
+              }
+            } catch (e) {
+              window.prompt("Copiez ce lien :", cardPublicUrl);
+            }
+          };
+        }
+
+        if (btnShareEmail) {
+          btnShareEmail.onclick = () => {
+            const subject = encodeURIComponent("Votre carte de contact SmartCard");
+            const body = encodeURIComponent(shareMessage);
+            const mailto = "mailto:?subject=" + subject + "&body=" + body;
+            window.location.href = mailto;
+          };
+        }
       } catch (e) {
         console.error(e);
         showToast("Erreur lors du chargement de la carte.", true);
