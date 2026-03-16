@@ -185,8 +185,6 @@ async function saveCard() {
       method = "PUT";
     }
 
-    console.warn("[DEBUG] saveCard payload keys:", Object.keys(payload), "avatar_url:", payload.avatar_url);
-
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
