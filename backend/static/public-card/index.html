@@ -449,6 +449,12 @@
       box-shadow: 0 0 0 1px var(--primary-soft);
     }
 
+    .btn-link.btn-link-google-active {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+    }
+
     .btn-link:disabled {
       opacity: 0.5;
       cursor: default;
@@ -678,6 +684,10 @@
               <span class="emoji">😐</span>
               <span>Je ne suis pas satisfait</span>
             </button>
+          </div>
+
+          <div class="hint" id="feedback-helper-text">
+            Choisissez une option ci-dessus pour nous laisser un retour rapide.
           </div>
 
           <textarea
@@ -1158,6 +1168,9 @@ if (fullName) {
           let feedbackValue = null;
           const pillYes = document.getElementById("pill-yes");
           const pillNo = document.getElementById("pill-no");
+          const helperTextEl = document.getElementById("feedback-helper-text");
+          const btnGoogleReview = document.getElementById("btn-google-review");
+          const commentEl = document.getElementById("feedback-comment");
 
           function selectFeedback(value) {
             feedbackValue = value;
@@ -1165,14 +1178,28 @@ if (fullName) {
               pillYes.classList.toggle("selected-yes", value === "yes");
               pillNo.classList.toggle("selected-no", value === "no");
             }
+
+            if (!value && helperTextEl) {
+              helperTextEl.textContent =
+                "Choisissez une option ci-dessus pour nous laisser un retour rapide.";
+            }
           }
 
           if (pillYes) {
             pillYes.onclick = () => {
               selectFeedback("yes");
-              const reviewUrl = (card.google_review_link || "").toString().trim();
-              if (reviewUrl) {
-                window.open(reviewUrl, "_blank", "noopener");
+              if (helperTextEl) {
+                helperTextEl.textContent =
+                  "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
+              }
+              if (commentEl) {
+                commentEl.placeholder = "Un mot sur votre expérience (optionnel)";
+              }
+              if (btnFeedback) {
+                btnFeedback.textContent = "✨ Envoyer un retour privé";
+              }
+              if (btnGoogleReview) {
+                btnGoogleReview.classList.add("btn-link-google-active");
               }
             };
           }
@@ -1180,9 +1207,20 @@ if (fullName) {
           if (pillNo) {
             pillNo.onclick = () => {
               selectFeedback("no");
-              const commentEl = document.getElementById("feedback-comment");
               if (commentEl) {
                 commentEl.focus();
+                commentEl.placeholder =
+                  "Dites-nous ce qui n’a pas été satisfaisant (retour privé).";
+              }
+              if (helperTextEl) {
+                helperTextEl.textContent =
+                  "Dites-nous ce qui n’a pas été satisfaisant. Votre retour reste privé.";
+              }
+              if (btnFeedback) {
+                btnFeedback.textContent = "✨ Envoyer mon retour";
+              }
+              if (btnGoogleReview) {
+                btnGoogleReview.classList.remove("btn-link-google-active");
               }
             };
           }
@@ -1218,6 +1256,12 @@ if (fullName) {
               showToast("Merci pour votre avis !");
               document.getElementById("feedback-comment").value = "";
               selectFeedback(null);
+              if (btnFeedback) {
+                btnFeedback.textContent = "✨ Envoyer mon avis";
+              }
+              if (btnGoogleReview) {
+                btnGoogleReview.classList.remove("btn-link-google-active");
+              }
             } catch (e) {
               console.error(e);
               showToast("Erreur réseau lors de l’envoi de l’avis.", true);
