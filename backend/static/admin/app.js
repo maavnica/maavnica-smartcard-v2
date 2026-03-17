@@ -24,6 +24,8 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
+  document.getElementById("google-rating").value = card.google_rating != null ? card.google_rating : "";
+  document.getElementById("google-review-count").value = card.google_review_count != null ? card.google_review_count : "";
   document.getElementById("phone").value = card.phone || "";
   document.getElementById("whatsapp").value = card.whatsapp || "";
   document.getElementById("payment-link").value = card.payment_link || "";
@@ -60,6 +62,8 @@ document.getElementById("last-name").value = "";
   document.getElementById("slug").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
+  document.getElementById("google-rating").value = "";
+  document.getElementById("google-review-count").value = "";
   document.getElementById("phone").value = "";
   document.getElementById("whatsapp").value = "";
   document.getElementById("payment-link").value = "";
@@ -153,6 +157,18 @@ async function saveCard() {
 
     // 🔹 Champs classiques
     google_review_link: document.getElementById("google-link").value.trim() || null,
+    google_rating: (() => {
+      const v = document.getElementById("google-rating").value.trim();
+      if (!v) return null;
+      const n = parseFloat(v);
+      return isNaN(n) ? null : n;
+    })(),
+    google_review_count: (() => {
+      const v = document.getElementById("google-review-count").value.trim();
+      if (!v) return null;
+      const n = parseInt(v, 10);
+      return isNaN(n) ? null : n;
+    })(),
     phone: document.getElementById("phone").value.trim() || null,
     whatsapp: document.getElementById("whatsapp").value.trim() || null,
     payment_link: document.getElementById("payment-link").value.trim() || null,

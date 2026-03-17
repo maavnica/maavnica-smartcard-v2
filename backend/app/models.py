@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column,
+    Float,
     Integer,
     String,
     DateTime,
@@ -60,6 +61,8 @@ class Card(Base):
 
     # Liens & contact
     google_review_link = Column(String, nullable=True)
+    google_rating = Column(Float, nullable=True)
+    google_review_count = Column(Integer, nullable=True)
     phone = Column(String, nullable=True)
     whatsapp = Column(String, nullable=True)
     payment_link = Column(String, nullable=True)

@@ -24,6 +24,8 @@ class CardBase(BaseModel):
 
     # 🔹 Contact & actions
     google_review_link: Optional[str] = None
+    google_rating: Optional[float] = None
+    google_review_count: Optional[int] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
@@ -61,6 +63,8 @@ class CardUpdate(BaseModel):
     site_web: Optional[str] = None
 
     google_review_link: Optional[str] = None
+    google_rating: Optional[float] = None
+    google_review_count: Optional[int] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
@@ -91,6 +95,8 @@ class CardPublic(BaseModel):
     site_web: Optional[str]
 
     google_review_link: Optional[str] = None
+    google_rating: Optional[float] = None
+    google_review_count: Optional[int] = None
     phone: Optional[str] = None
     whatsapp: Optional[str] = None
     payment_link: Optional[str] = None
