@@ -9,6 +9,6 @@ python-multipart
 itsdangerous
 psycopg2-binary
 stripe==14.1.0
-
+cloudinary
 
 
