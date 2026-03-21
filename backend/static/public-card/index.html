@@ -403,15 +403,15 @@
     }
 
     .pill.selected-yes {
-      border-color: #22c55e;
-      background: rgba(22, 163, 74, 0.18);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.45);
+      border-color: rgba(34, 197, 94, 0.6);
+      background: rgba(34, 197, 94, 0.12);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
     }
 
     .pill.selected-no {
-      border-color: #f97316;
-      background: rgba(248, 113, 113, 0.12);
-      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
+      border-color: rgba(239, 68, 68, 0.6);
+      background: rgba(239, 68, 68, 0.10);
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
     }
 
     /* Feedback UX : sélection très visible + non sélection atténuée */
@@ -579,19 +579,17 @@
     /* Bloc partage post-prestation (démo / impact visuel) */
     .post-share-block {
       margin-top: 14px;
-      padding: 12px 11px 11px;
+      padding: 14px;
       border-radius: 16px;
       background: linear-gradient(
         145deg,
         var(--primary-soft),
-        rgba(15, 23, 42, 0.92) 45%,
-        rgba(15, 23, 42, 0.98)
+        rgba(15, 23, 42, 0.95)
       );
-      border: 1px solid rgba(148, 163, 184, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow:
-        0 8px 28px rgba(0, 0, 0, 0.35),
-        0 0 0 1px var(--primary-soft),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        0 6px 18px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
     }
 
     .post-share-block .section-label {
@@ -601,54 +599,55 @@
     }
 
     .post-share-kicker {
-      display: block;
       font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
       color: var(--primary);
+      letter-spacing: 0.08em;
       margin-bottom: 4px;
     }
 
-    .btn-primary.btn-share-card-main {
-      margin-top: 0;
-      padding: 11px 14px;
+    .post-share-title {
       font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .btn-share-card-main {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
       font-weight: 700;
-      letter-spacing: 0.02em;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow:
-        0 4px 0 rgba(0, 0, 0, 0.2),
-        0 14px 36px var(--primary-soft),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .btn-primary.btn-share-card-main:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 6px 0 rgba(0, 0, 0, 0.18),
-        0 20px 44px var(--primary-soft),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    .btn-share-card-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
     }
 
-    .btn-primary.btn-share-card-main:active {
-      transform: translateY(0);
-      box-shadow: 0 10px 28px var(--primary-soft);
+    .btn-share-card-main:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
     }
 
     .post-share-hint {
-      margin-top: 10px;
       font-size: 11px;
-      line-height: 1.45;
-      color: rgba(203, 213, 225, 0.96);
-      padding: 0 2px;
+      color: #cbd5f5;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .post-share-benefits {
+      font-size: 11px;
+      margin-top: 6px;
+      color: #9ca3af;
     }
 
     .post-share-block .share-row {
-      margin-top: 12px;
+      margin-top: 10px;
       padding-top: 10px;
-      border-top: 1px solid rgba(148, 163, 184, 0.28);
-      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .post-share-block .share-row .btn-link {
@@ -923,23 +922,35 @@
           </div>
 
           <div class="post-share-block">
-            <div class="section-label" style="margin-top:0;">
-              <span class="post-share-kicker">Après la prestation</span>
-              Partager cette carte avec le client
+            <div class="post-share-kicker">
+              APRÈS CHAQUE INTERVENTION
             </div>
+
+            <div class="post-share-title">
+              Envoyez votre carte en 1 clic
+            </div>
+
             <button class="btn-primary btn-share-card-main" id="btn-share-card-main">
-              📲 Envoyer ma carte au client
+              📲 Envoyer ma carte (avis + contact)
             </button>
-            <div class="hint post-share-hint">
-              Un geste pro : à la fin de l’intervention, envoyez votre carte en un clic — avis Google, coordonnées et prochain contact, au même endroit.
+
+            <div class="post-share-hint">
+              Un geste simple en fin de prestation pour recevoir des avis et rester en contact avec votre client.
             </div>
+
+            <div class="post-share-benefits">
+              ✔ Avis Google • ✔ Contact rapide • ✔ Demande de devis
+            </div>
+
             <div class="share-row" id="share-card-options">
               <button class="btn-link" id="btn-share-wa">WhatsApp</button>
               <button class="btn-link" id="btn-share-sms">SMS</button>
               <button class="btn-link" id="btn-share-copy">Copier le lien</button>
               <button class="btn-link" id="btn-share-email">Email</button>
             </div>
+
           </div>
+
           <div class="hint" style="margin-top:6px;">
             Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
           </div>
