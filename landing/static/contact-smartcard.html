@@ -34,7 +34,9 @@
       display:grid;place-items:center;font-weight:800;
     }
     h1{margin:0;font-size:22px}
-    .sub{margin:6px 0 0;color:var(--mut);font-size:14px;line-height:1.35}
+    .sub{margin:8px 0 0;color:var(--mut);font-size:14px;line-height:1.45}
+    .sub-terrain{margin-top:10px;font-size:15px;color:#eaf1ff;line-height:1.45}
+    .sub-step{margin-top:8px;font-size:13px;color:var(--mut);line-height:1.35}
 
     .grid{display:grid;grid-template-columns: 1.05fr 0.95fr; gap:16px; margin-top:18px}
     @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
@@ -291,17 +293,19 @@
 <body>
   <div class="wrap">
 
-    <!-- ✅ Retour landing -->
-    <a href="https://smartcard.maavnica.com" class="back-link"
-       onclick="if(history.length>1){history.back(); return false;}">
-      ← Retour à la présentation
-    </a>
+    <!-- ✅ Retour landing (racine du site = landing SmartCard) -->
+    <a href="/" class="back-link">← Retour à la présentation</a>
 
     <header>
       <div class="logo">M</div>
       <div>
         <h1>Commander votre SmartCard</h1>
-        <p class="sub">Remplis le formulaire, puis tu seras redirigé vers le paiement Stripe pour finaliser la commande.</p>
+        <p class="sub sub-terrain">
+          Indiquez vos informations : nous préparons votre carte pour que vous puissiez l’envoyer à vos clients après chaque intervention (avis Google, rappel, demande de devis).
+        </p>
+        <p class="sub sub-step">
+          Ensuite, vous serez redirigé vers le paiement sécurisé (Stripe) pour finaliser votre commande.
+        </p>
       </div>
     </header>
 
@@ -314,7 +318,7 @@
 
         <ul class="miniList" id="offerBullets">
           <li>1 SmartCard (QR code + liens essentiels)</li>
-          <li>Configuration sur mesure à partir de tes infos</li>
+          <li>Configuration sur mesure à partir de vos informations</li>
           <li>Livraison rapide + support</li>
         </ul>
 
@@ -353,18 +357,18 @@
           <label>Nom de l’entreprise / activité</label>
           <input name="entreprise" id="entreprise" placeholder="Ex: Plomberie Martin" />
 
-          <label>Ta demande (liens à intégrer, réseaux, Google Avis, WhatsApp, etc.)</label>
-          <textarea name="demande" id="demande" placeholder="Décris ce que tu veux sur ta SmartCard…"></textarea>
+          <label>Vos liens utiles (avis Google, WhatsApp, site…) — optionnel : vous pouvez aussi les envoyer après commande</label>
+          <textarea name="demande" id="demande" placeholder="Indiquez ici vos liens ou précisions si vous les avez déjà ; sinon vous pourrez les transmettre après la commande."></textarea>
 
-          <button class="btn" id="submitBtn" type="submit">Envoyer & payer sur Stripe</button>
+          <button class="btn" id="submitBtn" type="submit">Continuer vers le paiement sécurisé</button>
 
           <div class="okbox" id="okbox">
             ✅ <strong>Formulaire envoyé.</strong><br/>
-            Redirection vers Stripe en cours pour finaliser le paiement…
+            Redirection vers le paiement sécurisé en cours…
           </div>
 
           <p class="hint">
-            Le paiement finalise la commande. Après paiement, tu reçois un email de confirmation + les prochaines étapes.
+            Le paiement finalise la commande. Après paiement, vous recevez un email de confirmation et les prochaines étapes.
           </p>
         </form>
       </section>
@@ -460,7 +464,7 @@
         </div>
 
         <p class="hint" style="margin-top:12px">
-          Aperçu de la SmartCard finale (design + blocs + actions). Le contenu sera personnalisé avec les infos de ton client.
+          Aperçu de la SmartCard finale (design + blocs + actions). Le contenu sera personnalisé avec vos informations.
         </p>
       </section>
     </div>
@@ -501,7 +505,7 @@
       price.textContent = "39€ HT / an";
       bullets.innerHTML = `
         <li>1 SmartCard (QR code + liens essentiels)</li>
-        <li>Configuration sur mesure à partir de tes infos</li>
+        <li>Configuration sur mesure à partir de vos informations</li>
         <li>Livraison rapide + support</li>`;
       fieldOffre.value = "solo";
       fieldStripe.value = STRIPE_SOLO_URL;
