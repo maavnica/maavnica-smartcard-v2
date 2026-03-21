@@ -204,6 +204,14 @@
       margin-bottom: 2px;
     }
 
+    .hero-professional-tagline {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: rgba(226, 232, 240, 0.96);
+      margin: 4px 0 6px;
+      letter-spacing: 0.01em;
+    }
 
     .hero-company {
       font-size: 13px;
@@ -237,6 +245,7 @@
       align-items: center;
       gap: 6px;
       min-width: 0;
+      flex-wrap: wrap;
     }
 
     .dot-green {
@@ -330,19 +339,28 @@
       color: rgba(148, 163, 184, 0.96);
     }
 
+    .hero-google-badge-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+
     .hero-google-badge {
-      display: inline-flex;
+      display: none;
       align-items: center;
+      justify-content: center;
       gap: 4px;
       font-size: 12px;
       font-weight: 600;
       color: #e5e7eb;
-      margin-bottom: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(248, 250, 252, 0.25);
+      margin: 0 0 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(248, 250, 252, 0.32);
       max-width: 100%;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
     }
 
     .hero-google-badge a {
@@ -396,6 +414,17 @@
       box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
     }
 
+    /* Feedback UX : sélection très visible + non sélection atténuée */
+    .pill-row.feedback-has-selection .pill {
+      opacity: 0.68;
+    }
+
+    .pill-row.feedback-has-selection .pill.selected-yes,
+    .pill-row.feedback-has-selection .pill.selected-no {
+      opacity: 1;
+      transform: translateY(-0.5px) scale(1.03);
+    }
+
     .emoji { font-size: 14px; }
 
     .feedback-input,
@@ -410,6 +439,48 @@
       resize: vertical;
       min-height: 36px;
       max-width: 100%;
+    }
+
+    /* Apparition en douceur du champ texte + message d’aide */
+    #feedback-comment {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(8px) scale(0.99);
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      overflow: hidden;
+      pointer-events: none;
+      resize: none;
+      transition:
+        opacity 180ms ease-out,
+        transform 180ms ease-out,
+        max-height 220ms ease-out,
+        border-width 180ms ease-out,
+        padding-top 180ms ease-out,
+        padding-bottom 180ms ease-out;
+    }
+
+    #feedback-comment.feedback-comment-visible {
+      max-height: 220px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      padding-top: 7px;
+      padding-bottom: 7px;
+      border-width: 1px;
+      pointer-events: auto;
+      resize: vertical;
+    }
+
+    #feedback-helper-text {
+      transition: opacity 180ms ease-out, transform 180ms ease-out;
+      opacity: 0.86;
+      transform: translateY(2px);
+    }
+
+    #feedback-helper-text.feedback-helper-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .feedback-input::placeholder,
@@ -503,6 +574,90 @@
       font-size: 10px;
       color: rgba(148, 163, 184, 0.95);
       line-height: 1.4;
+    }
+
+    /* Bloc partage post-prestation (démo / impact visuel) */
+    .post-share-block {
+      margin-top: 14px;
+      padding: 12px 11px 11px;
+      border-radius: 16px;
+      background: linear-gradient(
+        145deg,
+        var(--primary-soft),
+        rgba(15, 23, 42, 0.92) 45%,
+        rgba(15, 23, 42, 0.98)
+      );
+      border: 1px solid rgba(148, 163, 184, 0.38);
+      box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.35),
+        0 0 0 1px var(--primary-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .post-share-block .section-label {
+      margin-bottom: 8px;
+      color: rgba(226, 232, 240, 0.98);
+      letter-spacing: 0.06em;
+    }
+
+    .post-share-kicker {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .btn-primary.btn-share-card-main {
+      margin-top: 0;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.2),
+        0 14px 36px var(--primary-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-primary.btn-share-card-main:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 6px 0 rgba(0, 0, 0, 0.18),
+        0 20px 44px var(--primary-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary.btn-share-card-main:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 28px var(--primary-soft);
+    }
+
+    .post-share-hint {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(203, 213, 225, 0.96);
+      padding: 0 2px;
+    }
+
+    .post-share-block .share-row {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.28);
+      gap: 8px;
+    }
+
+    .post-share-block .share-row .btn-link {
+      flex: 1 1 calc(50% - 4px);
+      min-width: 0;
+      font-size: 11px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.88);
+      border-color: rgba(148, 163, 184, 0.45);
     }
 
 .qr-wrap {
@@ -669,6 +824,9 @@
           <div class="hero-texts">
             <div class="hero-subline">MAAVNICA SMARTCARD</div>
             <div class="hero-title" id="person-name">Prénom Nom</div>
+            <div class="hero-professional-tagline" id="hero-professional-tagline">
+              Contact, avis et demande en 1 clic
+            </div>
             <div class="hero-company" id="company-name">Votre entreprise</div>
             <div class="hero-subtitle" id="hero-subtitle">
               Contact, avis Google et demandes de devis en un seul lien.
@@ -676,8 +834,7 @@
 
             <div class="hero-meta">
               <div class="hero-line">
-                <span class="dot-green"></span>
-                <span class="hero-meta-label">Disponible pour vos clients</span>
+                <span class="hero-meta-label">🟢 Disponible — réponse rapide</span>
                 <span class="hero-meta-value" id="hero-availability-note"></span>
               </div>
               <div class="hero-line">
@@ -711,13 +868,18 @@
             Avis Google · Contact rapide · Demande de devis
           </div>
 
-          <div id="hero-google-badge" class="hero-google-badge" style="display:none;"></div>
+          <div class="hero-google-badge-wrap">
+            <div id="hero-google-badge" class="hero-google-badge" style="display:none;"></div>
+          </div>
 
           <button class="btn-link" id="btn-call">
             📞 Appeler directement
           </button>
 
           <div class="section-label">Votre avis rapide</div>
+          <div class="hint" style="margin-top: -2px; margin-bottom: 6px;">
+            Vos clients peuvent laisser un avis en quelques secondes.
+          </div>
           <div class="pill-row">
             <button class="pill" id="pill-yes">
               <span class="emoji">😊</span>
@@ -760,18 +922,26 @@
             Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
           </div>
 
-          <div class="section-label" style="margin-top:10px;">Partager cette carte après la prestation</div>
-          <button class="btn-primary" id="btn-share-card-main">
-            📲 Envoyer ma carte au client
-          </button>
-          <div class="hint" style="margin-top:4px;">
-            Après chaque prestation, envoyez votre carte pour recevoir un avis ou être recontacté facilement.
+          <div class="post-share-block">
+            <div class="section-label" style="margin-top:0;">
+              <span class="post-share-kicker">Après la prestation</span>
+              Partager cette carte avec le client
+            </div>
+            <button class="btn-primary btn-share-card-main" id="btn-share-card-main">
+              📲 Envoyer ma carte au client
+            </button>
+            <div class="hint post-share-hint">
+              Un geste pro : à la fin de l’intervention, envoyez votre carte en un clic — avis Google, coordonnées et prochain contact, au même endroit.
+            </div>
+            <div class="share-row" id="share-card-options">
+              <button class="btn-link" id="btn-share-wa">WhatsApp</button>
+              <button class="btn-link" id="btn-share-sms">SMS</button>
+              <button class="btn-link" id="btn-share-copy">Copier le lien</button>
+              <button class="btn-link" id="btn-share-email">Email</button>
+            </div>
           </div>
-          <div class="share-row" id="share-card-options">
-            <button class="btn-link" id="btn-share-wa">WhatsApp</button>
-            <button class="btn-link" id="btn-share-sms">SMS</button>
-            <button class="btn-link" id="btn-share-copy">Copier le lien</button>
-            <button class="btn-link" id="btn-share-email">Email</button>
+          <div class="hint" style="margin-top:6px;">
+            Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
           </div>
         </div>
 
@@ -1197,7 +1367,7 @@ if (fullName) {
             } else {
               googleBadgeEl.textContent = text;
             }
-            googleBadgeEl.style.display = "inline-flex";
+            googleBadgeEl.style.display = "flex";
           } else {
             googleBadgeEl.style.display = "none";
           }
@@ -1252,16 +1422,23 @@ if (fullName) {
           let feedbackValue = null;
           const pillYes = document.getElementById("pill-yes");
           const pillNo = document.getElementById("pill-no");
+          const pillRow = pillYes ? pillYes.closest(".pill-row") : null;
           const helperTextEl = document.getElementById("feedback-helper-text");
           const btnGoogleReview = document.getElementById("btn-google-review");
           const commentEl = document.getElementById("feedback-comment");
 
           function selectFeedback(value) {
             feedbackValue = value;
+            const hasSelection = !!value;
             if (pillYes && pillNo) {
               pillYes.classList.toggle("selected-yes", value === "yes");
               pillNo.classList.toggle("selected-no", value === "no");
             }
+
+            if (pillRow) pillRow.classList.toggle("feedback-has-selection", hasSelection);
+            if (commentEl) commentEl.classList.toggle("feedback-comment-visible", hasSelection);
+            if (helperTextEl)
+              helperTextEl.classList.toggle("feedback-helper-visible", hasSelection);
 
             if (!value && helperTextEl) {
               helperTextEl.textContent =
