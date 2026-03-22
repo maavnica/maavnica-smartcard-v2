@@ -596,6 +596,7 @@
     const demoEmail = document.getElementById("demoEmail");
 
     function update(){
+      if (!prenom || !nom || !entreprise || !email) return;
       const full = `${(prenom.value||"Julie").trim()} ${(nom.value||"Martin").trim()}`.trim();
       if (demoName) demoName.textContent = full || "Julie Martin";
 
@@ -611,8 +612,10 @@
       }
     }
 
-    [prenom, nom, entreprise, email].forEach(el => el.addEventListener("input", update));
-    update();
+    [prenom, nom, entreprise, email].forEach(function (el) {
+      if (el) el.addEventListener("input", update);
+    });
+    if (prenom && nom && entreprise && email) update();
   }
 
   // Intercept submit: envoi FormSubmit puis redirection Stripe uniquement si succès réel
@@ -622,6 +625,8 @@
     const okbox = document.getElementById("okbox");
     const errbox = document.getElementById("errbox");
     const fieldStripe = document.getElementById("fieldStripe");
+
+    if (!form || !btn) return;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -668,8 +673,9 @@
   (function init(){
     const offre = getOffre();
     setOfferUI(offre);
-    bindPreview();
+    // Listener submit en premier : si bindPreview() levait une erreur, le fetch FormSubmit ne s’attachait jamais.
     setupSubmitRedirect();
+    bindPreview();
   })();
 </script>
 </body>
