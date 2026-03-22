@@ -371,6 +371,7 @@
           <input type="hidden" name="_subject" value="Nouvelle commande SmartCard (pré-paiement)" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_next" value="https://smartcard.maavnica.com/success-smartcard.html" />
 
           <!-- Champs cachés utiles -->
           <input type="hidden" name="offre" id="fieldOffre" value="solo" />
@@ -618,63 +619,9 @@
     if (prenom && nom && entreprise && email) update();
   }
 
-  // Intercept submit: envoi FormSubmit puis redirection Stripe uniquement si succès réel
-  function setupSubmitRedirect(){
-    const form = document.getElementById("orderForm");
-    const btn = document.getElementById("submitBtn");
-    const okbox = document.getElementById("okbox");
-    const errbox = document.getElementById("errbox");
-    const fieldStripe = document.getElementById("fieldStripe");
-
-    if (!form || !btn) return;
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const stripeUrl = (fieldStripe.value || "").trim();
-      if(!stripeUrl){
-        alert("Lien Stripe manquant.");
-        return;
-      }
-
-      btn.disabled = true;
-      if (okbox) okbox.style.display = "none";
-      if (errbox) errbox.style.display = "none";
-
-      try {
-        const fd = new FormData(form);
-        const res = await fetch(form.action, {
-          method: "POST",
-          body: fd,
-          headers: { "Accept": "application/json" }
-        });
-
-        if (!res.ok) {
-          throw new Error("FormSubmit a répondu avec le code " + res.status);
-        }
-
-        const ct = (res.headers.get("content-type") || "").toLowerCase();
-        if (ct.includes("application/json")) {
-          const data = await res.json();
-          if (data && data.success === false) {
-            throw new Error((data && data.message) || "Formulaire refusé par le service d’envoi.");
-          }
-        }
-
-        if (okbox) okbox.style.display = "block";
-        window.location.href = stripeUrl;
-      } catch (err) {
-        if (errbox) errbox.style.display = "block";
-        btn.disabled = false;
-      }
-    });
-  }
-
   (function init(){
     const offre = getOffre();
     setOfferUI(offre);
-    // Listener submit en premier : si bindPreview() levait une erreur, le fetch FormSubmit ne s’attachait jamais.
-    setupSubmitRedirect();
     bindPreview();
   })();
 </script>
