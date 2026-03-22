@@ -130,6 +130,20 @@
     }
     .okbox strong{color:#ffffff}
 
+    .errbox{
+      display:none;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(248,113,113,.45);
+      background:rgba(248,113,113,.10);
+      color:#fecaca;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .errbox strong{color:#ffffff}
+    .errbox a{color:#93c5fd;text-decoration:underline;text-underline-offset:2px}
+
     /* === Phone SmartCard demo (droite) === */
     .phone{
       max-width: 430px;
@@ -419,6 +433,13 @@
             Redirection vers le paiement sécurisé en cours…
           </div>
 
+          <div class="errbox" id="errbox" role="alert">
+            ⚠️ <strong>L’envoi de votre formulaire a échoué.</strong><br/>
+            Vérifiez votre connexion internet et réessayez. Si le problème continue, contactez-nous à
+            <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>
+            — vous ne serez pas redirigé vers le paiement tant que l’envoi n’a pas réussi.
+          </div>
+
           <p class="hint">
             Le paiement finalise la commande. Après paiement, vous recevez un email de confirmation et les prochaines étapes.
           </p>
@@ -594,11 +615,12 @@
     update();
   }
 
-  // Intercept submit: feedback + envoi FormSubmit + redirect Stripe
+  // Intercept submit: envoi FormSubmit puis redirection Stripe uniquement si succès réel
   function setupSubmitRedirect(){
     const form = document.getElementById("orderForm");
     const btn = document.getElementById("submitBtn");
     const okbox = document.getElementById("okbox");
+    const errbox = document.getElementById("errbox");
     const fieldStripe = document.getElementById("fieldStripe");
 
     form.addEventListener("submit", async (e) => {
@@ -611,19 +633,34 @@
       }
 
       btn.disabled = true;
-      okbox.style.display = "block";
+      if (okbox) okbox.style.display = "none";
+      if (errbox) errbox.style.display = "none";
 
       try {
         const fd = new FormData(form);
-        await fetch(form.action, {
+        const res = await fetch(form.action, {
           method: "POST",
           body: fd,
           headers: { "Accept": "application/json" }
         });
-      } catch (err) {
-        // si erreur réseau, on redirige quand même vers Stripe
-      } finally {
+
+        if (!res.ok) {
+          throw new Error("FormSubmit a répondu avec le code " + res.status);
+        }
+
+        const ct = (res.headers.get("content-type") || "").toLowerCase();
+        if (ct.includes("application/json")) {
+          const data = await res.json();
+          if (data && data.success === false) {
+            throw new Error((data && data.message) || "Formulaire refusé par le service d’envoi.");
+          }
+        }
+
+        if (okbox) okbox.style.display = "block";
         window.location.href = stripeUrl;
+      } catch (err) {
+        if (errbox) errbox.style.display = "block";
+        btn.disabled = false;
       }
     });
   }
