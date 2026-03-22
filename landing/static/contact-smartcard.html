@@ -71,6 +71,36 @@
       outline:none;
     }
     textarea{min-height:92px;resize:vertical}
+    input[type="file"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0a1428;
+      color:var(--txt);
+      font-size:14px;
+    }
+    input[type="url"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0a1428;
+      color:var(--txt);
+      outline:none;
+    }
+    .photo-help{
+      font-size:12px;
+      color:var(--mut);
+      line-height:1.4;
+      margin:-2px 0 8px;
+    }
+    .photo-or{
+      font-size:11px;
+      color:var(--mut);
+      margin:10px 0 6px;
+      line-height:1.35;
+    }
     .row{display:grid;grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width: 520px){ .row{grid-template-columns:1fr} }
 
@@ -323,7 +353,7 @@
         </ul>
 
         <!-- FORM (FormSubmit) -->
-        <form id="orderForm" action="https://formsubmit.co/contact@maavnica.com" method="POST">
+        <form id="orderForm" action="https://formsubmit.co/contact@maavnica.com" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="Nouvelle commande SmartCard (pré-paiement)" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
@@ -356,6 +386,28 @@
 
           <label>Nom de l’entreprise / activité</label>
           <input name="entreprise" id="entreprise" placeholder="Ex: Plomberie Martin" />
+
+          <label>Photo ou logo</label>
+          <p class="photo-help">
+            Ajoutez votre photo ou votre logo pour personnaliser votre carte.
+            Formats : JPG, PNG, WebP ou GIF (fichier pas trop lourd pour un envoi par email).
+          </p>
+          <input
+            type="file"
+            name="photo_logo_fichier"
+            id="photo_logo_fichier"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+          />
+          <p class="photo-or">
+            Pas de fichier sous la main ? Indiquez plutôt l’URL directe d’une image (site, hébergeur d’images…) — optionnel :
+          </p>
+          <input
+            type="url"
+            name="photo_logo_url"
+            id="photo_logo_url"
+            placeholder="https://exemple.com/mon-logo.png"
+            autocomplete="off"
+          />
 
           <label>Vos liens utiles (avis Google, WhatsApp, site…) — optionnel : vous pouvez aussi les envoyer après commande</label>
           <textarea name="demande" id="demande" placeholder="Indiquez ici vos liens ou précisions si vous les avez déjà ; sinon vous pourrez les transmettre après la commande."></textarea>
