@@ -366,11 +366,12 @@
           <li>Livraison rapide + support</li>
         </ul>
 
-        <!-- FORM (FormSubmit) -->
-        <form id="orderForm" action="https://formsubmit.co/maavnica@gmail.com" method="POST" enctype="multipart/form-data">
+        <!-- FORM (Backend API) -->
+        <form id="orderForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="Nouvelle commande SmartCard (pré-paiement)" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
+          <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
 
           <!-- Champs cachés utiles -->
           <input type="hidden" name="offre" id="fieldOffre" value="solo" />
@@ -618,10 +619,78 @@
     if (prenom && nom && entreprise && email) update();
   }
 
+  function setupContactSubmit(){
+    const form = document.getElementById("orderForm");
+    const btn = document.getElementById("submitBtn");
+    const okbox = document.getElementById("okbox");
+    const errbox = document.getElementById("errbox");
+    const photoFile = document.getElementById("photo_logo_fichier");
+    const photoUrl = document.getElementById("photo_logo_url");
+    const demande = document.getElementById("demande");
+    const offre = document.getElementById("fieldOffre");
+    const prenom = document.getElementById("prenom");
+    const nom = document.getElementById("nom");
+    const email = document.getElementById("email");
+    const telephone = document.getElementById("telephone");
+    const entreprise = document.getElementById("entreprise");
+    const honey = document.getElementById("honey");
+
+    if (!form || !btn) return;
+
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      if (okbox) okbox.style.display = "none";
+      if (errbox) errbox.style.display = "none";
+      btn.disabled = true;
+
+      const details = [];
+      const messageText = (demande && demande.value ? demande.value.trim() : "");
+      if (messageText) details.push(messageText);
+      if (offre && offre.value) details.push("Offre: " + offre.value);
+      if (photoUrl && photoUrl.value.trim()) details.push("URL logo/photo: " + photoUrl.value.trim());
+      if (photoFile && photoFile.files && photoFile.files[0]) {
+        details.push("Fichier logo/photo: " + photoFile.files[0].name);
+      }
+
+      const payload = {
+        first_name: prenom ? prenom.value.trim() : "",
+        last_name: nom ? nom.value.trim() : "",
+        email: email ? email.value.trim() : "",
+        phone: telephone ? telephone.value.trim() : "",
+        company_name: entreprise ? entreprise.value.trim() : "",
+        message: details.join("\n"),
+        source: "landing/contact-smartcard",
+        honey: honey ? honey.value.trim() : ""
+      };
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error("Contact API failed");
+        }
+
+        form.reset();
+        setOfferUI(getOffre());
+        bindPreview();
+        if (okbox) okbox.style.display = "block";
+      } catch (err) {
+        if (errbox) errbox.style.display = "block";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  }
+
   (function init(){
     const offre = getOffre();
     setOfferUI(offre);
     bindPreview();
+    setupContactSubmit();
   })();
 </script>
 </body>
