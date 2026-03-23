@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+import re
+
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 # =============================================================
@@ -164,6 +166,45 @@ class QuoteOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+# =============================================================
+#  CONTACT SMARTCARD (Landing)
+# =============================================================
+
+_URL_PATTERN = re.compile(r"(https?://|www\.)", re.IGNORECASE)
+_PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
+
+
+class ContactRequest(BaseModel):
+    first_name: str = Field(..., min_length=1, max_length=80)
+    last_name: str = Field(..., min_length=1, max_length=80)
+    email: EmailStr
+    phone: str = Field(default="", min_length=0, max_length=25)
+    company_name: str = Field(default="", min_length=0, max_length=120)
+    message: str = Field(default="", min_length=0, max_length=4000)
+    source: str = Field(..., min_length=1, max_length=80)
+    honey: str = Field(default="", max_length=200)
+
+    @validator("first_name", "last_name", "phone", "company_name", "message", "source", "honey", pre=True)
+    def strip_strings(cls, v):
+        return v.strip() if isinstance(v, str) else v
+
+    @validator("first_name", "last_name", "phone", "company_name", "message", "source")
+    def block_urls_in_text_fields(cls, v: str) -> str:
+        if _URL_PATTERN.search(v):
+            raise ValueError("Les URLs ne sont pas autorisées dans ce champ.")
+        if "<" in v or ">" in v:
+            raise ValueError("Contenu invalide.")
+        return v
+
+    @validator("phone")
+    def validate_phone_format(cls, v: str) -> str:
+        if not v:
+            return v
+        if not _PHONE_PATTERN.match(v):
+            raise ValueError("Numéro de téléphone invalide.")
+        return v
 
 
 # =============================================================

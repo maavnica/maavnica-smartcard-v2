@@ -15,6 +15,7 @@ from app.routers import public, cards
 from app.routers.stripe_webhook import router as stripe_webhook_router
 from app.routers.checkout import router as checkout_router
 from app.routers.upload import router as upload_router
+from app.routers.contact import router as contact_router
 
 
 
@@ -100,6 +101,9 @@ app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 
 # Upload avatar (admin)
 app.include_router(upload_router, prefix="/api/upload", tags=["upload"])
+
+# Contact landing (SmartCard)
+app.include_router(contact_router)
 
 
 # ------------------------------------------------------------
