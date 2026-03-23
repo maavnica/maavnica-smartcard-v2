@@ -678,6 +678,13 @@
         setOfferUI(getOffre());
         bindPreview();
         if (okbox) okbox.style.display = "block";
+        const fieldStripeEl = document.getElementById("fieldStripe");
+        const stripeUrl = (fieldStripeEl && fieldStripeEl.value ? fieldStripeEl.value.trim() : "");
+        if (stripeUrl) {
+          setTimeout(function () {
+            window.location.href = stripeUrl;
+          }, 800);
+        }
       } catch (err) {
         if (errbox) errbox.style.display = "block";
       } finally {
