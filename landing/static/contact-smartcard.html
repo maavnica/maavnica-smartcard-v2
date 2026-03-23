@@ -427,11 +427,13 @@
           <label>Vos liens utiles (avis Google, WhatsApp, site…) — optionnel : vous pouvez aussi les envoyer après commande</label>
           <textarea name="demande" id="demande" placeholder="Indiquez ici vos liens ou précisions si vous les avez déjà ; sinon vous pourrez les transmettre après la commande."></textarea>
 
-          <button class="btn" id="submitBtn" type="submit">Continuer vers le paiement sécurisé</button>
+          <button class="btn" id="submitBtn" type="submit">Envoyer mon formulaire</button>
 
           <div class="okbox" id="okbox">
-            ✅ <strong>Formulaire envoyé.</strong><br/>
-            Redirection vers le paiement sécurisé en cours…
+            ✅ <strong>Formulaire envoyé avec succès.</strong><br/>
+            Votre demande a bien été transmise. Vérifiez le récapitulatif ci-dessous, puis poursuivez vers le paiement sécurisé.
+            <div id="okboxRecap" style="margin-top:10px;line-height:1.45;"></div>
+            <button type="button" class="btn" id="payBtn" style="margin-top:12px;display:none;">Continuer vers le paiement sécurisé</button>
           </div>
 
           <div class="errbox" id="errbox" role="alert">
@@ -586,6 +588,14 @@
     }
   }
 
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
   // Live update dans l’aperçu SmartCard (droite)
   function bindPreview(){
     const prenom = document.getElementById("prenom");
@@ -634,8 +644,18 @@
     const telephone = document.getElementById("telephone");
     const entreprise = document.getElementById("entreprise");
     const honey = document.getElementById("honey");
+    const okboxRecap = document.getElementById("okboxRecap");
+    const payBtn = document.getElementById("payBtn");
 
     if (!form || !btn) return;
+
+    if (payBtn) {
+      payBtn.addEventListener("click", function () {
+        const fieldStripeEl = document.getElementById("fieldStripe");
+        const url = fieldStripeEl && fieldStripeEl.value ? fieldStripeEl.value.trim() : "";
+        if (url) window.location.href = url;
+      });
+    }
 
     form.addEventListener("submit", async function(e){
       e.preventDefault();
@@ -674,16 +694,31 @@
           throw new Error("Contact API failed");
         }
 
-        form.reset();
-        setOfferUI(getOffre());
-        bindPreview();
-        if (okbox) okbox.style.display = "block";
         const fieldStripeEl = document.getElementById("fieldStripe");
-        const stripeUrl = (fieldStripeEl && fieldStripeEl.value ? fieldStripeEl.value.trim() : "");
-        if (stripeUrl) {
-          setTimeout(function () {
-            window.location.href = stripeUrl;
-          }, 800);
+        const stripeUrl = fieldStripeEl && fieldStripeEl.value ? fieldStripeEl.value.trim() : "";
+
+        const fn = prenom ? prenom.value.trim() : "";
+        const ln = nom ? nom.value.trim() : "";
+        const em = email ? email.value.trim() : "";
+        const offVal = offre ? offre.value : "";
+        const offLabel = offVal === "business" ? "SmartCard Business" : "SmartCard Solo";
+        const photoUrlStr = photoUrl && photoUrl.value.trim() ? photoUrl.value.trim() : "";
+        const fileName = photoFile && photoFile.files && photoFile.files[0] ? photoFile.files[0].name : "";
+
+        if (okboxRecap) {
+          const lines = [];
+          lines.push("<strong>Récapitulatif</strong>");
+          lines.push("Prénom et nom : " + escapeHtml((fn + " " + ln).trim()));
+          lines.push("Email : " + escapeHtml(em));
+          lines.push("Offre : " + escapeHtml(offLabel));
+          if (photoUrlStr) lines.push("URL photo / logo : " + escapeHtml(photoUrlStr));
+          if (fileName) lines.push("Fichier sélectionné : " + escapeHtml(fileName));
+          okboxRecap.innerHTML = lines.join("<br/>");
+        }
+
+        if (okbox) okbox.style.display = "block";
+        if (payBtn) {
+          payBtn.style.display = stripeUrl ? "block" : "none";
         }
       } catch (err) {
         if (errbox) errbox.style.display = "block";
