@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maavnica SmartCard – Avis Google & contact après chaque intervention</title>
+  <title>Maavnica SmartCard – Visibilité, crédibilité & nouveaux clients</title>
   <meta name="description"
-        content="Envoyez votre carte digitale après chaque prestation : avis Google, rappel, demande de devis. Un lien, zéro appli." />
+        content="Carte digitale avec QR code : plus de visibilité, plus de crédibilité, plus de demandes clients. Trouvez de nouveaux clients et fidélisez les anciens." />
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -68,8 +68,17 @@
     .hero-sub {
       font-size:1rem;
       color:#cbd5e1;
+      margin-bottom:14px;
+      max-width:46ch;
+    }
+
+    .hero-punchline {
+      font-size:1.05rem;
+      font-weight:700;
+      color:#FACC15;
       margin-bottom:22px;
-      max-width:42ch;
+      max-width:44ch;
+      line-height:1.35;
     }
 
     .hero-cta-row {
@@ -209,6 +218,53 @@
       display:flex;
       align-items:center;
       justify-content:center;
+    }
+
+    /* ---------- VISIBILITÉ ---------- */
+    .visibility-section {
+      background:#020617;
+      border-bottom:1px solid rgba(148,163,184,0.12);
+    }
+    .visibility-box {
+      background:linear-gradient(145deg, rgba(15,23,42,0.95) 0%, #020617 100%);
+      border:1px solid rgba(59,130,246,0.35);
+      border-radius:18px;
+      padding:24px 26px;
+      max-width:720px;
+      margin:0 auto;
+      box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    }
+    .visibility-box h2 {
+      font-size:clamp(1.05rem, 2.5vw, 1.25rem);
+      font-weight:800;
+      margin-bottom:16px;
+      color:#fff;
+      letter-spacing:-0.02em;
+    }
+    .visibility-list {
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+    .visibility-list li {
+      position:relative;
+      padding-left:28px;
+      margin-bottom:12px;
+      font-size:15px;
+      color:#e2e8f0;
+      line-height:1.45;
+    }
+    .visibility-list li:last-child { margin-bottom:0; }
+    .visibility-list li::before {
+      content:"";
+      position:absolute;
+      left:0;
+      top:0.45em;
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:linear-gradient(135deg, #3b82f6, #22c55e);
+      box-shadow:0 0 0 3px rgba(59,130,246,0.2);
     }
 
     /* ---------- HINT ---------- */
@@ -519,11 +575,11 @@
     <div class="hero">
       <div class="hero-left">
         <p class="hero-kicker">Pour artisans & indépendants</p>
-        <h1>Après chaque intervention : un lien pour récupérer des avis et rester joignable.</h1>
+        <h1>Trouvez de nouveaux clients et faites revenir les anciens</h1>
         <p class="hero-sub">
-          Envoyez votre carte en 1 clic à votre client.
-          Il peut laisser un avis, vous rappeler ou demander un devis immédiatement.
+          Une carte digitale avec QR code pour gagner en visibilité, en crédibilité et recevoir plus de demandes clients
         </p>
+        <p class="hero-punchline">Chaque client peut vous en ramener un autre</p>
         <div class="hero-cta-row">
           <a href="/static/contact-smartcard.html?offre=solo" class="cta-primary">
             <span>📲 Créer ma SmartCard</span>
@@ -549,15 +605,30 @@
     </div>
   </header>
 
-  <!-- MINI SCÉNARIO -->
+  <!-- VISIBILITÉ & CONFIANCE -->
+  <section class="section visibility-section">
+    <div class="container">
+      <div class="visibility-box">
+        <h2>Gagnez en visibilité et inspirez confiance</h2>
+        <ul class="visibility-list">
+          <li>Vos clients vous trouvent plus facilement</li>
+          <li>Vous obtenez plus d’avis Google</li>
+          <li>Vous renforcez votre image professionnelle</li>
+          <li>Vous transformez chaque client en opportunité</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTION (parcours client) -->
   <section class="section scenario-section">
     <div class="container">
       <div class="scenario-box">
-        <h2>Après votre intervention :</h2>
+        <h2>Après chaque intervention :</h2>
         <ul class="scenario-steps">
-          <li>Vous envoyez votre carte</li>
-          <li>Le client clique</li>
-          <li>Vous recevez un avis ou une demande</li>
+          <li>Vous envoyez votre SmartCard</li>
+          <li>Votre client laisse un avis</li>
+          <li>De nouveaux clients vous découvrent</li>
         </ul>
       </div>
       <p class="hint" style="margin-top:16px;">Vos clients peuvent laisser un avis en quelques secondes.</p>
