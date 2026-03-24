@@ -427,13 +427,24 @@
           <label>Vos liens utiles (avis Google, WhatsApp, site…) — optionnel : vous pouvez aussi les envoyer après commande</label>
           <textarea name="demande" id="demande" placeholder="Indiquez ici vos liens ou précisions si vous les avez déjà ; sinon vous pourrez les transmettre après la commande."></textarea>
 
+          <p class="hint" style="margin-top:14px;margin-bottom:0;">⚡ Votre SmartCard est prête sous 24h après paiement</p>
+
           <button class="btn" id="submitBtn" type="submit">Envoyer mon formulaire</button>
 
+          <p class="hint" style="margin-top:12px;margin-bottom:0;">🔒 Aucun paiement n’est débité à cette étape. Vous pourrez vérifier votre demande avant de payer.</p>
+
           <div class="okbox" id="okbox">
-            ✅ <strong>Formulaire envoyé avec succès.</strong><br/>
-            Votre demande a bien été transmise. Vérifiez le récapitulatif ci-dessous, puis poursuivez vers le paiement sécurisé.
+            ✅ <strong>Votre demande a bien été envoyée.</strong><br/><br/>
+            Nous préparons votre SmartCard avec vos informations.<br/><br/>
+            🎯 Prochaine étape :<br/>
+            Finalisez votre commande pour activer votre carte et commencer à l’utiliser.<br/><br/>
+            Après paiement :<br/>
+            - votre SmartCard est activée<br/>
+            - vous recevez votre lien + QR code<br/>
+            - vous pouvez l’envoyer à vos clients<br/><br/>
             <div id="okboxRecap" style="margin-top:10px;line-height:1.45;"></div>
-            <button type="button" class="btn" id="payBtn" style="margin-top:12px;display:none;">Continuer vers le paiement sécurisé</button>
+            <p class="hint" style="margin-top:10px;margin-bottom:0;line-height:1.45;">💡 La plupart des clients finalisent leur SmartCard immédiatement pour ne pas perdre de prospects.</p>
+            <button type="button" class="btn" id="payBtn" style="margin-top:12px;display:none;">Finaliser ma commande</button>
           </div>
 
           <div class="errbox" id="errbox" role="alert">
