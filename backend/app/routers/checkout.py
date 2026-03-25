@@ -1,9 +1,10 @@
 import os, uuid
 import stripe
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import text
 from app.db import get_engine
+from app.utils.rate_limit import rate_limit_by_ip
 
 router = APIRouter(prefix="/api", tags=["checkout"])
 
@@ -28,7 +29,7 @@ class CheckoutIn(BaseModel):
 
 
 @router.post("/create-checkout")
-def create_checkout(data: CheckoutIn):
+def create_checkout(data: CheckoutIn, _: None = Depends(rate_limit_by_ip(5, 60))):
     offer = data.offer.lower()
 
     if offer not in ("solo", "business"):

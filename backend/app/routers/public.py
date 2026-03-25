@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models import Card, Feedback, Quote
 from app.schemas import CardPublic, FeedbackCreate, QuoteCreate
 from app.utils.emailer import send_email
+from app.utils.rate_limit import rate_limit_by_ip
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
@@ -243,6 +244,7 @@ def create_feedback(
     payload: FeedbackCreate,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
+    _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
     card = get_card_by_id_or_404(card_id, db)
 
@@ -317,6 +319,7 @@ def create_quote(
     payload: QuoteCreate,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
+    _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
     card = get_card_by_id_or_404(card_id, db)
 

@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from .. import models, schemas
 from ..database import get_db
+from app.utils.admin_auth import require_admin_api_key
 
 router = APIRouter()
 
@@ -33,6 +34,7 @@ ALLOWED_PROFILES = {
 def create_card(
     card: schemas.CardCreate,
     db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
 ) -> schemas.CardPublic:
 
     # Vérifie si le slug existe déjà
@@ -78,6 +80,7 @@ def update_card(
     card_id: int,
     card_in: schemas.CardUpdate,
     db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
 ) -> schemas.CardPublic:
 
     db_card = (
@@ -136,6 +139,7 @@ def update_card(
 def get_card_by_slug(
     slug: str,
     db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
 ) -> schemas.CardPublic:
 
     card = (
@@ -161,6 +165,7 @@ def get_card_by_slug(
 def list_feedback(
     card_id: int,
     db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
 ) -> List[schemas.FeedbackOut]:
 
     card_exists = (
@@ -189,6 +194,7 @@ def list_feedback(
 def list_quotes(
     card_id: int,
     db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
 ) -> List[schemas.QuoteOut]:
 
     card_exists = (

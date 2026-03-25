@@ -12,7 +12,7 @@ import uuid
 from io import BytesIO
 from typing import Optional
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 try:
     import cloudinary
@@ -23,6 +23,8 @@ except ImportError:  # pragma: no cover
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+
+from app.utils.admin_auth import require_admin_api_key
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 ALLOWED_CONTENT_TYPES = {
@@ -142,7 +144,10 @@ async def _upload_avatar_to_cloudinary(image_bytes: bytes, ext: str) -> str:
 
 
 @router.post("/avatar")
-async def upload_avatar(file: UploadFile = File(..., alias="file")):
+async def upload_avatar(
+    file: UploadFile = File(..., alias="file"),
+    _: None = Depends(require_admin_api_key),
+):
     """
     Reçoit une image, l'uploade sur Cloudinary et retourne l'URL `secure_url`.
     Accepte : .jpg, .jpeg, .png, .webp

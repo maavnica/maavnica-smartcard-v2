@@ -1,6 +1,20 @@
 const API_BASE = "/api/cards";
+let ADMIN_API_KEY = sessionStorage.getItem("ADMIN_API_KEY") || "";
 let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
+
+function ensureAdminApiKey() {
+  if (ADMIN_API_KEY && ADMIN_API_KEY.trim()) return ADMIN_API_KEY.trim();
+  const entered = window.prompt("Clé admin requise pour accéder à l’interface SmartCard :");
+  if (entered === null) return "";
+  ADMIN_API_KEY = entered.trim();
+  if (!ADMIN_API_KEY) {
+    showToast("Clé admin manquante. Actions admin bloquées.", true);
+    return "";
+  }
+  sessionStorage.setItem("ADMIN_API_KEY", ADMIN_API_KEY);
+  return ADMIN_API_KEY;
+}
 
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
@@ -115,8 +129,13 @@ async function loadCardBySlug() {
     return;
   }
 
+  const adminKey = ensureAdminApiKey();
+  if (!adminKey) return;
+
   try {
-    const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`);
+    const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`, {
+      headers: { "Authorization": "Bearer " + adminKey }
+    });
     if (!res.ok) {
       showToast("Carte introuvable pour ce slug.", true);
       return;
@@ -143,6 +162,9 @@ async function saveCard() {
     showToast("Nom d’entreprise et slug sont obligatoires.", true);
     return;
   }
+
+  const adminKey = ensureAdminApiKey();
+  if (!adminKey) return;
 
   slug = slug.toLowerCase();
   document.getElementById("slug").value = slug;
@@ -203,7 +225,10 @@ async function saveCard() {
 
     const res = await fetch(url, {
       method,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + adminKey
+      },
       body: JSON.stringify(payload)
     });
 
@@ -234,10 +259,17 @@ async function saveCard() {
 async function loadFeedbackAndQuotes() {
   if (!currentCardId) return;
 
+  const adminKey = ensureAdminApiKey();
+  if (!adminKey) return;
+
   try {
     const [fRes, qRes] = await Promise.all([
-      fetch(`${API_BASE}/${currentCardId}/feedback`),
-      fetch(`${API_BASE}/${currentCardId}/quotes`)
+      fetch(`${API_BASE}/${currentCardId}/feedback`, {
+        headers: { "Authorization": "Bearer " + adminKey }
+      }),
+      fetch(`${API_BASE}/${currentCardId}/quotes`, {
+        headers: { "Authorization": "Bearer " + adminKey }
+      })
     ]);
 
     const feedbackList = document.getElementById("feedback-list");
@@ -330,8 +362,11 @@ function hasAllowedAvatarExt(filename) {
 }
 
 async function uploadAvatarFile(file) {
+  const adminKey = ensureAdminApiKey();
+  if (!adminKey) throw new Error("Clé admin requise.");
   const res = await fetch(UPLOAD_AVATAR_URL, {
     method: "POST",
+    headers: { "Authorization": "Bearer " + adminKey },
     body: (() => {
       const fd = new FormData();
       fd.append("file", file);
