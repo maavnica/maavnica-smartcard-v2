@@ -179,10 +179,8 @@
       <h1>Demandez à être recontacté</h1>
       <p class="sub">Expliquez votre besoin et nous revenons vers vous rapidement.</p>
 
-      <form id="recontactForm" action="https://formsubmit.co/contact@maavnica.com" method="POST">
-        <input type="hidden" name="_subject" value="Demande de recontact — SmartCard Maavnica" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_template" value="table" />
+      <form id="recontactForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST">
+        <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
 
         <div class="row">
           <div>
@@ -219,6 +217,9 @@
           autocomplete="off"
         />
 
+        <p class="hint" id="formErr" role="alert" style="display:none;color:#fecaca;margin-top:4px;">
+          L’envoi a échoué. Vérifiez votre connexion et réessayez.
+        </p>
         <button type="submit" class="btn" id="submitBtn">Envoyer ma demande</button>
         <p class="hint">
           Aucune obligation d’achat. Nous vous rappelons pour répondre à vos questions sur la SmartCard (carte après intervention, avis, devis).
@@ -241,25 +242,54 @@
       var btn = document.getElementById("submitBtn");
       var cardBlock = document.getElementById("cardBlock");
       var thankyou = document.getElementById("thankyou");
+      var formErr = document.getElementById("formErr");
 
       if (!form) return;
 
-      form.addEventListener("submit", function (e) {
+      form.addEventListener("submit", async function (e) {
         e.preventDefault();
         btn.disabled = true;
+        if (formErr) formErr.style.display = "none";
 
-        var fd = new FormData(form);
-        fetch(form.action, {
-          method: "POST",
-          body: fd,
-          headers: { Accept: "application/json" },
-        })
-          .catch(function () {})
-          .finally(function () {
-            cardBlock.style.display = "none";
-            thankyou.style.display = "block";
-            btn.disabled = false;
+        var prenom = document.getElementById("prenom");
+        var nom = document.getElementById("nom");
+        var besoins = document.getElementById("besoins");
+        var email = document.getElementById("email");
+        var telephone = document.getElementById("telephone");
+        var creneau = document.getElementById("creneau");
+        var honey = document.getElementById("honey");
+
+        var msgParts = [];
+        if (besoins && besoins.value.trim()) msgParts.push(besoins.value.trim());
+        if (creneau && creneau.value.trim()) msgParts.push("Créneau souhaité : " + creneau.value.trim());
+        var messageText = msgParts.join("\n\n");
+
+        var payload = {
+          first_name: prenom ? prenom.value.trim() : "",
+          last_name: nom ? nom.value.trim() : "",
+          email: email ? email.value.trim() : "",
+          phone: telephone ? telephone.value.trim() : "",
+          company_name: "",
+          message: messageText,
+          source: "landing/recontact-smartcard",
+          honey: honey ? honey.value.trim() : ""
+        };
+
+        try {
+          var response = await fetch(form.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
           });
+          if (!response.ok) throw new Error("Contact API failed");
+          form.reset();
+          cardBlock.style.display = "none";
+          thankyou.style.display = "block";
+        } catch (err) {
+          if (formErr) formErr.style.display = "block";
+        } finally {
+          btn.disabled = false;
+        }
       });
     })();
   </script>
