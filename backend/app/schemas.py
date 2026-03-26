@@ -5,6 +5,27 @@ import re
 
 from pydantic import BaseModel, EmailStr, Field, validator
 
+# Règles communes anti-spam (contact, feedback, devis public)
+_URL_PATTERN = re.compile(r"(https?://|www\.)", re.IGNORECASE)
+_EMAIL_IN_TEXT_PATTERN = re.compile(
+    r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+)
+_PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
+
+
+def _reject_urls_and_angle_brackets(v: str) -> str:
+    if _URL_PATTERN.search(v):
+        raise ValueError("Les URLs ne sont pas autorisées dans ce champ.")
+    if "<" in v or ">" in v:
+        raise ValueError("Contenu invalide.")
+    return v
+
+
+def _reject_email_like_in_text(v: str) -> str:
+    if _EMAIL_IN_TEXT_PATTERN.search(v):
+        raise ValueError("Les adresses e-mail ne sont pas autorisées dans ce champ.")
+    return v
+
 
 # =============================================================
 #  SMARTCARD — BASE
@@ -132,7 +153,20 @@ class CardOut(CardPublic):
 
 class FeedbackCreate(BaseModel):
     satisfaction: bool
-    comment: Optional[str] = None
+    comment: Optional[str] = Field(None, max_length=2000)
+
+    @validator("comment", pre=True)
+    def _feedback_comment_empty(cls, v):
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return None
+        return v.strip() if isinstance(v, str) else v
+
+    @validator("comment")
+    def _feedback_comment_rules(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        v = _reject_urls_and_angle_brackets(v)
+        return _reject_email_like_in_text(v)
 
 
 class FeedbackOut(BaseModel):
@@ -150,10 +184,41 @@ class FeedbackOut(BaseModel):
 # =============================================================
 
 class QuoteCreate(BaseModel):
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    message: Optional[str] = None
+    name: str = Field(..., min_length=1, max_length=120)
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = Field(None, max_length=25)
+    message: Optional[str] = Field(None, max_length=5000)
+
+    @validator("name", "phone", "message", pre=True)
+    def _quote_strip(cls, v):
+        if v is None:
+            return v
+        return v.strip() if isinstance(v, str) else v
+
+    @validator("email", pre=True)
+    def _quote_email_empty(cls, v):
+        if v is None or (isinstance(v, str) and not str(v).strip()):
+            return None
+        return str(v).strip() if isinstance(v, str) else v
+
+    @validator("name")
+    def _quote_name(cls, v: str) -> str:
+        return _reject_urls_and_angle_brackets(v)
+
+    @validator("phone")
+    def _quote_phone(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return v
+        if not _PHONE_PATTERN.match(v):
+            raise ValueError("Numéro de téléphone invalide.")
+        return _reject_urls_and_angle_brackets(v)
+
+    @validator("message")
+    def _quote_message(cls, v: Optional[str]) -> Optional[str]:
+        if v is None or v == "":
+            return None
+        v = _reject_urls_and_angle_brackets(v)
+        return _reject_email_like_in_text(v)
 
 
 class QuoteOut(BaseModel):
@@ -172,9 +237,6 @@ class QuoteOut(BaseModel):
 #  CONTACT SMARTCARD (Landing)
 # =============================================================
 
-_URL_PATTERN = re.compile(r"(https?://|www\.)", re.IGNORECASE)
-_PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
-
 
 class ContactRequest(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=80)
@@ -192,11 +254,7 @@ class ContactRequest(BaseModel):
 
     @validator("first_name", "last_name", "phone", "company_name", "message", "source")
     def block_urls_in_text_fields(cls, v: str) -> str:
-        if _URL_PATTERN.search(v):
-            raise ValueError("Les URLs ne sont pas autorisées dans ce champ.")
-        if "<" in v or ">" in v:
-            raise ValueError("Contenu invalide.")
-        return v
+        return _reject_urls_and_angle_brackets(v)
 
     @validator("phone")
     def validate_phone_format(cls, v: str) -> str:

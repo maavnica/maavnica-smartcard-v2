@@ -180,7 +180,8 @@ async def upload_avatar(
 
     try:
         contents = await file.read()
-        if len(contents) > 5 * 1024 * 1024:
+        _max_bytes = 2 * 1024 * 1024
+        if len(contents) > _max_bytes:
             logger.warning(
                 "Fichier trop volumineux pour filename=%s: %s octets",
                 file.filename,
@@ -188,7 +189,7 @@ async def upload_avatar(
             )
             raise HTTPException(
                 status_code=400,
-                detail="Fichier trop volumineux (max 5 Mo).",
+                detail="Fichier trop volumineux (max 2 Mo).",
             )
         if not contents:
             logger.warning("Fichier vide pour filename=%s", file.filename)

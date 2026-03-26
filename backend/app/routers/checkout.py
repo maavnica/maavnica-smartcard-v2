@@ -29,7 +29,7 @@ class CheckoutIn(BaseModel):
 
 
 @router.post("/create-checkout")
-def create_checkout(data: CheckoutIn, _: None = Depends(rate_limit_by_ip(5, 60))):
+def create_checkout(data: CheckoutIn, _: None = Depends(rate_limit_by_ip(3, 300))):
     offer = data.offer.lower()
 
     if offer not in ("solo", "business"):

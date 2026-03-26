@@ -43,6 +43,18 @@ def _is_rate_limited(client_ip: str) -> bool:
         return False
 
 
+def _mask_email_for_log(email: str) -> str:
+    """Réduit l'exposition des emails dans les logs (debug / abuse)."""
+    if not email or "@" not in email:
+        return "(inconnu)"
+    local, _, domain = email.partition("@")
+    if not domain:
+        return "***"
+    if len(local) <= 1:
+        return f"***@{domain}"
+    return f"{local[0]}***@{domain}"
+
+
 def _env_required(name: str) -> str:
     value = (os.getenv(name) or "").strip()
     if not value:
@@ -153,7 +165,7 @@ async def submit_contact(
     logger.info(
         "Contact envoyé avec succès (ip=%s, email=%s, source=%s)",
         client_ip,
-        payload.email,
+        _mask_email_for_log(str(payload.email)),
         payload.source,
     )
     return {"ok": True, "message": "Message envoyé avec succès."}
