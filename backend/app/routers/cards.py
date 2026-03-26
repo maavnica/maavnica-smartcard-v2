@@ -130,7 +130,7 @@ def update_card(
 
 
 # ============================================================
-#  RÉCUPÉRER UNE CARTE PAR SLUG (ADMIN)
+#  RÉCUPÉRER UNE CARTE PAR SLUG (PUBLIC — page /c/{slug})
 # ============================================================
 @router.get(
     "/by-slug/{slug}",
@@ -139,7 +139,6 @@ def update_card(
 def get_card_by_slug(
     slug: str,
     db: Session = Depends(get_db),
-    _: None = Depends(require_admin_api_key),
 ) -> schemas.CardPublic:
 
     card = (
