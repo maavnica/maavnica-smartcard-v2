@@ -437,20 +437,17 @@
         var honey = (form.elements["honey"] && form.elements["honey"].value || "").trim();
 
         var payload = {
-          first_name: prenom,
-          last_name: nom,
-          email: email,
-          phone: telephone,
-          company_name: zone,
-          message: [
-            "Inscription programme d'affiliation SmartCard",
-            "",
-            "Zone / region : " + (zone || "(non renseignee)"),
-            "Canal de recommandation :",
-            canal || "(non renseigne)"
-          ].join("\n"),
+          first_name: (prenom || "").trim(),
+          last_name: (nom || "").trim(),
+          email: (email || "").trim(),
+          phone: (telephone || "").trim(),
+          company_name: (zone || "").trim(),
+          message:
+            "Demande affiliation SmartCard\n" +
+            "Zone: " + (zone || "N/A") + "\n" +
+            "Canal: " + (canal || "N/A"),
           source: "landing/devenir-affilie",
-          honey: honey
+          honey: (honey || "").trim()
         };
 
         try {
