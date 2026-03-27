@@ -200,6 +200,14 @@
       font-size:12px; color:var(--muted2); line-height:1.45;
       border-top:1px solid var(--line); padding-top:12px; margin-top:12px;
     }
+    .form-msg{
+      display:none;
+      margin-top:8px;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .form-msg.ok{color:#9bf4c9}
+    .form-msg.err{color:#ffb4b4}
     .kpis{
       display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:14px;
     }
@@ -333,16 +341,9 @@
         </div>
         <div class="bd">
 
-          <!-- FormSubmit -->
-          <form action="https://formsubmit.co/contact@maavnica.com" method="POST">
-            <!-- anti-spam -->
-            <input type="text" name="_honey" style="display:none">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="Nouvelle inscription affilié — Maavnica SmartCard">
-            <input type="hidden" name="_template" value="table">
-
-            <!-- redirect après envoi -->
-            <input type="hidden" name="_next" value="https://smartcard.maavnica.com/static/devenir-affilie-merci.html">
+          <form id="affiliateForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST">
+            <!-- honeypot anti-spam -->
+            <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;opacity:0;pointer-events:none;">
 
             <!-- champs -->
             <div class="row">
@@ -381,6 +382,8 @@
               <button class="submit" type="submit">✨ S’inscrire au programme affilié</button>
               <a class="btn" href="https://smartcard.maavnica.com">Retour au site</a>
             </div>
+            <p id="okbox" class="form-msg ok"></p>
+            <p id="errbox" class="form-msg err"></p>
 
             <div class="fine">
               Vos informations sont utilisées uniquement pour vous contacter au sujet du programme affilié.
@@ -398,5 +401,77 @@
     </footer>
 
   </div>
+  <script>
+    (function () {
+      var form = document.getElementById("affiliateForm");
+      if (!form) return;
+
+      var okbox = document.getElementById("okbox");
+      var errbox = document.getElementById("errbox");
+
+      function setMessage(ok, text) {
+        if (!okbox || !errbox) return;
+        if (ok) {
+          okbox.textContent = text;
+          okbox.style.display = "block";
+          errbox.style.display = "none";
+        } else {
+          errbox.textContent = text;
+          errbox.style.display = "block";
+          okbox.style.display = "none";
+        }
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        setMessage(true, "");
+        if (okbox) okbox.style.display = "none";
+        if (errbox) errbox.style.display = "none";
+
+        var prenom = (form.elements["prenom"] && form.elements["prenom"].value || "").trim();
+        var nom = (form.elements["nom"] && form.elements["nom"].value || "").trim();
+        var email = (form.elements["email"] && form.elements["email"].value || "").trim();
+        var telephone = (form.elements["telephone"] && form.elements["telephone"].value || "").trim();
+        var zone = (form.elements["zone"] && form.elements["zone"].value || "").trim();
+        var canal = (form.elements["canal"] && form.elements["canal"].value || "").trim();
+        var honey = (form.elements["honey"] && form.elements["honey"].value || "").trim();
+
+        var payload = {
+          first_name: prenom,
+          last_name: nom,
+          email: email,
+          phone: telephone,
+          company_name: zone,
+          message: [
+            "Inscription programme d'affiliation SmartCard",
+            "",
+            "Zone / region : " + (zone || "(non renseignee)"),
+            "Canal de recommandation :",
+            canal || "(non renseigne)"
+          ].join("\n"),
+          source: "landing/devenir-affilie",
+          honey: honey
+        };
+
+        try {
+          var response = await fetch(form.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            setMessage(false, "Impossible d'envoyer votre inscription pour le moment. Merci de reessayer.");
+            return;
+          }
+
+          setMessage(true, "Inscription envoyee. Redirection...");
+          window.location.href = "https://smartcard.maavnica.com/static/devenir-affilie-merci.html";
+        } catch (err) {
+          setMessage(false, "Erreur reseau. Merci de verifier votre connexion puis de reessayer.");
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
