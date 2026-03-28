@@ -404,9 +404,31 @@
   <script>
     (function () {
       function maavnicaReadAffiliateRef() {
+        var TTL_MS = 30 * 24 * 60 * 60 * 1000;
+        var REF_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+        function clearBoth() {
+          try {
+            localStorage.removeItem("maavnica_affiliate_ref");
+            localStorage.removeItem("maavnica_affiliate_ref_ts");
+          } catch (e2) {}
+        }
         try {
           var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
-          if (!s || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(s)) return "";
+          if (!s) return "";
+          var tsRaw = localStorage.getItem("maavnica_affiliate_ref_ts");
+          var ts = tsRaw != null && tsRaw !== "" ? parseInt(tsRaw, 10) : NaN;
+          if (!Number.isFinite(ts)) {
+            clearBoth();
+            return "";
+          }
+          if (Date.now() - ts > TTL_MS) {
+            clearBoth();
+            return "";
+          }
+          if (!REF_RE.test(s)) {
+            clearBoth();
+            return "";
+          }
           return s;
         } catch (e) {
           return "";
