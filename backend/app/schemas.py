@@ -282,6 +282,38 @@ class ContactRequest(BaseModel):
 
 
 # =============================================================
+#  KIT AFFILIÉ (outil interne — envoi email)
+# =============================================================
+
+
+class AffiliateKitSendRequest(BaseModel):
+    first_name: str = Field(..., min_length=1, max_length=80)
+    last_name: str = Field(..., min_length=1, max_length=80)
+    email: EmailStr
+    affiliate_ref: str = Field(..., min_length=1, max_length=32)
+
+    @validator("first_name", "last_name", "affiliate_ref", pre=True)
+    def strip_affiliate_kit_strings(cls, v):
+        return v.strip() if isinstance(v, str) else v
+
+    @validator("affiliate_ref", pre=True)
+    def affiliate_kit_ref_lower(cls, v):
+        if not isinstance(v, str):
+            return ""
+        return v.strip().lower()
+
+    @validator("affiliate_ref")
+    def affiliate_kit_ref_validate(cls, v: str) -> str:
+        if not _AFFILIATE_REF_PATTERN.fullmatch(v):
+            raise ValueError("Référence affiliation invalide.")
+        return v
+
+    @validator("first_name", "last_name")
+    def affiliate_kit_names_no_url(cls, v: str) -> str:
+        return _reject_urls_and_angle_brackets(v)
+
+
+# =============================================================
 #  UTILISATEURS
 # =============================================================
 
