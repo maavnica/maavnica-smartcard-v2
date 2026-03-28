@@ -403,6 +403,16 @@
   </div>
   <script>
     (function () {
+      function maavnicaReadAffiliateRef() {
+        try {
+          var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
+          if (!s || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(s)) return "";
+          return s;
+        } catch (e) {
+          return "";
+        }
+      }
+
       var form = document.getElementById("affiliateForm");
       if (!form) return;
 
@@ -448,7 +458,8 @@
             "Zone: " + (zone || "N/A") + "\n" +
             "Canal: " + (canal || "N/A"),
           source: "landing/devenir-affilie",
-          honey: (honey || "").trim()
+          honey: (honey || "").trim(),
+          affiliate_ref: maavnicaReadAffiliateRef()
         };
 
         try {

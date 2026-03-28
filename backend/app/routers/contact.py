@@ -75,23 +75,21 @@ def _send_contact_email(payload: ContactRequest) -> None:
     msg["To"] = mail_to
     msg["Subject"] = f"Nouveau contact SmartCard - {payload.company_name}"
     msg["Reply-To"] = payload.email
-    msg.set_content(
-        "\n".join(
-            [
-                "Nouveau message du formulaire SmartCard",
-                "",
-                f"Prénom: {payload.first_name}",
-                f"Nom: {payload.last_name}",
-                f"Email: {payload.email}",
-                f"Téléphone: {payload.phone}",
-                f"Entreprise: {payload.company_name}",
-                f"Source: {payload.source}",
-                "",
-                "Message:",
-                payload.message,
-            ]
-        )
-    )
+    body_lines = [
+        "Nouveau message du formulaire SmartCard",
+        "",
+        f"Prénom: {payload.first_name}",
+        f"Nom: {payload.last_name}",
+        f"Email: {payload.email}",
+        f"Téléphone: {payload.phone}",
+        f"Entreprise: {payload.company_name}",
+        f"Source: {payload.source}",
+    ]
+    if payload.affiliate_ref:
+        body_lines.append(f"Réf. affiliation: {payload.affiliate_ref}")
+    body_lines.extend(["", "Message:", payload.message])
+
+    msg.set_content("\n".join(body_lines))
 
     timeout = 20
     if smtp_port == 465:
@@ -151,6 +149,9 @@ async def submit_contact(
         message=html.escape(payload.message, quote=False),
         source=html.escape(payload.source, quote=False),
         honey=payload.honey,
+        affiliate_ref=html.escape(payload.affiliate_ref, quote=False)
+        if payload.affiliate_ref
+        else "",
     )
 
     try:

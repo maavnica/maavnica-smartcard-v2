@@ -11,6 +11,7 @@ _EMAIL_IN_TEXT_PATTERN = re.compile(
     r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
 )
 _PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
+_AFFILIATE_REF_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{0,31}$")
 
 
 def _reject_urls_and_angle_brackets(v: str) -> str:
@@ -247,6 +248,21 @@ class ContactRequest(BaseModel):
     message: str = Field(default="", min_length=0, max_length=4000)
     source: str = Field(..., min_length=1, max_length=80)
     honey: str = Field(default="", max_length=200)
+    affiliate_ref: str = Field(default="", max_length=32)
+
+    @validator("affiliate_ref", pre=True)
+    def affiliate_ref_normalize(cls, v):
+        if v is None or not isinstance(v, str):
+            return ""
+        return v.strip().lower()
+
+    @validator("affiliate_ref")
+    def affiliate_ref_validate(cls, v: str) -> str:
+        if not v:
+            return v
+        if not _AFFILIATE_REF_PATTERN.fullmatch(v):
+            raise ValueError("Référence affiliation invalide.")
+        return v
 
     @validator("first_name", "last_name", "phone", "company_name", "message", "source", "honey", pre=True)
     def strip_strings(cls, v):

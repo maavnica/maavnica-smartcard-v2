@@ -640,6 +640,16 @@
     if (prenom && nom && entreprise && email) update();
   }
 
+  function maavnicaReadAffiliateRef() {
+    try {
+      var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
+      if (!s || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(s)) return "";
+      return s;
+    } catch (e) {
+      return "";
+    }
+  }
+
   function setupContactSubmit(){
     const form = document.getElementById("orderForm");
     const btn = document.getElementById("submitBtn");
@@ -691,7 +701,8 @@
         company_name: entreprise ? entreprise.value.trim() : "",
         message: details.join("\n"),
         source: "landing/contact-smartcard",
-        honey: honey ? honey.value.trim() : ""
+        honey: honey ? honey.value.trim() : "",
+        affiliate_ref: maavnicaReadAffiliateRef()
       };
 
       try {

@@ -332,6 +332,17 @@
       <div>Contact : <a href="mailto:contact@maavnica.com" style="text-decoration:underline; opacity:.9;">contact@maavnica.com</a></div>
     </div>
   </div>
+  <script>
+    (function () {
+      try {
+        var raw = new URLSearchParams(window.location.search).get("ref");
+        if (raw === null || raw === "") return;
+        var s = String(raw).trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 32);
+        if (!s || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(s)) return;
+        localStorage.setItem("maavnica_affiliate_ref", s);
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
 
