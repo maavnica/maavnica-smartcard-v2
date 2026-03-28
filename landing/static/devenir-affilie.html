@@ -408,6 +408,7 @@
 
       var okbox = document.getElementById("okbox");
       var errbox = document.getElementById("errbox");
+      var submitBtn = form.querySelector('button[type="submit"]');
 
       function setMessage(ok, text) {
         if (!okbox || !errbox) return;
@@ -424,9 +425,9 @@
 
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
-        setMessage(true, "");
-        if (okbox) okbox.style.display = "none";
-        if (errbox) errbox.style.display = "none";
+
+        if (submitBtn) submitBtn.disabled = true;
+        setMessage(true, "Envoi en cours...");
 
         var prenom = (form.elements["prenom"] && form.elements["prenom"].value || "").trim();
         var nom = (form.elements["nom"] && form.elements["nom"].value || "").trim();
@@ -459,13 +460,19 @@
 
           if (!response.ok) {
             setMessage(false, "Impossible d'envoyer votre inscription pour le moment. Merci de reessayer.");
+            if (submitBtn) submitBtn.disabled = false;
             return;
           }
 
-          setMessage(true, "Inscription envoyee. Redirection...");
+          setMessage(true, "Inscription envoyée. Redirection...");
+          await new Promise(function (resolve) {
+            setTimeout(resolve, 700);
+          });
+          if (submitBtn) submitBtn.disabled = false;
           window.location.href = "https://smartcard.maavnica.com/static/devenir-affilie-merci.html";
         } catch (err) {
           setMessage(false, "Erreur reseau. Merci de verifier votre connexion puis de reessayer.");
+          if (submitBtn) submitBtn.disabled = false;
         }
       });
     })();
