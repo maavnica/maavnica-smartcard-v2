@@ -97,6 +97,9 @@
     <p class="hint">
       Les liens utilisent la base https://smartcard.maavnica.com et votre référence. La clé admin est demandée une fois par session (stockage session du navigateur).
     </p>
+    <div class="actions" style="margin-top: 14px;">
+      <button type="button" class="btn-secondary" id="btnClearAdminKey">Réinitialiser la clé admin</button>
+    </div>
   </div>
 
   <script>
@@ -184,6 +187,12 @@
         if (ok) ok.style.display = "none";
         if (err) err.style.display = "none";
       }
+
+      document.getElementById("btnClearAdminKey").addEventListener("click", function () {
+        sessionStorage.removeItem("ADMIN_API_KEY");
+        hideMsgs();
+        showOk("Clé admin supprimée pour cette session. Une nouvelle clé sera demandée au prochain envoi du kit.");
+      });
 
       document.getElementById("btnPreview").addEventListener("click", function () {
         hideMsgs();
