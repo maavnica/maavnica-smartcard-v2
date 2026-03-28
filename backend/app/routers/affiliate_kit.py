@@ -30,19 +30,42 @@ def _affiliate_links(ref: str) -> dict[str, str]:
 
 def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> str:
     display = f"{first} {last}".strip()
+    lm = links["main"]
     wa = (
-        f"Bonjour, je te partage la SmartCard Maavnica (carte pro digitale, avis Google, devis, QR…) : "
-        f"{links['main']}"
+        "Bonjour,\n"
+        "je te partage une solution simple pour aider les professionnels à :\n"
+        "- obtenir plus d’avis Google\n"
+        "- recevoir plus de demandes clients\n"
+        "- partager facilement leur carte pro avec un QR code\n\n"
+        f"Voici le lien :\n{lm}"
     )
-    sms = f"SmartCard Maavnica pour pros : {links['main']}"
+    sms = f"Si tu veux plus d’avis Google et plus de contacts clients, regarde ici :\n{lm}"
     lines = [
         f"Bonjour {display},",
         "",
         "Bienvenue dans le programme d’affiliation Maavnica SmartCard.",
         f"Votre référence affilié : {ref}",
         "",
+        "— Profils à qui proposer SmartCard —",
+        "Profils qui utilisent le plus SmartCard :",
+        "- artisans",
+        "- restaurateurs",
+        "- esthéticiennes",
+        "- thérapeutes",
+        "- agents immobiliers",
+        "- indépendants",
+        "- coachs",
+        "- consultants",
+        "",
+        "— Pourquoi SmartCard est utile —",
+        "SmartCard permet aux professionnels de :",
+        "- obtenir plus d’avis Google",
+        "- gagner en crédibilité",
+        "- recevoir plus de demandes clients",
+        "- partager facilement leurs coordonnées via QR code",
+        "",
         "— Vos liens personnels (à utiliser tels quels) —",
-        f"Lien principal (accueil + tracking) : {links['main']}",
+        f"Lien principal (accueil + tracking) : {lm}",
         f"Lien offre Solo : {links['solo']}",
         f"Lien offre Business : {links['business']}",
         "",
@@ -70,10 +93,14 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     ref_e = escape(ref)
     lm = links["main"]
     wa_plain = (
-        f"Bonjour, je te partage la SmartCard Maavnica (carte pro digitale, avis Google, devis, QR…) : "
-        f"{lm}"
+        "Bonjour,\n"
+        "je te partage une solution simple pour aider les professionnels à :\n"
+        "- obtenir plus d’avis Google\n"
+        "- recevoir plus de demandes clients\n"
+        "- partager facilement leur carte pro avec un QR code\n\n"
+        f"Voici le lien :\n{lm}"
     )
-    sms_plain = f"SmartCard Maavnica pour pros : {lm}"
+    sms_plain = f"Si tu veux plus d’avis Google et plus de contacts clients, regarde ici :\n{lm}"
     return f"""\
 <!DOCTYPE html>
 <html lang="fr">
@@ -82,6 +109,26 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
   <p>Bonjour {display},</p>
   <p>Bienvenue dans le programme d’affiliation <strong>Maavnica SmartCard</strong>.</p>
   <p><strong>Référence affilié :</strong> <code>{ref_e}</code></p>
+  <h3 style="font-size:1rem;">Profils à qui proposer SmartCard</h3>
+  <p style="margin:0 0 6px 0;">Profils qui utilisent le plus SmartCard :</p>
+  <ul>
+    <li>artisans</li>
+    <li>restaurateurs</li>
+    <li>esthéticiennes</li>
+    <li>thérapeutes</li>
+    <li>agents immobiliers</li>
+    <li>indépendants</li>
+    <li>coachs</li>
+    <li>consultants</li>
+  </ul>
+  <h3 style="font-size:1rem;">Pourquoi SmartCard est utile</h3>
+  <p style="margin:0 0 6px 0;">SmartCard permet aux professionnels de :</p>
+  <ul>
+    <li>obtenir plus d’avis Google</li>
+    <li>gagner en crédibilité</li>
+    <li>recevoir plus de demandes clients</li>
+    <li>partager facilement leurs coordonnées via QR code</li>
+  </ul>
   <h3 style="font-size:1rem;">Vos liens personnels</h3>
   <ul>
     <li><a href="{escape(lm)}">Lien principal</a> (accueil + tracking)</li>
