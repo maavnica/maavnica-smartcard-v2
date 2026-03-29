@@ -91,6 +91,56 @@
       letter-spacing: 0.03em;
     }
 
+    /* Surcouche marketing — uniquement activée en JS si slug === "demo" */
+    .demo-marketing {
+      display: none;
+    }
+    .demo-marketing.demo-marketing--on {
+      display: block;
+    }
+    .demo-banner {
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.32);
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.95);
+      line-height: 1.45;
+    }
+    .demo-banner-title {
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+    .demo-banner-sub {
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.96);
+      margin-bottom: 8px;
+    }
+    .demo-conv-lead {
+      font-size: 11px;
+      color: rgba(209, 213, 219, 0.92);
+      margin: 0 0 6px;
+    }
+    .demo-conv-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 10px;
+      color: rgba(148, 163, 184, 0.98);
+    }
+    .demo-conv-list li {
+      margin-bottom: 2px;
+    }
+    .demo-cta-shell {
+      margin-top: 12px;
+    }
+    .demo-cta-shell .demo-cta-btn {
+      text-decoration: none;
+      text-align: center;
+    }
+
     .card {
       border-radius: 24px;
       padding: 16px 16px 14px;
@@ -803,6 +853,19 @@
       <div class="notch"></div>
       <div class="status-bar">Maavnica SmartCard</div>
 
+      <div id="demo-banner-shell" class="demo-marketing" aria-hidden="true">
+        <div class="demo-banner">
+          <div class="demo-banner-title">⭐ Exemple de SmartCard Maavnica</div>
+          <div class="demo-banner-sub">Créez votre propre carte en quelques minutes</div>
+          <p class="demo-conv-lead">Cette carte montre comment un professionnel peut :</p>
+          <ul class="demo-conv-list">
+            <li>recevoir des demandes</li>
+            <li>obtenir plus d’avis Google</li>
+            <li>partager facilement ses coordonnées</li>
+          </ul>
+        </div>
+      </div>
+
       <!-- HERO -->
       <div class="hero">
         <div class="hero-badges">
@@ -995,6 +1058,10 @@
         </div>
       </div>
 
+      <div id="demo-cta-shell" class="demo-marketing demo-cta-shell" aria-hidden="true">
+        <a class="btn-primary demo-cta-btn" href="/static/contact-smartcard.html">Créer ma SmartCard</a>
+      </div>
+
       <div class="footer">
         SmartCard Maavnica
         ·
@@ -1165,6 +1232,12 @@
         showToast("Slug introuvable dans l’URL", true);
         return;
       }
+
+      const isDemo = slug === "demo";
+      document.querySelectorAll(".demo-marketing").forEach(function (el) {
+        el.classList.toggle("demo-marketing--on", isDemo);
+        el.setAttribute("aria-hidden", isDemo ? "false" : "true");
+      });
 
       try {
         const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
