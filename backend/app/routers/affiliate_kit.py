@@ -22,7 +22,7 @@ BASE_URL = "https://smartcard.maavnica.com"
 
 def _affiliate_links(ref: str) -> dict[str, str]:
     return {
-        "demo": f"{BASE_URL}/c/demo?ref={ref}",
+        "demo": f"https://maavnica-smartcard-v2.onrender.com/c/demo?ref={ref}",
         "main": f"{BASE_URL}/?ref={ref}",
         "solo": f"{BASE_URL}/static/contact-smartcard.html?offre=solo&ref={ref}",
         "business": f"{BASE_URL}/static/contact-smartcard.html?offre=business&ref={ref}",
