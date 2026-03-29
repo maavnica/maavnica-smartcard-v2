@@ -467,7 +467,6 @@
         var telephone = (form.elements["telephone"] && form.elements["telephone"].value || "").trim();
         var zone = (form.elements["zone"] && form.elements["zone"].value || "").trim();
         var canal = (form.elements["canal"] && form.elements["canal"].value || "").trim();
-        var honey = (form.elements["honey"] && form.elements["honey"].value || "").trim();
 
         var payload = {
           first_name: (prenom || "").trim(),
@@ -480,7 +479,7 @@
             "Zone: " + (zone || "N/A") + "\n" +
             "Canal: " + (canal || "N/A"),
           source: "landing/devenir-affilie",
-          honey: (honey || "").trim(),
+          honey: "",
           affiliate_ref: maavnicaReadAffiliateRef()
         };
 
