@@ -22,6 +22,7 @@ BASE_URL = "https://smartcard.maavnica.com"
 
 def _affiliate_links(ref: str) -> dict[str, str]:
     return {
+        "demo": f"{BASE_URL}/c/demo?ref={ref}",
         "main": f"{BASE_URL}/?ref={ref}",
         "solo": f"{BASE_URL}/static/contact-smartcard.html?offre=solo&ref={ref}",
         "business": f"{BASE_URL}/static/contact-smartcard.html?offre=business&ref={ref}",
@@ -31,15 +32,17 @@ def _affiliate_links(ref: str) -> dict[str, str]:
 def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> str:
     display = f"{first} {last}".strip()
     lm = links["main"]
+    ld = links["demo"]
     wa = (
-        "Bonjour,\n"
-        "je te partage une solution simple pour aider les professionnels à :\n"
+        "Bonjour,\n\n"
+        "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
+        "Elle permet notamment de :\n"
+        "- recevoir des demandes\n"
         "- obtenir plus d’avis Google\n"
-        "- recevoir plus de demandes clients\n"
-        "- partager facilement leur carte pro avec un QR code\n\n"
-        f"Voici le lien :\n{lm}"
+        "- partager facilement ses coordonnées\n\n"
+        f"Voici la démo :\n{ld}"
     )
-    sms = f"Si tu veux plus d’avis Google et plus de contacts clients, regarde ici :\n{lm}"
+    sms = f"Regarde cet exemple de SmartCard pour professionnels :\n{ld}"
     lines = [
         f"Bonjour {display},",
         "",
@@ -64,10 +67,19 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
         "- recevoir plus de demandes clients",
         "- partager facilement leurs coordonnées via QR code",
         "",
+        "— Conseil —",
+        "Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.",
+        "",
         "— Vos liens personnels (à utiliser tels quels) —",
+        f"Lien démo recommandé (prioritaire) : {ld}",
         f"Lien principal (accueil + tracking) : {lm}",
         f"Lien offre Solo : {links['solo']}",
         f"Lien offre Business : {links['business']}",
+        "",
+        "À retenir :",
+        "• Lien démo — pour présenter",
+        "• Lien Solo — pour commander l’offre Solo",
+        "• Lien Business — pour commander l’offre Business",
         "",
         "— Rémunération (rappel) —",
         "20 € par SmartCard Solo vendue (39 € HT / an).",
@@ -80,7 +92,7 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
         "— SMS court (à copier-coller) —",
         sms,
         "",
-        "Important : partagez toujours vos liens ci-dessus pour que vos recommandations soient rattachées à votre référence.",
+        "Important : utilisez toujours vos liens ci-dessus (la démo en premier si possible) pour que vos recommandations soient rattachées à votre référence.",
         "",
         "Cordialement,",
         "L’équipe Maavnica",
@@ -92,15 +104,17 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     display = escape(f"{first} {last}".strip())
     ref_e = escape(ref)
     lm = links["main"]
+    ld = links["demo"]
     wa_plain = (
-        "Bonjour,\n"
-        "je te partage une solution simple pour aider les professionnels à :\n"
+        "Bonjour,\n\n"
+        "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
+        "Elle permet notamment de :\n"
+        "- recevoir des demandes\n"
         "- obtenir plus d’avis Google\n"
-        "- recevoir plus de demandes clients\n"
-        "- partager facilement leur carte pro avec un QR code\n\n"
-        f"Voici le lien :\n{lm}"
+        "- partager facilement ses coordonnées\n\n"
+        f"Voici la démo :\n{ld}"
     )
-    sms_plain = f"Si tu veux plus d’avis Google et plus de contacts clients, regarde ici :\n{lm}"
+    sms_plain = f"Regarde cet exemple de SmartCard pour professionnels :\n{ld}"
     return f"""\
 <!DOCTYPE html>
 <html lang="fr">
@@ -129,12 +143,16 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     <li>recevoir plus de demandes clients</li>
     <li>partager facilement leurs coordonnées via QR code</li>
   </ul>
+  <h3 style="font-size:1rem;">Conseil</h3>
+  <p style="font-size:0.92rem;color:#444;margin:0 0 12px 0;">Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.</p>
   <h3 style="font-size:1rem;">Vos liens personnels</h3>
   <ul>
+    <li><a href="{escape(ld)}">Lien démo recommandé</a> (à partager en priorité)</li>
     <li><a href="{escape(lm)}">Lien principal</a> (accueil + tracking)</li>
-    <li><a href="{escape(links['solo'])}">Offre Solo</a></li>
-    <li><a href="{escape(links['business'])}">Offre Business</a></li>
+    <li><a href="{escape(links['solo'])}">Offre Solo</a> — pour commander l’offre Solo</li>
+    <li><a href="{escape(links['business'])}">Offre Business</a> — pour commander l’offre Business</li>
   </ul>
+  <p style="font-size:0.88rem;color:#555;margin:8px 0 0 0;"><strong>À retenir :</strong> lien démo pour présenter · liens Solo / Business lorsque le prospect est prêt à commander.</p>
   <h3 style="font-size:1rem;">Rémunération</h3>
   <ul>
     <li><strong>20 €</strong> par SmartCard Solo vendue (39 € HT / an)</li>
@@ -145,7 +163,7 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
   <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_plain)}</pre>
   <h3 style="font-size:1rem;">SMS court (copier-coller)</h3>
   <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(sms_plain)}</pre>
-  <p><strong>Important :</strong> utilisez toujours <em>vos</em> liens ci-dessus pour rattacher vos recommandations à votre référence.</p>
+  <p><strong>Important :</strong> utilisez toujours <em>vos</em> liens ci-dessus (la démo en premier si possible) pour rattacher vos recommandations à votre référence.</p>
   <p>Cordialement,<br/>L’équipe Maavnica</p>
 </body>
 </html>
