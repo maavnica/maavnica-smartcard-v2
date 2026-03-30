@@ -1,208 +1,381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programme d'affiliation – Maavnica SmartCard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Programme d’affiliation — Maavnica SmartCard</title>
+  <meta name="description" content="Recommandez Maavnica SmartCard et percevez une commission sur chaque vente validée." />
 
   <style>
-    body {
+    :root{
+      --bg0:#050814;
+      --bg1:#071029;
+      --card: rgba(255,255,255,.06);
+      --stroke: rgba(148,163,184,.22);
+      --text:#e5e7eb;
+      --muted: rgba(226,232,240,.78);
+      --brand:#7c3aed;
+      --brand2:#22c55e;
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --r: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
       margin:0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:#0F172A;
-      color:white;
-    }
-    .section { padding:50px 20px; }
-    .container { max-width:900px; margin:0 auto; }
-
-    h1, h2, h3 { font-weight:700; }
-    h1 { font-size:30px; text-align:center; margin-bottom:20px; }
-    h2 { font-size:22px; margin-bottom:14px; }
-    h3 { font-size:18px; margin-bottom:10px; color:#93C5FD; }
-    p { font-size:14px; color:#E2E8F0; line-height:1.6; }
-
-    .hero {
-      text-align:center;
-      padding-top:60px;
-      padding-bottom:40px;
-    }
-    .hero-badge {
-      display:inline-block;
-      padding:6px 12px;
-      background:rgba(255,255,255,0.1);
-      border-radius:999px;
-      font-size:13px;
-      margin-bottom:16px;
-    }
-    .cta-main {
-      margin-top:25px;
-      display:inline-block;
-      background:#22C55E;
-      color:#052E16;
-      padding:14px 28px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:16px;
-      transition:.2s;
-    }
-    .cta-main:hover { background:#16A34A; }
-
-    .back-btn {
-      display:inline-block;
-      margin-top:10px;
-      font-size:13px;
-      color:#93C5FD;
-      text-decoration:underline;
-      text-underline-offset:3px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(124,58,237,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 20%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(800px 500px at 50% 90%, rgba(59,130,246,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
     }
 
-    .grid {
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: 1040px; margin: 0 auto; padding: 28px 18px 70px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding: 10px 0 22px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px;
+    }
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(59,130,246,.85));
+      box-shadow: 0 12px 30px rgba(124,58,237,.28);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px;
+    }
+    .nav{
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      transition: .15s ease;
+    }
+    .pill:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); color: var(--text); }
+
+    .hero{
+      padding: 22px 0 10px;
       display:grid;
-      gap:22px;
-      grid-template-columns:repeat(3, 1fr);
-      margin-top:30px;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
     }
-    @media(max-width:900px){
-      .grid { grid-template-columns:1fr; }
-    }
-
-    .card {
-      background:#0B1120;
-      padding:22px;
-      border-radius:14px;
-      border:1px solid #1E3A8A;
-      box-shadow:0 12px 40px rgba(0,0,0,0.4);
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
     }
 
-    .footer {
-      text-align:center;
-      font-size:12px;
-      padding:30px;
-      color:#64748B;
+    .hcard{
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      position:relative;
+      overflow:hidden;
     }
+    .hcard:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(600px 220px at 20% 0%, rgba(124,58,237,.22), transparent 60%),
+                  radial-gradient(520px 220px at 100% 30%, rgba(34,197,94,.14), transparent 60%);
+      pointer-events:none;
+    }
+    .hcard > *{ position:relative; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      padding:8px 10px;
+      border-radius:999px;
+      color: var(--muted);
+      font-weight:600;
+      width:fit-content;
+    }
+
+    h1{ margin: 12px 0 10px; font-size: 34px; line-height:1.08; }
+    .sub{ margin:0; color: var(--muted); font-size: 15.5px; line-height:1.55; }
+
+    .ctaRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top: 16px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-weight:800;
+      transition: .15s ease;
+      min-width: 210px;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
+    .btn.primary{
+      border-color: rgba(34,197,94,.35);
+      background: linear-gradient(135deg, rgba(34,197,94,.92), rgba(16,185,129,.78));
+      color:#06220f;
+    }
+    .btn.secondary{
+      border-color: rgba(124,58,237,.35);
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(59,130,246,.82));
+      color:#070516;
+    }
+    .mini{
+      margin-top: 10px;
+      color: rgba(226,232,240,.72);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .mini b{ color: rgba(226,232,240,.95); }
+
+    .side{ display:grid; gap:12px; }
+    .kpi{
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      background: rgba(255,255,255,.04);
+      padding: 16px 16px 14px;
+    }
+    .kpi .t{ font-weight:900; margin:0 0 6px; font-size:14px; color: rgba(226,232,240,.95); }
+    .kpi .d{ margin:0; color: var(--muted); font-size:13.5px; line-height:1.55; }
+    .kpi .tag{
+      display:inline-flex; margin-top:10px;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: rgba(226,232,240,.80);
+      font-weight:700; font-size:12.5px;
+    }
+
+    .section{ margin-top: 22px; }
+    .grid{
+      display:grid; grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      background: rgba(255,255,255,.04);
+      padding: 16px 16px 14px;
+    }
+    .card h2{ margin:0 0 10px; font-size:18px; }
+    ul{ margin:0; padding-left: 18px; color: var(--muted); }
+    li{ margin: 8px 0; line-height:1.5; }
+
+    .pricing{
+      display:grid; grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px){
+      .pricing{ grid-template-columns: 1fr; }
+    }
+    .price{
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      padding: 16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .price .name{ font-weight:900; margin:0 0 6px; }
+    .price .gain{ font-size: 26px; font-weight: 1000; margin:0; }
+    .price .hint{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height:1.5; }
+    .price .badge2{
+      position:absolute; top:12px; right:12px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color: rgba(226,232,240,.85);
+      font-weight:800; font-size: 12px;
+    }
+
+    .footer{
+      margin-top: 26px;
+      color: rgba(226,232,240,.62);
+      font-size: 12.5px;
+      display:flex; flex-wrap:wrap; gap:10px;
+      justify-content:space-between;
+      border-top:1px solid rgba(148,163,184,.16);
+      padding-top: 16px;
+    }
+    code{ color: rgba(226,232,240,.88); }
   </style>
 </head>
 
 <body>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge">💸 Programme d'affiliation Maavnica</div>
-    <h1>Gagnez de l’argent en recommandant la SmartCard Maavnica.</h1>
-    <p style="max-width:650px; margin:0 auto;">
-      Recommandez un outil simple, utile et moderne pour artisans, indépendants, thérapeutes et conciergeries.
-      Vous partagez une démo, Maavnica s’occupe du reste. Vous touchez une commission sur chaque vente.
-    </p>
-
-    <a href="/static/contact-smartcard.html?offre=affiliation" class="cta-main">
-      Je veux devenir affilié
-    </a>
-
-    <br/>
-    <a href="/static/index.html" class="back-btn">← Revenir à la page SmartCard</a>
-  </section>
-
-  <!-- 3 BLOCS -->
-  <section class="section">
-    <div class="container">
-
-      <h2>Pourquoi devenir affilié Maavnica ?</h2>
-
-      <div class="grid">
-
-        <div class="card">
-          <h3>💰 30% de commission</h3>
-          <p>
-            Vous gagnez 30% sur chaque vente :
-            <br>→ 39€ Solo = 12€ pour vous  
-            <br>→ 8,90€/mois Pro (pendant 12 mois)  
-            <br>→ 19,90€/mois Business  
-          </p>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">M</div>
+        <div>
+          <div style="font-size:14px; opacity:.9;">Maavnica</div>
+          <div style="font-size:12px; opacity:.7; margin-top:1px;">Programme d’affiliation SmartCard</div>
         </div>
+      </div>
 
-        <div class="card">
-          <h3>⚡ Aucun effort de vente</h3>
-          <p>
-            Vous montrez une carte démo ou partagez le lien de présentation.
-            Si le client achète, vous êtes payé.  
-            Maavnica gère la création, le support et la facturation.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>📱 Produit simple et viral</h3>
-          <p>
-            Une carte pro digitale avec avis Google, WhatsApp, appel, devis, paiement.
-            Les pros comprennent en quelques secondes.  
-            C’est visuel, moderne et ça se partage naturellement.
-          </p>
-        </div>
-
+      <div class="nav">
+        <a class="pill" href="/">← Accueil</a>
+        <a class="pill" href="/#demos">Voir des démos</a>
+        <a class="pill" href="/static/devenir-affilie.html">Devenir affilié</a>
       </div>
     </div>
-  </section>
 
-  <!-- COMMENT ÇA MARCHE -->
-  <section class="section" style="background:#020617;">
-    <div class="container">
+    <div class="hero">
+      <div class="hcard">
+        <div class="badge">💸 Programme d’affiliation • Maavnica SmartCard</div>
+        <h1>Gagnez de l’argent en recommandant SmartCard</h1>
+        <p class="sub">
+          Recommandez SmartCard aux professionnels de votre réseau et gagnez&nbsp;:<br/>
+          <b>20 €</b> par vente Solo · <b>35 €</b> par vente Business<br/><br/>
+          Une démo publique est déjà prête à être partagée pour montrer concrètement la carte digitale (QR, page pro, demandes, avis Google).
+        </p>
 
-      <h2>Comment ça marche ?</h2>
+        <div class="ctaRow">
+          <a class="btn primary" href="/static/devenir-affilie.html">Devenir affilié</a>
+          <a class="btn secondary" href="https://maavnica-smartcard-v2.onrender.com/c/demo">Voir la carte démo</a>
+        </div>
 
-      <div class="card" style="margin-bottom:20px;">
-        <h3>1️⃣ Vous partagez une démo</h3>
-        <p>→ Artisan : /c/demo-artisan  
-           <br>→ Bien-être : /c/demo-sante  
-           <br>→ Premium Black & Gold : /c/demo-gold</p>
+        <p class="mini">
+          🔔 Une fois affilié, vous recevez un kit avec vos liens trackés — en commençant par la <b>carte démo</b>, le plus simple pour susciter l’intérêt.
+        </p>
       </div>
 
-      <div class="card" style="margin-bottom:20px;">
-        <h3>2️⃣ Le client passe commande</h3>
-        <p>Il utilise la page SmartCard et le formulaire de contact.  
-           Maavnica s’occupe de : la création de la carte, des ajustements, du support.</p>
+      <div class="side">
+        <div class="kpi">
+          <p class="t">Simple et efficace</p>
+          <p class="d">Vous rejoignez le programme, recevez votre kit, partagez la démo et vos liens. Maavnica gère la livraison et le support.</p>
+          <div class="tag">✅ Aucun support client</div>
+        </div>
+
+        <div class="kpi">
+          <p class="t">Qualité & validation</p>
+          <p class="d">Les ventes sont confirmées côté Maavnica (qualité + anti-fraude) avant paiement de la commission.</p>
+          <div class="tag">🔒 Commission après validation</div>
+        </div>
+
+        <div class="kpi">
+          <p class="t">Pour votre réseau</p>
+          <p class="d">Indépendants, artisans, commerçants, réseaux pro, imprimeurs, agences…</p>
+          <div class="tag">🤝 Recommandation B2B</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section grid">
+      <div class="card">
+        <h2>Pourquoi c’est facile à recommander</h2>
+        <p class="d" style="margin:0 0 10px;">SmartCard aide les professionnels à :</p>
+        <ul>
+          <li>obtenir plus d’avis Google</li>
+          <li>recevoir plus de demandes clients</li>
+          <li>partager facilement leurs coordonnées</li>
+          <li>renvoyer une image plus pro avec une carte digitale et un QR code</li>
+        </ul>
       </div>
 
       <div class="card">
-        <h3>3️⃣ Vous recevez votre commission</h3>
-        <p>Chaque mois, vous recevez un récapitulatif des ventes liées à vos recommandations
-           et votre commission est versée par virement ou PayPal.</p>
+        <h2>Comment ça marche</h2>
+        <ul>
+          <li><b>1.</b> Vous rejoignez le programme</li>
+          <li><b>2.</b> Vous recevez votre kit affilié</li>
+          <li><b>3.</b> Vous partagez la carte démo et vos liens personnels</li>
+          <li><b>4.</b> Vous gagnez une commission sur les ventes confirmées</li>
+        </ul>
       </div>
-
     </div>
-  </section>
 
-  <!-- FAQ -->
-  <section class="section">
-    <div class="container">
-      <h2>Questions fréquentes</h2>
+   <div class="section card">
+  <h2>Commissions <span style="font-size:13px; opacity:.7;">– Offre de lancement</span></h2>
 
-      <div class="card" style="margin-bottom:18px;">
-        <h3>Est-ce que je dois être commercial ?</h3>
-        <p>Non. Une simple recommandation suffit : vous montrez une démo, le produit fait le travail.</p>
-      </div>
-
-      <div class="card" style="margin-bottom:18px;">
-        <h3>Faut-il un statut particulier ?</h3>
-        <p>Pas forcément au début. C’est un complément de revenus déclarable. On peut en parler si besoin.</p>
-      </div>
-
-      <div class="card" style="margin-bottom:18px;">
-        <h3>Combien je peux gagner ?</h3>
-        <p>Autant que vous le souhaitez. Plus vous partagez, plus vous touchez. Certains affiliés ciblent un secteur précis.</p>
-      </div>
-
-      <div class="card">
-        <h3>Quand est-ce que je suis payé ?</h3>
-        <p>Une fois par mois, après validation des ventes définitives, par virement ou PayPal.</p>
-      </div>
-
+  <div class="pricing">
+    <div class="price">
+      <div class="badge2">SOLO</div>
+      <p class="name">SmartCard Solo — 39€ / an</p>
+      <p class="gain">20€</p>
+      <p class="hint">
+        Commission fixe par vente confirmée.<br/>
+        Offre de lancement réservée aux premiers affiliés.
+      </p>
     </div>
-  </section>
 
-  <div class="footer">
-    Maavnica © 2025 — Programme d’affiliation SmartCard
+    <div class="price">
+      <div class="badge2">BUSINESS</div>
+      <p class="name">SmartCard Business — 99€ / an (5 cartes)</p>
+      <p class="gain">35€</p>
+      <p class="hint">
+        Commission fixe par vente confirmée.<br/>
+        Idéal pour des recommandations qualifiées ou en pack.
+      </p>
+    </div>
   </div>
 
+  <p class="mini" style="margin-top:12px;">
+    💡 Ces commissions font partie de notre <b>offre de lancement</b> et sont susceptibles d’évoluer à l’avenir.<br/>
+    Les commissions dues sur les ventes déjà validées restent acquises.
+  </p>
+</div>
+
+    <div class="section grid">
+      <div class="card">
+        <h2>À qui proposer SmartCard</h2>
+        <ul>
+          <li>artisans</li>
+          <li>restaurateurs</li>
+          <li>esthéticiennes</li>
+          <li>thérapeutes</li>
+          <li>agents immobiliers</li>
+          <li>indépendants</li>
+          <li>coachs</li>
+          <li>consultants</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Démo</h2>
+        <p class="d" style="margin:0 0 14px;">
+          Vous pouvez montrer directement un exemple concret de SmartCard à vos prospects.
+          C’est souvent le moyen le plus simple pour déclencher l’intérêt et la commande.
+        </p>
+        <div class="ctaRow" style="margin-top:0;">
+          <a class="btn secondary" href="https://maavnica-smartcard-v2.onrender.com/c/demo">Voir la démo SmartCard</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="text-align:center; padding: 6px 0 10px;">
+      <a class="btn primary" style="min-width:260px;" href="/static/devenir-affilie.html">Rejoindre le programme affilié</a>
+    </div>
+
+    <div class="footer">
+      <div>© 2025 Maavnica — SmartCard</div>
+      <div>Contact : <a href="mailto:contact@maavnica.com" style="text-decoration:underline; opacity:.9;">contact@maavnica.com</a></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      try {
+        var raw = new URLSearchParams(window.location.search).get("ref");
+        if (raw === null || raw === "") return;
+        var s = String(raw).trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 32);
+        if (!s || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(s)) return;
+        localStorage.setItem("maavnica_affiliate_ref", s);
+        localStorage.setItem("maavnica_affiliate_ref_ts", String(Date.now()));
+      } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
+
 
 

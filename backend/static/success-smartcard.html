@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Commande confirmée – Maavnica SmartCard</title>
+  <style>
+    body{
+      margin:0; padding:0;
+      background:#020617;
+      color:#E5E7EB;
+      font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+      display:flex; justify-content:center; align-items:center;
+      min-height:100vh;
+    }
+    .box{
+      width:min(520px, calc(100% - 28px));
+      background:#020617;
+      border-radius:18px;
+      padding:28px 24px;
+      border:1px solid rgba(148,163,184,0.35);
+      box-shadow:0 20px 60px rgba(15,23,42,0.95);
+      text-align:center;
+    }
+    h1{
+      font-size:24px;
+      font-weight:800;
+      margin:0 0 10px;
+      color:#E2E8F0;
+      letter-spacing:-0.2px;
+    }
+    p{
+      font-size:14px;
+      color:#CBD5F5;
+      margin:10px 0;
+      line-height:1.6;
+    }
+    .steps{
+      margin:14px 0 4px;
+      text-align:left;
+      background:rgba(148,163,184,0.08);
+      border:1px solid rgba(148,163,184,0.18);
+      border-radius:14px;
+      padding:14px 14px;
+    }
+    .steps li{
+      margin:8px 0;
+      color:#D7E3FF;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 18px;
+      border-radius:999px;
+      background:#1D4ED8;
+      color:#fff;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:700;
+      box-shadow:0 10px 25px rgba(29,78,216,0.45);
+      border:0;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn.secondary{
+      background:rgba(148,163,184,0.15);
+      box-shadow:none;
+      color:#E2E8F0;
+      border:1px solid rgba(148,163,184,0.25);
+    }
+    .ref{
+      margin-top:14px;
+      padding:12px 12px;
+      border-radius:14px;
+      background:rgba(148,163,184,0.06);
+      border:1px solid rgba(148,163,184,0.18);
+      text-align:left;
+      font-size:13px;
+      color:#D6E2FF;
+      display:none;
+    }
+    .ref code{
+      display:block;
+      margin-top:6px;
+      padding:10px 10px;
+      border-radius:10px;
+      background:rgba(2,6,23,0.55);
+      border:1px solid rgba(148,163,184,0.15);
+      color:#E5E7EB;
+      overflow:auto;
+      font-size:12px;
+    }
+    .mini{
+      margin-top:14px;
+      font-size:12px;
+      color:#94A3B8;
+      line-height:1.6;
+    }
+    .continuity{
+      margin:14px 0 0;
+      font-size:14px;
+      color:#BFDBFE;
+      line-height:1.5;
+      font-weight:600;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(148,163,184,0.25);
+      color:#E2E8F0;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
+    }
+    .toast.show{ opacity:1; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>✅ Paiement confirmé</h1>
+
+  <p>
+    Merci ! Votre <strong>SmartCard Maavnica</strong> va être préparée.
+    Pour aller plus vite, vous pouvez <strong>personnaliser votre SmartCard maintenant</strong> (2 minutes).
+  </p>
+
+  <p class="continuity">
+    Prochaine étape : personnalisez votre carte pour recevoir votre lien à envoyer après vos interventions.
+  </p>
+
+  <div class="steps">
+    <ul style="padding-left:18px; margin:0;">
+      <li><strong>Étape 1 :</strong> cliquez sur “Personnaliser ma SmartCard”.</li>
+      <li><strong>Étape 2 :</strong> remplissez le formulaire (infos + liens).</li>
+      <li><strong>Étape 3 :</strong> livraison de votre SmartCard sous <strong>24h</strong> (souvent plus rapide).</li>
+    </ul>
+  </div>
+
+  <div id="refBox" class="ref">
+    <div><strong>Référence de paiement</strong> (à garder si besoin de support) :</div>
+    <code id="refCode">—</code>
+    <div class="row" style="justify-content:flex-start; margin-top:10px;">
+      <button class="btn secondary" type="button" id="btnCopy">📋 Copier la référence</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <a class="btn" id="btnForm" href="/form-smartcard.html">✨ Personnaliser ma SmartCard (2 min)</a>
+
+    <a class="btn secondary" href="/">Retour au site</a>
+  </div>
+
+  <p class="mini">
+    Astuce : certains paiements Stripe ne collectent pas forcément l’email du client via le lien de paiement,
+    donc <strong>ne pas attendre un email</strong> : utilisez le bouton ci-dessus pour lancer la personnalisation immédiatement.<br><br>
+    Un souci ? Contact : <strong>contact@maavnica.com</strong>
+  </p>
+</div>
+
+<div class="toast" id="toast">Copié ✅</div>
+
+<script>
+  // Récupère un identifiant utile si Stripe le met dans l’URL (selon config Payment Link)
+  const params = new URLSearchParams(window.location.search);
+
+  const ref =
+    params.get("payment_intent") ||
+    params.get("session_id") ||
+    params.get("pi") ||
+    params.get("checkout_session") ||
+    "";
+
+  const refBox = document.getElementById("refBox");
+  const refCode = document.getElementById("refCode");
+  const btnCopy = document.getElementById("btnCopy");
+  const toast = document.getElementById("toast");
+
+  if (ref) {
+    refCode.textContent = ref;
+    refBox.style.display = "block";
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1600);
+  }
+
+  if (btnCopy) {
+    btnCopy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(ref || window.location.href);
+        showToast("Copié ✅");
+      } catch (e) {
+        showToast("Impossible de copier");
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

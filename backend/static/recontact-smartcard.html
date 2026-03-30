@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Être recontacté — SmartCard Maavnica</title>
+  <meta name="description" content="Demandez à être rappelé pour la SmartCard : avis Google et contact après chaque intervention." />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: #93c5fd;
+      opacity: 0.9;
+    }
+    .back-link:hover { opacity: 1; }
+
+    .card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 18px;
+      padding: 22px 20px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #facc15;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin: 12px 0 6px;
+    }
+    label:first-of-type { margin-top: 0; }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(2, 6, 23, 0.75);
+      color: #f1f5f9;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(250, 204, 21, 0.5);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.2);
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      border: none;
+      background: #facc15;
+      color: #020617;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 12px 32px rgba(250, 204, 21, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(250, 204, 21, 0.4);
+    }
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .thankyou {
+      display: none;
+      text-align: center;
+      padding: 8px 0 4px;
+    }
+    .thankyou h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .thankyou p {
+      font-size: 15px;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .thankyou .btn-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.15);
+      color: #e5e7eb;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      text-decoration: none;
+    }
+    .thankyou .btn-home:hover {
+      background: rgba(148, 163, 184, 0.22);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="/" class="back-link">← Retour à la présentation SmartCard</a>
+
+    <div class="card" id="cardBlock">
+      <p class="badge">SmartCard · Artisan</p>
+      <h1>Demandez à être recontacté</h1>
+      <p class="sub">Expliquez votre besoin et nous revenons vers vous rapidement.</p>
+
+      <form id="recontactForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST">
+        <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
+
+        <div class="row">
+          <div>
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" required placeholder="Ex : Jean" autocomplete="given-name" />
+          </div>
+          <div>
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" required placeholder="Ex : Dupont" autocomplete="family-name" />
+          </div>
+        </div>
+
+        <label for="besoins">Vos besoins</label>
+        <textarea
+          id="besoins"
+          name="besoins"
+          required
+          placeholder="Ex : carte pour mon activité de plomberie, questions sur les avis Google…"
+        ></textarea>
+
+        <label for="email">Adresse e-mail</label>
+        <input type="email" id="email" name="email" required placeholder="vous@exemple.com" autocomplete="email" />
+
+        <label for="telephone">Téléphone</label>
+        <input type="tel" id="telephone" name="telephone" required placeholder="06 12 34 56 78" autocomplete="tel" />
+
+        <label for="creneau">Créneau de disponibilité</label>
+        <input
+          type="text"
+          id="creneau"
+          name="creneau_disponibilite"
+          required
+          placeholder="Ex : en semaine matin, après 17h, samedi…"
+          autocomplete="off"
+        />
+
+        <p class="hint" id="formErr" role="alert" style="display:none;color:#fecaca;margin-top:4px;">
+          L’envoi a échoué. Vérifiez votre connexion et réessayez.
+        </p>
+        <button type="submit" class="btn" id="submitBtn">Envoyer ma demande</button>
+        <p class="hint">
+          Aucune obligation d’achat. Nous vous rappelons pour répondre à vos questions sur la SmartCard (carte après intervention, avis, devis).
+        </p>
+      </form>
+    </div>
+
+    <div class="thankyou" id="thankyou">
+      <div class="card">
+        <h2>Merci, c’est bien envoyé</h2>
+        <p>Nous avons reçu votre demande. Nous vous recontactons très bientôt sur le créneau ou les coordonnées indiqués.</p>
+        <a href="/" class="btn-home">Retour à la présentation SmartCard</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function maavnicaReadAffiliateRef() {
+        var TTL_MS = 30 * 24 * 60 * 60 * 1000;
+        var REF_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+        function clearBoth() {
+          try {
+            localStorage.removeItem("maavnica_affiliate_ref");
+            localStorage.removeItem("maavnica_affiliate_ref_ts");
+          } catch (e2) {}
+        }
+        try {
+          var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
+          if (!s) return "";
+          var tsRaw = localStorage.getItem("maavnica_affiliate_ref_ts");
+          var ts = tsRaw != null && tsRaw !== "" ? parseInt(tsRaw, 10) : NaN;
+          if (!Number.isFinite(ts)) {
+            clearBoth();
+            return "";
+          }
+          if (Date.now() - ts > TTL_MS) {
+            clearBoth();
+            return "";
+          }
+          if (!REF_RE.test(s)) {
+            clearBoth();
+            return "";
+          }
+          return s;
+        } catch (e) {
+          return "";
+        }
+      }
+
+      var form = document.getElementById("recontactForm");
+      var btn = document.getElementById("submitBtn");
+      var cardBlock = document.getElementById("cardBlock");
+      var thankyou = document.getElementById("thankyou");
+      var formErr = document.getElementById("formErr");
+
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        btn.disabled = true;
+        if (formErr) formErr.style.display = "none";
+
+        var prenom = document.getElementById("prenom");
+        var nom = document.getElementById("nom");
+        var besoins = document.getElementById("besoins");
+        var email = document.getElementById("email");
+        var telephone = document.getElementById("telephone");
+        var creneau = document.getElementById("creneau");
+        var honey = document.getElementById("honey");
+
+        var msgParts = [];
+        if (besoins && besoins.value.trim()) msgParts.push(besoins.value.trim());
+        if (creneau && creneau.value.trim()) msgParts.push("Créneau souhaité : " + creneau.value.trim());
+        var messageText = msgParts.join("\n\n");
+
+        var payload = {
+          first_name: prenom ? prenom.value.trim() : "",
+          last_name: nom ? nom.value.trim() : "",
+          email: email ? email.value.trim() : "",
+          phone: telephone ? telephone.value.trim() : "",
+          company_name: "",
+          message: messageText,
+          source: "landing/recontact-smartcard",
+          honey: honey ? honey.value.trim() : "",
+          affiliate_ref: maavnicaReadAffiliateRef()
+        };
+
+        try {
+          var response = await fetch(form.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) throw new Error("Contact API failed");
+          form.reset();
+          cardBlock.style.display = "none";
+          thankyou.style.display = "block";
+        } catch (err) {
+          if (formErr) formErr.style.display = "block";
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

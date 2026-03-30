@@ -37,6 +37,10 @@ if not STATIC_DIR.exists():
 UPLOADS_DIR = STATIC_DIR / "uploads"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Landing marketing (source dans le dépôt, sans dupliquer index.html dans backend/static)
+LANDING_DIR = BACKEND_DIR.parent / "landing"
+LANDING_INDEX = LANDING_DIR / "index.html"
+
 
 # ------------------------------------------------------------
 # App
@@ -87,16 +91,14 @@ app.add_middleware(SecurityHeadersMiddleware)
 
 
 # ------------------------------------------------------------
-# Health / Root
+# Landing marketing (racine)
 # ------------------------------------------------------------
 @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
 async def root():
-    return {
-        "message": "Maavnica SmartCard API is running",
-        "admin_url": "/admin",
-        "static_admin": "/static/admin/index.html",
-        "public_example": "/c/example-slug",
-    }
+    """Page d’accueil : landing/index.html (même fichier que dans le dossier landing/ du repo)."""
+    if not LANDING_INDEX.is_file():
+        raise HTTPException(status_code=404, detail="landing/index.html introuvable")
+    return FileResponse(path=str(LANDING_INDEX), media_type="text/html; charset=utf-8")
 
 
 # ------------------------------------------------------------
