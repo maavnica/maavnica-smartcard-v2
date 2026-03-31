@@ -22,7 +22,8 @@ BASE_URL = "https://smartcard.maavnica.com"
 
 def _affiliate_links(ref: str) -> dict[str, str]:
     return {
-        "demo": f"https://maavnica-smartcard-v2.onrender.com/c/demo?ref={ref}",
+        "demo": f"{BASE_URL}/c/demo?ref={ref}",
+        "demo2": f"{BASE_URL}/c/demo2?ref={ref}",
         "main": f"{BASE_URL}/?ref={ref}",
         "solo": f"{BASE_URL}/static/contact-smartcard.html?offre=solo&ref={ref}",
         "business": f"{BASE_URL}/static/contact-smartcard.html?offre=business&ref={ref}",
@@ -33,6 +34,7 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
     display = f"{first} {last}".strip()
     lm = links["main"]
     ld = links["demo"]
+    ld2 = links["demo2"]
     wa = (
         "Bonjour,\n\n"
         "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
@@ -70,14 +72,17 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
         "— Conseil —",
         "Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.",
         "",
+        "— Exemples de SmartCard à montrer —",
+        f"Artisan / professionnel local : {ld}",
+        f"Bien-être / coach / thérapeute : {ld2}",
+        "",
         "— Vos liens personnels (à utiliser tels quels) —",
-        f"Lien démo recommandé (prioritaire) : {ld}",
         f"Lien principal (accueil + tracking) : {lm}",
         f"Lien offre Solo : {links['solo']}",
         f"Lien offre Business : {links['business']}",
         "",
         "À retenir :",
-        "• Lien démo — pour présenter",
+        "• Démos exemples (artisan ou bien-être) — pour présenter",
         "• Lien Solo — pour commander l’offre Solo",
         "• Lien Business — pour commander l’offre Business",
         "",
@@ -105,6 +110,7 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     ref_e = escape(ref)
     lm = links["main"]
     ld = links["demo"]
+    ld2 = links["demo2"]
     wa_plain = (
         "Bonjour,\n\n"
         "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
@@ -145,14 +151,18 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
   </ul>
   <h3 style="font-size:1rem;">Conseil</h3>
   <p style="font-size:0.92rem;color:#444;margin:0 0 12px 0;">Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.</p>
+  <h3 style="font-size:1rem;">Exemples de SmartCard à montrer</h3>
+  <ul>
+    <li>Artisan / professionnel local — <a href="{escape(ld)}">démo</a></li>
+    <li>Bien-être / coach / thérapeute — <a href="{escape(ld2)}">démo</a></li>
+  </ul>
   <h3 style="font-size:1rem;">Vos liens personnels</h3>
   <ul>
-    <li><a href="{escape(ld)}">Lien démo recommandé</a> (à partager en priorité)</li>
     <li><a href="{escape(lm)}">Lien principal</a> (accueil + tracking)</li>
     <li><a href="{escape(links['solo'])}">Offre Solo</a> — pour commander l’offre Solo</li>
     <li><a href="{escape(links['business'])}">Offre Business</a> — pour commander l’offre Business</li>
   </ul>
-  <p style="font-size:0.88rem;color:#555;margin:8px 0 0 0;"><strong>À retenir :</strong> lien démo pour présenter · liens Solo / Business lorsque le prospect est prêt à commander.</p>
+  <p style="font-size:0.88rem;color:#555;margin:8px 0 0 0;"><strong>À retenir :</strong> démos exemples pour présenter · liens Solo / Business lorsque le prospect est prêt à commander.</p>
   <h3 style="font-size:1rem;">Rémunération</h3>
   <ul>
     <li><strong>20 €</strong> par SmartCard Solo vendue (39 € HT / an)</li>
