@@ -35,6 +35,14 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
     lm = links["main"]
     ld = links["demo"]
     ld2 = links["demo2"]
+    activation_ready = (
+        "Je travaille avec une solution qui aide les professionnels à recevoir des demandes clients, "
+        "obtenir des avis Google et partager leurs coordonnées facilement.\n\n"
+        "Voici deux exemples :\n\n"
+        f"Artisan / professionnel local\n{ld}\n\n"
+        f"Bien-être / coach / thérapeute\n{ld2}\n\n"
+        "Dis-moi simplement lequel te parle le plus 🙂"
+    )
     wa = (
         "Bonjour,\n\n"
         "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
@@ -76,6 +84,26 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
         f"Artisan / professionnel local : {ld}",
         f"Bien-être / coach / thérapeute : {ld2}",
         "",
+        "— Première mission (5 minutes) —",
+        "🎯 Première mission (5 minutes)",
+        "",
+        "Pour commencer simplement, partage SmartCard à 3 professionnels autour de toi :",
+        "",
+        "* un artisan",
+        "* un commerce local",
+        "* un professionnel du bien-être",
+        "",
+        "Tu n’as pas besoin de vendre tout de suite :",
+        "le plus simple est de demander un avis sur les exemples.",
+        "",
+        "Message prêt à envoyer :",
+        "",
+        activation_ready,
+        "",
+        "— Motivation —",
+        "Une vente SmartCard Solo = 20€ pour vous",
+        "Une vente SmartCard Business = 35€ pour vous",
+        "",
         "— Vos liens personnels (à utiliser tels quels) —",
         f"Lien principal (accueil + tracking) : {lm}",
         f"Lien offre Solo : {links['solo']}",
@@ -111,6 +139,14 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     lm = links["main"]
     ld = links["demo"]
     ld2 = links["demo2"]
+    activation_ready = (
+        "Je travaille avec une solution qui aide les professionnels à recevoir des demandes clients, "
+        "obtenir des avis Google et partager leurs coordonnées facilement.\n\n"
+        "Voici deux exemples :\n\n"
+        f"Artisan / professionnel local\n{ld}\n\n"
+        f"Bien-être / coach / thérapeute\n{ld2}\n\n"
+        "Dis-moi simplement lequel te parle le plus 🙂"
+    )
     wa_plain = (
         "Bonjour,\n\n"
         "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
@@ -156,6 +192,18 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     <li>Artisan / professionnel local — <a href="{escape(ld)}">démo</a></li>
     <li>Bien-être / coach / thérapeute — <a href="{escape(ld2)}">démo</a></li>
   </ul>
+  <h3 style="font-size:1rem;">🎯 Première mission (5 minutes)</h3>
+  <p style="font-size:0.92rem;color:#444;margin:0 0 8px 0;">Pour commencer simplement, partage SmartCard à 3 professionnels autour de toi :</p>
+  <ul>
+    <li>un artisan</li>
+    <li>un commerce local</li>
+    <li>un professionnel du bien-être</li>
+  </ul>
+  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;">Tu n’as pas besoin de vendre tout de suite : le plus simple est de demander un avis sur les exemples.</p>
+  <p style="font-size:0.92rem;margin:0 0 6px 0;"><strong>Message prêt à envoyer :</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(activation_ready)}</pre>
+  <p style="font-size:0.92rem;color:#444;margin:10px 0 0 0;"><strong>Une vente SmartCard Solo = 20€ pour vous</strong><br/>
+  <strong>Une vente SmartCard Business = 35€ pour vous</strong></p>
   <h3 style="font-size:1rem;">Vos liens personnels</h3>
   <ul>
     <li><a href="{escape(lm)}">Lien principal</a> (accueil + tracking)</li>
