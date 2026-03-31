@@ -1233,7 +1233,7 @@
         return;
       }
 
-      const isDemo = slug === "demo";
+      const isDemo = slug === "demo" || slug === "demo2";
       document.querySelectorAll(".demo-marketing").forEach(function (el) {
         el.classList.toggle("demo-marketing--on", isDemo);
         el.setAttribute("aria-hidden", isDemo ? "false" : "true");
