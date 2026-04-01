@@ -43,6 +43,10 @@ def main() -> None:
     print(f"Total d'entrées enrichies : {len(enriched_items)}")
     pending = sum(1 for row in enriched_items if row.enrichment_status == "pending")
     print(f"Entrées avec enrichissement « pending » (initial) : {pending}")
+    ready = sum(1 for row in enriched_items if row.ready_to_contact)
+    print(f"Prêts à être contactés (ready_to_contact) : {ready}")
+    high_pri = sum(1 for row in enriched_items if row.priority == "high")
+    print(f"Priorité « high » : {high_pri}")
     print(f"Fichier CSV exporté : {exported_file}")
     if enriched_items and enriched_items[0].search_url:
         print(f"Exemple d'URL de recherche : {enriched_items[0].search_url}")

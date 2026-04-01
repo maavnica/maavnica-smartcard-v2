@@ -35,6 +35,9 @@ class EnrichedProspectItem:
     source: str = ""
     contact_found: bool = False
     enrichment_status: str = "pending"
+    ready_to_contact: bool = False
+    contact_channel: str = ""
+    priority: str = "normal"
 
 
 def build_enriched_items_from_outreach(items: list[OutreachItem]) -> list[EnrichedProspectItem]:
@@ -60,6 +63,9 @@ def build_enriched_items_from_outreach(items: list[OutreachItem]) -> list[Enrich
                 source="",
                 contact_found=False,
                 enrichment_status="pending",
+                ready_to_contact=False,
+                contact_channel="",
+                priority="normal",
             )
         )
 

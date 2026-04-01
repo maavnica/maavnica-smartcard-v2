@@ -23,10 +23,15 @@ _REQUIRED_COLUMNS: tuple[str, ...] = (
     "source",
     "contact_found",
     "enrichment_status",
+    "ready_to_contact",
+    "contact_channel",
+    "priority",
 )
 
 _ALLOWED_PROSPECT_STATUS: frozenset[str] = frozenset({"new", "reviewed", "contacted"})
 _ALLOWED_ENRICHMENT_STATUS: frozenset[str] = frozenset({"pending", "started", "completed"})
+_ALLOWED_PRIORITY: frozenset[str] = frozenset({"low", "normal", "high"})
+_ALLOWED_CONTACT_CHANNEL: frozenset[str] = frozenset({"", "email", "linkedin", "website", "phone"})
 
 
 def _cell(row: dict[str, str], key: str) -> str:
@@ -36,7 +41,7 @@ def _cell(row: dict[str, str], key: str) -> str:
     return str(v).strip()
 
 
-def _parse_contact_found(raw: str) -> bool:
+def _parse_bool_cell(raw: str) -> bool:
     """Interprète une cellule CSV en booléen (tolérant aux variantes courantes)."""
     if not raw or not raw.strip():
         return False
@@ -46,6 +51,30 @@ def _parse_contact_found(raw: str) -> bool:
     if v in ("false", "0", "no", "non", "faux", "n"):
         return False
     return False
+
+
+def _parse_priority(raw: str, line_no: int) -> str:
+    v = (raw or "").strip().lower()
+    if not v:
+        v = "normal"
+    if v not in _ALLOWED_PRIORITY:
+        opts = ", ".join(sorted(_ALLOWED_PRIORITY))
+        raise ValueError(
+            f"CSV invalide (ligne {line_no}) : colonne 'priority', valeur {raw!r} non reconnue. "
+            f"Valeurs autorisées : {opts}."
+        )
+    return v
+
+
+def _parse_contact_channel(raw: str, line_no: int) -> str:
+    v = (raw or "").strip().lower()
+    if v not in _ALLOWED_CONTACT_CHANNEL:
+        opts = "vide, " + ", ".join(sorted(c for c in _ALLOWED_CONTACT_CHANNEL if c))
+        raise ValueError(
+            f"CSV invalide (ligne {line_no}) : colonne 'contact_channel', valeur {raw!r} non reconnue. "
+            f"Valeurs autorisées : {opts}."
+        )
+    return v
 
 
 def _validate_choice(value: str, column: str, allowed: frozenset[str]) -> str:
@@ -106,7 +135,11 @@ def import_enriched_items_from_csv(input_path: str) -> list[EnrichedProspectItem
             )
 
             contact_raw = _cell(row_norm, "contact_found")
-            contact_found = _parse_contact_found(contact_raw)
+            contact_found = _parse_bool_cell(contact_raw)
+            ready_raw = _cell(row_norm, "ready_to_contact")
+            ready_to_contact = _parse_bool_cell(ready_raw)
+            priority = _parse_priority(_cell(row_norm, "priority"), line_no)
+            contact_channel = _parse_contact_channel(_cell(row_norm, "contact_channel"), line_no)
 
             try:
                 items.append(
@@ -124,6 +157,9 @@ def import_enriched_items_from_csv(input_path: str) -> list[EnrichedProspectItem
                         source=_cell(row_norm, "source"),
                         contact_found=contact_found,
                         enrichment_status=enrichment_status,
+                        ready_to_contact=ready_to_contact,
+                        contact_channel=contact_channel,
+                        priority=priority,
                     )
                 )
             except TypeError as exc:

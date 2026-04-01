@@ -13,7 +13,8 @@ def export_enriched_items_to_csv(items: list[EnrichedProspectItem], output_path:
     Exporte une liste de EnrichedProspectItem dans un fichier CSV.
 
     Colonnes : category, city, query, status, notes, message, website, email, linkedin,
-    search_url, source, contact_found, enrichment_status.
+    search_url, source, contact_found, enrichment_status,
+    ready_to_contact, contact_channel, priority.
     """
     target = Path(output_path).expanduser().resolve()
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -32,6 +33,9 @@ def export_enriched_items_to_csv(items: list[EnrichedProspectItem], output_path:
         "source",
         "contact_found",
         "enrichment_status",
+        "ready_to_contact",
+        "contact_channel",
+        "priority",
     ]
 
     with target.open("w", newline="", encoding="utf-8") as file_obj:
@@ -53,6 +57,9 @@ def export_enriched_items_to_csv(items: list[EnrichedProspectItem], output_path:
                     "source": item.source,
                     "contact_found": item.contact_found,
                     "enrichment_status": item.enrichment_status,
+                    "ready_to_contact": item.ready_to_contact,
+                    "contact_channel": item.contact_channel,
+                    "priority": item.priority,
                 }
             )
 
