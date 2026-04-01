@@ -2,7 +2,7 @@
   "name": "SmartCard Maavnica",
   "short_name": "SmartCard",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "/c/demo2",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
