@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte publique</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <meta name="theme-color" content="#000000">
 
   <style>
     :root {
@@ -1729,6 +1731,11 @@ if (fullName) {
     }
 
     document.addEventListener("DOMContentLoaded", loadCard);
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});
+    }
   </script>
 </body>
 </html>
