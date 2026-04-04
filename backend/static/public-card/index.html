@@ -53,26 +53,29 @@
       padding: 16px;
     }
 
+    /* Shell = wrapper de layout uniquement (évite l’effet « carte dans une carte ») */
     .phone-shell {
       max-width: 420px;
       width: 100%;
       border-radius: 32px;
-      padding: 12px;
-      background: radial-gradient(circle at top, #111827, #020617);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
       position: relative;
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      border: none;
       margin: 0 auto;
-      overflow: hidden; /* ✅ évite tout débordement visuel */
+      overflow: visible;
     }
 
     .phone-inner {
-      border-radius: 26px;
+      border-radius: 32px;
       background: #020617;
       padding: 14px 14px 18px;
       overflow: hidden;
       position: relative;
       min-height: 620px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.35);
     }
 
     .notch {
