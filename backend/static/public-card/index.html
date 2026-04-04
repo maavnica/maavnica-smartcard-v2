@@ -493,6 +493,19 @@
       cursor: pointer;
       transition: all 0.15s ease-out;
       min-width: 0;
+      text-align: center;
+    }
+
+    .pill .emoji {
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* Libellé : peut se réduire et revenir à la ligne dans la pilule (évite le débordement) */
+    .pill > span:not(.emoji) {
+      min-width: 0;
+      line-height: 1.25;
+      overflow-wrap: break-word;
     }
 
     .pill:hover {
@@ -525,6 +538,29 @@
     }
 
     .emoji { font-size: 14px; }
+
+    /* Avis rapide : mobile — après .emoji pour que la taille d’emoji pilule s’applique */
+    @media (max-width: 420px) {
+      .pill-row {
+        align-items: stretch;
+      }
+      .pill {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 8px;
+        font-size: 10px;
+      }
+      .pill .emoji {
+        font-size: 13px;
+      }
+      .pill > span:not(.emoji) {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+      }
+    }
 
     .feedback-input,
     .quote-input {
