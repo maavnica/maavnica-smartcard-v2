@@ -702,7 +702,8 @@
     .btn-link.btn-link-google-active {
       border-color: var(--primary);
       color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary-soft);
+      box-shadow: 0 0 0 2px var(--primary-soft);
+      background: rgba(255, 255, 255, 0.06);
     }
 
     #btn-call {
@@ -1685,8 +1686,6 @@ if (fullName) {
         const btnFeedback = document.getElementById("btn-send-feedback");
         if (btnFeedback) {
           let feedbackValue = null;
-          let pillYesGoogleTimer = null;
-          let pillYesGoogleRaf = null;
           const pillYes = document.getElementById("pill-yes");
           const pillNo = document.getElementById("pill-no");
           const pillRow = pillYes ? pillYes.closest(".pill-row") : null;
@@ -1695,16 +1694,6 @@ if (fullName) {
           const commentEl = document.getElementById("feedback-comment");
 
           function selectFeedback(value) {
-            if (value !== "yes") {
-              if (pillYesGoogleRaf != null) {
-                cancelAnimationFrame(pillYesGoogleRaf);
-                pillYesGoogleRaf = null;
-              }
-              if (pillYesGoogleTimer) {
-                clearTimeout(pillYesGoogleTimer);
-                pillYesGoogleTimer = null;
-              }
-            }
             feedbackValue = value;
             const hasSelection = !!value;
             if (pillYes && pillNo) {
@@ -1725,14 +1714,6 @@ if (fullName) {
 
           if (pillYes) {
             pillYes.onclick = () => {
-              if (pillYesGoogleRaf != null) {
-                cancelAnimationFrame(pillYesGoogleRaf);
-                pillYesGoogleRaf = null;
-              }
-              if (pillYesGoogleTimer) {
-                clearTimeout(pillYesGoogleTimer);
-                pillYesGoogleTimer = null;
-              }
               selectFeedback("yes");
               const googleReviewUrl = (card.google_review_link || "").toString().trim();
               if (helperTextEl) {
@@ -1747,21 +1728,13 @@ if (fullName) {
               }
               if (btnGoogleReview) {
                 btnGoogleReview.classList.add("btn-link-google-active");
+                if (googleReviewUrl && !btnGoogleReview.disabled) {
+                  btnGoogleReview.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                  });
+                }
               }
-              const followUpYesHelper =
-                "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
-              pillYesGoogleRaf = requestAnimationFrame(() => {
-                pillYesGoogleRaf = null;
-                pillYesGoogleTimer = window.setTimeout(() => {
-                  pillYesGoogleTimer = null;
-                  if (googleReviewUrl) {
-                    window.open(googleReviewUrl, "_blank", "noopener");
-                  }
-                  if (helperTextEl) {
-                    helperTextEl.textContent = followUpYesHelper;
-                  }
-                }, 700);
-              });
             };
           }
 
