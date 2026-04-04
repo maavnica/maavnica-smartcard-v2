@@ -82,8 +82,13 @@
       overflow: hidden;
       position: relative;
       min-height: 620px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      /* Ombre plus fine type produit + halo très discret (même couche = pas de double carte) */
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.05) inset,
+        0 12px 36px -10px rgba(0, 0, 0, 0.55),
+        0 28px 56px -24px rgba(0, 0, 0, 0.4),
+        0 0 72px -28px rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.26);
     }
 
     .notch {
@@ -229,8 +234,10 @@
       border-radius: 50%;
       flex: 0 0 auto;
       background-color: #111827;
-      border: 1px solid rgba(248, 250, 252, 0.35);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(248, 250, 252, 0.28);
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.38),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
     }
 
     #hero-avatar-img {
