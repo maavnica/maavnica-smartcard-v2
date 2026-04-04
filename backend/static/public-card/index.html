@@ -65,6 +65,14 @@
       border: none;
       margin: 0 auto;
       overflow: visible;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.12s ease-out;
+    }
+
+    body.is-ready .phone-shell {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .phone-inner {
@@ -616,7 +624,6 @@
     .share-row {
       display: none;
       margin-top: 6px;
-      display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
@@ -1239,10 +1246,17 @@
 
     let CURRENT_PROFILE_CONFIG = PROFILE_CONFIG.artisan;
 
+    function revealCardShell() {
+      requestAnimationFrame(function () {
+        document.body.classList.add("is-ready");
+      });
+    }
+
     async function loadCard() {
       const slug = getSlugFromPath();
       if (!slug) {
         showToast("Slug introuvable dans l’URL", true);
+        revealCardShell();
         return;
       }
 
@@ -1256,6 +1270,7 @@
         const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
         if (!res.ok) {
           showToast("Carte introuvable", true);
+          revealCardShell();
           return;
         }
 
@@ -1735,9 +1750,12 @@ if (fullName) {
             window.location.href = mailto;
           };
         }
+
+        revealCardShell();
       } catch (e) {
         console.error(e);
         showToast("Erreur lors du chargement de la carte.", true);
+        revealCardShell();
       }
     }
 
