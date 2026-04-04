@@ -722,6 +722,38 @@
       cursor: default;
     }
 
+    a.btn-link {
+      text-decoration: none;
+    }
+
+    /* Google / contact vCard / WhatsApp : même structure icône + texte, même colonne d’emoji */
+    #btn-google-review,
+    #btn-add-contact,
+    #btn-whatsapp {
+      justify-content: flex-start;
+      padding-left: 12px;
+      padding-right: 12px;
+      gap: 8px;
+    }
+
+    #btn-google-review .btn-link-leading,
+    #btn-add-contact .btn-link-leading,
+    #btn-whatsapp .btn-link-leading {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 1.5em;
+      line-height: 1;
+    }
+
+    #btn-google-review .btn-link-text,
+    #btn-add-contact .btn-link-text,
+    #btn-whatsapp .btn-link-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      text-align: left;
+    }
+
     .hint {
       margin-top: 8px;
       font-size: 10px;
@@ -1081,12 +1113,17 @@
 
           <div class="section-label" style="margin-top:10px;">Autres façons de vous contacter</div>
 
-          <button class="btn-link" id="btn-google-review">
-            ⭐ Laisser un avis Google
+          <button class="btn-link" id="btn-google-review" type="button">
+            <span class="btn-link-leading" aria-hidden="true">⭐</span
+            ><span class="btn-link-text">Laisser un avis Google</span>
           </button>
-          <a class="btn-link" id="btn-add-contact" href="#">👤 Ajouter au contact</a>
-          <button class="btn-link" id="btn-whatsapp">
-            💬 Écrire sur WhatsApp
+          <a class="btn-link" id="btn-add-contact" href="#"
+            ><span class="btn-link-leading" aria-hidden="true">👤</span
+            ><span class="btn-link-text">Ajouter au contact</span></a
+          >
+          <button class="btn-link" id="btn-whatsapp" type="button">
+            <span class="btn-link-leading" aria-hidden="true">💬</span
+            ><span class="btn-link-text">Écrire sur WhatsApp</span>
           </button>
           <button class="btn-link" id="btn-pay" disabled>
             💳 Payer en ligne (si disponible)
