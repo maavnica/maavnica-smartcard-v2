@@ -173,8 +173,16 @@
     .hero {
       border-radius: 18px;
       padding: 12px 12px 10px;
-      background: var(--hero-bg);
-      border: 1px solid rgba(148, 163, 184, 0.44);
+      /* Fond tiré vers #020617 (même base que .phone-inner) + thème en sous-couche */
+      background:
+        linear-gradient(
+          180deg,
+          rgba(2, 6, 23, 0.28) 0%,
+          rgba(2, 6, 23, 0.82) 52%,
+          #020617 100%
+        ),
+        var(--hero-bg);
+      border: none;
       margin-bottom: 12px;
       overflow: hidden; /* ✅ sécurité */
     }
