@@ -1686,6 +1686,7 @@ if (fullName) {
         if (btnFeedback) {
           let feedbackValue = null;
           let pillYesGoogleTimer = null;
+          let pillYesGoogleRaf = null;
           const pillYes = document.getElementById("pill-yes");
           const pillNo = document.getElementById("pill-no");
           const pillRow = pillYes ? pillYes.closest(".pill-row") : null;
@@ -1694,9 +1695,15 @@ if (fullName) {
           const commentEl = document.getElementById("feedback-comment");
 
           function selectFeedback(value) {
-            if (pillYesGoogleTimer && value !== "yes") {
-              clearTimeout(pillYesGoogleTimer);
-              pillYesGoogleTimer = null;
+            if (value !== "yes") {
+              if (pillYesGoogleRaf != null) {
+                cancelAnimationFrame(pillYesGoogleRaf);
+                pillYesGoogleRaf = null;
+              }
+              if (pillYesGoogleTimer) {
+                clearTimeout(pillYesGoogleTimer);
+                pillYesGoogleTimer = null;
+              }
             }
             feedbackValue = value;
             const hasSelection = !!value;
@@ -1718,6 +1725,10 @@ if (fullName) {
 
           if (pillYes) {
             pillYes.onclick = () => {
+              if (pillYesGoogleRaf != null) {
+                cancelAnimationFrame(pillYesGoogleRaf);
+                pillYesGoogleRaf = null;
+              }
               if (pillYesGoogleTimer) {
                 clearTimeout(pillYesGoogleTimer);
                 pillYesGoogleTimer = null;
@@ -1739,15 +1750,18 @@ if (fullName) {
               }
               const followUpYesHelper =
                 "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
-              pillYesGoogleTimer = window.setTimeout(() => {
-                pillYesGoogleTimer = null;
-                if (googleReviewUrl) {
-                  window.open(googleReviewUrl, "_blank", "noopener");
-                }
-                if (helperTextEl) {
-                  helperTextEl.textContent = followUpYesHelper;
-                }
-              }, 700);
+              pillYesGoogleRaf = requestAnimationFrame(() => {
+                pillYesGoogleRaf = null;
+                pillYesGoogleTimer = window.setTimeout(() => {
+                  pillYesGoogleTimer = null;
+                  if (googleReviewUrl) {
+                    window.open(googleReviewUrl, "_blank", "noopener");
+                  }
+                  if (helperTextEl) {
+                    helperTextEl.textContent = followUpYesHelper;
+                  }
+                }, 700);
+              });
             };
           }
 
