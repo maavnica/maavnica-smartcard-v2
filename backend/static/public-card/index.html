@@ -1690,6 +1690,10 @@ if (fullName) {
           if (pillYes) {
             pillYes.onclick = () => {
               selectFeedback("yes");
+              const googleReviewUrl = (card.google_review_link || "").toString().trim();
+              if (googleReviewUrl) {
+                window.open(googleReviewUrl, "_blank", "noopener");
+              }
               if (helperTextEl) {
                 helperTextEl.textContent =
                   "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
