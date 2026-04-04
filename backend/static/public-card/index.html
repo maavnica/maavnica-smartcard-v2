@@ -207,8 +207,9 @@
       border: none;
       margin-bottom: 14px;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.08) inset,
-        inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        inset 0 -1px 0 rgba(0, 0, 0, 0.32),
+        0 8px 22px -12px rgba(0, 0, 0, 0.3);
       overflow: hidden; /* ✅ sécurité */
     }
 
@@ -751,13 +752,19 @@
       font-size: 14px;
       font-weight: 700;
       border-radius: 12px;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 6px 16px rgba(0, 0, 0, 0.38),
+        0 4px 14px var(--primary-soft);
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     }
 
     .btn-share-card-main:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 12px 28px rgba(0, 0, 0, 0.42),
+        0 8px 22px var(--primary-soft);
     }
 
     .btn-share-card-main:active {
