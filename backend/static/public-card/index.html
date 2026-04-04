@@ -77,32 +77,28 @@
 
     .phone-inner {
       border-radius: 32px;
-      /* Légère profondeur sur tout le chassis (visible mais sobre) */
+      /* V3 : contraste franc haut / bas (slate lisible → quasi noir), pas trois quasi-noirs */
       background: linear-gradient(
-        168deg,
-        #0b1220 0%,
-        #050a14 38%,
-        #020617 72%
+        180deg,
+        #1e293b 0%,
+        #0f172a 38%,
+        #020617 100%
       );
       padding: 14px 14px 18px;
       overflow: hidden;
       position: relative;
       min-height: 620px;
-      /* V2 : ombre plus marquée + halo assumé, toujours sur une seule surface */
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.08) inset,
-        0 16px 44px -10px rgba(0, 0, 0, 0.62),
-        0 36px 72px -24px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.07),
-        0 0 120px -18px rgba(99, 102, 241, 0.28),
-        0 0 80px -32px rgba(148, 163, 184, 0.16);
-      border: 1px solid rgba(203, 213, 225, 0.22);
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 22px 48px -14px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
     .notch {
       width: 120px;
       height: 18px;
-      background: #020617;
+      background: #1e293b;
       border-radius: 999px;
       margin: 0 auto 10px;
       box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8);
@@ -194,25 +190,25 @@
     .hero {
       border-radius: 16px;
       padding: 13px 13px 11px;
-      /* Panneau encastré : relief léger + fusion bas de carte, thème conservé */
+      /* V3 : thème plus visible en haut, voile léger ; bas fusionné au chassis (#0f172a / #020617) */
       background:
         linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.055) 0%,
-          transparent 32%
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 36%
         ),
         linear-gradient(
           180deg,
-          rgba(2, 6, 23, 0.18) 0%,
-          rgba(2, 6, 23, 0.78) 50%,
-          #020617 100%
+          rgba(2, 6, 23, 0.04) 0%,
+          rgba(2, 6, 23, 0.38) 58%,
+          rgba(15, 23, 42, 0.92) 100%
         ),
         var(--hero-bg);
       border: none;
       margin-bottom: 14px;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.06) inset,
-        0 10px 28px -10px rgba(0, 0, 0, 0.42);
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        inset 0 -1px 0 rgba(0, 0, 0, 0.28);
       overflow: hidden; /* ✅ sécurité */
     }
 
@@ -250,10 +246,10 @@
       border-radius: 50%;
       flex: 0 0 auto;
       background-color: #111827;
-      border: 1px solid rgba(248, 250, 252, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.48),
-        0 0 0 1px rgba(255, 255, 255, 0.07);
+        0 4px 16px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     #hero-avatar-img {
@@ -407,16 +403,17 @@
     .card-block {
       border-radius: 18px;
       padding: 12px 12px 11px;
+      /* V3 : panneaux nettement plus clairs que le bas du chassis, bordure lisible */
       background: linear-gradient(
-        152deg,
-        rgba(51, 65, 85, 0.35) 0%,
-        rgba(15, 23, 42, 0.94) 55%,
-        rgba(15, 23, 42, 0.98) 100%
+        165deg,
+        rgba(71, 85, 105, 0.5) 0%,
+        rgba(51, 65, 85, 0.72) 28%,
+        rgba(30, 41, 59, 0.9) 100%
       );
-      border: 1px solid rgba(226, 232, 240, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.05) inset,
-        0 6px 22px -8px rgba(0, 0, 0, 0.5);
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 10px 28px -12px rgba(0, 0, 0, 0.55);
       font-size: 12px;
       min-width: 0;
     }
