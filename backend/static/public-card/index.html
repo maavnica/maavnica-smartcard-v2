@@ -1685,6 +1685,7 @@ if (fullName) {
         const btnFeedback = document.getElementById("btn-send-feedback");
         if (btnFeedback) {
           let feedbackValue = null;
+          let pillYesGoogleTimer = null;
           const pillYes = document.getElementById("pill-yes");
           const pillNo = document.getElementById("pill-no");
           const pillRow = pillYes ? pillYes.closest(".pill-row") : null;
@@ -1693,6 +1694,10 @@ if (fullName) {
           const commentEl = document.getElementById("feedback-comment");
 
           function selectFeedback(value) {
+            if (pillYesGoogleTimer && value !== "yes") {
+              clearTimeout(pillYesGoogleTimer);
+              pillYesGoogleTimer = null;
+            }
             feedbackValue = value;
             const hasSelection = !!value;
             if (pillYes && pillNo) {
@@ -1713,14 +1718,15 @@ if (fullName) {
 
           if (pillYes) {
             pillYes.onclick = () => {
+              if (pillYesGoogleTimer) {
+                clearTimeout(pillYesGoogleTimer);
+                pillYesGoogleTimer = null;
+              }
               selectFeedback("yes");
               const googleReviewUrl = (card.google_review_link || "").toString().trim();
-              if (googleReviewUrl) {
-                window.open(googleReviewUrl, "_blank", "noopener");
-              }
               if (helperTextEl) {
                 helperTextEl.textContent =
-                  "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
+                  "Merci 🙌 Votre avis aide beaucoup ce professionnel.";
               }
               if (commentEl) {
                 commentEl.placeholder = "Un mot sur votre expérience (optionnel)";
@@ -1731,6 +1737,17 @@ if (fullName) {
               if (btnGoogleReview) {
                 btnGoogleReview.classList.add("btn-link-google-active");
               }
+              const followUpYesHelper =
+                "Merci pour votre retour. Vous pouvez partager votre expérience sur Google.";
+              pillYesGoogleTimer = window.setTimeout(() => {
+                pillYesGoogleTimer = null;
+                if (googleReviewUrl) {
+                  window.open(googleReviewUrl, "_blank", "noopener");
+                }
+                if (helperTextEl) {
+                  helperTextEl.textContent = followUpYesHelper;
+                }
+              }, 700);
             };
           }
 
