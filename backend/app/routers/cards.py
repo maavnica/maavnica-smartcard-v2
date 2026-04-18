@@ -23,6 +23,19 @@ ALLOWED_PROFILES = {
 }
 
 
+def _card_payload(card: schemas.CardCreate) -> dict:
+    """Pydantic v2 : model_dump() ; v1 : dict()."""
+    if hasattr(card, "model_dump"):
+        return card.model_dump()
+    return card.dict()
+
+
+def _card_update_payload(card_in: schemas.CardUpdate) -> dict:
+    if hasattr(card_in, "model_dump"):
+        return card_in.model_dump(exclude_unset=True)
+    return card_in.dict(exclude_unset=True)
+
+
 # ============================================================
 #  CRÉATION D'UNE CARTE (ADMIN)
 # ============================================================
@@ -59,7 +72,7 @@ def create_card(
     # IMPORTANT : on force user_id = 1 pour cette V1
     db_card = models.Card(
         user_id=1,
-        **card.dict(),
+        **_card_payload(card),
     )
 
     db.add(db_card)
@@ -94,7 +107,7 @@ def update_card(
             detail="Card not found",
         )
 
-    update_data = card_in.dict(exclude_unset=True)
+    update_data = _card_update_payload(card_in)
 
     # Vérifier que le profil envoyé est autorisé
     if "profile" in update_data:

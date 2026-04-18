@@ -3,7 +3,7 @@ from typing import Optional
 
 import re
 
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, validator
 
 # Règles communes anti-spam (contact, feedback, devis public)
 _URL_PATTERN = re.compile(r"(https?://|www\.)", re.IGNORECASE)
@@ -164,6 +164,8 @@ class CardUpdate(BaseModel):
 class CardPublic(BaseModel):
     """Schéma complet renvoyé au front (admin & carte publique)."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     company_name: str
     slug: str
@@ -201,10 +203,6 @@ class CardPublic(BaseModel):
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
-
-    class Config:
-        # Permet de faire `return card` directement avec un objet SQLAlchemy
-        orm_mode = True
 
 
 # Compatibilité ancienne version

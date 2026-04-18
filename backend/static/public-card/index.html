@@ -1574,67 +1574,38 @@
 
         const companyName = (card.company_name || "Votre entreprise").toString().trim();
 
-// On supporte 2 formats SANS changer le backend :
-// 1) Si first_name/last_name existent (future-proof) -> on les affiche
-// 2) Sinon, on permet de saisir dans "Nom de l’entreprise / activité" : "Prénom Nom — Entreprise"
-function splitDisplayName(raw) {
-  const s = (raw || "").toString().trim();
-  if (!s) return { person: "", company: "" };
+        const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
+        const last = (card.last_name || card.nom || card.lastname || "").toString().trim();
+        const fullName = `${first} ${last}`.trim();
 
-  // Séparateurs acceptés : "—" (recommandé), "|" ou " - " (avec espaces)
-  // On évite le "-" simple pour ne pas casser les noms composés.
-  const parts = s.split(/\s+(?:—|\|)\s+|\s-\s/).map(x => x.trim()).filter(Boolean);
+        const displayNameRaw = (card.display_name != null && card.display_name !== undefined
+          ? String(card.display_name)
+          : "").trim();
+        const businessNameRaw = (card.business_name != null && card.business_name !== undefined
+          ? String(card.business_name)
+          : "").trim();
 
-  if (parts.length >= 2) {
-    return { person: parts[0], company: parts.slice(1).join(" — ") };
-  }
-  return { person: s, company: "" };
-}
+        // Persisté uniquement : display_name sinon company_name (first/last ne sont pas en base)
+        const primaryName = displayNameRaw || companyName;
 
-const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
-const last  = (card.last_name  || card.nom    || card.lastname  || "").toString().trim();
-const fullName = `${first} ${last}`.trim();
+        const personEl = document.getElementById("person-name");
+        const companyEl = document.getElementById("company-name");
 
-const displayNameRaw = (card.display_name || "").toString().trim();
-const businessNameRaw = (card.business_name || "").toString().trim();
+        if (personEl) personEl.textContent = primaryName;
 
-const personEl = document.getElementById("person-name");
-const companyEl = document.getElementById("company-name");
+        if (companyEl) {
+          if (
+            businessNameRaw &&
+            businessNameRaw.toLowerCase() !== primaryName.toLowerCase()
+          ) {
+            companyEl.textContent = businessNameRaw;
+            companyEl.style.display = "";
+          } else {
+            companyEl.style.display = "none";
+          }
+        }
 
-if (displayNameRaw) {
-  if (personEl) personEl.textContent = displayNameRaw;
-  if (companyEl) {
-    if (businessNameRaw) {
-      companyEl.textContent = businessNameRaw;
-      companyEl.style.display = "";
-    } else {
-      companyEl.style.display = "none";
-    }
-  }
-} else if (fullName) {
-  // Format "pro" : prénom/nom en gros + entreprise dessous
-  if (personEl) personEl.textContent = fullName;
-  if (companyEl) {
-    companyEl.textContent = companyName;
-    companyEl.style.display = "";
-  }
-} else {
-  // Format "simple" : on split company_name si l’utilisateur a mis "Nom — Entreprise"
-  const d = splitDisplayName(companyName);
-
-  if (personEl) personEl.textContent = d.person || companyName;
-
-  if (companyEl) {
-    if (d.company) {
-      companyEl.textContent = d.company;
-      companyEl.style.display = "";
-    } else {
-      companyEl.style.display = "none";
-    }
-  }
-}
-
-        applyPublicShellCopy(isDemoCard, companyName, displayNameRaw || fullName);
+        applyPublicShellCopy(isDemoCard, companyName, primaryName);
 
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
