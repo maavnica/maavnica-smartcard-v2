@@ -334,6 +334,17 @@
       margin-bottom: 6px;
     }
 
+    /* Métier / fonction (séparé de l’accroche hero_title) */
+    .hero-job-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: rgba(226, 232, 240, 0.96);
+      margin: 0 0 5px;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
     .hero-subtitle {
       font-size: 12px;
       color: rgba(209, 213, 219, 0.95);
@@ -1055,6 +1066,8 @@
           <div class="hero-texts">
             <div class="hero-subline" id="hero-subline">MAAVNICA SMARTCARD</div>
             <div class="hero-title" id="person-name">Prénom Nom</div>
+            <div class="hero-company" id="company-name">Votre entreprise</div>
+            <div class="hero-job-title" id="hero-job-title" style="display: none;" aria-hidden="true"></div>
             <div class="hero-professional-tagline" id="hero-professional-tagline">
               Contact, avis et demande en 1 clic
             </div>
@@ -1067,7 +1080,6 @@
             <div class="hero-subtitle" id="hero-subtitle">
               Contact, avis Google et demandes de devis en un seul lien.
             </div>
-            <div class="hero-company" id="company-name">Votre entreprise</div>
 
             <div class="hero-meta">
               <div class="hero-line">
@@ -1595,17 +1607,8 @@ if (displayNameRaw) {
     if (businessNameRaw) {
       companyEl.textContent = businessNameRaw;
       companyEl.style.display = "";
-    } else if (fullName) {
-      companyEl.textContent = companyName;
-      companyEl.style.display = "";
     } else {
-      const d = splitDisplayName(companyName);
-      if (d.company) {
-        companyEl.textContent = d.company;
-        companyEl.style.display = "";
-      } else {
-        companyEl.style.display = "none";
-      }
+      companyEl.style.display = "none";
     }
   }
 } else if (fullName) {
@@ -1713,11 +1716,25 @@ if (displayNameRaw) {
           ? "Déjà utilisé par des artisans, thérapeutes et indépendants"
           : "Une présentation claire pour vos clients et prospects.";
 
-        const heroTaglineEl = document.getElementById("hero-professional-tagline");
         const rawJobTitle = (card.job_title || "").toString().trim();
         const rawHeroTitle = (card.hero_title || "").toString().trim();
+
+        const jobTitleEl = document.getElementById("hero-job-title");
+        if (jobTitleEl) {
+          if (rawJobTitle) {
+            jobTitleEl.textContent = rawJobTitle;
+            jobTitleEl.style.display = "";
+            jobTitleEl.setAttribute("aria-hidden", "false");
+          } else {
+            jobTitleEl.textContent = "";
+            jobTitleEl.style.display = "none";
+            jobTitleEl.setAttribute("aria-hidden", "true");
+          }
+        }
+
+        const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
-          heroTaglineEl.textContent = rawJobTitle || rawHeroTitle || DEFAULT_HERO_TITLE;
+          heroTaglineEl.textContent = rawHeroTitle || DEFAULT_HERO_TITLE;
         }
 
         const reassuranceEl = document.getElementById("hero-reassurance");
