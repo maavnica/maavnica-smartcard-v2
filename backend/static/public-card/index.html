@@ -1050,16 +1050,16 @@
             <div class="hero-professional-tagline" id="hero-professional-tagline">
               Contact, avis et demande en 1 clic
             </div>
-            <div class="hero-reassurance">
+            <div class="hero-reassurance" id="hero-reassurance">
               ⭐ Plus d’avis Google. Plus de clients.
             </div>
-            <div class="hero-social-proof">
+            <div class="hero-social-proof" id="hero-social-proof">
               Déjà utilisé par des artisans, thérapeutes et indépendants
             </div>
-            <div class="hero-company" id="company-name">Votre entreprise</div>
             <div class="hero-subtitle" id="hero-subtitle">
               Contact, avis Google et demandes de devis en un seul lien.
             </div>
+            <div class="hero-company" id="company-name">Votre entreprise</div>
 
             <div class="hero-meta">
               <div class="hero-line">
@@ -1599,10 +1599,40 @@ if (fullName) {
 
         runAvatarBlock(card);
 
+        const DEFAULT_HERO_TITLE = "Contact, avis et demande en 1 clic";
+        const DEFAULT_REASSURANCE = "⭐ Plus d’avis Google. Plus de clients.";
+        const DEFAULT_SOCIAL_PROOF =
+          "Déjà utilisé par des artisans, thérapeutes et indépendants";
+
+        const heroTaglineEl = document.getElementById("hero-professional-tagline");
+        const rawHeroTitle = (card.hero_title || "").toString().trim();
+        if (heroTaglineEl) {
+          heroTaglineEl.textContent = rawHeroTitle || DEFAULT_HERO_TITLE;
+        }
+
+        const reassuranceEl = document.getElementById("hero-reassurance");
+        const socialProofEl = document.getElementById("hero-social-proof");
+        const rawHeroText = (card.hero_text || "").toString().trim();
+        if (reassuranceEl && socialProofEl) {
+          if (rawHeroText) {
+            reassuranceEl.textContent = rawHeroText;
+            reassuranceEl.style.display = "";
+            socialProofEl.style.display = "none";
+          } else {
+            reassuranceEl.textContent = DEFAULT_REASSURANCE;
+            reassuranceEl.style.display = "";
+            socialProofEl.textContent = DEFAULT_SOCIAL_PROOF;
+            socialProofEl.style.display = "";
+          }
+        }
+
         const subtitleEl = document.getElementById("hero-subtitle");
+        const rawHeroCta = (card.hero_cta_text || "").toString().trim();
         if (subtitleEl) {
-          subtitleEl.textContent =
-            CURRENT_PROFILE_CONFIG.heroSubtitle || "Carte pro intelligente Maavnica.";
+          subtitleEl.textContent = rawHeroCta
+            ? rawHeroCta
+            : (CURRENT_PROFILE_CONFIG.heroSubtitle ||
+                "Carte pro intelligente Maavnica.");
         }
 
         const badgeLeftIcon = document.getElementById("hero-badge-left-icon");

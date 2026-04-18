@@ -77,6 +77,11 @@ class Card(Base):
     # Couleur principale personnalisable
     theme_color = Column(String, nullable=True, default="#2563EB")
 
+    # Zone hero (carte publique) — wording personnalisable
+    hero_title = Column(Text, nullable=True)
+    hero_text = Column(Text, nullable=True)
+    hero_cta_text = Column(Text, nullable=True)
+
     # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(

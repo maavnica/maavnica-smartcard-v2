@@ -54,6 +54,9 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("email-pro").value = card.email_pro || "";
   document.getElementById("site-web").value = card.site_web || "";
   document.getElementById("avatar-url").value = card.avatar_url || "";
+  document.getElementById("hero-title").value = card.hero_title || "";
+  document.getElementById("hero-text").value = card.hero_text || "";
+  document.getElementById("hero-cta-text").value = card.hero_cta_text || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
@@ -92,6 +95,9 @@ document.getElementById("last-name").value = "";
   document.getElementById("email-pro").value = "";
   document.getElementById("site-web").value = "";
   document.getElementById("avatar-url").value = "";
+  document.getElementById("hero-title").value = "";
+  document.getElementById("hero-text").value = "";
+  document.getElementById("hero-cta-text").value = "";
   const avatarFile = document.getElementById("avatar-file");
   if (avatarFile) avatarFile.value = "";
 
@@ -204,7 +210,10 @@ async function saveCard() {
     profile: document.getElementById("profile").value || "artisan",
     email_pro: document.getElementById("email-pro").value.trim() || null,
     site_web: document.getElementById("site-web").value.trim() || null,
-    avatar_url: document.getElementById("avatar-url").value.trim() || null
+    avatar_url: document.getElementById("avatar-url").value.trim() || null,
+    hero_title: document.getElementById("hero-title").value.trim() || null,
+    hero_text: document.getElementById("hero-text").value.trim() || null,
+    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null
   };
 
   // on met aussi à jour currentProfile si on change dans le formulaire

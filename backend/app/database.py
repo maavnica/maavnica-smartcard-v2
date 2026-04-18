@@ -42,3 +42,29 @@ def get_db():
         db.close()
 
 
+def ensure_card_hero_columns() -> None:
+    """
+    Ajoute hero_title / hero_text / hero_cta_text si la table `cards` existait déjà
+    (create_all ne modifie pas les tables existantes — SQLite / PostgreSQL).
+    """
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    statements = []
+    if "hero_title" not in existing:
+        statements.append("ALTER TABLE cards ADD COLUMN hero_title TEXT")
+    if "hero_text" not in existing:
+        statements.append("ALTER TABLE cards ADD COLUMN hero_text TEXT")
+    if "hero_cta_text" not in existing:
+        statements.append("ALTER TABLE cards ADD COLUMN hero_cta_text TEXT")
+    for sql in statements:
+        with engine.begin() as conn:
+            conn.execute(text(sql))
+
+
