@@ -129,6 +129,48 @@ def _traffic_sources_30d(db: Session, d30: datetime) -> List[Tuple[str, int]]:
     return out
 
 
+def _affiliates_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
+    """
+    Performance par affilié (paramètre ref) sur 30 jours.
+    visites = lignes card_visits avec ref renseigné
+    actions = lignes card_events avec ref renseigné
+    """
+    v_rows = (
+        db.query(CardVisit.ref, func.count(CardVisit.id))
+        .filter(
+            CardVisit.created_at >= d30,
+            CardVisit.ref.isnot(None),
+            CardVisit.ref != "",
+        )
+        .group_by(CardVisit.ref)
+        .all()
+    )
+    e_rows = (
+        db.query(CardEvent.ref, func.count(CardEvent.id))
+        .filter(
+            CardEvent.created_at >= d30,
+            CardEvent.ref.isnot(None),
+            CardEvent.ref != "",
+        )
+        .group_by(CardEvent.ref)
+        .all()
+    )
+    visits_by_ref: Dict[str, int] = {str(r[0]): int(r[1]) for r in v_rows}
+    actions_by_ref: Dict[str, int] = {str(r[0]): int(r[1]) for r in e_rows}
+    all_refs = set(visits_by_ref) | set(actions_by_ref)
+    out: List[Tuple[str, int, int]] = []
+    for ref in all_refs:
+        out.append(
+            (
+                ref,
+                visits_by_ref.get(ref, 0),
+                actions_by_ref.get(ref, 0),
+            )
+        )
+    out.sort(key=lambda row: (-row[1], row[0]))
+    return out
+
+
 def _build_dashboard_html(db: Session) -> str:
     now = datetime.utcnow()
     today0 = _utc_day_start()
@@ -151,6 +193,7 @@ def _build_dashboard_html(db: Session) -> str:
     ev7 = _event_counts_since(db, d7, _EVENT_COLUMNS)
 
     traffic = _traffic_sources_30d(db, d30)
+    affiliates = _affiliates_30d(db, d30)
 
     def ev(slug: str, kind: str) -> int:
         return ev7.get((slug, kind), 0)
@@ -188,6 +231,27 @@ def _build_dashboard_html(db: Session) -> str:
             '<tr><td colspan="2" style="color:rgba(229,231,235,.65)">'
             "Aucune visite sur 30 jours.</td></tr>"
         )
+
+    affiliate_html: List[str] = []
+    for ref_val, v_cnt, a_cnt in affiliates:
+        affiliate_html.append(
+            f"<tr><td><code>{escape(ref_val)}</code></td>"
+            f"<td style=\"text-align:right\">{v_cnt}</td>"
+            f"<td style=\"text-align:right\">{a_cnt}</td></tr>"
+        )
+    if not affiliate_html:
+        affiliate_html.append(
+            '<tr><td colspan="3" style="color:rgba(229,231,235,.65)">'
+            "Aucun paramètre <code>ref</code> sur 30 jours.</td></tr>"
+        )
+
+    table_aff = (
+        "<table><thead><tr>"
+        "<th>ref (affilié)</th><th>Visites</th><th>Actions</th>"
+        "</tr></thead><tbody>"
+        + "".join(affiliate_html)
+        + "</tbody></table>"
+    )
 
     kpi = f"""
     <div class="kpi-grid">
@@ -278,6 +342,13 @@ def _build_dashboard_html(db: Session) -> str:
     <section>
       <h2>Sources de trafic (30 jours)</h2>
       {table_src}
+    </section>
+    <section>
+      <h2>Affiliés (30 jours)</h2>
+      <p class="sub" style="margin-top:-4px;margin-bottom:12px;font-size:13px;">
+        Basé sur le paramètre d’URL <code>ref</code> (ex. <code>/c/demo2?ref=paul</code>).
+      </p>
+      {table_aff}
     </section>
     <p class="sub"><a href="/admin">← Retour admin cartes</a></p>
   </div>
