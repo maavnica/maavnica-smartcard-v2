@@ -77,6 +77,20 @@ class CardBase(BaseModel):
             return s if s else None
         return v
 
+    display_name: Optional[str] = Field(None, max_length=200)
+    business_name: Optional[str] = Field(None, max_length=200)
+    job_title: Optional[str] = Field(None, max_length=300)
+    form_title: Optional[str] = Field(None, max_length=200)
+
+    @validator("display_name", "business_name", "job_title", "form_title", pre=True)
+    def _identity_fields_strip_empty(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
 
 # =============================================================
 #  SMARTCARD — CRÉATION / MISE À JOUR
@@ -128,6 +142,20 @@ class CardUpdate(BaseModel):
             return s if s else None
         return v
 
+    display_name: Optional[str] = Field(None, max_length=200)
+    business_name: Optional[str] = Field(None, max_length=200)
+    job_title: Optional[str] = Field(None, max_length=300)
+    form_title: Optional[str] = Field(None, max_length=200)
+
+    @validator("display_name", "business_name", "job_title", "form_title", pre=True)
+    def _identity_update_strip_empty(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
 
 # =============================================================
 #  SMARTCARD — RÉPONSE API (PUBLIC + ADMIN)
@@ -164,6 +192,11 @@ class CardPublic(BaseModel):
     hero_title: Optional[str] = None
     hero_text: Optional[str] = None
     hero_cta_text: Optional[str] = None
+
+    display_name: Optional[str] = None
+    business_name: Optional[str] = None
+    job_title: Optional[str] = None
+    form_title: Optional[str] = None
 
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None

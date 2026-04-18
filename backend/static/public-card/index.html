@@ -1583,10 +1583,32 @@ const first = (card.first_name || card.prenom || card.firstname || "").toString(
 const last  = (card.last_name  || card.nom    || card.lastname  || "").toString().trim();
 const fullName = `${first} ${last}`.trim();
 
+const displayNameRaw = (card.display_name || "").toString().trim();
+const businessNameRaw = (card.business_name || "").toString().trim();
+
 const personEl = document.getElementById("person-name");
 const companyEl = document.getElementById("company-name");
 
-if (fullName) {
+if (displayNameRaw) {
+  if (personEl) personEl.textContent = displayNameRaw;
+  if (companyEl) {
+    if (businessNameRaw) {
+      companyEl.textContent = businessNameRaw;
+      companyEl.style.display = "";
+    } else if (fullName) {
+      companyEl.textContent = companyName;
+      companyEl.style.display = "";
+    } else {
+      const d = splitDisplayName(companyName);
+      if (d.company) {
+        companyEl.textContent = d.company;
+        companyEl.style.display = "";
+      } else {
+        companyEl.style.display = "none";
+      }
+    }
+  }
+} else if (fullName) {
   // Format "pro" : prénom/nom en gros + entreprise dessous
   if (personEl) personEl.textContent = fullName;
   if (companyEl) {
@@ -1609,7 +1631,7 @@ if (fullName) {
   }
 }
 
-        applyPublicShellCopy(isDemoCard, companyName, fullName);
+        applyPublicShellCopy(isDemoCard, companyName, displayNameRaw || fullName);
 
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
@@ -1619,6 +1641,17 @@ if (fullName) {
           const avatarUrl = (card.avatar_url || "").toString().trim();
 
           const getInitials = () => {
+            const dn = (card.display_name || "").toString().trim();
+            if (dn) {
+              const parts = dn.split(/\s+/).filter(Boolean);
+              if (parts.length >= 2) {
+                const s = ((parts[0][0] || "") + (parts[1][0] || "")).toUpperCase();
+                if (s) return s;
+              }
+              if (parts.length === 1 && parts[0].length) {
+                return parts[0].slice(0, 2).toUpperCase();
+              }
+            }
             const first = (card.first_name || card.prenom || card.firstname || "").toString().trim();
             const last = (card.last_name || card.nom || card.lastname || "").toString().trim();
             const company = (card.company_name || "").toString().trim();
@@ -1681,9 +1714,10 @@ if (fullName) {
           : "Une présentation claire pour vos clients et prospects.";
 
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
+        const rawJobTitle = (card.job_title || "").toString().trim();
         const rawHeroTitle = (card.hero_title || "").toString().trim();
         if (heroTaglineEl) {
-          heroTaglineEl.textContent = rawHeroTitle || DEFAULT_HERO_TITLE;
+          heroTaglineEl.textContent = rawJobTitle || rawHeroTitle || DEFAULT_HERO_TITLE;
         }
 
         const reassuranceEl = document.getElementById("hero-reassurance");
@@ -1735,8 +1769,15 @@ if (fullName) {
         }
 
         const quoteSectionLabel = document.getElementById("quote-section-label");
-        if (quoteSectionLabel && CURRENT_PROFILE_CONFIG.quoteSectionLabel) {
-          quoteSectionLabel.textContent = CURRENT_PROFILE_CONFIG.quoteSectionLabel;
+        const rawFormTitle = (card.form_title || "").toString().trim();
+        if (quoteSectionLabel) {
+          if (rawFormTitle) {
+            quoteSectionLabel.textContent = rawFormTitle;
+          } else if (!isDemoCard) {
+            quoteSectionLabel.textContent = "Demande de contact";
+          } else if (CURRENT_PROFILE_CONFIG.quoteSectionLabel) {
+            quoteSectionLabel.textContent = CURRENT_PROFILE_CONFIG.quoteSectionLabel;
+          }
         }
 
         const quoteBtn = document.getElementById("btn-send-quote");

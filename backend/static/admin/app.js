@@ -57,6 +57,10 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("hero-title").value = card.hero_title || "";
   document.getElementById("hero-text").value = card.hero_text || "";
   document.getElementById("hero-cta-text").value = card.hero_cta_text || "";
+  document.getElementById("display-name").value = card.display_name || "";
+  document.getElementById("business-name-field").value = card.business_name || "";
+  document.getElementById("job-title").value = card.job_title || "";
+  document.getElementById("form-title").value = card.form_title || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
@@ -98,6 +102,10 @@ document.getElementById("last-name").value = "";
   document.getElementById("hero-title").value = "";
   document.getElementById("hero-text").value = "";
   document.getElementById("hero-cta-text").value = "";
+  document.getElementById("display-name").value = "";
+  document.getElementById("business-name-field").value = "";
+  document.getElementById("job-title").value = "";
+  document.getElementById("form-title").value = "";
   const avatarFile = document.getElementById("avatar-file");
   if (avatarFile) avatarFile.value = "";
 
@@ -213,7 +221,11 @@ async function saveCard() {
     avatar_url: document.getElementById("avatar-url").value.trim() || null,
     hero_title: document.getElementById("hero-title").value.trim() || null,
     hero_text: document.getElementById("hero-text").value.trim() || null,
-    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null
+    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null,
+    display_name: document.getElementById("display-name").value.trim() || null,
+    business_name: document.getElementById("business-name-field").value.trim() || null,
+    job_title: document.getElementById("job-title").value.trim() || null,
+    form_title: document.getElementById("form-title").value.trim() || null
   };
 
   // on met aussi à jour currentProfile si on change dans le formulaire

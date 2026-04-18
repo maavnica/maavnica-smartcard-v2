@@ -82,6 +82,12 @@ class Card(Base):
     hero_text = Column(Text, nullable=True)
     hero_cta_text = Column(Text, nullable=True)
 
+    # Identité affichée (optionnel — fallbacks côté front si vide)
+    display_name = Column(String(255), nullable=True)
+    business_name = Column(String(255), nullable=True)
+    job_title = Column(String(255), nullable=True)
+    form_title = Column(String(255), nullable=True)
+
     # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(

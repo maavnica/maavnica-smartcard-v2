@@ -68,3 +68,28 @@ def ensure_card_hero_columns() -> None:
             conn.execute(text(sql))
 
 
+def ensure_card_identity_columns() -> None:
+    """Ajoute display_name, business_name, job_title, form_title si colonnes manquantes."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    statements = []
+    for col, sql in (
+        ("display_name", "ALTER TABLE cards ADD COLUMN display_name TEXT"),
+        ("business_name", "ALTER TABLE cards ADD COLUMN business_name TEXT"),
+        ("job_title", "ALTER TABLE cards ADD COLUMN job_title TEXT"),
+        ("form_title", "ALTER TABLE cards ADD COLUMN form_title TEXT"),
+    ):
+        if col not in existing:
+            statements.append(sql)
+    for stmt in statements:
+        with engine.begin() as conn:
+            conn.execute(text(stmt))
+
+
