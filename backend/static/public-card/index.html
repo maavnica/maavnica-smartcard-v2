@@ -639,6 +639,14 @@
       transform: translateY(0);
     }
 
+    /* Cartes client : masquer le texte d’aide avant choix d’avis (logique JS conserve l’affichage après sélection). */
+    body.client-card-mode #feedback-helper-text:not(.feedback-helper-visible) {
+      display: none !important;
+      margin: 0;
+      max-height: 0;
+      overflow: hidden;
+    }
+
     .feedback-input::placeholder,
     .quote-input::placeholder {
       color: rgba(148, 163, 184, 0.85);
@@ -1090,10 +1098,10 @@
         <!-- Colonne gauche -->
         <div class="card-block">
           <div class="block-title" id="block-title-main">Avis & contacts simplifiés</div>
-          <div class="block-sub">
+          <div class="block-sub" id="left-block-sub">
             Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
           </div>
-          <div class="hint">
+          <div class="hint" id="left-block-tags-hint">
             Avis Google · Contact rapide · Demande de devis
           </div>
 
@@ -1106,10 +1114,10 @@
           </button>
 
           <div class="section-label">Votre avis rapide</div>
-          <p class="contact-actions-guide">
+          <p class="contact-actions-guide" id="contact-actions-guide">
             Choisissez l’action la plus simple pour vous
           </p>
-          <div class="hint" style="margin-top: -2px; margin-bottom: 6px;">
+          <div class="hint" id="pill-section-hint" style="margin-top: -2px; margin-bottom: 6px;">
             Vos clients peuvent laisser un avis en quelques secondes.
           </div>
           <div class="pill-row">
@@ -1155,11 +1163,11 @@
             💳 Payer en ligne (si disponible)
           </button>
 
-          <div class="hint">
+          <div class="hint" id="hint-share-signature">
             Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
           </div>
 
-          <div class="post-share-block">
+          <div class="post-share-block" id="post-share-block">
             <div class="post-share-kicker">
               APRÈS CHAQUE INTERVENTION
             </div>
@@ -1189,7 +1197,7 @@
 
           </div>
 
-          <div class="hint" style="margin-top:6px;">
+          <div class="hint" id="hint-post-prestation" style="margin-top:6px;">
             Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
           </div>
         </div>
@@ -1261,6 +1269,28 @@
     function isDemoSlug(slug) {
       if (!slug) return false;
       return slug.toLowerCase().startsWith("demo");
+    }
+
+    /** Masque les textes pédagogiques du bloc central sur les cartes client uniquement. */
+    function applyClientMidsectionVisibility(isDemoCard) {
+      const ids = [
+        "left-block-sub",
+        "left-block-tags-hint",
+        "contact-actions-guide",
+        "pill-section-hint",
+        "hint-share-signature",
+        "post-share-block",
+        "hint-post-prestation",
+      ];
+      ids.forEach(function (id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (isDemoCard) {
+          el.style.removeProperty("display");
+        } else {
+          el.style.display = "none";
+        }
+      });
     }
 
     function applyPublicShellCopy(isDemoCard, companyName, fullName) {
@@ -1504,6 +1534,8 @@
       }
 
       const isDemoCard = isDemoSlug(slug);
+      document.body.classList.toggle("client-card-mode", !isDemoCard);
+      applyClientMidsectionVisibility(isDemoCard);
       document.querySelectorAll(".demo-marketing").forEach(function (el) {
         el.classList.toggle("demo-marketing--on", isDemoCard);
         el.setAttribute("aria-hidden", isDemoCard ? "false" : "true");
@@ -1694,8 +1726,12 @@ if (fullName) {
         }
 
         const mainBlockTitle = document.getElementById("block-title-main");
-        if (mainBlockTitle && CURRENT_PROFILE_CONFIG.leftBlockTitle) {
-          mainBlockTitle.textContent = CURRENT_PROFILE_CONFIG.leftBlockTitle;
+        if (mainBlockTitle) {
+          if (!isDemoCard) {
+            mainBlockTitle.textContent = "Contact & avis";
+          } else if (CURRENT_PROFILE_CONFIG.leftBlockTitle) {
+            mainBlockTitle.textContent = CURRENT_PROFILE_CONFIG.leftBlockTitle;
+          }
         }
 
         const quoteSectionLabel = document.getElementById("quote-section-label");
