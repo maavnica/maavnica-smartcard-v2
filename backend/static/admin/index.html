@@ -113,6 +113,14 @@
         <label for="form-title">Titre du formulaire</label>
         <input id="form-title" type="text" placeholder="Ex. Demande de contact" />
 
+        <label class="checkbox-row" style="display:flex;align-items:flex-start;gap:10px;margin-top:12px;cursor:pointer;">
+          <input id="enable-recommendation" type="checkbox" style="margin-top:3px;flex-shrink:0;" />
+          <span>Activer la recommandation (fonction premium)</span>
+        </label>
+        <div class="hint" style="margin-top:4px;">
+          Affiche sur la carte publique un bloc pour recommander ce professionnel (message distinct du partage standard).
+        </div>
+
         <!-- FIN NOUVELLE SECTION -->
 
         <label for="google-link">Lien avis Google</label>
@@ -233,7 +241,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=identity-fields-1"></script>
+  <script src="/static/admin/app.js?v=recommend-1"></script>
 </body>
 </html>
 

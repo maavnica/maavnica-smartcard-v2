@@ -25,6 +25,7 @@ _EVENT_COLUMNS = (
     "whatsapp_click",
     "google_review_click",
     "rdv_request",
+    "recommend_click",
 )
 
 
@@ -211,12 +212,13 @@ def _build_dashboard_html(db: Session) -> str:
             f"<td style=\"text-align:right\">{ev(slug, 'whatsapp_click')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'google_review_click')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'rdv_request')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'recommend_click')}</td>"
             "</tr>"
         )
 
     if not rows_html:
         rows_html.append(
-            '<tr><td colspan="7" style="color:rgba(229,231,235,.65)">'
+            '<tr><td colspan="8" style="color:rgba(229,231,235,.65)">'
             "Aucune carte en base — créez une carte depuis l’admin.</td></tr>"
         )
 
@@ -265,7 +267,7 @@ def _build_dashboard_html(db: Session) -> str:
     table_cards = (
         "<table><thead><tr>"
         "<th>Slug</th><th>Visites 7j</th><th>Visites 30j</th>"
-        "<th>phone</th><th>whatsapp</th><th>Google</th><th>demande</th>"
+        "<th>phone</th><th>whatsapp</th><th>Google</th><th>demande</th><th>reco</th>"
         "</tr></thead><tbody>"
         + "".join(rows_html)
         + "</tbody></table>"

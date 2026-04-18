@@ -88,6 +88,9 @@ class Card(Base):
     job_title = Column(String(255), nullable=True)
     form_title = Column(String(255), nullable=True)
 
+    # Fonctionnalité premium : bloc « recommander » sur la carte publique
+    enable_recommendation = Column(Boolean, nullable=False, default=False)
+
     # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(

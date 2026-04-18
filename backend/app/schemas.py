@@ -82,6 +82,8 @@ class CardBase(BaseModel):
     job_title: Optional[str] = Field(None, max_length=300)
     form_title: Optional[str] = Field(None, max_length=200)
 
+    enable_recommendation: bool = False
+
     @validator("display_name", "business_name", "job_title", "form_title", pre=True)
     def _identity_fields_strip_empty(cls, v):
         if v is None:
@@ -147,6 +149,8 @@ class CardUpdate(BaseModel):
     job_title: Optional[str] = Field(None, max_length=300)
     form_title: Optional[str] = Field(None, max_length=200)
 
+    enable_recommendation: Optional[bool] = None
+
     @validator("display_name", "business_name", "job_title", "form_title", pre=True)
     def _identity_update_strip_empty(cls, v):
         if v is None:
@@ -199,6 +203,8 @@ class CardPublic(BaseModel):
     business_name: Optional[str] = None
     job_title: Optional[str] = None
     form_title: Optional[str] = None
+
+    enable_recommendation: bool = False
 
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -431,6 +437,11 @@ _ANALYTICS_EVENT_TYPES = frozenset(
         "google_review_click",
         "rdv_request",
         "share_click",
+        "recommend_click",
+        "recommend_share_whatsapp",
+        "recommend_share_sms",
+        "recommend_share_copy",
+        "recommend_share_email",
     }
 )
 

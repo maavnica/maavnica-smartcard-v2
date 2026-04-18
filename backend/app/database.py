@@ -93,3 +93,25 @@ def ensure_card_identity_columns() -> None:
             conn.execute(text(stmt))
 
 
+def ensure_enable_recommendation_column() -> None:
+    """Ajoute enable_recommendation (défaut false) si colonne manquante."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "enable_recommendation" in existing:
+        return
+    dialect = engine.dialect.name
+    if dialect == "sqlite":
+        sql = "ALTER TABLE cards ADD COLUMN enable_recommendation BOOLEAN NOT NULL DEFAULT 0"
+    else:
+        sql = "ALTER TABLE cards ADD COLUMN enable_recommendation BOOLEAN NOT NULL DEFAULT false"
+    with engine.begin() as conn:
+        conn.execute(text(sql))
+
+

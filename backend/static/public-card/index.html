@@ -1226,6 +1226,22 @@
 
           </div>
 
+          <div class="post-share-block" id="recommend-block" style="display: none;">
+            <div class="post-share-title">Recommander ce professionnel</div>
+            <div class="post-share-hint" style="margin-bottom: 10px;">
+              Vous connaissez quelqu’un qui pourrait avoir besoin de ce professionnel ?
+            </div>
+            <button class="btn-primary btn-share-card-main" id="btn-recommend-main" type="button">
+              Recommander
+            </button>
+            <div class="share-row" id="recommend-share-options">
+              <button class="btn-link" id="btn-recommend-wa" type="button">WhatsApp</button>
+              <button class="btn-link" id="btn-recommend-sms" type="button">SMS</button>
+              <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien</button>
+              <button class="btn-link" id="btn-recommend-email" type="button">Email</button>
+            </div>
+          </div>
+
           <div class="hint" id="hint-post-prestation" style="margin-top:6px;">
             Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
           </div>
@@ -2152,6 +2168,78 @@
             const mailto = "mailto:?subject=" + subject + "&body=" + body;
             window.location.href = mailto;
           };
+        }
+
+        const recommendEnabled = card.enable_recommendation === true;
+        const recommendBlock = document.getElementById("recommend-block");
+        if (recommendBlock) {
+          recommendBlock.style.display = recommendEnabled ? "block" : "none";
+        }
+
+        if (recommendEnabled) {
+          const recommendMessage =
+            "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
+            cardPublicUrl;
+
+          const btnRecommendMain = document.getElementById("btn-recommend-main");
+          const recommendRow = document.getElementById("recommend-share-options");
+          const btnRecommendWa = document.getElementById("btn-recommend-wa");
+          const btnRecommendSms = document.getElementById("btn-recommend-sms");
+          const btnRecommendCopy = document.getElementById("btn-recommend-copy");
+          const btnRecommendEmail = document.getElementById("btn-recommend-email");
+
+          if (btnRecommendMain && recommendRow) {
+            recommendRow.style.display = "none";
+            btnRecommendMain.onclick = () => {
+              trackCardEvent(slug, "recommend_click");
+              const isHidden =
+                recommendRow.style.display === "none" || !recommendRow.style.display;
+              recommendRow.style.display = isHidden ? "flex" : "none";
+            };
+          }
+
+          if (btnRecommendWa) {
+            btnRecommendWa.onclick = () => {
+              trackCardEvent(slug, "recommend_share_whatsapp");
+              window.open(
+                "https://wa.me/?text=" + encodeURIComponent(recommendMessage),
+                "_blank",
+                "noopener"
+              );
+            };
+          }
+
+          if (btnRecommendSms) {
+            btnRecommendSms.onclick = () => {
+              trackCardEvent(slug, "recommend_share_sms");
+              window.location.href = "sms:?&body=" + encodeURIComponent(recommendMessage);
+            };
+          }
+
+          if (btnRecommendCopy) {
+            btnRecommendCopy.onclick = async () => {
+              trackCardEvent(slug, "recommend_share_copy");
+              try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  await navigator.clipboard.writeText(cardPublicUrl);
+                  showToast("Lien copié dans le presse-papier.");
+                } else {
+                  window.prompt("Copiez ce lien :", cardPublicUrl);
+                }
+              } catch (e) {
+                window.prompt("Copiez ce lien :", cardPublicUrl);
+              }
+            };
+          }
+
+          if (btnRecommendEmail) {
+            btnRecommendEmail.onclick = () => {
+              trackCardEvent(slug, "recommend_share_email");
+              const subject = encodeURIComponent("Recommandation professionnelle");
+              const body = encodeURIComponent(recommendMessage);
+              window.location.href = "mailto:?subject=" + subject + "&body=" + body;
+            };
+          }
         }
 
         revealCardShell();

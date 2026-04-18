@@ -53,11 +53,18 @@ app = FastAPI(title="Maavnica SmartCard API")
 def _create_db_tables():
     """Crée les tables manquantes (ex. analytics) sans migration lourde."""
     import app.models  # noqa: F401 — enregistre les modèles sur le metadata
-    from app.database import Base, engine, ensure_card_hero_columns, ensure_card_identity_columns
+    from app.database import (
+        Base,
+        engine,
+        ensure_card_hero_columns,
+        ensure_card_identity_columns,
+        ensure_enable_recommendation_column,
+    )
 
     Base.metadata.create_all(bind=engine)
     ensure_card_hero_columns()
     ensure_card_identity_columns()
+    ensure_enable_recommendation_column()
 
 
 app.include_router(public.router)
