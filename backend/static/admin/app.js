@@ -221,17 +221,14 @@ async function saveCard() {
     avatar_url: document.getElementById("avatar-url").value.trim() || null,
     hero_title: document.getElementById("hero-title").value.trim() || null,
     hero_text: document.getElementById("hero-text").value.trim() || null,
-    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null
-  };
+    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null,
 
-  payload.display_name =
-    document.getElementById("display-name")?.value?.trim() || null;
-  payload.business_name =
-    document.getElementById("business-name-field")?.value?.trim() || null;
-  payload.job_title =
-    document.getElementById("job-title")?.value?.trim() || null;
-  payload.form_title =
-    document.getElementById("form-title")?.value?.trim() || null;
+    display_name: document.getElementById("display-name").value.trim() || null,
+    business_name:
+      document.getElementById("business-name-field").value.trim() || null,
+    job_title: document.getElementById("job-title").value.trim() || null,
+    form_title: document.getElementById("form-title").value.trim() || null
+  };
 
   // on met aussi à jour currentProfile si on change dans le formulaire
   currentProfile = payload.profile || "artisan";
