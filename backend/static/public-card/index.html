@@ -1012,7 +1012,7 @@
   <div class="phone-shell">
     <div class="phone-inner">
       <div class="notch"></div>
-      <div class="status-bar">Maavnica SmartCard</div>
+      <div class="status-bar" id="status-bar">Maavnica SmartCard</div>
 
       <div id="demo-banner-shell" class="demo-marketing" aria-hidden="true">
         <div class="demo-banner">
@@ -1045,7 +1045,7 @@
           </div>
 
           <div class="hero-texts">
-            <div class="hero-subline">MAAVNICA SMARTCARD</div>
+            <div class="hero-subline" id="hero-subline">MAAVNICA SMARTCARD</div>
             <div class="hero-title" id="person-name">Prénom Nom</div>
             <div class="hero-professional-tagline" id="hero-professional-tagline">
               Contact, avis et demande en 1 clic
@@ -1066,7 +1066,7 @@
                 <span class="hero-meta-label">🟢 Disponible — réponse rapide</span>
                 <span class="hero-meta-value" id="hero-availability-note"></span>
               </div>
-              <div class="hero-line">
+              <div class="hero-line" id="hero-tagline-row">
                 <span class="hero-meta-value" id="hero-tagline">via Maavnica SmartCard</span>
               </div>
             </div>
@@ -1224,7 +1224,7 @@
           </div>
 
           <div class="qr-wrap">
-            <img id="qr-image" alt="QR Code SmartCard" />
+            <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
             <div>
               QR à scanner après intervention, sur vos devis ou vos factures.
               <br />Lien unique relié à cette carte.
@@ -1237,7 +1237,7 @@
         <a class="btn-primary demo-cta-btn" href="https://smartcard.maavnica.com/static/contact-smartcard.html">Créer ma SmartCard</a>
       </div>
 
-      <div class="footer">
+      <div class="footer" id="public-card-footer">
         SmartCard Maavnica
         ·
         <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">En savoir plus</a>
@@ -1255,6 +1255,43 @@
         return decodeURIComponent(parts[cIndex + 1]);
       }
       return null;
+    }
+
+    /** Carte marketing / démo : slug commence par « demo » (ex. demo, demo2, demo-artisan). */
+    function isDemoSlug(slug) {
+      if (!slug) return false;
+      return slug.toLowerCase().startsWith("demo");
+    }
+
+    function applyPublicShellCopy(isDemoCard, companyName, fullName) {
+      const sb = document.getElementById("status-bar");
+      const subline = document.getElementById("hero-subline");
+      const foot = document.getElementById("public-card-footer");
+      const tagRow = document.getElementById("hero-tagline-row");
+      const tagMeta = document.getElementById("hero-tagline");
+      const qrImg = document.getElementById("qr-image");
+
+      if (isDemoCard) {
+        if (sb) sb.textContent = "Maavnica SmartCard";
+        if (subline) subline.textContent = "MAAVNICA SMARTCARD";
+        if (foot) {
+          foot.innerHTML =
+            'SmartCard Maavnica · <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">En savoir plus</a>';
+        }
+        if (tagRow) tagRow.style.display = "";
+        if (tagMeta) tagMeta.textContent = "via Maavnica SmartCard";
+        document.title = "Maavnica SmartCard – Carte publique";
+        if (qrImg) qrImg.alt = qrImg.getAttribute("data-alt-demo") || qrImg.alt;
+        return;
+      }
+
+      if (sb) sb.textContent = "Carte de contact";
+      if (subline) subline.textContent = "CONTACT PROFESSIONNEL";
+      if (foot) foot.textContent = "Carte de contact professionnelle";
+      if (tagRow) tagRow.style.display = "none";
+      const dn = ((fullName || "").trim() || (companyName || "").trim() || "Carte de contact");
+      document.title = dn + " – Contact";
+      if (qrImg) qrImg.alt = qrImg.getAttribute("data-alt-client") || "QR code";
     }
 
     function getUrlTrackingParams() {
@@ -1466,10 +1503,10 @@
         return;
       }
 
-      const isDemo = slug === "demo" || slug === "demo2";
+      const isDemoCard = isDemoSlug(slug);
       document.querySelectorAll(".demo-marketing").forEach(function (el) {
-        el.classList.toggle("demo-marketing--on", isDemo);
-        el.setAttribute("aria-hidden", isDemo ? "false" : "true");
+        el.classList.toggle("demo-marketing--on", isDemoCard);
+        el.setAttribute("aria-hidden", isDemoCard ? "false" : "true");
       });
 
       try {
@@ -1540,6 +1577,8 @@ if (fullName) {
   }
 }
 
+        applyPublicShellCopy(isDemoCard, companyName, fullName);
+
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
           const avatarFallback = document.getElementById("hero-avatar-fallback");
@@ -1599,10 +1638,15 @@ if (fullName) {
 
         runAvatarBlock(card);
 
-        const DEFAULT_HERO_TITLE = "Contact, avis et demande en 1 clic";
-        const DEFAULT_REASSURANCE = "⭐ Plus d’avis Google. Plus de clients.";
-        const DEFAULT_SOCIAL_PROOF =
-          "Déjà utilisé par des artisans, thérapeutes et indépendants";
+        const DEFAULT_HERO_TITLE = isDemoCard
+          ? "Contact, avis et demande en 1 clic"
+          : "Coordonnées, avis et demandes en ligne";
+        const DEFAULT_REASSURANCE = isDemoCard
+          ? "⭐ Plus d’avis Google. Plus de clients."
+          : "⭐ Avis clients, messages et demandes simplifiés.";
+        const DEFAULT_SOCIAL_PROOF = isDemoCard
+          ? "Déjà utilisé par des artisans, thérapeutes et indépendants"
+          : "Une présentation claire pour vos clients et prospects.";
 
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         const rawHeroTitle = (card.hero_title || "").toString().trim();
@@ -1632,7 +1676,9 @@ if (fullName) {
           subtitleEl.textContent = rawHeroCta
             ? rawHeroCta
             : (CURRENT_PROFILE_CONFIG.heroSubtitle ||
-                "Carte pro intelligente Maavnica.");
+                (isDemoCard
+                  ? "Carte pro intelligente Maavnica."
+                  : "Contact, avis et demandes en ligne."));
         }
 
         const badgeLeftIcon = document.getElementById("hero-badge-left-icon");
@@ -1737,7 +1783,11 @@ if (fullName) {
             btnWhats.onclick = () => {
               trackCardEvent(slug, "whatsapp_click");
               const base = "https://wa.me/";
-              const msg = encodeURIComponent("Bonjour, je vous contacte via votre SmartCard Maavnica.");
+              const msg = encodeURIComponent(
+                isDemoCard
+                  ? "Bonjour, je vous contacte via votre SmartCard Maavnica."
+                  : "Bonjour, je vous contacte depuis votre carte de contact."
+              );
               const digits = waNumber.toString().replace(/[^\d]/g, "");
               window.open(base + digits + "?text=" + msg, "_blank");
             };
@@ -1955,9 +2005,11 @@ if (fullName) {
 
         const cardPublicUrl =
           (window.location.origin || "") + "/c/" + encodeURIComponent(slug);
-        const shareMessage =
-          "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
-          cardPublicUrl;
+        const shareMessage = isDemoCard
+          ? "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
+            cardPublicUrl
+          : "Bonjour, voici ma carte de contact. Vous y trouverez mes coordonnées et pourrez me contacter ou laisser un avis : " +
+            cardPublicUrl;
 
         if (btnShareMain && shareRow) {
           shareRow.style.display = "none";
@@ -2005,7 +2057,9 @@ if (fullName) {
         if (btnShareEmail) {
           btnShareEmail.onclick = () => {
             trackCardEvent(slug, "share_click");
-            const subject = encodeURIComponent("Votre carte de contact SmartCard");
+            const subject = encodeURIComponent(
+              isDemoCard ? "Votre carte de contact SmartCard" : "Carte de contact"
+            );
             const body = encodeURIComponent(shareMessage);
             const mailto = "mailto:?subject=" + subject + "&body=" + body;
             window.location.href = mailto;
