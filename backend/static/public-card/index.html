@@ -874,6 +874,17 @@
       color: #9ca3af;
     }
 
+    /* Variantes sobres du bloc partage (cartes client uniquement) */
+    .post-share-client-only {
+      display: none;
+    }
+    body.client-card-mode .post-share-demo-only {
+      display: none !important;
+    }
+    body.client-card-mode .post-share-client-only {
+      display: block !important;
+    }
+
     .post-share-block .share-row {
       margin-top: 10px;
       padding-top: 10px;
@@ -1180,23 +1191,29 @@
           </div>
 
           <div class="post-share-block" id="post-share-block">
-            <div class="post-share-kicker">
+            <div class="post-share-kicker post-share-demo-only">
               APRÈS CHAQUE INTERVENTION
             </div>
 
-            <div class="post-share-title">
+            <div class="post-share-title post-share-demo-only">
               Envoyez votre carte en 1 clic
             </div>
+            <div class="post-share-title post-share-client-only">
+              Partager cette carte
+            </div>
 
-            <button class="btn-primary btn-share-card-main" id="btn-share-card-main">
+            <button class="btn-primary btn-share-card-main" id="btn-share-card-main" type="button">
               📲 Envoyer ma carte (avis + contact)
             </button>
 
-            <div class="post-share-hint">
+            <div class="post-share-hint post-share-demo-only">
               Un geste simple en fin de prestation pour recevoir des avis et rester en contact avec votre client.
             </div>
+            <div class="post-share-hint post-share-client-only">
+              Partagez facilement vos coordonnées, vos avis et votre contact.
+            </div>
 
-            <div class="post-share-benefits">
+            <div class="post-share-benefits post-share-demo-only">
               ✔ Avis Google • ✔ Contact rapide • ✔ Demande de devis
             </div>
 
@@ -1291,7 +1308,6 @@
         "contact-actions-guide",
         "pill-section-hint",
         "hint-share-signature",
-        "post-share-block",
         "hint-post-prestation",
       ];
       ids.forEach(function (id) {
@@ -1303,6 +1319,13 @@
           el.style.display = "none";
         }
       });
+
+      const btnShareLabel = document.getElementById("btn-share-card-main");
+      if (btnShareLabel) {
+        btnShareLabel.textContent = isDemoCard
+          ? "📲 Envoyer ma carte (avis + contact)"
+          : "Envoyer ma carte";
+      }
     }
 
     function applyPublicShellCopy(isDemoCard, companyName, fullName) {
