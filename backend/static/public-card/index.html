@@ -1257,6 +1257,57 @@
       return null;
     }
 
+    function getUrlTrackingParams() {
+      try {
+        const p = new URLSearchParams(window.location.search || "");
+        return {
+          src: p.get("src") || null,
+          ref: p.get("ref") || null,
+          rec: p.get("rec") || null,
+        };
+      } catch (e) {
+        return { src: null, ref: null, rec: null };
+      }
+    }
+
+    function postAnalytics(url, body) {
+      try {
+        const json = JSON.stringify(body);
+        if (navigator.sendBeacon) {
+          const blob = new Blob([json], { type: "application/json" });
+          navigator.sendBeacon(url, blob);
+        } else {
+          fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+            keepalive: true,
+          }).catch(function () {});
+        }
+      } catch (e) {}
+    }
+
+    function trackCardVisit(slug) {
+      const t = getUrlTrackingParams();
+      postAnalytics("/api/analytics/visit", {
+        slug: slug,
+        src: t.src,
+        ref: t.ref,
+        rec: t.rec,
+      });
+    }
+
+    function trackCardEvent(slug, eventType) {
+      const t = getUrlTrackingParams();
+      postAnalytics("/api/analytics/event", {
+        slug: slug,
+        event_type: eventType,
+        src: t.src,
+        ref: t.ref,
+        rec: t.rec,
+      });
+    }
+
     function showToast(message, isError = false) {
       const toast = document.getElementById("toast");
       toast.textContent = message;
@@ -1432,6 +1483,8 @@
         const card = await res.json();
         const cardId = card.id;
 
+        trackCardVisit(slug);
+
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
         CURRENT_PROFILE_CONFIG = PROFILE_CONFIG[profileKey];
@@ -1606,7 +1659,10 @@ if (fullName) {
         if (btnGoogle) {
           if (card.google_review_link) {
             btnGoogle.disabled = false;
-            btnGoogle.onclick = () => window.open(card.google_review_link, "_blank", "noopener");
+            btnGoogle.onclick = () => {
+              trackCardEvent(slug, "google_review_click");
+              window.open(card.google_review_link, "_blank", "noopener");
+            };
           } else {
             btnGoogle.disabled = true;
             btnGoogle.onclick = null;
@@ -1630,6 +1686,9 @@ if (fullName) {
               a.target = "_blank";
               a.rel = "noopener";
               a.textContent = text;
+              a.addEventListener("click", function () {
+                trackCardEvent(slug, "google_review_click");
+              });
               googleBadgeEl.appendChild(a);
             } else {
               googleBadgeEl.textContent = text;
@@ -1646,6 +1705,7 @@ if (fullName) {
           if (waNumber) {
             btnWhats.disabled = false;
             btnWhats.onclick = () => {
+              trackCardEvent(slug, "whatsapp_click");
               const base = "https://wa.me/";
               const msg = encodeURIComponent("Bonjour, je vous contacte via votre SmartCard Maavnica.");
               const digits = waNumber.toString().replace(/[^\d]/g, "");
@@ -1661,7 +1721,10 @@ if (fullName) {
         if (btnCall) {
           if (card.phone) {
             btnCall.disabled = false;
-            btnCall.onclick = () => window.location.href = "tel:" + card.phone;
+            btnCall.onclick = () => {
+              trackCardEvent(slug, "phone_click");
+              window.location.href = "tel:" + card.phone;
+            };
           } else {
             btnCall.disabled = true;
             btnCall.onclick = null;
@@ -1839,6 +1902,7 @@ if (fullName) {
               }
 
               showToast(CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !");
+              trackCardEvent(slug, "rdv_request");
               document.getElementById("quote-name").value = "";
               document.getElementById("quote-phone").value = "";
               document.getElementById("quote-email").value = "";
@@ -1868,6 +1932,7 @@ if (fullName) {
         if (btnShareMain && shareRow) {
           shareRow.style.display = "none";
           btnShareMain.onclick = () => {
+            trackCardEvent(slug, "share_click");
             const isHidden = shareRow.style.display === "none" || !shareRow.style.display;
             shareRow.style.display = isHidden ? "flex" : "none";
           };
@@ -1875,6 +1940,7 @@ if (fullName) {
 
         if (btnShareWa) {
           btnShareWa.onclick = () => {
+            trackCardEvent(slug, "share_click");
             const url =
               "https://wa.me/?text=" + encodeURIComponent(shareMessage);
             window.open(url, "_blank", "noopener");
@@ -1883,6 +1949,7 @@ if (fullName) {
 
         if (btnShareSms) {
           btnShareSms.onclick = () => {
+            trackCardEvent(slug, "share_click");
             const body = encodeURIComponent(shareMessage);
             const smsUrl = "sms:?&body=" + body;
             window.location.href = smsUrl;
@@ -1891,6 +1958,7 @@ if (fullName) {
 
         if (btnShareCopy) {
           btnShareCopy.onclick = async () => {
+            trackCardEvent(slug, "share_click");
             try {
               if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(cardPublicUrl);
@@ -1906,6 +1974,7 @@ if (fullName) {
 
         if (btnShareEmail) {
           btnShareEmail.onclick = () => {
+            trackCardEvent(slug, "share_click");
             const subject = encodeURIComponent("Votre carte de contact SmartCard");
             const body = encodeURIComponent(shareMessage);
             const mailto = "mailto:?subject=" + subject + "&body=" + body;

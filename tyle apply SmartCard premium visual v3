@@ -1,0 +1,121 @@
+warning: in the working copy of 'backend/static/public-card/index.html', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/backend/static/public-card/index.html b/backend/static/public-card/index.html[m
+[1mindex 4610f12..a11e0ae 100644[m
+[1m--- a/backend/static/public-card/index.html[m
+[1m+++ b/backend/static/public-card/index.html[m
+[36m@@ -77,32 +77,28 @@[m
+ [m
+     .phone-inner {[m
+       border-radius: 32px;[m
+[31m-      /* Légère profondeur sur tout le chassis (visible mais sobre) */[m
+[32m+[m[32m      /* V3 : contraste franc haut / bas (slate lisible → quasi noir), pas trois quasi-noirs */[m
+       background: linear-gradient([m
+[31m-        168deg,[m
+[31m-        #0b1220 0%,[m
+[31m-        #050a14 38%,[m
+[31m-        #020617 72%[m
+[32m+[m[32m        180deg,[m
+[32m+[m[32m        #1e293b 0%,[m
+[32m+[m[32m        #0f172a 38%,[m
+[32m+[m[32m        #020617 100%[m
+       );[m
+       padding: 14px 14px 18px;[m
+       overflow: hidden;[m
+       position: relative;[m
+       min-height: 620px;[m
+[31m-      /* V2 : ombre plus marquée + halo assumé, toujours sur une seule surface */[m
+       box-shadow:[m
+[31m-        0 1px 0 rgba(255, 255, 255, 0.08) inset,[m
+[31m-        0 16px 44px -10px rgba(0, 0, 0, 0.62),[m
+[31m-        0 36px 72px -24px rgba(0, 0, 0, 0.5),[m
+[31m-        0 0 0 1px rgba(255, 255, 255, 0.07),[m
+[31m-        0 0 120px -18px rgba(99, 102, 241, 0.28),[m
+[31m-        0 0 80px -32px rgba(148, 163, 184, 0.16);[m
+[31m-      border: 1px solid rgba(203, 213, 225, 0.22);[m
+[32m+[m[32m        0 1px 0 rgba(255, 255, 255, 0.1) inset,[m
+[32m+[m[32m        0 22px 48px -14px rgba(0, 0, 0, 0.58),[m
+[32m+[m[32m        0 0 0 1px rgba(255, 255, 255, 0.14);[m
+[32m+[m[32m      border: 1px solid rgba(255, 255, 255, 0.18);[m
+     }[m
+ [m
+     .notch {[m
+       width: 120px;[m
+       height: 18px;[m
+[31m-      background: #020617;[m
+[32m+[m[32m      background: #1e293b;[m
+       border-radius: 999px;[m
+       margin: 0 auto 10px;[m
+       box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8);[m
+[36m@@ -194,25 +190,25 @@[m
+     .hero {[m
+       border-radius: 16px;[m
+       padding: 13px 13px 11px;[m
+[31m-      /* Panneau encastré : relief léger + fusion bas de carte, thème conservé */[m
+[32m+[m[32m      /* V3 : thème plus visible en haut, voile léger ; bas fusionné au chassis (#0f172a / #020617) */[m
+       background:[m
+         linear-gradient([m
+           180deg,[m
+[31m-          rgba(255, 255, 255, 0.055) 0%,[m
+[31m-          transparent 32%[m
+[32m+[m[32m          rgba(255, 255, 255, 0.1) 0%,[m
+[32m+[m[32m          transparent 36%[m
+         ),[m
+         linear-gradient([m
+           180deg,[m
+[31m-          rgba(2, 6, 23, 0.18) 0%,[m
+[31m-          rgba(2, 6, 23, 0.78) 50%,[m
+[31m-          #020617 100%[m
+[32m+[m[32m          rgba(2, 6, 23, 0.04) 0%,[m
+[32m+[m[32m          rgba(2, 6, 23, 0.38) 58%,[m
+[32m+[m[32m          rgba(15, 23, 42, 0.92) 100%[m
+         ),[m
+         var(--hero-bg);[m
+       border: none;[m
+       margin-bottom: 14px;[m
+       box-shadow:[m
+[31m-        0 1px 0 rgba(255, 255, 255, 0.06) inset,[m
+[31m-        0 10px 28px -10px rgba(0, 0, 0, 0.42);[m
+[32m+[m[32m        0 1px 0 rgba(255, 255, 255, 0.08) inset,[m
+[32m+[m[32m        inset 0 -1px 0 rgba(0, 0, 0, 0.28);[m
+       overflow: hidden; /* ✅ sécurité */[m
+     }[m
+ [m
+[36m@@ -250,10 +246,10 @@[m
+       border-radius: 50%;[m
+       flex: 0 0 auto;[m
+       background-color: #111827;[m
+[31m-      border: 1px solid rgba(248, 250, 252, 0.32);[m
+[32m+[m[32m      border: 1px solid rgba(255, 255, 255, 0.2);[m
+       box-shadow:[m
+[31m-        0 4px 14px rgba(0, 0, 0, 0.48),[m
+[31m-        0 0 0 1px rgba(255, 255, 255, 0.07);[m
+[32m+[m[32m        0 4px 16px rgba(0, 0, 0, 0.5),[m
+[32m+[m[32m        0 0 0 1px rgba(255, 255, 255, 0.08);[m
+     }[m
+ [m
+     #hero-avatar-img {[m
+[36m@@ -407,16 +403,17 @@[m
+     .card-block {[m
+       border-radius: 18px;[m
+       padding: 12px 12px 11px;[m
+[32m+[m[32m      /* V3 : panneaux nettement plus clairs que le bas du chassis, bordure lisible */[m
+       background: linear-gradient([m
+[31m-        152deg,[m
+[31m-        rgba(51, 65, 85, 0.35) 0%,[m
+[31m-        rgba(15, 23, 42, 0.94) 55%,[m
+[31m-        rgba(15, 23, 42, 0.98) 100%[m
+[32m+[m[32m        165deg,[m
+[32m+[m[32m        rgba(71, 85, 105, 0.5) 0%,[m
+[32m+[m[32m        rgba(51, 65, 85, 0.72) 28%,[m
+[32m+[m[32m        rgba(30, 41, 59, 0.9) 100%[m
+       );[m
+[31m-      border: 1px solid rgba(226, 232, 240, 0.1);[m
+[32m+[m[32m      border: 1px solid rgba(255, 255, 255, 0.16);[m
+       box-shadow:[m
+[31m-        0 1px 0 rgba(255, 255, 255, 0.05) inset,[m
+[31m-        0 6px 22px -8px rgba(0, 0, 0, 0.5);[m
+[32m+[m[32m        0 1px 0 rgba(255, 255, 255, 0.08) inset,[m
+[32m+[m[32m        0 10px 28px -12px rgba(0, 0, 0, 0.55);[m
+       font-size: 12px;[m
+       min-width: 0;[m
+     }[m

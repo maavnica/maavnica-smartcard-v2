@@ -333,4 +333,73 @@ class UserOut(UserBase):
         orm_mode = True
 
 
+# =============================================================
+#  ANALYTICS (carte publique)
+# =============================================================
+
+_SLUG_ANALYTICS_PATTERN = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_-]{0,126}$")
+
+
+class AnalyticsVisitIn(BaseModel):
+    slug: str = Field(..., min_length=1, max_length=128)
+    src: Optional[str] = Field(None, max_length=255)
+    ref: Optional[str] = Field(None, max_length=512)
+    rec: Optional[str] = Field(None, max_length=255)
+
+    @validator("slug")
+    def validate_slug_analytics(cls, v: str) -> str:
+        s = (v or "").strip()
+        if not _SLUG_ANALYTICS_PATTERN.fullmatch(s):
+            raise ValueError("Slug invalide.")
+        return s
+
+    @validator("src", "ref", "rec", pre=True)
+    def empty_str_to_none(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
+
+
+_ANALYTICS_EVENT_TYPES = frozenset(
+    {
+        "phone_click",
+        "whatsapp_click",
+        "google_review_click",
+        "rdv_request",
+        "share_click",
+    }
+)
+
+
+class AnalyticsEventIn(BaseModel):
+    slug: str = Field(..., min_length=1, max_length=128)
+    event_type: str = Field(..., min_length=1, max_length=64)
+    src: Optional[str] = Field(None, max_length=255)
+    ref: Optional[str] = Field(None, max_length=512)
+    rec: Optional[str] = Field(None, max_length=255)
+
+    @validator("slug")
+    def validate_slug_analytics_event(cls, v: str) -> str:
+        s = (v or "").strip()
+        if not _SLUG_ANALYTICS_PATTERN.fullmatch(s):
+            raise ValueError("Slug invalide.")
+        return s
+
+    @validator("event_type")
+    def validate_event_type(cls, v: str) -> str:
+        t = (v or "").strip()
+        if t not in _ANALYTICS_EVENT_TYPES:
+            raise ValueError("Type d’événement non reconnu.")
+        return t
+
+    @validator("src", "ref", "rec", pre=True)
+    def empty_str_to_none_event(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
+
 

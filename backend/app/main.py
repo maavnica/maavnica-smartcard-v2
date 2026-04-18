@@ -12,6 +12,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 # Routes API
 from app.routers import public, cards
+from app.routers import analytics as analytics_router
 from app.routers.stripe_webhook import router as stripe_webhook_router
 from app.routers.checkout import router as checkout_router
 from app.routers.upload import router as upload_router
@@ -46,6 +47,16 @@ LANDING_INDEX = LANDING_DIR / "index.html"
 # App
 # ------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+
+
+@app.on_event("startup")
+def _create_db_tables():
+    """Crée les tables manquantes (ex. analytics) sans migration lourde."""
+    import app.models  # noqa: F401 — enregistre les modèles sur le metadata
+    from app.database import Base, engine
+
+    Base.metadata.create_all(bind=engine)
+
 
 app.include_router(public.router)
 app.include_router(cards.router)
@@ -118,6 +129,10 @@ app.include_router(contact_router)
 
 # Kit affilié (outil interne, clé admin)
 app.include_router(affiliate_kit_router)
+
+# Analytics (API + page /admin/analytics)
+app.include_router(analytics_router.router_api)
+app.include_router(analytics_router.router_pages)
 
 
 # ------------------------------------------------------------

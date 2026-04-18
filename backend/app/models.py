@@ -149,3 +149,34 @@ class Quote(Base):
         return f"<Quote id={self.id} card_id={self.card_id} name={self.name!r}>"
 
 
+# =============================================================
+#  ANALYTICS CARTE PUBLIQUE (v1)
+# =============================================================
+
+
+class CardVisit(Base):
+    """Visite d’une URL /c/{slug} (paramètres src/ref/rec passés par le front)."""
+
+    __tablename__ = "card_visits"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(128), nullable=False, index=True)
+    source = Column(String(255), nullable=True)
+    ref = Column(String(512), nullable=True)
+    rec = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class CardEvent(Base):
+    """Événement d’interaction sur la carte publique (clics, envoi formulaire, partage)."""
+
+    __tablename__ = "card_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(128), nullable=False, index=True)
+    event_type = Column(String(64), nullable=False, index=True)
+    source = Column(String(255), nullable=True)
+    ref = Column(String(512), nullable=True)
+    rec = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
