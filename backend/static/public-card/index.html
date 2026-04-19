@@ -1388,6 +1388,16 @@
       }
     }
 
+    /** True si l’URL contient ?src=recommend (ou &src=recommend) — insensible à la casse. */
+    function isRecommendSourceParam() {
+      try {
+        const v = new URLSearchParams(window.location.search || "").get("src");
+        return (v || "").trim().toLowerCase() === "recommend";
+      } catch (e) {
+        return false;
+      }
+    }
+
     function postAnalytics(url, body) {
       try {
         const json = JSON.stringify(body);
@@ -1570,6 +1580,9 @@
 
     let CURRENT_PROFILE_CONFIG = PROFILE_CONFIG.artisan;
 
+    /** Garde-fou : un seul envoi visit_from_recommendation par chargement de page. */
+    let visitFromRecommendationEventDone = false;
+
     function revealCardShell() {
       requestAnimationFrame(function () {
         document.body.classList.add("is-ready");
@@ -1604,6 +1617,11 @@
         const cardId = card.id;
 
         trackCardVisit(slug);
+
+        if (!visitFromRecommendationEventDone && isRecommendSourceParam()) {
+          visitFromRecommendationEventDone = true;
+          trackCardEvent(slug, "visit_from_recommendation");
+        }
 
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";

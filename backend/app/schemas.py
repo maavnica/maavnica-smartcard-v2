@@ -442,6 +442,7 @@ _ANALYTICS_EVENT_TYPES = frozenset(
         "recommend_share_sms",
         "recommend_share_copy",
         "recommend_share_email",
+        "visit_from_recommendation",
     }
 )
 
