@@ -232,6 +232,32 @@
       max-width: 100%;
     }
 
+    /* Social proof discret — uniquement si ?src=recommend (affichage géré en JS) */
+    .hero-recommend-trust {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0 0 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: 0.01em;
+      color: rgba(226, 232, 240, 0.96);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(148, 163, 184, 0.32);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+      max-width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .hero-recommend-trust.is-visible {
+      display: flex;
+    }
+
     .hero-main-row {
       display: flex;
       gap: 10px;
@@ -1068,6 +1094,15 @@
           </div>
         </div>
 
+        <div
+          class="hero-recommend-trust"
+          id="hero-recommend-trust"
+          hidden
+          aria-hidden="true"
+        >
+          👍 Ce professionnel vous a été recommandé
+        </div>
+
         <div class="hero-main-row">
           <div class="hero-avatar" aria-label="Photo ou logo">
             <img id="hero-avatar-img" alt="" />
@@ -1615,6 +1650,19 @@
 
         const card = await res.json();
         const cardId = card.id;
+
+        const trustBanner = document.getElementById("hero-recommend-trust");
+        if (trustBanner) {
+          if (isRecommendSourceParam()) {
+            trustBanner.removeAttribute("hidden");
+            trustBanner.classList.add("is-visible");
+            trustBanner.setAttribute("aria-hidden", "false");
+          } else {
+            trustBanner.setAttribute("hidden", "");
+            trustBanner.classList.remove("is-visible");
+            trustBanner.setAttribute("aria-hidden", "true");
+          }
+        }
 
         trackCardVisit(slug);
 
