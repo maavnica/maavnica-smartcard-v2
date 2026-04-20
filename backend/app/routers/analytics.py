@@ -26,6 +26,10 @@ _EVENT_COLUMNS = (
     "google_review_click",
     "rdv_request",
     "recommend_click",
+    "share_click",
+    "share_native_opened",
+    "share_native_success",
+    "share_copy_fallback",
 )
 
 
@@ -172,6 +176,48 @@ def _affiliates_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
     return out
 
 
+def _recommendation_codes_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
+    """
+    Performance par code de recommandation (paramètre rec) sur 30 jours.
+    visites = lignes card_visits avec rec renseigné
+    actions = lignes card_events avec rec renseigné
+    """
+    v_rows = (
+        db.query(CardVisit.rec, func.count(CardVisit.id))
+        .filter(
+            CardVisit.created_at >= d30,
+            CardVisit.rec.isnot(None),
+            CardVisit.rec != "",
+        )
+        .group_by(CardVisit.rec)
+        .all()
+    )
+    e_rows = (
+        db.query(CardEvent.rec, func.count(CardEvent.id))
+        .filter(
+            CardEvent.created_at >= d30,
+            CardEvent.rec.isnot(None),
+            CardEvent.rec != "",
+        )
+        .group_by(CardEvent.rec)
+        .all()
+    )
+    visits_by_rec: Dict[str, int] = {str(r[0]): int(r[1]) for r in v_rows}
+    actions_by_rec: Dict[str, int] = {str(r[0]): int(r[1]) for r in e_rows}
+    all_recs = set(visits_by_rec) | set(actions_by_rec)
+    out: List[Tuple[str, int, int]] = []
+    for rec_val in all_recs:
+        out.append(
+            (
+                rec_val,
+                visits_by_rec.get(rec_val, 0),
+                actions_by_rec.get(rec_val, 0),
+            )
+        )
+    out.sort(key=lambda row: (-row[1], row[0]))
+    return out
+
+
 def _build_dashboard_html(db: Session) -> str:
     now = datetime.utcnow()
     today0 = _utc_day_start()
@@ -195,6 +241,7 @@ def _build_dashboard_html(db: Session) -> str:
 
     traffic = _traffic_sources_30d(db, d30)
     affiliates = _affiliates_30d(db, d30)
+    recommendations = _recommendation_codes_30d(db, d30)
 
     def ev(slug: str, kind: str) -> int:
         return ev7.get((slug, kind), 0)
@@ -213,12 +260,16 @@ def _build_dashboard_html(db: Session) -> str:
             f"<td style=\"text-align:right\">{ev(slug, 'google_review_click')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'rdv_request')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'recommend_click')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'share_click')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'share_native_opened')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'share_native_success')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'share_copy_fallback')}</td>"
             "</tr>"
         )
 
     if not rows_html:
         rows_html.append(
-            '<tr><td colspan="8" style="color:rgba(229,231,235,.65)">'
+            '<tr><td colspan="12" style="color:rgba(229,231,235,.65)">'
             "Aucune carte en base — créez une carte depuis l’admin.</td></tr>"
         )
 
@@ -247,11 +298,32 @@ def _build_dashboard_html(db: Session) -> str:
             "Aucun paramètre <code>ref</code> sur 30 jours.</td></tr>"
         )
 
+    reco_html: List[str] = []
+    for rec_val, v_cnt, a_cnt in recommendations:
+        reco_html.append(
+            f"<tr><td><code>{escape(rec_val)}</code></td>"
+            f"<td style=\"text-align:right\">{v_cnt}</td>"
+            f"<td style=\"text-align:right\">{a_cnt}</td></tr>"
+        )
+    if not reco_html:
+        reco_html.append(
+            '<tr><td colspan="3" style="color:rgba(229,231,235,.65)">'
+            "Aucun paramètre <code>rec</code> sur 30 jours.</td></tr>"
+        )
+
     table_aff = (
         "<table><thead><tr>"
         "<th>ref (affilié)</th><th>Visites</th><th>Actions</th>"
         "</tr></thead><tbody>"
         + "".join(affiliate_html)
+        + "</tbody></table>"
+    )
+
+    table_reco = (
+        "<table><thead><tr>"
+        "<th>rec</th><th>Visites</th><th>Actions</th>"
+        "</tr></thead><tbody>"
+        + "".join(reco_html)
         + "</tbody></table>"
     )
 
@@ -268,6 +340,7 @@ def _build_dashboard_html(db: Session) -> str:
         "<table><thead><tr>"
         "<th>Slug</th><th>Visites 7j</th><th>Visites 30j</th>"
         "<th>phone</th><th>whatsapp</th><th>Google</th><th>demande</th><th>reco</th>"
+        "<th>partage</th><th>share open</th><th>share ok</th><th>copie fallback</th>"
         "</tr></thead><tbody>"
         + "".join(rows_html)
         + "</tbody></table>"
@@ -351,6 +424,13 @@ def _build_dashboard_html(db: Session) -> str:
         Basé sur le paramètre d’URL <code>ref</code> (ex. <code>/c/demo2?ref=paul</code>).
       </p>
       {table_aff}
+    </section>
+    <section>
+      <h2>RECOMMANDATIONS (30 jours)</h2>
+      <p class="sub" style="margin-top:-4px;margin-bottom:12px;font-size:13px;">
+        Basé sur le paramètre d’URL <code>rec</code> (ex. partage avec <code>?src=recommend&amp;rec=julie123</code>).
+      </p>
+      {table_reco}
     </section>
     <p class="sub"><a href="/admin">← Retour admin cartes</a></p>
   </div>
