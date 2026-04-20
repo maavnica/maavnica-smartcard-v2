@@ -762,7 +762,7 @@
     }
 
     .share-row {
-      display: none;
+      display: flex;
       margin-top: 6px;
       flex-wrap: wrap;
       gap: 6px;
@@ -924,6 +924,11 @@
       padding: 8px 10px;
       background: rgba(15, 23, 42, 0.88);
       border-color: rgba(148, 163, 184, 0.45);
+    }
+
+    .post-share-block .share-row.share-row--secondary .btn-link {
+      opacity: 0.88;
+      font-weight: 500;
     }
 
 .qr-wrap {
@@ -1238,7 +1243,7 @@
             </div>
 
             <button class="btn-primary btn-share-card-main" id="btn-share-card-main" type="button">
-              📲 Envoyer ma carte (avis + contact)
+              📲 Partager ma carte
             </button>
 
             <div class="post-share-hint post-share-demo-only">
@@ -1252,11 +1257,10 @@
               ✔ Avis Google • ✔ Contact rapide • ✔ Demande de devis
             </div>
 
-            <div class="share-row" id="share-card-options">
-              <button class="btn-link" id="btn-share-wa">WhatsApp</button>
-              <button class="btn-link" id="btn-share-sms">SMS</button>
-              <button class="btn-link" id="btn-share-copy">Copier le lien</button>
-              <button class="btn-link" id="btn-share-email">Email</button>
+            <div class="share-row share-row--secondary" id="share-card-options">
+              <button class="btn-link" id="btn-share-copy" type="button">Copier le lien</button>
+              <button class="btn-link" id="btn-share-sms" type="button">SMS</button>
+              <button class="btn-link" id="btn-share-email" type="button">Email</button>
             </div>
 
           </div>
@@ -1269,10 +1273,9 @@
             <button class="btn-primary btn-share-card-main" id="btn-recommend-main" type="button">
               Recommander
             </button>
-            <div class="share-row" id="recommend-share-options">
-              <button class="btn-link" id="btn-recommend-wa" type="button">WhatsApp</button>
-              <button class="btn-link" id="btn-recommend-sms" type="button">SMS</button>
+            <div class="share-row share-row--secondary" id="recommend-share-options">
               <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien</button>
+              <button class="btn-link" id="btn-recommend-sms" type="button">SMS</button>
               <button class="btn-link" id="btn-recommend-email" type="button">Email</button>
             </div>
           </div>
@@ -1374,8 +1377,8 @@
       const btnShareLabel = document.getElementById("btn-share-card-main");
       if (btnShareLabel) {
         btnShareLabel.textContent = isDemoCard
-          ? "📲 Envoyer ma carte (avis + contact)"
-          : "Envoyer ma carte";
+          ? "📲 Partager ma carte"
+          : "Partager ma carte";
       }
     }
 
@@ -2166,36 +2169,63 @@
 
         updateQrCode(slug);
 
+        async function copyPublicUrlToClipboard(url) {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(url);
+              showToast("Lien copié dans le presse-papier.");
+            } else {
+              window.prompt("Copiez ce lien :", url);
+            }
+          } catch (e) {
+            window.prompt("Copiez ce lien :", url);
+          }
+        }
+
         const btnShareMain = document.getElementById("btn-share-card-main");
-        const shareRow = document.getElementById("share-card-options");
-        const btnShareWa = document.getElementById("btn-share-wa");
         const btnShareSms = document.getElementById("btn-share-sms");
         const btnShareCopy = document.getElementById("btn-share-copy");
         const btnShareEmail = document.getElementById("btn-share-email");
 
-        const cardPublicUrl =
-          (window.location.origin || "") + "/c/" + encodeURIComponent(slug);
+        const origin = window.location.origin || "";
+        const cardPublicUrl = origin + "/c/" + encodeURIComponent(slug);
+        const recCodeRaw =
+          card.recommendation_code != null && card.recommendation_code !== undefined
+            ? String(card.recommendation_code).trim()
+            : "";
+        const recommendShareUrl = (() => {
+          const qs = new URLSearchParams();
+          qs.set("src", "recommend");
+          if (recCodeRaw) qs.set("rec", recCodeRaw);
+          return origin + "/c/" + encodeURIComponent(slug) + "?" + qs.toString();
+        })();
         const shareMessage = isDemoCard
           ? "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
             cardPublicUrl
           : "Bonjour, voici ma carte de contact. Vous y trouverez mes coordonnées et pourrez me contacter ou laisser un avis : " +
             cardPublicUrl;
+        const shareCardTitle = isDemoCard ? "Ma carte SmartCard" : "Ma carte de contact";
 
-        if (btnShareMain && shareRow) {
-          shareRow.style.display = "none";
-          btnShareMain.onclick = () => {
-            trackCardEvent(slug, "share_click");
-            const isHidden = shareRow.style.display === "none" || !shareRow.style.display;
-            shareRow.style.display = isHidden ? "flex" : "none";
-          };
-        }
-
-        if (btnShareWa) {
-          btnShareWa.onclick = () => {
-            trackCardEvent(slug, "share_click");
-            const url =
-              "https://wa.me/?text=" + encodeURIComponent(shareMessage);
-            window.open(url, "_blank", "noopener");
+        if (btnShareMain) {
+          btnShareMain.onclick = async function () {
+            const sharePayload = {
+              title: shareCardTitle,
+              text: shareMessage,
+              url: cardPublicUrl
+            };
+            if (typeof navigator.share === "function") {
+              try {
+                await navigator.share(sharePayload);
+                trackCardEvent(slug, "share_click");
+              } catch (err) {
+                if (err && err.name === "AbortError") return;
+                await copyPublicUrlToClipboard(cardPublicUrl);
+                trackCardEvent(slug, "share_click");
+              }
+            } else {
+              await copyPublicUrlToClipboard(cardPublicUrl);
+              trackCardEvent(slug, "share_click");
+            }
           };
         }
 
@@ -2211,16 +2241,7 @@
         if (btnShareCopy) {
           btnShareCopy.onclick = async () => {
             trackCardEvent(slug, "share_click");
-            try {
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(cardPublicUrl);
-                showToast("Lien copié dans le presse-papier.");
-              } else {
-                window.prompt("Copiez ce lien :", cardPublicUrl);
-              }
-            } catch (e) {
-              window.prompt("Copiez ce lien :", cardPublicUrl);
-            }
+            await copyPublicUrlToClipboard(cardPublicUrl);
           };
         }
 
@@ -2245,33 +2266,33 @@
         if (recommendEnabled) {
           const recommendMessage =
             "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
-            cardPublicUrl;
+            recommendShareUrl;
 
           const btnRecommendMain = document.getElementById("btn-recommend-main");
-          const recommendRow = document.getElementById("recommend-share-options");
-          const btnRecommendWa = document.getElementById("btn-recommend-wa");
           const btnRecommendSms = document.getElementById("btn-recommend-sms");
           const btnRecommendCopy = document.getElementById("btn-recommend-copy");
           const btnRecommendEmail = document.getElementById("btn-recommend-email");
 
-          if (btnRecommendMain && recommendRow) {
-            recommendRow.style.display = "none";
-            btnRecommendMain.onclick = () => {
-              trackCardEvent(slug, "recommend_click");
-              const isHidden =
-                recommendRow.style.display === "none" || !recommendRow.style.display;
-              recommendRow.style.display = isHidden ? "flex" : "none";
-            };
-          }
-
-          if (btnRecommendWa) {
-            btnRecommendWa.onclick = () => {
-              trackCardEvent(slug, "recommend_share_whatsapp");
-              window.open(
-                "https://wa.me/?text=" + encodeURIComponent(recommendMessage),
-                "_blank",
-                "noopener"
-              );
+          if (btnRecommendMain) {
+            btnRecommendMain.onclick = async function () {
+              const sharePayload = {
+                title: "Recommandation professionnelle",
+                text: recommendMessage,
+                url: recommendShareUrl
+              };
+              if (typeof navigator.share === "function") {
+                try {
+                  await navigator.share(sharePayload);
+                  trackCardEvent(slug, "recommend_click");
+                } catch (err) {
+                  if (err && err.name === "AbortError") return;
+                  await copyPublicUrlToClipboard(recommendShareUrl);
+                  trackCardEvent(slug, "recommend_click");
+                }
+              } else {
+                await copyPublicUrlToClipboard(recommendShareUrl);
+                trackCardEvent(slug, "recommend_click");
+              }
             };
           }
 
@@ -2285,16 +2306,7 @@
           if (btnRecommendCopy) {
             btnRecommendCopy.onclick = async () => {
               trackCardEvent(slug, "recommend_share_copy");
-              try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                  await navigator.clipboard.writeText(cardPublicUrl);
-                  showToast("Lien copié dans le presse-papier.");
-                } else {
-                  window.prompt("Copiez ce lien :", cardPublicUrl);
-                }
-              } catch (e) {
-                window.prompt("Copiez ce lien :", cardPublicUrl);
-              }
+              await copyPublicUrlToClipboard(recommendShareUrl);
             };
           }
 
