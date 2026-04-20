@@ -59,7 +59,9 @@ def _create_db_tables():
         ensure_card_hero_columns,
         ensure_card_identity_columns,
         ensure_enable_recommendation_column,
+        ensure_quote_recommendation_columns,
         ensure_recommendation_code_column,
+        ensure_owner_share_key_column,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -67,6 +69,8 @@ def _create_db_tables():
     ensure_card_identity_columns()
     ensure_enable_recommendation_column()
     ensure_recommendation_code_column()
+    ensure_owner_share_key_column()
+    ensure_quote_recommendation_columns()
 
 
 app.include_router(public.router)

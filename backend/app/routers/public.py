@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from typing import Optional
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from html import escape
@@ -7,6 +9,7 @@ import re
 from app.database import get_db
 from app.models import Card, Feedback, Quote
 from app.schemas import CardPublic, FeedbackCreate, QuoteCreate
+from app.routers.cards import _ensure_owner_share_key, _serialize_card_public
 from app.utils.emailer import send_email
 from app.utils.rate_limit import rate_limit_by_ip
 
@@ -221,8 +224,15 @@ def lead_labels_for_profile(profile: str | None) -> dict:
 
 
 @router.get("/cards/{slug}", response_model=CardPublic)
-def get_public_card(slug: str, db: Session = Depends(get_db)):
-    return get_card_by_slug_or_404(slug, db)
+def get_public_card(
+    slug: str,
+    request: Request,
+    o: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+):
+    card = get_card_by_slug_or_404(slug, db)
+    _ensure_owner_share_key(db, card)
+    return _serialize_card_public(card, request, owner_query_key=o)
 
 
 @router.get("/cards/{slug}/vcard")

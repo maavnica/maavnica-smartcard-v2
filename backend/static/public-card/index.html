@@ -911,9 +911,18 @@
       display: block !important;
     }
 
-    /* « Partager / envoyer ma carte » : outil pro, montré sur les slugs démo uniquement.
-       En vue carte client publique, le parcours de diffusion traçable passe par « Recommander ». */
-    body.client-card-mode #post-share-block {
+    /* « Envoyer ma carte » : démo (toujours) ou carte réelle avec ?o= + clé valide (classe owner-share-tools en JS). */
+    #post-share-block {
+      display: none !important;
+    }
+    body.owner-share-tools #post-share-block {
+      display: block !important;
+    }
+    /* Propriétaire sur carte réelle : libellés type « outil pro » (comme la démo), pas la variante visiteur. */
+    body.owner-share-tools.client-card-mode .post-share-demo-only {
+      display: block !important;
+    }
+    body.owner-share-tools.client-card-mode .post-share-client-only {
       display: none !important;
     }
 
@@ -1360,6 +1369,17 @@
       return slug.toLowerCase().startsWith("demo");
     }
 
+    /** Clé mode propriétaire : /c/{slug}?o=… (ne pas inclure dans les SMS / mails clients). */
+    function getOwnerShareKeyFromUrl() {
+      try {
+        var p = new URLSearchParams(window.location.search || "");
+        var v = (p.get("o") || "").trim();
+        return v || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     /** Masque les textes pédagogiques du bloc central sur les cartes client uniquement. */
     function applyClientMidsectionVisibility(isDemoCard) {
       const ids = [
@@ -1380,10 +1400,6 @@
         }
       });
 
-      const btnShareLabel = document.getElementById("btn-share-card-main");
-      if (btnShareLabel && isDemoCard) {
-        btnShareLabel.textContent = "📲 Envoyer ma carte";
-      }
     }
 
     function applyPublicShellCopy(isDemoCard, companyName, fullName) {
@@ -1690,8 +1706,19 @@
         el.setAttribute("aria-hidden", isDemoCard ? "false" : "true");
       });
 
+      if (isDemoCard) {
+        document.body.classList.add("owner-share-tools");
+      } else {
+        document.body.classList.remove("owner-share-tools");
+      }
+
       try {
-        const res = await fetch(`/api/cards/by-slug/${encodeURIComponent(slug)}`);
+        var apiUrl = "/api/cards/by-slug/" + encodeURIComponent(slug);
+        var ownerKeyParam = getOwnerShareKeyFromUrl();
+        if (ownerKeyParam) {
+          apiUrl += "?o=" + encodeURIComponent(ownerKeyParam);
+        }
+        const res = await fetch(apiUrl);
         if (!res.ok) {
           showToast("Carte introuvable", true);
           revealCardShell();
@@ -1699,6 +1726,13 @@
         }
 
         const card = await res.json();
+
+        var showOwnerShareTools = !!isDemoCard || card.owner_mode === true;
+        document.body.classList.toggle("owner-share-tools", showOwnerShareTools);
+        var btnShareMainEarly = document.getElementById("btn-share-card-main");
+        if (btnShareMainEarly && showOwnerShareTools) {
+          btnShareMainEarly.textContent = "📲 Envoyer ma carte";
+        }
         const cardId = card.id;
         const referrerIdFromUrl = getRecommendationReferrerIdFromUrl();
         const recommendationVisitorId = referrerIdFromUrl

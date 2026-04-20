@@ -42,6 +42,21 @@ def require_admin_api_key(request: Request) -> None:
     return None
 
 
+def admin_bearer_matches(request: Request) -> bool:
+    """
+    True si la requête porte Authorization: Bearer <ADMIN_API_KEY> valide.
+    Utile pour enrichir une réponse JSON (ex. clé mode propriétaire) sans rendre l’auth obligatoire.
+    """
+    expected = (os.getenv("ADMIN_API_KEY") or "").strip()
+    if not expected:
+        return False
+    auth = request.headers.get("Authorization", "") or ""
+    if not auth.lower().startswith("bearer "):
+        return False
+    provided = auth[7:].strip()
+    return secrets.compare_digest(provided, expected)
+
+
 _http_basic = HTTPBasic()
 
 

@@ -65,6 +65,8 @@ document.getElementById("last-name").value = card.last_name || "";
   if (recCb) recCb.checked = !!card.enable_recommendation;
   const recCodeEl = document.getElementById("recommendation-code");
   if (recCodeEl) recCodeEl.value = card.recommendation_code || "";
+  const ownerKeyEl = document.getElementById("owner-share-key");
+  if (ownerKeyEl) ownerKeyEl.value = card.owner_share_key || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
@@ -114,6 +116,8 @@ document.getElementById("last-name").value = "";
   if (recCbReset) recCbReset.checked = false;
   const recCodeReset = document.getElementById("recommendation-code");
   if (recCodeReset) recCodeReset.value = "";
+  const ownerKeyReset = document.getElementById("owner-share-key");
+  if (ownerKeyReset) ownerKeyReset.value = "";
   const avatarFile = document.getElementById("avatar-file");
   if (avatarFile) avatarFile.value = "";
 
@@ -130,14 +134,32 @@ document.getElementById("last-name").value = "";
 function updatePublicLink() {
   const slug = document.getElementById("slug").value.trim();
   const box = document.getElementById("public-link");
+  const ownerBox = document.getElementById("owner-public-link");
 
   if (!slug) {
     box.textContent = "";
+    if (ownerBox) ownerBox.textContent = "";
     return;
   }
 
   const base = window.location.origin;
-  box.textContent = "Lien public : " + base.replace(/\/admin$/, "") + "/c/" + slug;
+  const origin = base.replace(/\/admin$/, "");
+  const publicUrl = origin + "/c/" + slug;
+  box.textContent = "Lien public (visiteurs / clients) : " + publicUrl;
+
+  if (ownerBox) {
+    const ok = (document.getElementById("owner-share-key")?.value || "").trim();
+    if (ok) {
+      ownerBox.textContent =
+        "Lien propriétaire (envoyer ma carte, à garder pour vous) : " +
+        publicUrl +
+        "?o=" +
+        encodeURIComponent(ok);
+    } else {
+      ownerBox.textContent =
+        "Lien propriétaire : chargez ou enregistrez la carte pour afficher la clé personnelle.";
+    }
+  }
 }
 
 /* ============================================================
@@ -367,6 +389,10 @@ async function loadFeedbackAndQuotes() {
             <div class="item-title">${baseLabel} – ${q.name || "—"}</div>
             <div>${q.phone || ""}${q.email ? " · " + q.email : ""}</div>
             <div>${q.message || ""}</div>
+            <div><strong>Origine :</strong> ${
+              q.source_type === "recommendation" ? "recommandation" : "directe / autre"
+            }</div>
+            <div><strong>Recommandé par :</strong> ${q.referrer_id || "—"}</div>
             <div class="item-meta">${new Date(
               q.created_at
             ).toLocaleString()}</div>

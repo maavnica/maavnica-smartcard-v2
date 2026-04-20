@@ -248,6 +248,11 @@ class CardPublic(BaseModel):
     enable_recommendation: bool = False
     recommendation_code: Optional[str] = None
 
+    # Carte publique : true si ?o= correspond à owner_share_key (voir GET by-slug)
+    owner_mode: bool = False
+    # Rempli uniquement quand la requête est authentifiée admin (Bearer)
+    owner_share_key: Optional[str] = None
+
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
@@ -299,12 +304,23 @@ class QuoteCreate(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[str] = Field(None, max_length=25)
     message: Optional[str] = Field(None, max_length=5000)
+    source_type: Optional[str] = Field(None, max_length=32)
+    referrer_id: Optional[str] = Field(None, max_length=128)
 
     @validator("name", "phone", "message", pre=True)
     def _quote_strip(cls, v):
         if v is None:
             return v
         return v.strip() if isinstance(v, str) else v
+
+    @validator("source_type", "referrer_id", pre=True)
+    def _quote_source_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
 
     @validator("email", pre=True)
     def _quote_email_empty(cls, v):
@@ -331,6 +347,22 @@ class QuoteCreate(BaseModel):
         v = _reject_urls_and_angle_brackets(v)
         return _reject_email_like_in_text(v)
 
+    @validator("source_type")
+    def _quote_source_type(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if v not in {"recommendation"}:
+            raise ValueError("Type de source invalide.")
+        return v
+
+    @validator("referrer_id")
+    def _quote_referrer_id(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if not _RECOMMENDATION_CODE_PATTERN.fullmatch(v):
+            raise ValueError("Identifiant recommandant invalide.")
+        return v
+
 
 class QuoteOut(BaseModel):
     id: int
@@ -338,6 +370,8 @@ class QuoteOut(BaseModel):
     email: Optional[str]
     phone: Optional[str]
     message: Optional[str]
+    source_type: Optional[str]
+    referrer_id: Optional[str]
     created_at: datetime
 
     class Config:

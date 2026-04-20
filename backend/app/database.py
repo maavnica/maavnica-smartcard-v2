@@ -137,3 +137,62 @@ def ensure_recommendation_code_column() -> None:
         conn.execute(text(sql))
 
 
+def ensure_owner_share_key_column() -> None:
+    """Ajoute owner_share_key (nullable) et remplit les cartes existantes sans clé."""
+    from sqlalchemy import inspect, text
+    import secrets
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "owner_share_key" not in existing:
+        dialect = engine.dialect.name
+        if dialect == "sqlite":
+            sql = "ALTER TABLE cards ADD COLUMN owner_share_key VARCHAR(64)"
+        else:
+            sql = "ALTER TABLE cards ADD COLUMN owner_share_key VARCHAR(64)"
+        with engine.begin() as conn:
+            conn.execute(text(sql))
+
+    from sqlalchemy import or_
+    from sqlalchemy.orm import sessionmaker
+    from app.models import Card
+
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+    try:
+        q = db.query(Card).filter(
+            or_(Card.owner_share_key.is_(None), Card.owner_share_key == "")
+        )
+        for card in q.all():
+            card.owner_share_key = secrets.token_urlsafe(10)
+        db.commit()
+    finally:
+        db.close()
+
+
+def ensure_quote_recommendation_columns() -> None:
+    """Ajoute source_type / referrer_id sur quotes si colonnes manquantes."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("quotes"):
+        return
+    existing = {c["name"] for c in insp.get_columns("quotes")}
+    statements = []
+    if "source_type" not in existing:
+        statements.append("ALTER TABLE quotes ADD COLUMN source_type VARCHAR(32)")
+    if "referrer_id" not in existing:
+        statements.append("ALTER TABLE quotes ADD COLUMN referrer_id VARCHAR(128)")
+    for stmt in statements:
+        with engine.begin() as conn:
+            conn.execute(text(stmt))
+
+

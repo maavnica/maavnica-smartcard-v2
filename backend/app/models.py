@@ -93,6 +93,9 @@ class Card(Base):
     # Code manuel (admin) pour tracer les partages ?src=recommend&rec=…
     recommendation_code = Column(String(64), nullable=True)
 
+    # Lien personnel « envoyer ma carte » : /c/{slug}?o={owner_share_key} (jamais exposé sans auth admin)
+    owner_share_key = Column(String(64), nullable=True)
+
     # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(
@@ -156,6 +159,8 @@ class Quote(Base):
     email = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     message = Column(Text, nullable=True)
+    source_type = Column(String(32), nullable=True, index=True)
+    referrer_id = Column(String(128), nullable=True, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relation
