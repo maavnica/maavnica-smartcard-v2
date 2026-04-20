@@ -260,16 +260,13 @@ def _build_dashboard_html(db: Session) -> str:
             f"<td style=\"text-align:right\">{ev(slug, 'google_review_click')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'rdv_request')}</td>"
             f"<td style=\"text-align:right\">{ev(slug, 'recommend_click')}</td>"
-            f"<td style=\"text-align:right\">{ev(slug, 'share_click')}</td>"
-            f"<td style=\"text-align:right\">{ev(slug, 'share_native_opened')}</td>"
-            f"<td style=\"text-align:right\">{ev(slug, 'share_native_success')}</td>"
-            f"<td style=\"text-align:right\">{ev(slug, 'share_copy_fallback')}</td>"
+            f"<td style=\"text-align:right\">{ev(slug, 'share_native_success') + ev(slug, 'share_copy_fallback')}</td>"
             "</tr>"
         )
 
     if not rows_html:
         rows_html.append(
-            '<tr><td colspan="12" style="color:rgba(229,231,235,.65)">'
+            '<tr><td colspan="9" style="color:rgba(229,231,235,.65)">'
             "Aucune carte en base — créez une carte depuis l’admin.</td></tr>"
         )
 
@@ -340,7 +337,7 @@ def _build_dashboard_html(db: Session) -> str:
         "<table><thead><tr>"
         "<th>Slug</th><th>Visites 7j</th><th>Visites 30j</th>"
         "<th>phone</th><th>whatsapp</th><th>Google</th><th>demande</th><th>reco</th>"
-        "<th>partage</th><th>share open</th><th>share ok</th><th>copie fallback</th>"
+        "<th>partage</th>"
         "</tr></thead><tbody>"
         + "".join(rows_html)
         + "</tbody></table>"
