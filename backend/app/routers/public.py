@@ -329,6 +329,8 @@ def create_quote(
         email=payload.email,
         phone=payload.phone,
         message=payload.message,
+        source_type=payload.source_type,
+        referrer_id=payload.referrer_id,
     )
     db.add(quote)
     db.commit()
@@ -347,6 +349,8 @@ def create_quote(
         f"- Nom : {payload.name}\n"
         f"- Téléphone : {payload.phone}\n"
         f"- Email : {prospect_email}\n\n"
+        f"- Origine : {'recommandation' if payload.source_type == 'recommendation' else 'directe / autre'}\n"
+        f"- Recommandé par : {payload.referrer_id or '(non renseigné)'}\n\n"
         "Message :\n"
         f"{payload.message}\n"
     )
@@ -368,7 +372,9 @@ def create_quote(
         <div style="margin-top:8px;font-size:14px;">
           <b>Nom :</b> {escape(payload.name)}<br/>
           <b>Téléphone :</b> {escape(payload.phone)}<br/>
-          <b>Email :</b> {escape(payload.email or "—")}
+          <b>Email :</b> {escape(payload.email or "—")}<br/>
+          <b>Origine :</b> {escape("recommandation" if payload.source_type == "recommendation" else "directe / autre")}<br/>
+          <b>Recommandé par :</b> {escape(payload.referrer_id or "—")}
         </div>
 
         <div style="margin-top:12px;">
