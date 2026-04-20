@@ -121,6 +121,12 @@
           Affiche sur la carte publique un bloc pour recommander ce professionnel (message distinct du partage standard).
         </div>
 
+        <label for="recommendation-code">Code de recommandation</label>
+        <input id="recommendation-code" type="text" maxlength="64" placeholder="Ex. julie-client, paul123 (optionnel)" autocomplete="off" spellcheck="false" />
+        <div class="hint" style="margin-top:4px;">
+          Optionnel : les liens du bloc « Recommander » incluront <code>?src=recommend&amp;rec=…</code> pour le suivi analytics. Laisser vide pour <code>?src=recommend</code> seul.
+        </div>
+
         <!-- FIN NOUVELLE SECTION -->
 
         <label for="google-link">Lien avis Google</label>
@@ -241,7 +247,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=recommend-1"></script>
+  <script src="/static/admin/app.js?v=recommend-2"></script>
 </body>
 </html>
 

@@ -491,6 +491,14 @@ _ANALYTICS_EVENT_TYPES = frozenset(
     }
 )
 
+_RECOMMENDATION_EVENT_TYPES = frozenset(
+    {
+        "recommend_link_created",
+        "recommend_visit",
+        "recommend_contact",
+    }
+)
+
 
 class AnalyticsEventIn(BaseModel):
     slug: str = Field(..., min_length=1, max_length=128)
@@ -520,5 +528,35 @@ class AnalyticsEventIn(BaseModel):
         if isinstance(v, str) and not v.strip():
             return None
         return v
+
+
+class RecommendationEventIn(BaseModel):
+    card_slug: str = Field(..., min_length=1, max_length=128)
+    referrer_id: str = Field(..., min_length=1, max_length=128)
+    visitor_id: Optional[str] = Field(None, max_length=128)
+    event_type: str = Field(..., min_length=1, max_length=64)
+
+    @validator("card_slug")
+    def validate_card_slug(cls, v: str) -> str:
+        s = (v or "").strip()
+        if not _SLUG_ANALYTICS_PATTERN.fullmatch(s):
+            raise ValueError("Slug invalide.")
+        return s
+
+    @validator("referrer_id", "visitor_id", pre=True)
+    def normalize_referrer_visitor(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
+    @validator("event_type")
+    def validate_recommendation_event_type(cls, v: str) -> str:
+        t = (v or "").strip()
+        if t not in _RECOMMENDATION_EVENT_TYPES:
+            raise ValueError("Type d’événement de recommandation non reconnu.")
+        return t
 
 

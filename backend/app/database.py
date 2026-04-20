@@ -115,3 +115,25 @@ def ensure_enable_recommendation_column() -> None:
         conn.execute(text(sql))
 
 
+def ensure_recommendation_code_column() -> None:
+    """Ajoute recommendation_code (nullable) si colonne manquante."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "recommendation_code" in existing:
+        return
+    dialect = engine.dialect.name
+    if dialect == "sqlite":
+        sql = "ALTER TABLE cards ADD COLUMN recommendation_code VARCHAR(64)"
+    else:
+        sql = "ALTER TABLE cards ADD COLUMN recommendation_code VARCHAR(64)"
+    with engine.begin() as conn:
+        conn.execute(text(sql))
+
+

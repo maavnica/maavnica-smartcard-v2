@@ -90,6 +90,8 @@ class Card(Base):
 
     # Fonctionnalité premium : bloc « recommander » sur la carte publique
     enable_recommendation = Column(Boolean, nullable=False, default=False)
+    # Code manuel (admin) pour tracer les partages ?src=recommend&rec=…
+    recommendation_code = Column(String(64), nullable=True)
 
     # Métadonnées
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -192,5 +194,18 @@ class CardEvent(Base):
     source = Column(String(255), nullable=True)
     ref = Column(String(512), nullable=True)
     rec = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class RecommendationEvent(Base):
+    """Événements de recommandation explicite (paramètre ?r=...)."""
+
+    __tablename__ = "recommendation_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    card_slug = Column(String(128), nullable=False, index=True)
+    referrer_id = Column(String(128), nullable=False, index=True)
+    visitor_id = Column(String(128), nullable=True, index=True)
+    event_type = Column(String(64), nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 

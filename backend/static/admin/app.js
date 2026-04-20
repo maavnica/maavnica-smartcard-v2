@@ -63,6 +63,8 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("form-title").value = card.form_title || "";
   const recCb = document.getElementById("enable-recommendation");
   if (recCb) recCb.checked = !!card.enable_recommendation;
+  const recCodeEl = document.getElementById("recommendation-code");
+  if (recCodeEl) recCodeEl.value = card.recommendation_code || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
@@ -110,6 +112,8 @@ document.getElementById("last-name").value = "";
   document.getElementById("form-title").value = "";
   const recCbReset = document.getElementById("enable-recommendation");
   if (recCbReset) recCbReset.checked = false;
+  const recCodeReset = document.getElementById("recommendation-code");
+  if (recCodeReset) recCodeReset.value = "";
   const avatarFile = document.getElementById("avatar-file");
   if (avatarFile) avatarFile.value = "";
 
@@ -233,7 +237,9 @@ async function saveCard() {
     job_title: document.getElementById("job-title").value.trim() || null,
     form_title: document.getElementById("form-title").value.trim() || null,
 
-    enable_recommendation: !!document.getElementById("enable-recommendation")?.checked
+    enable_recommendation: !!document.getElementById("enable-recommendation")?.checked,
+    recommendation_code:
+      document.getElementById("recommendation-code")?.value.trim() || null
   };
 
   // on met aussi à jour currentProfile si on change dans le formulaire

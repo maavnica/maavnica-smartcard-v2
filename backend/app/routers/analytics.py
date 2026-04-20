@@ -12,8 +12,8 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Card, CardEvent, CardVisit
-from app.schemas import AnalyticsEventIn, AnalyticsVisitIn
+from app.models import Card, CardEvent, CardVisit, RecommendationEvent
+from app.schemas import AnalyticsEventIn, AnalyticsVisitIn, RecommendationEventIn
 from app.utils.admin_auth import require_admin_http_basic
 from app.utils.rate_limit import rate_limit_by_ip
 
@@ -26,8 +26,6 @@ _EVENT_COLUMNS = (
     "google_review_click",
     "rdv_request",
     "recommend_click",
-    "share_click",
-    "share_native_opened",
     "share_native_success",
     "share_copy_fallback",
 )
@@ -80,6 +78,23 @@ def record_event(
         source=src,
         ref=ref,
         rec=rec,
+    )
+    db.add(row)
+    db.commit()
+    return Response(status_code=204)
+
+
+@router_api.post("/recommendation-event", status_code=204)
+def record_recommendation_event(
+    payload: RecommendationEventIn,
+    db: Session = Depends(get_db),
+    _: None = Depends(rate_limit_by_ip(180, 60)),
+):
+    row = RecommendationEvent(
+        card_slug=payload.card_slug,
+        referrer_id=payload.referrer_id,
+        visitor_id=payload.visitor_id,
+        event_type=payload.event_type,
     )
     db.add(row)
     db.commit()
@@ -176,45 +191,52 @@ def _affiliates_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
     return out
 
 
-def _recommendation_codes_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
-    """
-    Performance par code de recommandation (paramètre rec) sur 30 jours.
-    visites = lignes card_visits avec rec renseigné
-    actions = lignes card_events avec rec renseigné
-    """
-    v_rows = (
-        db.query(CardVisit.rec, func.count(CardVisit.id))
-        .filter(
-            CardVisit.created_at >= d30,
-            CardVisit.rec.isnot(None),
-            CardVisit.rec != "",
+def _recommendation_referrers_30d(db: Session, d30: datetime) -> List[Tuple[str, str, int, int]]:
+    visit_rows = (
+        db.query(
+            RecommendationEvent.card_slug,
+            RecommendationEvent.referrer_id,
+            func.count(RecommendationEvent.id),
         )
-        .group_by(CardVisit.rec)
+        .filter(
+            RecommendationEvent.created_at >= d30,
+            RecommendationEvent.event_type == "recommend_visit",
+        )
+        .group_by(RecommendationEvent.card_slug, RecommendationEvent.referrer_id)
         .all()
     )
-    e_rows = (
-        db.query(CardEvent.rec, func.count(CardEvent.id))
-        .filter(
-            CardEvent.created_at >= d30,
-            CardEvent.rec.isnot(None),
-            CardEvent.rec != "",
+    contact_rows = (
+        db.query(
+            RecommendationEvent.card_slug,
+            RecommendationEvent.referrer_id,
+            func.count(RecommendationEvent.id),
         )
-        .group_by(CardEvent.rec)
+        .filter(
+            RecommendationEvent.created_at >= d30,
+            RecommendationEvent.event_type == "recommend_contact",
+        )
+        .group_by(RecommendationEvent.card_slug, RecommendationEvent.referrer_id)
         .all()
     )
-    visits_by_rec: Dict[str, int] = {str(r[0]): int(r[1]) for r in v_rows}
-    actions_by_rec: Dict[str, int] = {str(r[0]): int(r[1]) for r in e_rows}
-    all_recs = set(visits_by_rec) | set(actions_by_rec)
-    out: List[Tuple[str, int, int]] = []
-    for rec_val in all_recs:
+
+    visits_by_key: Dict[Tuple[str, str], int] = {
+        (str(r[0]), str(r[1])): int(r[2]) for r in visit_rows
+    }
+    contacts_by_key: Dict[Tuple[str, str], int] = {
+        (str(r[0]), str(r[1])): int(r[2]) for r in contact_rows
+    }
+    all_keys = set(visits_by_key) | set(contacts_by_key)
+    out: List[Tuple[str, str, int, int]] = []
+    for card_slug, referrer_id in all_keys:
         out.append(
             (
-                rec_val,
-                visits_by_rec.get(rec_val, 0),
-                actions_by_rec.get(rec_val, 0),
+                card_slug,
+                referrer_id,
+                visits_by_key.get((card_slug, referrer_id), 0),
+                contacts_by_key.get((card_slug, referrer_id), 0),
             )
         )
-    out.sort(key=lambda row: (-row[1], row[0]))
+    out.sort(key=lambda row: (-row[2], row[0], row[1]))
     return out
 
 
@@ -241,7 +263,7 @@ def _build_dashboard_html(db: Session) -> str:
 
     traffic = _traffic_sources_30d(db, d30)
     affiliates = _affiliates_30d(db, d30)
-    recommendations = _recommendation_codes_30d(db, d30)
+    recommendation_referrers = _recommendation_referrers_30d(db, d30)
 
     def ev(slug: str, kind: str) -> int:
         return ev7.get((slug, kind), 0)
@@ -295,17 +317,18 @@ def _build_dashboard_html(db: Session) -> str:
             "Aucun paramètre <code>ref</code> sur 30 jours.</td></tr>"
         )
 
-    reco_html: List[str] = []
-    for rec_val, v_cnt, a_cnt in recommendations:
-        reco_html.append(
-            f"<tr><td><code>{escape(rec_val)}</code></td>"
+    reco_referrer_html: List[str] = []
+    for card_slug, referrer_id, v_cnt, c_cnt in recommendation_referrers:
+        reco_referrer_html.append(
+            f"<tr><td><code>{escape(card_slug)}</code></td>"
+            f"<td><code>{escape(referrer_id)}</code></td>"
             f"<td style=\"text-align:right\">{v_cnt}</td>"
-            f"<td style=\"text-align:right\">{a_cnt}</td></tr>"
+            f"<td style=\"text-align:right\">{c_cnt}</td></tr>"
         )
-    if not reco_html:
-        reco_html.append(
-            '<tr><td colspan="3" style="color:rgba(229,231,235,.65)">'
-            "Aucun paramètre <code>rec</code> sur 30 jours.</td></tr>"
+    if not reco_referrer_html:
+        reco_referrer_html.append(
+            '<tr><td colspan="4" style="color:rgba(229,231,235,.65)">'
+            "Aucune recommandation tracée via <code>?r=...</code> sur 30 jours.</td></tr>"
         )
 
     table_aff = (
@@ -316,11 +339,11 @@ def _build_dashboard_html(db: Session) -> str:
         + "</tbody></table>"
     )
 
-    table_reco = (
+    table_reco_referrer = (
         "<table><thead><tr>"
-        "<th>rec</th><th>Visites</th><th>Actions</th>"
+        "<th>Carte</th><th>Recommandant</th><th>Visites générées</th><th>Contacts générés</th>"
         "</tr></thead><tbody>"
-        + "".join(reco_html)
+        + "".join(reco_referrer_html)
         + "</tbody></table>"
     )
 
@@ -423,11 +446,11 @@ def _build_dashboard_html(db: Session) -> str:
       {table_aff}
     </section>
     <section>
-      <h2>RECOMMANDATIONS (30 jours)</h2>
+      <h2>RECOMMANDATIONS TRAÇABLES (30 jours)</h2>
       <p class="sub" style="margin-top:-4px;margin-bottom:12px;font-size:13px;">
-        Basé sur le paramètre d’URL <code>rec</code> (ex. partage avec <code>?src=recommend&amp;rec=julie123</code>).
+        Basé sur la table <code>recommendation_events</code> (chaîne de recommandation traçable).
       </p>
-      {table_reco}
+      {table_reco_referrer}
     </section>
     <p class="sub"><a href="/admin">← Retour admin cartes</a></p>
   </div>
