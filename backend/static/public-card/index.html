@@ -2390,12 +2390,14 @@
         }
 
         const recommendEnabled = card.enable_recommendation === true;
+        /* Démo : toujours montrer le bloc recommandation (démo produit complète). Vraie carte : selon réglage admin. */
+        const showRecommendBlock = isDemoCard || recommendEnabled;
         const recommendBlock = document.getElementById("recommend-block");
         if (recommendBlock) {
-          recommendBlock.style.display = recommendEnabled ? "block" : "none";
+          recommendBlock.style.display = showRecommendBlock ? "block" : "none";
         }
 
-        if (recommendEnabled) {
+        if (showRecommendBlock) {
           const btnRecommendMain = document.getElementById("btn-recommend-main");
           const btnRecommendSms = document.getElementById("btn-recommend-sms");
           const btnRecommendCopy = document.getElementById("btn-recommend-copy");
