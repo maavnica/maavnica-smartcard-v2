@@ -2208,23 +2208,25 @@
 
         if (btnShareMain) {
           btnShareMain.onclick = async function () {
+            trackCardEvent(slug, "share_click");
             const sharePayload = {
               title: shareCardTitle,
               text: shareMessage,
               url: cardPublicUrl
             };
             if (typeof navigator.share === "function") {
+              trackCardEvent(slug, "share_native_opened");
               try {
                 await navigator.share(sharePayload);
-                trackCardEvent(slug, "share_click");
+                trackCardEvent(slug, "share_native_success");
               } catch (err) {
                 if (err && err.name === "AbortError") return;
                 await copyPublicUrlToClipboard(cardPublicUrl);
-                trackCardEvent(slug, "share_click");
+                trackCardEvent(slug, "share_copy_fallback");
               }
             } else {
               await copyPublicUrlToClipboard(cardPublicUrl);
-              trackCardEvent(slug, "share_click");
+              trackCardEvent(slug, "share_copy_fallback");
             }
           };
         }

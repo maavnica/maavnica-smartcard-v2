@@ -12,6 +12,7 @@ _EMAIL_IN_TEXT_PATTERN = re.compile(
 )
 _PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
 _AFFILIATE_REF_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{0,31}$")
+_RECOMMENDATION_CODE_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,64}$")
 
 
 def _reject_urls_and_angle_brackets(v: str) -> str:
@@ -83,6 +84,26 @@ class CardBase(BaseModel):
     form_title: Optional[str] = Field(None, max_length=200)
 
     enable_recommendation: bool = False
+    recommendation_code: Optional[str] = Field(None, max_length=64)
+
+    @validator("recommendation_code", pre=True)
+    def _recommendation_code_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
+    @validator("recommendation_code")
+    def _recommendation_code_format(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if not _RECOMMENDATION_CODE_PATTERN.fullmatch(v):
+            raise ValueError(
+                "Code de recommandation invalide (1–64 caractères : lettres, chiffres, tirets, underscores)."
+            )
+        return v
 
     @validator("display_name", "business_name", "job_title", "form_title", pre=True)
     def _identity_fields_strip_empty(cls, v):
@@ -150,6 +171,26 @@ class CardUpdate(BaseModel):
     form_title: Optional[str] = Field(None, max_length=200)
 
     enable_recommendation: Optional[bool] = None
+    recommendation_code: Optional[str] = Field(None, max_length=64)
+
+    @validator("recommendation_code", pre=True)
+    def _recommendation_code_update_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
+    @validator("recommendation_code")
+    def _recommendation_code_update_format(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if not _RECOMMENDATION_CODE_PATTERN.fullmatch(v):
+            raise ValueError(
+                "Code de recommandation invalide (1–64 caractères : lettres, chiffres, tirets, underscores)."
+            )
+        return v
 
     @validator("display_name", "business_name", "job_title", "form_title", pre=True)
     def _identity_update_strip_empty(cls, v):
@@ -205,6 +246,7 @@ class CardPublic(BaseModel):
     form_title: Optional[str] = None
 
     enable_recommendation: bool = False
+    recommendation_code: Optional[str] = None
 
     qr_url: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -437,6 +479,9 @@ _ANALYTICS_EVENT_TYPES = frozenset(
         "google_review_click",
         "rdv_request",
         "share_click",
+        "share_native_opened",
+        "share_native_success",
+        "share_copy_fallback",
         "recommend_click",
         "recommend_share_whatsapp",
         "recommend_share_sms",
