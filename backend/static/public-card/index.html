@@ -911,6 +911,12 @@
       display: block !important;
     }
 
+    /* « Partager / envoyer ma carte » : outil pro, montré sur les slugs démo uniquement.
+       En vue carte client publique, le parcours de diffusion traçable passe par « Recommander ». */
+    body.client-card-mode #post-share-block {
+      display: none !important;
+    }
+
     .post-share-block .share-row {
       margin-top: 10px;
       padding-top: 10px;
@@ -1243,7 +1249,7 @@
             </div>
 
             <button class="btn-primary btn-share-card-main" id="btn-share-card-main" type="button">
-              📲 Partager ma carte
+              📲 Envoyer ma carte
             </button>
 
             <div class="post-share-hint post-share-demo-only">
@@ -1271,7 +1277,7 @@
               Vous connaissez quelqu’un qui pourrait avoir besoin de ce professionnel ?
             </div>
             <button class="btn-primary btn-share-card-main" id="btn-recommend-main" type="button">
-              Recommander
+              Recommander ce professionnel
             </button>
             <div class="share-row share-row--secondary" id="recommend-share-options">
               <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien</button>
@@ -1375,10 +1381,8 @@
       });
 
       const btnShareLabel = document.getElementById("btn-share-card-main");
-      if (btnShareLabel) {
-        btnShareLabel.textContent = isDemoCard
-          ? "📲 Partager ma carte"
-          : "Partager ma carte";
+      if (btnShareLabel && isDemoCard) {
+        btnShareLabel.textContent = "📲 Envoyer ma carte";
       }
     }
 
@@ -2215,7 +2219,9 @@
     name,
     email,
     phone,
-    message
+    message,
+    source_type: referrerIdFromUrl ? "recommendation" : null,
+    referrer_id: referrerIdFromUrl
   })
 })
 
