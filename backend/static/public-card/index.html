@@ -756,6 +756,36 @@
       margin-bottom: 12px;
     }
 
+    /* Incitation recommandation après avis positif (visiteur / démo — pas prévisualisation propriétaire) */
+    .feedback-recommend-nudge {
+      margin-top: 12px;
+      margin-bottom: 2px;
+      padding: 12px 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.32);
+      background: rgba(15, 23, 42, 0.55);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .feedback-recommend-nudge-thanks {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 6px;
+      color: #e5e7eb;
+      letter-spacing: 0.01em;
+    }
+
+    .feedback-recommend-nudge-hint {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 0 0 10px;
+      line-height: 1.45;
+    }
+
+    .feedback-recommend-nudge .btn-share-card-main {
+      width: 100%;
+    }
+
     /* Espace sous « Votre avis rapide » uniquement (compense le margin-top: -2px du hint suivant) */
     #btn-call + .section-label {
       margin-bottom: 14px;
@@ -1222,6 +1252,24 @@
           <button class="btn-primary" id="btn-send-feedback">
             ✨ Envoyer mon avis
           </button>
+
+          <div
+            class="feedback-recommend-nudge"
+            id="feedback-recommend-nudge"
+            hidden
+          >
+            <p class="feedback-recommend-nudge-thanks">Merci 🙏</p>
+            <p class="feedback-recommend-nudge-hint">
+              Connaissez-vous quelqu’un qui pourrait avoir besoin de ce professionnel ?
+            </p>
+            <button
+              class="btn-primary btn-share-card-main"
+              id="btn-feedback-recommend-nudge"
+              type="button"
+            >
+              Recommander ce professionnel
+            </button>
+          </div>
 
           <div class="section-label" style="margin-top:10px;">Autres façons de vous contacter</div>
 
@@ -2192,6 +2240,7 @@
               return;
             }
 
+            const sentPositive = feedbackValue === "yes";
             const comment = document.getElementById("feedback-comment").value.trim();
 
             try {
@@ -2222,6 +2271,22 @@
               }
               if (btnGoogleReview) {
                 btnGoogleReview.classList.remove("btn-link-google-active");
+              }
+
+              const nudgeEl = document.getElementById("feedback-recommend-nudge");
+              if (nudgeEl) {
+                if (
+                  sentPositive &&
+                  showRecommendBlock &&
+                  (!card.owner_mode || isDemoCard)
+                ) {
+                  nudgeEl.hidden = false;
+                  requestAnimationFrame(function () {
+                    nudgeEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                  });
+                } else {
+                  nudgeEl.hidden = true;
+                }
               }
             } catch (e) {
               console.error(e);
@@ -2432,6 +2497,13 @@
                 trackCardEvent(slug, "recommend_click");
                 trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
               }
+            };
+          }
+
+          const btnFeedbackRecommendNudge = document.getElementById("btn-feedback-recommend-nudge");
+          if (btnFeedbackRecommendNudge && btnRecommendMain) {
+            btnFeedbackRecommendNudge.onclick = function () {
+              btnRecommendMain.click();
             };
           }
 
