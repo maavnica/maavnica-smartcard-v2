@@ -24,6 +24,22 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
+async function copyTextToClipboard(text) {
+  if (!text) return false;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) {}
+  try {
+    window.prompt("Copiez ce lien :", text);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 /* ============================================================
    REMPLISSAGE DU FORMULAIRE
 ============================================================ */
@@ -122,6 +138,8 @@ document.getElementById("last-name").value = "";
   if (avatarFile) avatarFile.value = "";
 
   document.getElementById("public-link").textContent = "";
+  const ownerLinkBox = document.getElementById("owner-public-link");
+  if (ownerLinkBox) ownerLinkBox.textContent = "";
   document.getElementById("feedback-list").innerHTML =
     '<div class="hint">Aucun avis pour l’instant.</div>';
   document.getElementById("quote-list").innerHTML =
@@ -145,21 +163,51 @@ function updatePublicLink() {
   const base = window.location.origin;
   const origin = base.replace(/\/admin$/, "");
   const publicUrl = origin + "/c/" + slug;
-  box.textContent = "Lien public (visiteurs / clients) : " + publicUrl;
+  box.textContent = publicUrl;
 
   if (ownerBox) {
     const ok = (document.getElementById("owner-share-key")?.value || "").trim();
     if (ok) {
-      ownerBox.textContent =
-        "Lien propriétaire (envoyer ma carte, à garder pour vous) : " +
-        publicUrl +
-        "?o=" +
-        encodeURIComponent(ok);
+      ownerBox.textContent = publicUrl + "?o=" + encodeURIComponent(ok);
     } else {
       ownerBox.textContent =
-        "Lien propriétaire : chargez ou enregistrez la carte pour afficher la clé personnelle.";
+        "Chargez ou enregistrez la carte pour générer le lien personnel.";
     }
   }
+}
+
+function getComputedPublicLink() {
+  const slug = document.getElementById("slug")?.value.trim() || "";
+  if (!slug) return "";
+  const origin = window.location.origin.replace(/\/admin$/, "");
+  return origin + "/c/" + slug;
+}
+
+function getComputedOwnerLink() {
+  const publicUrl = getComputedPublicLink();
+  const ownerKey = (document.getElementById("owner-share-key")?.value || "").trim();
+  if (!publicUrl || !ownerKey) return "";
+  return publicUrl + "?o=" + encodeURIComponent(ownerKey);
+}
+
+async function copyOwnerLink() {
+  const ownerLink = getComputedOwnerLink();
+  if (!ownerLink) {
+    showToast("Lien personnel indisponible. Chargez ou enregistrez la carte.", true);
+    return;
+  }
+  const ok = await copyTextToClipboard(ownerLink);
+  if (ok) showToast("Lien personnel copié.");
+}
+
+async function copyPublicLink() {
+  const publicLink = getComputedPublicLink();
+  if (!publicLink) {
+    showToast("Lien public indisponible. Renseignez le slug.", true);
+    return;
+  }
+  const ok = await copyTextToClipboard(publicLink);
+  if (ok) showToast("Lien public copié.");
 }
 
 /* ============================================================
@@ -473,6 +521,8 @@ document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
+document.getElementById("btn-copy-owner-link").addEventListener("click", copyOwnerLink);
+document.getElementById("btn-copy-public-link").addEventListener("click", copyPublicLink);
 initAvatarUpload();
 
 

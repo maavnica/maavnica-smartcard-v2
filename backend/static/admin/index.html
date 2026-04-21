@@ -216,9 +216,24 @@
           </button>
         </div>
 
-        <div id="public-link" class="link-preview"></div>
-        <input type="hidden" id="owner-share-key" value="" autocomplete="off" />
+        <div class="section-label" style="margin-top:12px;">Lien à envoyer à l’artisan</div>
+        <div class="hint" style="margin-top:4px;">
+          Ce lien permet à l’artisan d’utiliser sa carte en mode propriétaire (Envoyer ma carte).
+        </div>
         <div id="owner-public-link" class="link-preview" style="margin-top:6px;"></div>
+        <button class="btn btn-primary" id="btn-copy-owner-link" type="button" style="margin-top:8px;">
+          Copier le lien personnel
+        </button>
+
+        <div class="section-label" style="margin-top:14px;">Lien public de la carte</div>
+        <div class="hint" style="margin-top:4px;">
+          Lien public standard destiné aux clients.
+        </div>
+        <div id="public-link" class="link-preview" style="margin-top:6px;"></div>
+        <button class="btn btn-outline" id="btn-copy-public-link" type="button" style="margin-top:8px;">
+          Copier le lien public
+        </button>
+        <input type="hidden" id="owner-share-key" value="" autocomplete="off" />
       </div>
 
       <!-- COLONNE DROITE : AVIS & DEVIS -->
