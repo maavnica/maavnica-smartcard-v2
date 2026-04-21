@@ -240,6 +240,50 @@ def _recommendation_referrers_30d(db: Session, d30: datetime) -> List[Tuple[str,
     return out
 
 
+def _top_referrers_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int, int]]:
+    rows = (
+        db.query(
+            RecommendationEvent.referrer_id,
+            RecommendationEvent.event_type,
+            func.count(RecommendationEvent.id),
+        )
+        .filter(
+            RecommendationEvent.created_at >= d30,
+            RecommendationEvent.referrer_id.isnot(None),
+            RecommendationEvent.referrer_id != "",
+            RecommendationEvent.event_type.in_(
+                ("recommend_link_created", "recommend_visit", "recommend_contact")
+            ),
+        )
+        .group_by(RecommendationEvent.referrer_id, RecommendationEvent.event_type)
+        .all()
+    )
+    metrics_by_referrer: Dict[str, Dict[str, int]] = {}
+    for referrer_id, event_type, count_val in rows:
+        ref = str(referrer_id)
+        if ref not in metrics_by_referrer:
+            metrics_by_referrer[ref] = {
+                "recommend_link_created": 0,
+                "recommend_visit": 0,
+                "recommend_contact": 0,
+            }
+        metrics_by_referrer[ref][str(event_type)] = int(count_val)
+
+    out: List[Tuple[str, int, int, int]] = []
+    for referrer_id, metrics in metrics_by_referrer.items():
+        out.append(
+            (
+                referrer_id,
+                metrics["recommend_link_created"],
+                metrics["recommend_visit"],
+                metrics["recommend_contact"],
+            )
+        )
+
+    out.sort(key=lambda row: (-row[3], -row[2], -row[1], row[0]))
+    return out
+
+
 def _build_dashboard_html(db: Session) -> str:
     now = datetime.utcnow()
     today0 = _utc_day_start()
@@ -264,6 +308,7 @@ def _build_dashboard_html(db: Session) -> str:
     traffic = _traffic_sources_30d(db, d30)
     affiliates = _affiliates_30d(db, d30)
     recommendation_referrers = _recommendation_referrers_30d(db, d30)
+    top_referrers = _top_referrers_30d(db, d30)
 
     def ev(slug: str, kind: str) -> int:
         return ev7.get((slug, kind), 0)
@@ -331,6 +376,20 @@ def _build_dashboard_html(db: Session) -> str:
             "Aucune recommandation tracée via <code>?r=...</code> sur 30 jours.</td></tr>"
         )
 
+    top_referrers_html: List[str] = []
+    for referrer_id, created_cnt, visit_cnt, contact_cnt in top_referrers:
+        top_referrers_html.append(
+            f"<tr><td><code>{escape(referrer_id)}</code></td>"
+            f"<td style=\"text-align:right\">{created_cnt}</td>"
+            f"<td style=\"text-align:right\">{visit_cnt}</td>"
+            f"<td style=\"text-align:right\">{contact_cnt}</td></tr>"
+        )
+    if not top_referrers_html:
+        top_referrers_html.append(
+            '<tr><td colspan="4" style="color:rgba(229,231,235,.65)">'
+            "Aucun recommandant actif sur 30 jours.</td></tr>"
+        )
+
     table_aff = (
         "<table><thead><tr>"
         "<th>ref (affilié)</th><th>Visites</th><th>Actions</th>"
@@ -344,6 +403,14 @@ def _build_dashboard_html(db: Session) -> str:
         "<th>Carte</th><th>Recommandant</th><th>Visites générées</th><th>Contacts générés</th>"
         "</tr></thead><tbody>"
         + "".join(reco_referrer_html)
+        + "</tbody></table>"
+    )
+
+    table_top_referrers = (
+        "<table><thead><tr>"
+        "<th>Recommandant</th><th>Recommandations créées</th><th>Visites générées</th><th>Contacts générés</th>"
+        "</tr></thead><tbody>"
+        + "".join(top_referrers_html)
         + "</tbody></table>"
     )
 
@@ -451,6 +518,13 @@ def _build_dashboard_html(db: Session) -> str:
         Basé sur la table <code>recommendation_events</code> (chaîne de recommandation traçable).
       </p>
       {table_reco_referrer}
+    </section>
+    <section>
+      <h2>TOP RECOMMANDANTS (30 jours)</h2>
+      <p class="sub" style="margin-top:-4px;margin-bottom:12px;font-size:13px;">
+        Tri métier : contacts générés, puis visites générées, puis recommandations créées.
+      </p>
+      {table_top_referrers}
     </section>
     <p class="sub"><a href="/admin">← Retour admin cartes</a></p>
   </div>
