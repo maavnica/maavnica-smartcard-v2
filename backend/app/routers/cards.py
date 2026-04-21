@@ -115,6 +115,10 @@ def _serialize_card_public(
         if stored and o_stripped:
             owner_mode = secrets.compare_digest(stored, o_stripped)
     d = _card_to_public_dict(card)
+    if not d.get("plan_type"):
+        d["plan_type"] = "demo"
+    if "expires_at" not in d:
+        d["expires_at"] = None
     base = schemas.CardPublic.model_validate(d)
     out = base.model_dump()
     out["computed_status"] = _computed_status(card)
