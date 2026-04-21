@@ -211,7 +211,11 @@ def ensure_card_plan_columns() -> None:
     if "plan_type" not in existing:
         statements.append("ALTER TABLE cards ADD COLUMN plan_type VARCHAR(32) NOT NULL DEFAULT 'demo'")
     if "expires_at" not in existing:
-        statements.append("ALTER TABLE cards ADD COLUMN expires_at DATETIME")
+        dialect = engine.dialect.name
+        if dialect == "sqlite":
+            statements.append("ALTER TABLE cards ADD COLUMN expires_at DATETIME")
+        else:
+            statements.append("ALTER TABLE cards ADD COLUMN expires_at TIMESTAMP")
     for stmt in statements:
         with engine.begin() as conn:
             conn.execute(text(stmt))
