@@ -1,4 +1,6 @@
 import secrets
+from datetime import datetime, timedelta
+import math
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
@@ -23,19 +25,45 @@ ALLOWED_PROFILES = {
     "resto",
     "generic",
 }
+ALLOWED_PLAN_TYPES = {"demo", "lifetime", "trial", "solo", "business"}
 
 
 def _card_payload(card: schemas.CardCreate) -> dict:
-    """Pydantic v2 : model_dump() ; v1 : dict()."""
-    if hasattr(card, "model_dump"):
-        return card.model_dump()
-    return card.dict()
+    """Payload CardCreate (Pydantic v2)."""
+    return card.model_dump()
 
 
 def _card_update_payload(card_in: schemas.CardUpdate) -> dict:
-    if hasattr(card_in, "model_dump"):
-        return card_in.model_dump(exclude_unset=True)
-    return card_in.dict(exclude_unset=True)
+    return card_in.model_dump(exclude_unset=True)
+
+
+def _default_expiration_for_plan(plan_type: str) -> Optional[datetime]:
+    now = datetime.utcnow()
+    if plan_type == "trial":
+        return now + timedelta(days=30)
+    if plan_type in {"solo", "business"}:
+        return now + timedelta(days=365)
+    return None
+
+
+def _is_card_expired(card: models.Card) -> bool:
+    if not card.expires_at:
+        return False
+    return card.expires_at <= datetime.utcnow()
+
+
+def _computed_status(card: models.Card) -> str:
+    return "expired" if _is_card_expired(card) else "active"
+
+
+def _days_remaining(card: models.Card) -> Optional[int]:
+    if not card.expires_at:
+        return None
+    remaining_seconds = (card.expires_at - datetime.utcnow()).total_seconds()
+    if remaining_seconds <= 0:
+        return 0
+    # Affichage admin lisible: toute fraction de journée restante compte pour 1 jour.
+    return max(1, math.ceil(remaining_seconds / 86400))
 
 
 def _card_to_public_dict(card: models.Card) -> dict:
@@ -89,6 +117,8 @@ def _serialize_card_public(
     d = _card_to_public_dict(card)
     base = schemas.CardPublic.model_validate(d)
     out = base.model_dump()
+    out["computed_status"] = _computed_status(card)
+    out["days_remaining"] = _days_remaining(card)
     out["owner_mode"] = owner_mode
     out["owner_share_key"] = card.owner_share_key if admin_bearer_matches(request) else None
     out["recommendation_share_count"] = recommendation_share_count
@@ -129,11 +159,20 @@ def create_card(
             detail=f"Profil métier invalide. Profils autorisés : {', '.join(ALLOWED_PROFILES)}",
         )
 
+    if card.plan_type not in ALLOWED_PLAN_TYPES:
+        raise HTTPException(status_code=400, detail="plan_type invalide.")
+    if card.plan_type in {"trial", "solo", "business"} and card.expires_at is None:
+        fallback_exp = _default_expiration_for_plan(card.plan_type)
+        payload = _card_payload(card)
+        payload["expires_at"] = fallback_exp
+    else:
+        payload = _card_payload(card)
+
     # IMPORTANT : on force user_id = 1 pour cette V1
     db_card = models.Card(
         user_id=1,
         owner_share_key=secrets.token_urlsafe(10),
-        **_card_payload(card),
+        **payload,
     )
 
     db.add(db_card)
@@ -183,6 +222,21 @@ def update_card(
                 status_code=400,
                 detail=f"Profil métier invalide. Profils autorisés : {', '.join(ALLOWED_PROFILES)}",
             )
+    if "plan_type" in update_data:
+        plan_type = update_data["plan_type"]
+        if plan_type not in ALLOWED_PLAN_TYPES:
+            raise HTTPException(status_code=400, detail="plan_type invalide.")
+    else:
+        plan_type = db_card.plan_type
+
+    if plan_type in {"demo", "lifetime"}:
+        update_data["expires_at"] = None
+    if (
+        plan_type in {"trial", "solo", "business"}
+        and "expires_at" not in update_data
+        and db_card.expires_at is None
+    ):
+        update_data["expires_at"] = _default_expiration_for_plan(plan_type)
 
     # Empêcher un nouveau slug qui existerait déjà
     if "slug" in update_data and update_data["slug"] != db_card.slug:
@@ -247,6 +301,23 @@ def get_card_by_slug(
         owner_query_key=o,
         recommendation_share_count=_count_recommend_link_created(db, card.slug),
     )
+
+
+@router.get("/", response_model=List[schemas.CardPublic])
+def list_cards(
+    request: Request,
+    db: Session = Depends(get_db),
+    _: None = Depends(require_admin_api_key),
+) -> List[schemas.CardPublic]:
+    cards = db.query(models.Card).order_by(models.Card.created_at.desc()).all()
+    return [
+        _serialize_card_public(
+            c,
+            request,
+            recommendation_share_count=_count_recommend_link_created(db, c.slug),
+        )
+        for c in cards
+    ]
 
 
 # ============================================================

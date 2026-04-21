@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
@@ -235,6 +236,11 @@ def get_public_card(
     db: Session = Depends(get_db),
 ):
     card = get_card_by_slug_or_404(slug, db)
+    if card.expires_at and card.expires_at <= datetime.utcnow():
+        raise HTTPException(
+            status_code=403,
+            detail="Cette carte n’est actuellement plus active.",
+        )
     _ensure_owner_share_key(db, card)
     return _serialize_card_public(
         card,

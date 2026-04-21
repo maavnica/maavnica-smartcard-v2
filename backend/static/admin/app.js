@@ -2,6 +2,7 @@ const API_BASE = "/api/cards";
 let ADMIN_API_KEY = sessionStorage.getItem("ADMIN_API_KEY") || "";
 let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
+const NON_EXPIRING_PLANS = new Set(["demo", "lifetime"]);
 
 function ensureAdminApiKey() {
   if (ADMIN_API_KEY && ADMIN_API_KEY.trim()) return ADMIN_API_KEY.trim();
@@ -52,6 +53,8 @@ document.getElementById("first-name").value = card.first_name || "";
 document.getElementById("last-name").value = card.last_name || "";
 
   document.getElementById("slug").value = card.slug || "";
+  document.getElementById("plan-type").value = card.plan_type || "demo";
+  document.getElementById("expires-at").value = toDatetimeLocalValue(card.expires_at);
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
   document.getElementById("google-rating").value = card.google_rating != null ? card.google_rating : "";
@@ -86,6 +89,7 @@ document.getElementById("last-name").value = card.last_name || "";
 
   // 🔹 On mémorise le profil pour adapter les libellés dans l’admin
   currentProfile = card.profile || "artisan";
+  updatePlanExpirationUI(false);
 
   updatePublicLink();
 }
@@ -103,6 +107,8 @@ document.getElementById("first-name").value = "";
 document.getElementById("last-name").value = "";
 
   document.getElementById("slug").value = "";
+  document.getElementById("plan-type").value = "demo";
+  document.getElementById("expires-at").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
   document.getElementById("google-rating").value = "";
@@ -144,6 +150,45 @@ document.getElementById("last-name").value = "";
     '<div class="hint">Aucun avis pour l’instant.</div>';
   document.getElementById("quote-list").innerHTML =
     '<div class="hint">Aucune demande pour l’instant.</div>';
+  const cardsList = document.getElementById("cards-list");
+  if (cardsList) cardsList.innerHTML = '<div class="hint">Aucune carte chargée.</div>';
+  updatePlanExpirationUI(false);
+}
+
+function toDatetimeLocalValue(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return "";
+  const tzOffset = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+}
+
+function computeDefaultExpiration(planType) {
+  const now = new Date();
+  if (planType === "trial") now.setDate(now.getDate() + 30);
+  else if (planType === "solo" || planType === "business") now.setFullYear(now.getFullYear() + 1);
+  else return "";
+  const tzOffset = now.getTimezoneOffset() * 60000;
+  return new Date(now.getTime() - tzOffset).toISOString().slice(0, 16);
+}
+
+function updatePlanExpirationUI(autoPrefill = true) {
+  const plan = document.getElementById("plan-type").value;
+  const expiresInput = document.getElementById("expires-at");
+  const hint = document.getElementById("plan-expiration-hint");
+  if (NON_EXPIRING_PLANS.has(plan)) {
+    expiresInput.value = "";
+    expiresInput.disabled = true;
+    expiresInput.required = false;
+    if (hint) hint.textContent = "Sans expiration pour demo/lifetime.";
+    return;
+  }
+  expiresInput.disabled = false;
+  expiresInput.required = true;
+  if (autoPrefill && !expiresInput.value) {
+    expiresInput.value = computeDefaultExpiration(plan);
+  }
+  if (hint) hint.textContent = "Expiration requise pour trial/solo/business.";
 }
 
 /* ============================================================
@@ -268,6 +313,11 @@ async function saveCard() {
   last_name: document.getElementById("last-name")?.value.trim() || null,
     company_name: companyName,
     slug,
+    plan_type: document.getElementById("plan-type").value || "demo",
+    expires_at: (() => {
+      const v = document.getElementById("expires-at").value;
+      return v ? new Date(v).toISOString() : null;
+    })(),
 
     // 🔹 Champs classiques
     google_review_link: document.getElementById("google-link").value.trim() || null,
@@ -311,6 +361,9 @@ async function saveCard() {
     recommendation_code:
       document.getElementById("recommendation-code")?.value.trim() || null
   };
+  if (NON_EXPIRING_PLANS.has(payload.plan_type)) {
+    payload.expires_at = null;
+  }
 
   // on met aussi à jour currentProfile si on change dans le formulaire
   currentProfile = payload.profile || "artisan";
@@ -355,6 +408,65 @@ async function saveCard() {
   } finally {
     btn.disabled = false;
     btn.textContent = "Enregistrer la carte";
+  }
+}
+
+function formatExpiration(card) {
+  if (!card.expires_at || NON_EXPIRING_PLANS.has((card.plan_type || "").toLowerCase())) {
+    return "Sans expiration";
+  }
+  const d = new Date(card.expires_at);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString();
+}
+
+async function loadAllCards() {
+  const adminKey = ensureAdminApiKey();
+  if (!adminKey) return;
+  const box = document.getElementById("cards-list");
+  if (!box) return;
+  try {
+    const res = await fetch(`${API_BASE}/`, {
+      headers: { "Authorization": "Bearer " + adminKey }
+    });
+    if (!res.ok) {
+      box.innerHTML = '<div class="hint">Impossible de charger la liste.</div>';
+      return;
+    }
+    const cards = await res.json();
+    if (!cards.length) {
+      box.innerHTML = '<div class="hint">Aucune carte pour le moment.</div>';
+      return;
+    }
+    box.innerHTML = `
+      <table class="cards-table">
+        <thead>
+          <tr>
+            <th>Slug</th><th>Plan</th><th>Expiration</th><th>Statut</th><th>Jours restants</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${cards.map((c) => `
+            <tr data-slug="${c.slug}" class="card-row">
+              <td>${c.slug}</td>
+              <td>${c.plan_type || "demo"}</td>
+              <td>${formatExpiration(c)}</td>
+              <td><span class="status-badge ${c.computed_status === "expired" ? "status-expired" : "status-active"}">${c.computed_status || "active"}</span></td>
+              <td>${c.days_remaining == null ? "—" : c.days_remaining}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+    box.querySelectorAll(".card-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        const slug = row.getAttribute("data-slug");
+        document.getElementById("existing-slug").value = slug;
+        loadCardBySlug();
+      });
+    });
+  } catch (e) {
+    box.innerHTML = '<div class="hint">Erreur réseau pendant le chargement.</div>';
   }
 }
 
@@ -521,9 +633,13 @@ document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
+document.getElementById("plan-type").addEventListener("change", () => updatePlanExpirationUI(true));
 document.getElementById("btn-copy-owner-link").addEventListener("click", copyOwnerLink);
 document.getElementById("btn-copy-public-link").addEventListener("click", copyPublicLink);
+document.getElementById("btn-refresh-cards").addEventListener("click", loadAllCards);
 initAvatarUpload();
+updatePlanExpirationUI(false);
+loadAllCards();
 
 
 

@@ -8,6 +8,19 @@
   <meta name="theme-color" content="#000000">
 
   <style>
+    .inactive-card-message {
+      max-width: 420px;
+      width: 100%;
+      margin: 18px auto 0;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(248, 113, 113, 0.55);
+      background: rgba(127, 29, 29, 0.25);
+      color: #fecaca;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
     :root {
       --bg-page: #020617;
 
@@ -1132,6 +1145,7 @@
 </head>
 
 <body class="theme-apple">
+  <div id="inactive-card-message" class="inactive-card-message"></div>
   <div class="phone-shell">
     <div class="phone-inner">
       <div class="notch"></div>
@@ -1784,15 +1798,28 @@
       }
 
       try {
-        var apiUrl = "/api/cards/by-slug/" + encodeURIComponent(slug);
+        var apiUrl = "/api/public/cards/" + encodeURIComponent(slug);
         var ownerKeyParam = getOwnerShareKeyFromUrl();
         if (ownerKeyParam) {
           apiUrl += "?o=" + encodeURIComponent(ownerKeyParam);
         }
         const res = await fetch(apiUrl);
         if (!res.ok) {
-          showToast("Carte introuvable", true);
-          revealCardShell();
+          let errorDetail = "Carte introuvable";
+          try {
+            const errorData = await res.json();
+            if (errorData && errorData.detail) errorDetail = errorData.detail;
+          } catch (e) {}
+          const inactiveBox = document.getElementById("inactive-card-message");
+          if (res.status === 403 && inactiveBox) {
+            inactiveBox.textContent = errorDetail;
+            inactiveBox.style.display = "block";
+            const shell = document.querySelector(".phone-shell");
+            if (shell) shell.style.display = "none";
+          } else {
+            showToast(errorDetail, true);
+            revealCardShell();
+          }
           return;
         }
 

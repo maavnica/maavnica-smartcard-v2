@@ -47,6 +47,8 @@ class Card(Base):
     # Infos business
     company_name = Column(String, nullable=False)
     slug = Column(String, unique=True, index=True, nullable=False)
+    plan_type = Column(String(32), nullable=False, default="demo")
+    expires_at = Column(DateTime, nullable=True)
 
     # 🔹 NOUVEAUX CHAMPS – PROFIL & INFOS DIGITALES
     # Type de SmartCard / profil métier :

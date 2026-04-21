@@ -196,3 +196,24 @@ def ensure_quote_recommendation_columns() -> None:
             conn.execute(text(stmt))
 
 
+def ensure_card_plan_columns() -> None:
+    """Ajoute plan_type / expires_at sur cards si colonnes manquantes."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    statements = []
+    if "plan_type" not in existing:
+        statements.append("ALTER TABLE cards ADD COLUMN plan_type VARCHAR(32) NOT NULL DEFAULT 'demo'")
+    if "expires_at" not in existing:
+        statements.append("ALTER TABLE cards ADD COLUMN expires_at DATETIME")
+    for stmt in statements:
+        with engine.begin() as conn:
+            conn.execute(text(stmt))
+
+

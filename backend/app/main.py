@@ -62,6 +62,7 @@ def _create_db_tables():
         ensure_quote_recommendation_columns,
         ensure_recommendation_code_column,
         ensure_owner_share_key_column,
+        ensure_card_plan_columns,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -70,6 +71,7 @@ def _create_db_tables():
     ensure_enable_recommendation_column()
     ensure_recommendation_code_column()
     ensure_owner_share_key_column()
+    ensure_card_plan_columns()
     ensure_quote_recommendation_columns()
 
 

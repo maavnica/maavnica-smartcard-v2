@@ -63,6 +63,27 @@
         <label for="slug">Slug (URL publique) *</label>
         <input id="slug" placeholder="ex. plomberie-jules" />
 
+        <div class="section-label">Plan & expiration</div>
+        <div class="row">
+          <div>
+            <label for="plan-type">Plan *</label>
+            <select id="plan-type">
+              <option value="demo">Demo (sans expiration)</option>
+              <option value="lifetime">Lifetime (sans expiration)</option>
+              <option value="trial">Trial 30 jours</option>
+              <option value="solo">Solo annuel</option>
+              <option value="business">Business annuel</option>
+            </select>
+          </div>
+          <div>
+            <label for="expires-at">Date d’expiration</label>
+            <input id="expires-at" type="datetime-local" />
+          </div>
+        </div>
+        <div class="hint" id="plan-expiration-hint">
+          Demo et lifetime restent sans expiration.
+        </div>
+
         <!-- 🔹 NOUVELLE SECTION : PROFIL & INFOS DIGITALES -->
         <hr style="border:none;border-top:1px solid #1f2937;margin:15px 0;">
 
@@ -238,6 +259,17 @@
 
       <!-- COLONNE DROITE : AVIS & DEVIS -->
       <div class="card">
+        <div class="card-title">Cartes existantes</div>
+        <div class="hint">Vue rapide : plan, expiration, statut et jours restants.</div>
+        <button class="btn btn-outline" id="btn-refresh-cards" type="button" style="margin-bottom:8px;">
+          Rafraîchir la liste
+        </button>
+        <div id="cards-list" class="list">
+          <div class="hint">Aucune carte chargée.</div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid #111827;margin:10px 0;">
+
         <div class="card-title">Avis & demandes de devis</div>
         <div class="hint">
           Quand la carte reçoit des retours clients, ils s’affichent ici pour la carte chargée.
