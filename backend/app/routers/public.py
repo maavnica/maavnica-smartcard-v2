@@ -9,7 +9,11 @@ import re
 from app.database import get_db
 from app.models import Card, Feedback, Quote
 from app.schemas import CardPublic, FeedbackCreate, QuoteCreate
-from app.routers.cards import _ensure_owner_share_key, _serialize_card_public
+from app.routers.cards import (
+    _count_recommend_link_created,
+    _ensure_owner_share_key,
+    _serialize_card_public,
+)
 from app.utils.emailer import send_email
 from app.utils.rate_limit import rate_limit_by_ip
 
@@ -232,7 +236,12 @@ def get_public_card(
 ):
     card = get_card_by_slug_or_404(slug, db)
     _ensure_owner_share_key(db, card)
-    return _serialize_card_public(card, request, owner_query_key=o)
+    return _serialize_card_public(
+        card,
+        request,
+        owner_query_key=o,
+        recommendation_share_count=_count_recommend_link_created(db, card.slug),
+    )
 
 
 @router.get("/cards/{slug}/vcard")

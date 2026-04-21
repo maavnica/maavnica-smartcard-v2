@@ -248,6 +248,9 @@ class CardPublic(BaseModel):
     enable_recommendation: bool = False
     recommendation_code: Optional[str] = None
 
+    # Preuve sociale : nombre d’actions « lien de recommandation créé » (événements traçables)
+    recommendation_share_count: int = 0
+
     # Carte publique : true si ?o= correspond à owner_share_key (voir GET by-slug)
     owner_mode: bool = False
     # Rempli uniquement quand la requête est authentifiée admin (Bearer)

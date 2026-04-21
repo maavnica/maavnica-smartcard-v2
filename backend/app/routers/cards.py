@@ -2,6 +2,7 @@ import secrets
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
@@ -41,7 +42,7 @@ def _card_to_public_dict(card: models.Card) -> dict:
     """Construit le dict CardPublic sans lire owner_share_key depuis l’ORM (évite toute fuite)."""
     d = {}
     for name in schemas.CardPublic.model_fields:
-        if name in ("owner_mode", "owner_share_key"):
+        if name in ("owner_mode", "owner_share_key", "recommendation_share_count"):
             continue
         if hasattr(card, name):
             d[name] = getattr(card, name)
@@ -56,11 +57,28 @@ def _ensure_owner_share_key(db: Session, card: models.Card) -> None:
     db.refresh(card)
 
 
+def _count_recommend_link_created(db: Session, card_slug: str) -> int:
+    """Compte les partages de lien traçable (?r=…) pour cette carte (métrique produit « recommandé »)."""
+    try:
+        return (
+            db.query(models.RecommendationEvent)
+            .filter(
+                models.RecommendationEvent.card_slug == card_slug,
+                models.RecommendationEvent.event_type == "recommend_link_created",
+            )
+            .count()
+        )
+    except OperationalError:
+        db.rollback()
+        return 0
+
+
 def _serialize_card_public(
     card: models.Card,
     request: Request,
     *,
     owner_query_key: Optional[str] = None,
+    recommendation_share_count: int = 0,
 ) -> schemas.CardPublic:
     stored = (card.owner_share_key or "").strip()
     owner_mode = False
@@ -73,6 +91,7 @@ def _serialize_card_public(
     out = base.model_dump()
     out["owner_mode"] = owner_mode
     out["owner_share_key"] = card.owner_share_key if admin_bearer_matches(request) else None
+    out["recommendation_share_count"] = recommendation_share_count
     return schemas.CardPublic(**out)
 
 
@@ -121,7 +140,11 @@ def create_card(
     db.commit()
     db.refresh(db_card)
 
-    return _serialize_card_public(db_card, request)
+    return _serialize_card_public(
+        db_card,
+        request,
+        recommendation_share_count=_count_recommend_link_created(db, db_card.slug),
+    )
 
 
 # ============================================================
@@ -183,7 +206,11 @@ def update_card(
     db.commit()
     db.refresh(db_card)
     _ensure_owner_share_key(db, db_card)
-    return _serialize_card_public(db_card, request)
+    return _serialize_card_public(
+        db_card,
+        request,
+        recommendation_share_count=_count_recommend_link_created(db, db_card.slug),
+    )
 
 
 # ============================================================
@@ -214,7 +241,12 @@ def get_card_by_slug(
             detail="Card not found",
         )
     _ensure_owner_share_key(db, card)
-    return _serialize_card_public(card, request, owner_query_key=o)
+    return _serialize_card_public(
+        card,
+        request,
+        owner_query_key=o,
+        recommendation_share_count=_count_recommend_link_created(db, card.slug),
+    )
 
 
 # ============================================================
