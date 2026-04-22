@@ -1,8 +1,48 @@
+"""
+Dashboard SSR /admin/business — pilotage commercial des cartes SmartCard.
+
+PÉRIMÈTRE DES KPI « À TRAITER — RELANCE & RENOUVELLEMENT »
+(Comptés sur l’ensemble des cartes en base, hors filtre/recherche du tableau.)
+
+1) Trials à convertir
+   Entrent : cartes avec plan_type = trial ET statut calculé = active
+   (computed_status « active » = pas encore à expires_at ou pas d’expiration passée).
+   N’entrent pas : demo, lifetime, solo, business ; ni trial expirée.
+
+2) Expirées à relancer
+   Entrent : cartes avec statut calculé = expired ET plan_type ∈ {trial, solo, business}.
+   N’entrent pas : demo et lifetime (même si une anomalie les marquerait expirées,
+   elles sont exclues de ce KPI orienté renouvellement payant).
+
+3) Expire sous 7 jours (payant)
+   Entrent : cartes actives, plan_type ∈ {trial, solo, business} (hors demo/lifetime),
+   avec days_remaining défini et ≤ 7.
+   N’entrent pas : cartes expirées ; demo ; lifetime ; jours restants indéfinis.
+
+4) Expire sous 30 jours (payant)
+   Entrent : mêmes plans payants actifs, days_remaining défini et ≤ 30
+   (donc inclut aussi le sous-ensemble ≤ 7 jours).
+
+PRIORITÉ VISUELLE (classes CSS sur <tr> : row-priority-red / orange / yellow ; sinon neutre)
+- demo / lifetime : toujours neutre (aucune classe), quelle que soit la date.
+- Rouge : plan payant (trial/solo/business) ET statut expiré.
+- Orange : plan payant actif ET 1 ≤ days_remaining ≤ 7.
+- Jaune : plan payant actif ET 8 ≤ days_remaining ≤ 30.
+- Neutre : plan payant actif ET days_remaining > 30, ou days_remaining absent pour un
+  solo/business actif (cas anormal côté données), ou plan hors périmètre ci-dessus.
+
+COLONNE « RELANCE » (badge texte ; cohérent avec la priorité sauf cas demo/lifetime)
+- demo / lifetime : toujours « OK », ligne neutre.
+- trial active : toujours « À convertir » ; priorité orange/jaune/neutre selon jours restants.
+- solo/business active : « À relancer » si 1 ≤ days_remaining ≤ 30 ; sinon « OK ».
+- trial/solo/business expirés : « À relancer » ; ligne rouge si plan payant (trial/solo/business).
+"""
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta
 from html import escape
-from typing import List
+from typing import List, Optional, Tuple
 from urllib.parse import urlencode
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
@@ -44,6 +84,51 @@ def _normalize_sort(sort_value: str | None) -> str:
     return v if v in _ALLOWED_SORTS else "expiring_soon"
 
 
+def _is_commercial_expiring_plan(plan_type: str) -> bool:
+    return plan_type in {"trial", "solo", "business"}
+
+
+def _relance_label_and_row_class(
+    plan_type: str, status: str, days_remaining: Optional[int]
+) -> Tuple[str, str]:
+    """
+    Retourne (libellé Relance, classe CSS pour la ligne).
+
+    Priorité ligne : voir docstring du module. demo/lifetime : toujours neutre + OK.
+    """
+    if plan_type in _NON_EXPIRING_PLANS:
+        return "OK", ""
+
+    if status == "expired":
+        if _is_commercial_expiring_plan(plan_type):
+            return "À relancer", "row-priority-red"
+        return "OK", ""
+
+    if plan_type == "trial":
+        if days_remaining is not None and 1 <= days_remaining <= 7:
+            return "À convertir", "row-priority-orange"
+        if days_remaining is not None and 8 <= days_remaining <= 30:
+            return "À convertir", "row-priority-yellow"
+        return "À convertir", ""
+
+    if plan_type in {"solo", "business"}:
+        if days_remaining is not None and 1 <= days_remaining <= 7:
+            return "À relancer", "row-priority-orange"
+        if days_remaining is not None and 8 <= days_remaining <= 30:
+            return "À relancer", "row-priority-yellow"
+        return "OK", ""
+
+    return "OK", ""
+
+
+def _relance_badge_class(label: str) -> str:
+    if label == "À convertir":
+        return "relance-badge relance-convert"
+    if label == "À relancer":
+        return "relance-badge relance-relaunch"
+    return "relance-badge relance-ok"
+
+
 def _matches_filter(plan_type: str, status: str, filter_value: str) -> bool:
     if filter_value == "all":
         return True
@@ -60,7 +145,6 @@ def _apply_sort(cards: List[Card], sort_value: str) -> List[Card]:
     if sort_value == "company_az":
         return sorted(cards, key=lambda c: (c.company_name or "").strip().lower())
     if sort_value == "expiring_far":
-        # Les cartes sans expiration restent en bas pour garder la lisibilité.
         return sorted(
             cards,
             key=lambda c: (
@@ -68,7 +152,6 @@ def _apply_sort(cards: List[Card], sort_value: str) -> List[Card]:
                 0 if c.expires_at is None else -c.expires_at.timestamp(),
             ),
         )
-    # expiring_soon par défaut
     return sorted(
         cards,
         key=lambda c: (
@@ -102,7 +185,6 @@ def _apply_business_action(card: Card, action_type: str) -> None:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Action +30 jours non autorisee pour ce plan.",
             )
-        # Cas propre si date absente sur un plan expirant: on repart de maintenant.
         base_expiration = card.expires_at if card.expires_at else now
         card.expires_at = base_expiration + timedelta(days=30)
         return
@@ -121,7 +203,8 @@ def _build_business_dashboard_html(
     total_cards = len(cards)
     active_cards = 0
     expired_cards = 0
-    active_trials = 0
+    trials_to_convert = 0
+    expired_to_relaunch = 0
     demo_lifetime_cards = 0
     expiring_7 = 0
     expiring_30 = 0
@@ -139,12 +222,24 @@ def _build_business_dashboard_html(
             expired_cards += 1
 
         if plan_type == "trial" and status == "active":
-            active_trials += 1
+            trials_to_convert += 1
+        if status == "expired" and _is_commercial_expiring_plan(plan_type):
+            expired_to_relaunch += 1
         if plan_type in _NON_EXPIRING_PLANS:
             demo_lifetime_cards += 1
-        if status == "active" and days_remaining is not None and days_remaining <= 7:
+        if (
+            status == "active"
+            and _is_commercial_expiring_plan(plan_type)
+            and days_remaining is not None
+            and days_remaining <= 7
+        ):
             expiring_7 += 1
-        if status == "active" and days_remaining is not None and days_remaining <= 30:
+        if (
+            status == "active"
+            and _is_commercial_expiring_plan(plan_type)
+            and days_remaining is not None
+            and days_remaining <= 30
+        ):
             expiring_30 += 1
 
         company_raw = card.company_name or ""
@@ -170,6 +265,13 @@ def _build_business_dashboard_html(
         days_label = "—" if days_remaining is None else str(days_remaining)
         status_badge_class = "status-expired" if status == "expired" else "status-active"
         status_label = "Expirée" if status == "expired" else "Active"
+        relance_label, row_priority_class = _relance_label_and_row_class(
+            plan_type, status, days_remaining
+        )
+        relance_badge_class = _relance_badge_class(relance_label)
+        tr_open = (
+            f"<tr class=\"{row_priority_class}\">" if row_priority_class else "<tr>"
+        )
         edit_href = f"/admin?slug={escape(card.slug)}"
         can_convert = plan_type == "trial"
         can_extend_30 = plan_type in {"trial", "solo", "business"}
@@ -209,20 +311,21 @@ def _build_business_dashboard_html(
             )
 
         rows_html.append(
-            "<tr>"
+            tr_open
             f"<td><strong>{escape(company_name)}</strong></td>"
             f"<td><code>{escape(card.slug)}</code></td>"
             f"<td>{escape(plan_type)}</td>"
             f"<td>{escape(expiration_label)}</td>"
             f"<td><span class=\"status-badge {status_badge_class}\">{status_label}</span></td>"
             f"<td style=\"text-align:right\">{days_label}</td>"
+            f"<td><span class=\"{relance_badge_class}\">{escape(relance_label)}</span></td>"
             f"<td class=\"actions-cell\">{''.join(actions_html)}</td>"
             "</tr>"
         )
 
     if not rows_html:
         rows_html.append(
-            '<tr><td colspan="7" style="color:rgba(229,231,235,.7)">'
+            '<tr><td colspan="8" style="color:rgba(229,231,235,.7)">'
             "Aucune carte pour ce filtre/recherche.</td></tr>"
         )
 
@@ -264,6 +367,21 @@ def _build_business_dashboard_html(
     }}
     .kpi-label {{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }}
     .kpi-val {{ font-size: 26px; font-weight: 700; color: #fff; }}
+    .kpi-section-title {{
+      font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+      margin: 0 0 8px; font-weight: 600;
+    }}
+    .kpi-legend {{
+      font-size: 12px; color: rgba(229,231,235,.78); line-height: 1.55; max-width: 960px;
+      margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+      background: rgba(2,6,23,.35);
+    }}
+    .kpi-legend strong {{ color: rgba(229,231,235,.95); }}
+    .kpi-grid.kpi-action .kpi {{
+      border-color: rgba(251,191,36,.35);
+      background: rgba(251,191,36,.06);
+    }}
+    .kpi-grid.kpi-action .kpi-label {{ color: rgba(253,230,138,.9); }}
     .filters {{
       margin-bottom: 14px; display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;
       align-items:end;
@@ -289,6 +407,25 @@ def _build_business_dashboard_html(
     th, td {{ padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--line); }}
     th {{ background: rgba(15,23,42,.65); color: rgba(229,231,235,.92); font-weight: 600; }}
     tr:last-child td {{ border-bottom: none; }}
+    tr.row-priority-red td {{
+      background: rgba(239,68,68,.09);
+      box-shadow: inset 4px 0 0 #ef4444;
+    }}
+    tr.row-priority-orange td {{
+      background: rgba(249,115,22,.10);
+      box-shadow: inset 4px 0 0 #f97316;
+    }}
+    tr.row-priority-yellow td {{
+      background: rgba(234,179,8,.10);
+      box-shadow: inset 4px 0 0 #eab308;
+    }}
+    .relance-badge {{
+      display: inline-flex; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600;
+      border: 1px solid transparent;
+    }}
+    .relance-convert {{ background: rgba(96,165,250,.18); color: #93c5fd; border-color: rgba(96,165,250,.35); }}
+    .relance-relaunch {{ background: rgba(249,115,22,.18); color: #fdba74; border-color: rgba(249,115,22,.35); }}
+    .relance-ok {{ background: rgba(148,163,184,.12); color: rgba(229,231,235,.65); border-color: rgba(148,163,184,.25); }}
     .status-badge {{
       display:inline-flex; padding:3px 8px; border-radius:999px; font-size:12px; font-weight:600;
       border:1px solid transparent;
@@ -311,7 +448,7 @@ def _build_business_dashboard_html(
 </head>
 <body>
   <div class="wrap">
-    <div class="tag">Maavnica SmartCard — Dashboard Business v1</div>
+    <div class="tag">Maavnica SmartCard — Dashboard Business v4</div>
     <h1>Pilotage commercial des cartes</h1>
     <p class="sub">
       Vue globale des cartes, plans et expirations. Données calculées côté serveur en UTC à partir des cartes existantes.
@@ -320,14 +457,26 @@ def _build_business_dashboard_html(
       <a href="/admin">Retour admin cartes</a>
       <a href="/admin/analytics">Voir analytics</a>
     </div>
+    <p class="kpi-section-title">À traiter — relance &amp; renouvellement</p>
+    <p class="kpi-legend">
+      <strong>Périmètre (toutes les cartes en base) :</strong><br />
+      • <strong>Trials à convertir</strong> — <code>plan_type=trial</code> et statut <em>active</em> (non expirée).<br />
+      • <strong>Expirées à relancer</strong> — statut <em>expiré</em> et <code>plan_type</code> ∈ trial, solo, business (hors demo/lifetime).<br />
+      • <strong>Expire sous 7 jours (payant)</strong> — statut <em>active</em>, plan trial/solo/business, <code>days_remaining</code> défini et ≤ 7.<br />
+      • <strong>Expire sous 30 jours (payant)</strong> — idem avec ≤ 30 (inclut donc le sous-ensemble ≤ 7).
+    </p>
+    <div class="kpi-grid kpi-action">
+      <div class="kpi"><div class="kpi-label">Trials à convertir</div><div class="kpi-val">{trials_to_convert}</div></div>
+      <div class="kpi"><div class="kpi-label">Expirées à relancer</div><div class="kpi-val">{expired_to_relaunch}</div></div>
+      <div class="kpi"><div class="kpi-label">Expire sous 7 jours (payant)</div><div class="kpi-val">{expiring_7}</div></div>
+      <div class="kpi"><div class="kpi-label">Expire sous 30 jours (payant)</div><div class="kpi-val">{expiring_30}</div></div>
+    </div>
+    <p class="kpi-section-title" style="margin-top:18px;">Vue d’ensemble</p>
     <div class="kpi-grid">
       <div class="kpi"><div class="kpi-label">Total cartes</div><div class="kpi-val">{total_cards}</div></div>
       <div class="kpi"><div class="kpi-label">Cartes actives</div><div class="kpi-val">{active_cards}</div></div>
       <div class="kpi"><div class="kpi-label">Cartes expirées</div><div class="kpi-val">{expired_cards}</div></div>
-      <div class="kpi"><div class="kpi-label">Trials en cours</div><div class="kpi-val">{active_trials}</div></div>
       <div class="kpi"><div class="kpi-label">Demo / Lifetime</div><div class="kpi-val">{demo_lifetime_cards}</div></div>
-      <div class="kpi"><div class="kpi-label">Expire sous 7 jours</div><div class="kpi-val">{expiring_7}</div></div>
-      <div class="kpi"><div class="kpi-label">Expire sous 30 jours</div><div class="kpi-val">{expiring_30}</div></div>
     </div>
     <form method="get" action="/admin/business" class="filters">
       <div>
@@ -372,6 +521,7 @@ def _build_business_dashboard_html(
           <th>Expiration</th>
           <th>Statut</th>
           <th>Jours restants</th>
+          <th>Relance</th>
           <th>Action</th>
         </tr>
       </thead>
