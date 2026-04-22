@@ -288,6 +288,16 @@ async function loadCardBySlug() {
   }
 }
 
+async function loadCardFromQueryParam() {
+  const params = new URLSearchParams(window.location.search || "");
+  const slug = (params.get("slug") || "").trim();
+  if (!slug) return;
+  const slugInput = document.getElementById("existing-slug");
+  if (!slugInput) return;
+  slugInput.value = slug;
+  await loadCardBySlug();
+}
+
 /* ============================================================
    SAUVEGARDE (CREATE / UPDATE)
 ============================================================ */
@@ -640,6 +650,7 @@ document.getElementById("btn-refresh-cards").addEventListener("click", loadAllCa
 initAvatarUpload();
 updatePlanExpirationUI(false);
 loadAllCards();
+loadCardFromQueryParam();
 
 
 

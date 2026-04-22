@@ -226,6 +226,7 @@ def update_card(
                 status_code=400,
                 detail=f"Profil métier invalide. Profils autorisés : {', '.join(ALLOWED_PROFILES)}",
             )
+    plan_type_before = db_card.plan_type or "demo"
     if "plan_type" in update_data:
         plan_type = update_data["plan_type"]
         if plan_type not in ALLOWED_PLAN_TYPES:
@@ -241,6 +242,18 @@ def update_card(
         and db_card.expires_at is None
     ):
         update_data["expires_at"] = _default_expiration_for_plan(plan_type)
+    # Conversion commerciale simple : trial -> solo/business sans date fournie = +1 an.
+    if (
+        plan_type in {"solo", "business"}
+        and plan_type_before == "trial"
+        and "expires_at" not in update_data
+    ):
+        update_data["expires_at"] = _default_expiration_for_plan(plan_type)
+    if plan_type in {"trial", "solo", "business"} and update_data.get("expires_at") is None:
+        raise HTTPException(
+            status_code=400,
+            detail="expires_at est requis pour trial/solo/business.",
+        )
 
     # Empêcher un nouveau slug qui existerait déjà
     if "slug" in update_data and update_data["slug"] != db_card.slug:
