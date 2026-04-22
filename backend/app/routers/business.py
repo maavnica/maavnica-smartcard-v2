@@ -312,15 +312,15 @@ def _build_business_dashboard_html(
 
         rows_html.append(
             tr_open
-            f"<td><strong>{escape(company_name)}</strong></td>"
-            f"<td><code>{escape(card.slug)}</code></td>"
-            f"<td>{escape(plan_type)}</td>"
-            f"<td>{escape(expiration_label)}</td>"
-            f"<td><span class=\"status-badge {status_badge_class}\">{status_label}</span></td>"
-            f"<td style=\"text-align:right\">{days_label}</td>"
-            f"<td><span class=\"{relance_badge_class}\">{escape(relance_label)}</span></td>"
-            f"<td class=\"actions-cell\">{''.join(actions_html)}</td>"
-            "</tr>"
+            + f"<td><strong>{escape(company_name)}</strong></td>"
+            + f"<td><code>{escape(card.slug)}</code></td>"
+            + f"<td>{escape(plan_type)}</td>"
+            + f"<td>{escape(expiration_label)}</td>"
+            + f"<td><span class=\"status-badge {status_badge_class}\">{status_label}</span></td>"
+            + f"<td style=\"text-align:right\">{days_label}</td>"
+            + f"<td><span class=\"{relance_badge_class}\">{escape(relance_label)}</span></td>"
+            + f"<td class=\"actions-cell\">{''.join(actions_html)}</td>"
+            + "</tr>"
         )
 
     if not rows_html:
