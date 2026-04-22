@@ -163,6 +163,9 @@ class Quote(Base):
     message = Column(Text, nullable=True)
     source_type = Column(String(32), nullable=True, index=True)
     referrer_id = Column(String(128), nullable=True, index=True)
+    recommender_first_name = Column(String(80), nullable=True)
+    recommender_last_name = Column(String(80), nullable=True)
+    recommender_display_name = Column(String(200), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relation
@@ -214,5 +217,8 @@ class RecommendationEvent(Base):
     referrer_id = Column(String(128), nullable=False, index=True)
     visitor_id = Column(String(128), nullable=True, index=True)
     event_type = Column(String(64), nullable=False, index=True)
+    recommender_first_name = Column(String(80), nullable=True)
+    recommender_last_name = Column(String(80), nullable=True)
+    recommender_display_name = Column(String(200), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 

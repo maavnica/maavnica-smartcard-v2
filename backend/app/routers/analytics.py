@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from html import escape
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import HTMLResponse, Response
@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Card, CardEvent, CardVisit, RecommendationEvent
 from app.schemas import AnalyticsEventIn, AnalyticsVisitIn, RecommendationEventIn
+from app.utils.recommender_display import build_recommender_display_name, normalize_recommender_part
 from app.utils.admin_auth import require_admin_http_basic
 from app.utils.rate_limit import rate_limit_by_ip
 
@@ -84,17 +85,28 @@ def record_event(
     return Response(status_code=204)
 
 
+def _optional_recommender_part(value: Optional[str]) -> Optional[str]:
+    t = normalize_recommender_part(value)
+    return t if t else None
+
+
 @router_api.post("/recommendation-event", status_code=204)
 def record_recommendation_event(
     payload: RecommendationEventIn,
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(180, 60)),
 ):
+    fn = _optional_recommender_part(payload.recommender_first_name)
+    ln = _optional_recommender_part(payload.recommender_last_name)
+    display = build_recommender_display_name(payload.recommender_first_name, payload.recommender_last_name)
     row = RecommendationEvent(
         card_slug=payload.card_slug,
         referrer_id=payload.referrer_id,
         visitor_id=payload.visitor_id,
         event_type=payload.event_type,
+        recommender_first_name=fn,
+        recommender_last_name=ln,
+        recommender_display_name=display,
     )
     db.add(row)
     db.commit()
@@ -188,6 +200,27 @@ def _affiliates_30d(db: Session, d30: datetime) -> List[Tuple[str, int, int]]:
             )
         )
     out.sort(key=lambda row: (-row[1], row[0]))
+    return out
+
+
+def _recommender_display_labels_30d(db: Session, d30: datetime) -> Dict[str, str]:
+    rows = (
+        db.query(
+            RecommendationEvent.referrer_id,
+            func.max(RecommendationEvent.recommender_display_name),
+        )
+        .filter(
+            RecommendationEvent.created_at >= d30,
+            RecommendationEvent.recommender_display_name.isnot(None),
+        )
+        .group_by(RecommendationEvent.referrer_id)
+        .all()
+    )
+    out: Dict[str, str] = {}
+    for rid, dname in rows:
+        label = (str(dname).strip() if dname else "") or ""
+        if label:
+            out[str(rid)] = label
     return out
 
 
@@ -309,6 +342,7 @@ def _build_dashboard_html(db: Session) -> str:
     affiliates = _affiliates_30d(db, d30)
     recommendation_referrers = _recommendation_referrers_30d(db, d30)
     top_referrers = _top_referrers_30d(db, d30)
+    recommender_labels = _recommender_display_labels_30d(db, d30)
 
     def ev(slug: str, kind: str) -> int:
         return ev7.get((slug, kind), 0)
@@ -364,9 +398,10 @@ def _build_dashboard_html(db: Session) -> str:
 
     reco_referrer_html: List[str] = []
     for card_slug, referrer_id, v_cnt, c_cnt in recommendation_referrers:
+        who = escape(recommender_labels.get(referrer_id) or referrer_id)
         reco_referrer_html.append(
             f"<tr><td><code>{escape(card_slug)}</code></td>"
-            f"<td><code>{escape(referrer_id)}</code></td>"
+            f"<td>{who}</td>"
             f"<td style=\"text-align:right\">{v_cnt}</td>"
             f"<td style=\"text-align:right\">{c_cnt}</td></tr>"
         )
@@ -378,8 +413,9 @@ def _build_dashboard_html(db: Session) -> str:
 
     top_referrers_html: List[str] = []
     for referrer_id, created_cnt, visit_cnt, contact_cnt in top_referrers:
+        who = escape(recommender_labels.get(referrer_id) or referrer_id)
         top_referrers_html.append(
-            f"<tr><td><code>{escape(referrer_id)}</code></td>"
+            f"<tr><td>{who}</td>"
             f"<td style=\"text-align:right\">{created_cnt}</td>"
             f"<td style=\"text-align:right\">{visit_cnt}</td>"
             f"<td style=\"text-align:right\">{contact_cnt}</td></tr>"
@@ -516,6 +552,8 @@ def _build_dashboard_html(db: Session) -> str:
       <h2>RECOMMANDATIONS TRAÇABLES (30 jours)</h2>
       <p class="sub" style="margin-top:-4px;margin-bottom:12px;font-size:13px;">
         Basé sur la table <code>recommendation_events</code> (chaîne de recommandation traçable).
+        Colonne <b>Recommandant</b> : nom affiché si enregistré, sinon identifiant technique (<code>?r=…</code>) —
+        les totaux restent groupés par cet identifiant, pas par le nom seul.
       </p>
       {table_reco_referrer}
     </section>

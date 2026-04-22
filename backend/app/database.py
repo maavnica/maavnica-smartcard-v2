@@ -191,6 +191,35 @@ def ensure_quote_recommendation_columns() -> None:
         statements.append("ALTER TABLE quotes ADD COLUMN source_type VARCHAR(32)")
     if "referrer_id" not in existing:
         statements.append("ALTER TABLE quotes ADD COLUMN referrer_id VARCHAR(128)")
+    if "recommender_first_name" not in existing:
+        statements.append("ALTER TABLE quotes ADD COLUMN recommender_first_name VARCHAR(80)")
+    if "recommender_last_name" not in existing:
+        statements.append("ALTER TABLE quotes ADD COLUMN recommender_last_name VARCHAR(80)")
+    if "recommender_display_name" not in existing:
+        statements.append("ALTER TABLE quotes ADD COLUMN recommender_display_name VARCHAR(200)")
+    for stmt in statements:
+        with engine.begin() as conn:
+            conn.execute(text(stmt))
+
+
+def ensure_recommendation_event_display_columns() -> None:
+    """Ajoute prénom / nom / libellé affiché sur recommendation_events si manquant."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("recommendation_events"):
+        return
+    existing = {c["name"] for c in insp.get_columns("recommendation_events")}
+    statements = []
+    if "recommender_first_name" not in existing:
+        statements.append("ALTER TABLE recommendation_events ADD COLUMN recommender_first_name VARCHAR(80)")
+    if "recommender_last_name" not in existing:
+        statements.append("ALTER TABLE recommendation_events ADD COLUMN recommender_last_name VARCHAR(80)")
+    if "recommender_display_name" not in existing:
+        statements.append("ALTER TABLE recommendation_events ADD COLUMN recommender_display_name VARCHAR(200)")
     for stmt in statements:
         with engine.begin() as conn:
             conn.execute(text(stmt))

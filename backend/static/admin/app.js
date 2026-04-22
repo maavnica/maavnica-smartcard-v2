@@ -562,7 +562,9 @@ async function loadFeedbackAndQuotes() {
             <div><strong>Origine :</strong> ${
               q.source_type === "recommendation" ? "recommandation" : "directe / autre"
             }</div>
-            <div><strong>Recommandé par :</strong> ${q.referrer_id || "—"}</div>
+            <div><strong>Recommandé par :</strong> ${
+              q.recommender_display_name || q.referrer_id || "—"
+            }</div>
             <div class="item-meta">${new Date(
               q.created_at
             ).toLocaleString()}</div>

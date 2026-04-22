@@ -3,12 +3,13 @@ from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from html import escape
 import re
 
 from app.database import get_db
-from app.models import Card, Feedback, Quote
+from app.models import Card, Feedback, Quote, RecommendationEvent
 from app.schemas import CardPublic, FeedbackCreate, QuoteCreate
 from app.routers.cards import (
     _count_recommend_link_created,
@@ -17,6 +18,7 @@ from app.routers.cards import (
 )
 from app.utils.emailer import send_email
 from app.utils.rate_limit import rate_limit_by_ip
+from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
@@ -34,6 +36,22 @@ def get_card_by_slug_or_404(slug: str, db: Session) -> Card:
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
     return card
+
+
+def _latest_recommender_row_for_token(db: Session, token: str) -> Optional[RecommendationEvent]:
+    return (
+        db.query(RecommendationEvent)
+        .filter(RecommendationEvent.referrer_id == token)
+        .filter(
+            or_(
+                RecommendationEvent.recommender_display_name.isnot(None),
+                RecommendationEvent.recommender_first_name.isnot(None),
+                RecommendationEvent.recommender_last_name.isnot(None),
+            )
+        )
+        .order_by(RecommendationEvent.id.desc())
+        .first()
+    )
 
 
 def _card_url(card: Card) -> str:
@@ -348,6 +366,17 @@ def create_quote(
 ):
     card = get_card_by_id_or_404(card_id, db)
 
+    reco_first: Optional[str] = None
+    reco_last: Optional[str] = None
+    reco_display: Optional[str] = None
+    if payload.source_type == "recommendation" and payload.referrer_id:
+        ev = _latest_recommender_row_for_token(db, payload.referrer_id)
+        if ev:
+            reco_first = ev.recommender_first_name
+            reco_last = ev.recommender_last_name
+            stored = (ev.recommender_display_name or "").strip()
+            reco_display = stored or build_recommender_display_name(reco_first, reco_last)
+
     quote = Quote(
         card_id=card.id,
         name=payload.name,
@@ -356,6 +385,9 @@ def create_quote(
         message=payload.message,
         source_type=payload.source_type,
         referrer_id=payload.referrer_id,
+        recommender_first_name=reco_first,
+        recommender_last_name=reco_last,
+        recommender_display_name=reco_display,
     )
     db.add(quote)
     db.commit()
@@ -363,6 +395,7 @@ def create_quote(
 
     labels = lead_labels_for_profile(getattr(card, "profile", None))
     prospect_email = payload.email or "(non renseigné)"
+    reco_label = effective_recommender_label(reco_display, payload.referrer_id)
 
     # TEXTE (fallback)
     text = (
@@ -375,7 +408,7 @@ def create_quote(
         f"- Téléphone : {payload.phone}\n"
         f"- Email : {prospect_email}\n\n"
         f"- Origine : {'recommandation' if payload.source_type == 'recommendation' else 'directe / autre'}\n"
-        f"- Recommandé par : {payload.referrer_id or '(non renseigné)'}\n\n"
+        f"- Recommandé par : {reco_label if payload.source_type == 'recommendation' else '—'}\n\n"
         "Message :\n"
         f"{payload.message}\n"
     )
@@ -399,7 +432,7 @@ def create_quote(
           <b>Téléphone :</b> {escape(payload.phone)}<br/>
           <b>Email :</b> {escape(payload.email or "—")}<br/>
           <b>Origine :</b> {escape("recommandation" if payload.source_type == "recommendation" else "directe / autre")}<br/>
-          <b>Recommandé par :</b> {escape(payload.referrer_id or "—")}
+          <b>Recommandé par :</b> {escape(reco_label if payload.source_type == "recommendation" else "—")}
         </div>
 
         <div style="margin-top:12px;">

@@ -62,6 +62,7 @@ def _create_db_tables():
         ensure_enable_recommendation_column,
         ensure_quote_recommendation_columns,
         ensure_recommendation_code_column,
+        ensure_recommendation_event_display_columns,
         ensure_owner_share_key_column,
         ensure_card_plan_columns,
     )
@@ -74,6 +75,7 @@ def _create_db_tables():
     ensure_owner_share_key_column()
     ensure_card_plan_columns()
     ensure_quote_recommendation_columns()
+    ensure_recommendation_event_display_columns()
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):

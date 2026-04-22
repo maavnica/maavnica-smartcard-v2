@@ -1092,6 +1092,99 @@
       color: #fecaca;
     }
 
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .recommend-id-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.72);
+    }
+
+    .recommend-id-modal.is-open {
+      display: flex;
+    }
+
+    .recommend-id-panel {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.98);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+      padding: 16px 16px 14px;
+    }
+
+    .recommend-id-panel h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .recommend-id-panel p {
+      margin: 0 0 12px;
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .recommend-id-panel input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(2, 6, 23, 0.55);
+      color: #e5e7eb;
+      padding: 9px 10px;
+      font-size: 13px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+
+    .recommend-id-panel input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+    }
+
+    .recommend-id-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .recommend-id-actions button {
+      flex: 1;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+    }
+
+    .recommend-id-actions .recommend-id-confirm {
+      border: none;
+      background: linear-gradient(135deg, var(--primary), #f97316);
+      color: #052e16;
+    }
+
     /* Thèmes dynamiques */
     body.theme-apple {
       --card-bg: radial-gradient(circle at top, #1d4ed8 0%, #020617 70%);
@@ -1438,6 +1531,36 @@
 
   <div id="toast" class="toast"></div>
 
+  <div id="recommend-identity-modal" class="recommend-id-modal" aria-hidden="true">
+    <div class="recommend-id-panel" role="dialog" aria-modal="true" aria-labelledby="recommend-id-title">
+      <h3 id="recommend-id-title">Votre recommandation</h3>
+      <p>
+        Indiquez votre prénom et votre nom pour que le professionnel sache qui recommande. Un lien
+        personnel et discret sera créé.
+      </p>
+      <label class="visually-hidden" for="recommend-id-first">Prénom</label>
+      <input
+        id="recommend-id-first"
+        type="text"
+        maxlength="80"
+        autocomplete="given-name"
+        placeholder="Prénom *"
+      />
+      <label class="visually-hidden" for="recommend-id-last">Nom</label>
+      <input
+        id="recommend-id-last"
+        type="text"
+        maxlength="80"
+        autocomplete="family-name"
+        placeholder="Nom *"
+      />
+      <div class="recommend-id-actions">
+        <button type="button" id="recommend-id-cancel">Annuler</button>
+        <button type="button" class="recommend-id-confirm" id="recommend-id-confirm">Continuer</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -1555,14 +1678,24 @@
       return generated;
     }
 
-    function trackRecommendationEvent(cardSlug, eventType, referrerId, visitorId) {
+    function trackRecommendationEvent(
+      cardSlug,
+      eventType,
+      referrerId,
+      visitorId,
+      recommenderFirst,
+      recommenderLast
+    ) {
       if (!cardSlug || !eventType || !referrerId) return;
-      postAnalytics("/api/analytics/recommendation-event", {
+      var body = {
         card_slug: cardSlug,
         referrer_id: referrerId,
         visitor_id: visitorId || null,
         event_type: eventType,
-      });
+      };
+      if (recommenderFirst) body.recommender_first_name = recommenderFirst;
+      if (recommenderLast) body.recommender_last_name = recommenderLast;
+      postAnalytics("/api/analytics/recommendation-event", body);
     }
 
     function sanitizeReferrerId(input) {
@@ -1628,6 +1761,118 @@
       toast.classList.toggle("error", isError);
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function generateRecommendationToken() {
+      var a = Math.random().toString(36).slice(2, 10);
+      var b = Math.random().toString(36).slice(2, 6);
+      return "rec_" + a + b;
+    }
+
+    function readReferrerStorageState(storageKey) {
+      try {
+        var raw = localStorage.getItem(storageKey);
+        if (!raw) return { kind: "empty" };
+        var trimmed = raw.trim();
+        if (!trimmed) return { kind: "empty" };
+        if (trimmed.charAt(0) === "{") {
+          var o = JSON.parse(trimmed);
+          var id = sanitizeReferrerId(o.referrerId || o.i || "");
+          var first = (o.firstName || o.f || "").trim();
+          var last = (o.lastName || o.l || "").trim();
+          if (id && first && last) {
+            return { kind: "ready", referrerId: id, firstName: first, lastName: last };
+          }
+          if (id && (!first || !last)) {
+            return { kind: "incomplete", referrerId: id, firstName: first, lastName: last };
+          }
+          return { kind: "empty" };
+        }
+        var legacy = sanitizeReferrerId(trimmed);
+        if (legacy) return { kind: "legacy_id", referrerId: legacy };
+        return { kind: "empty" };
+      } catch (e) {
+        return { kind: "empty" };
+      }
+    }
+
+    function showRecommendIdentityModal(storageKey, prefillFirst, prefillLast, fixedReferrerId) {
+      return new Promise(function (resolve) {
+        var modal = document.getElementById("recommend-identity-modal");
+        var firstEl = document.getElementById("recommend-id-first");
+        var lastEl = document.getElementById("recommend-id-last");
+        var btnOk = document.getElementById("recommend-id-confirm");
+        var btnCancel = document.getElementById("recommend-id-cancel");
+        if (!modal || !firstEl || !lastEl || !btnOk || !btnCancel) {
+          resolve(null);
+          return;
+        }
+        firstEl.value = prefillFirst || "";
+        lastEl.value = prefillLast || "";
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+
+        function cleanup() {
+          modal.classList.remove("is-open");
+          modal.setAttribute("aria-hidden", "true");
+          btnOk.onclick = null;
+          btnCancel.onclick = null;
+        }
+
+        btnCancel.onclick = function () {
+          cleanup();
+          resolve(null);
+        };
+
+        btnOk.onclick = function () {
+          var fn = (firstEl.value || "").trim();
+          var ln = (lastEl.value || "").trim();
+          if (!fn || !ln) {
+            showToast("Merci de renseigner votre prénom et votre nom.", true);
+            return;
+          }
+          var rid = fixedReferrerId ? sanitizeReferrerId(fixedReferrerId) : "";
+          if (!rid) rid = generateRecommendationToken();
+          if (!rid) {
+            showToast("Impossible de créer le lien. Réessayez.", true);
+            return;
+          }
+          try {
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                referrerId: rid,
+                firstName: fn,
+                lastName: ln,
+              })
+            );
+          } catch (e) {}
+          cleanup();
+          resolve({ referrerId: rid, firstName: fn, lastName: ln });
+        };
+      });
+    }
+
+    async function ensureReferrerProfileForRecommendationLink(storageKey) {
+      var state = readReferrerStorageState(storageKey);
+      if (state.kind === "ready") {
+        return {
+          referrerId: state.referrerId,
+          firstName: state.firstName,
+          lastName: state.lastName,
+        };
+      }
+      var fixedId = null;
+      var pf = "";
+      var pl = "";
+      if (state.kind === "legacy_id") {
+        fixedId = state.referrerId;
+      } else if (state.kind === "incomplete") {
+        fixedId = state.referrerId || null;
+        pf = state.firstName || "";
+        pl = state.lastName || "";
+      }
+      return await showRecommendIdentityModal(storageKey, pf, pl, fixedId);
     }
 
     function guessEmoji(card) {
@@ -2445,24 +2690,8 @@
         const origin = window.location.origin || "";
         const cardPublicUrl = origin + "/c/" + encodeURIComponent(slug);
         const referrerStorageKey = "smartcard_recommend_referrer_" + slug;
-        async function ensureReferrerIdForRecommendationLink() {
-          let candidate = "";
-          try {
-            candidate = sanitizeReferrerId(localStorage.getItem(referrerStorageKey) || "");
-          } catch (e) {}
-          if (candidate) return candidate;
-
-          const typed = window.prompt("Votre identifiant de recommandation (ex: marc) :");
-          if (typed === null) return null;
-          candidate = sanitizeReferrerId(typed);
-          if (!candidate) {
-            showToast("Identifiant invalide. Utilisez lettres/chiffres/-/_", true);
-            return null;
-          }
-          try {
-            localStorage.setItem(referrerStorageKey, candidate);
-          } catch (e) {}
-          return candidate;
+        async function ensureReferrerProfileForCard() {
+          return await ensureReferrerProfileForRecommendationLink(referrerStorageKey);
         }
         const shareMessage = isDemoCard
           ? "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
@@ -2540,8 +2769,9 @@
 
           if (btnRecommendMain) {
             btnRecommendMain.onclick = async function () {
-              const referrerId = await ensureReferrerIdForRecommendationLink();
-              if (!referrerId) return;
+              const profile = await ensureReferrerProfileForCard();
+              if (!profile) return;
+              const referrerId = profile.referrerId;
               const recommendShareUrl =
                 origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
               const sharePayload = {
@@ -2555,17 +2785,38 @@
                 try {
                   await navigator.share(sharePayload);
                   trackCardEvent(slug, "recommend_click");
-                  trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+                  trackRecommendationEvent(
+                    slug,
+                    "recommend_link_created",
+                    referrerId,
+                    null,
+                    profile.firstName,
+                    profile.lastName
+                  );
                 } catch (err) {
                   if (err && err.name === "AbortError") return;
                   await copyPublicUrlToClipboard(recommendShareUrl);
                   trackCardEvent(slug, "recommend_click");
-                  trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+                  trackRecommendationEvent(
+                    slug,
+                    "recommend_link_created",
+                    referrerId,
+                    null,
+                    profile.firstName,
+                    profile.lastName
+                  );
                 }
               } else {
                 await copyPublicUrlToClipboard(recommendShareUrl);
                 trackCardEvent(slug, "recommend_click");
-                trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+                trackRecommendationEvent(
+                  slug,
+                  "recommend_link_created",
+                  referrerId,
+                  null,
+                  profile.firstName,
+                  profile.lastName
+                );
               }
             };
           }
@@ -2579,42 +2830,66 @@
 
           if (btnRecommendSms) {
             btnRecommendSms.onclick = async () => {
-              const referrerId = await ensureReferrerIdForRecommendationLink();
-              if (!referrerId) return;
+              const profile = await ensureReferrerProfileForCard();
+              if (!profile) return;
+              const referrerId = profile.referrerId;
               const recommendShareUrl =
                 origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage =
                 "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
                 recommendShareUrl;
               trackCardEvent(slug, "recommend_share_sms");
-              trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+              trackRecommendationEvent(
+                slug,
+                "recommend_link_created",
+                referrerId,
+                null,
+                profile.firstName,
+                profile.lastName
+              );
               window.location.href = "sms:?&body=" + encodeURIComponent(recommendMessage);
             };
           }
 
           if (btnRecommendCopy) {
             btnRecommendCopy.onclick = async () => {
-              const referrerId = await ensureReferrerIdForRecommendationLink();
-              if (!referrerId) return;
+              const profile = await ensureReferrerProfileForCard();
+              if (!profile) return;
+              const referrerId = profile.referrerId;
               const recommendShareUrl =
                 origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
               trackCardEvent(slug, "recommend_share_copy");
-              trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+              trackRecommendationEvent(
+                slug,
+                "recommend_link_created",
+                referrerId,
+                null,
+                profile.firstName,
+                profile.lastName
+              );
               await copyPublicUrlToClipboard(recommendShareUrl);
             };
           }
 
           if (btnRecommendEmail) {
             btnRecommendEmail.onclick = async () => {
-              const referrerId = await ensureReferrerIdForRecommendationLink();
-              if (!referrerId) return;
+              const profile = await ensureReferrerProfileForCard();
+              if (!profile) return;
+              const referrerId = profile.referrerId;
               const recommendShareUrl =
                 origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage =
                 "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
                 recommendShareUrl;
               trackCardEvent(slug, "recommend_share_email");
-              trackRecommendationEvent(slug, "recommend_link_created", referrerId, null);
+              trackRecommendationEvent(
+                slug,
+                "recommend_link_created",
+                referrerId,
+                null,
+                profile.firstName,
+                profile.lastName
+              );
               const subject = encodeURIComponent("Recommandation professionnelle");
               const body = encodeURIComponent(recommendMessage);
               window.location.href = "mailto:?subject=" + subject + "&body=" + body;

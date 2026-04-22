@@ -427,6 +427,9 @@ class QuoteOut(BaseModel):
     message: Optional[str]
     source_type: Optional[str]
     referrer_id: Optional[str]
+    recommender_first_name: Optional[str] = None
+    recommender_last_name: Optional[str] = None
+    recommender_display_name: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -624,6 +627,8 @@ class RecommendationEventIn(BaseModel):
     referrer_id: str = Field(..., min_length=1, max_length=128)
     visitor_id: Optional[str] = Field(None, max_length=128)
     event_type: str = Field(..., min_length=1, max_length=64)
+    recommender_first_name: Optional[str] = Field(None, max_length=80)
+    recommender_last_name: Optional[str] = Field(None, max_length=80)
 
     @validator("card_slug")
     def validate_card_slug(cls, v: str) -> str:
@@ -640,6 +645,21 @@ class RecommendationEventIn(BaseModel):
             s = v.strip()
             return s if s else None
         return v
+
+    @validator("recommender_first_name", "recommender_last_name", pre=True)
+    def _reco_names_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
+    @validator("recommender_first_name", "recommender_last_name")
+    def _reco_names_no_spam(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        return _reject_urls_and_angle_brackets(v)
 
     @validator("event_type")
     def validate_recommendation_event_type(cls, v: str) -> str:
