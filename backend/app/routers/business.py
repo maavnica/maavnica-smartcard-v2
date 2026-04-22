@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from html import escape
 from typing import List
+from urllib.parse import urlencode
 
-from fastapi import APIRouter, Depends, Query
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -18,6 +19,7 @@ router_pages = APIRouter(tags=["business"])
 _NON_EXPIRING_PLANS = {"demo", "lifetime"}
 _ALLOWED_FILTERS = {"all", "active", "expired", "trial", "solo", "business", "demo", "lifetime"}
 _ALLOWED_SORTS = {"expiring_soon", "expiring_far", "created_new", "created_old", "company_az"}
+_ALLOWED_ACTIONS = {"convert_solo", "convert_business", "extend_30"}
 
 
 def _format_plan(plan_type: str | None) -> str:
@@ -74,6 +76,37 @@ def _apply_sort(cards: List[Card], sort_value: str) -> List[Card]:
             c.expires_at.timestamp() if c.expires_at else float("inf"),
         ),
     )
+
+
+def _business_redirect_url(filter_value: str, search_query: str, sort_value: str) -> str:
+    params = {"filter": filter_value, "sort": sort_value}
+    if search_query.strip():
+        params["q"] = search_query.strip()
+    return "/admin/business?" + urlencode(params)
+
+
+def _apply_business_action(card: Card, action_type: str) -> None:
+    now = datetime.utcnow()
+    if action_type == "convert_solo":
+        card.plan_type = "solo"
+        card.expires_at = now + timedelta(days=365)
+        return
+    if action_type == "convert_business":
+        card.plan_type = "business"
+        card.expires_at = now + timedelta(days=365)
+        return
+    if action_type == "extend_30":
+        plan_type = _format_plan(card.plan_type)
+        if plan_type not in {"trial", "solo", "business"}:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Action +30 jours non autorisee pour ce plan.",
+            )
+        # Cas propre si date absente sur un plan expirant: on repart de maintenant.
+        base_expiration = card.expires_at if card.expires_at else now
+        card.expires_at = base_expiration + timedelta(days=30)
+        return
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Action inconnue.")
 
 
 def _build_business_dashboard_html(
@@ -138,6 +171,42 @@ def _build_business_dashboard_html(
         status_badge_class = "status-expired" if status == "expired" else "status-active"
         status_label = "Expirée" if status == "expired" else "Active"
         edit_href = f"/admin?slug={escape(card.slug)}"
+        can_convert = plan_type == "trial"
+        can_extend_30 = plan_type in {"trial", "solo", "business"}
+
+        actions_html: List[str] = [f'<a href="{edit_href}">Editer</a>']
+        if can_convert:
+            actions_html.append(
+                "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
+                "<input type=\"hidden\" name=\"action_type\" value=\"convert_solo\" />"
+                f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
+                f"<input type=\"hidden\" name=\"q\" value=\"{escape(search_query)}\" />"
+                f"<input type=\"hidden\" name=\"sort\" value=\"{escape(sort_value)}\" />"
+                "<button type=\"submit\" class=\"action-btn\">Convertir Solo</button>"
+                "</form>"
+            )
+            actions_html.append(
+                "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
+                "<input type=\"hidden\" name=\"action_type\" value=\"convert_business\" />"
+                f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
+                f"<input type=\"hidden\" name=\"q\" value=\"{escape(search_query)}\" />"
+                f"<input type=\"hidden\" name=\"sort\" value=\"{escape(sort_value)}\" />"
+                "<button type=\"submit\" class=\"action-btn\">Convertir Business</button>"
+                "</form>"
+            )
+        if can_extend_30:
+            actions_html.append(
+                "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
+                "<input type=\"hidden\" name=\"action_type\" value=\"extend_30\" />"
+                f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
+                f"<input type=\"hidden\" name=\"q\" value=\"{escape(search_query)}\" />"
+                f"<input type=\"hidden\" name=\"sort\" value=\"{escape(sort_value)}\" />"
+                "<button type=\"submit\" class=\"action-btn\">+30 jours</button>"
+                "</form>"
+            )
 
         rows_html.append(
             "<tr>"
@@ -147,7 +216,7 @@ def _build_business_dashboard_html(
             f"<td>{escape(expiration_label)}</td>"
             f"<td><span class=\"status-badge {status_badge_class}\">{status_label}</span></td>"
             f"<td style=\"text-align:right\">{days_label}</td>"
-            f"<td><a href=\"{edit_href}\">Editer</a></td>"
+            f"<td class=\"actions-cell\">{''.join(actions_html)}</td>"
             "</tr>"
         )
 
@@ -229,6 +298,15 @@ def _build_business_dashboard_html(
     code {{ font-family: ui-monospace, monospace; font-size: 12px; color: #93c5fd; }}
     a {{ color: #93c5fd; }}
     .top-links {{ margin-bottom: 14px; display:flex; gap:14px; flex-wrap:wrap; }}
+    .actions-cell {{
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+      min-width: 260px;
+    }}
+    .action-form {{ margin:0; }}
+    .action-btn {{
+      background: rgba(96,165,250,.15); color: #bfdbfe; border: 1px solid rgba(96,165,250,.4);
+      border-radius: 8px; padding: 5px 8px; font-size: 12px; cursor: pointer;
+    }}
   </style>
 </head>
 <body>
@@ -323,3 +401,32 @@ def business_dashboard_page(
         sort_value=sort_value,
     )
     return HTMLResponse(content=html)
+
+
+@router_pages.post("/admin/business/actions", include_in_schema=False)
+def business_dashboard_action(
+    card_id: int = Form(...),
+    action_type: str = Form(...),
+    filter: str = Form("all"),
+    q: str = Form(""),
+    sort: str = Form("expiring_soon"),
+    db: Session = Depends(get_db),
+    _: None = Depends(require_admin_http_basic),
+):
+    filter_value = _normalize_filter(filter)
+    sort_value = _normalize_sort(sort)
+    normalized_action = (action_type or "").strip().lower()
+    if normalized_action not in _ALLOWED_ACTIONS:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Action invalide.")
+
+    card = db.query(Card).filter(Card.id == card_id).first()
+    if not card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
+
+    _apply_business_action(card, normalized_action)
+    db.commit()
+
+    return RedirectResponse(
+        url=_business_redirect_url(filter_value, q, sort_value),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
