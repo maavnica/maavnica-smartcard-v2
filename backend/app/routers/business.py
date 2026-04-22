@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datetime import datetime
 from html import escape
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
@@ -15,6 +16,8 @@ from app.utils.admin_auth import require_admin_http_basic
 router_pages = APIRouter(tags=["business"])
 
 _NON_EXPIRING_PLANS = {"demo", "lifetime"}
+_ALLOWED_FILTERS = {"all", "active", "expired", "trial", "solo", "business", "demo", "lifetime"}
+_ALLOWED_SORTS = {"expiring_soon", "expiring_far", "created_new", "created_old", "company_az"}
 
 
 def _format_plan(plan_type: str | None) -> str:
@@ -29,8 +32,58 @@ def _format_expiration_label(plan_type: str, expires_at) -> str:
     return expires_at.strftime("%d/%m/%Y")
 
 
-def _build_business_dashboard_html(db: Session) -> str:
-    cards = db.query(Card).order_by(Card.created_at.desc()).all()
+def _normalize_filter(filter_value: str | None) -> str:
+    v = (filter_value or "all").strip().lower()
+    return v if v in _ALLOWED_FILTERS else "all"
+
+
+def _normalize_sort(sort_value: str | None) -> str:
+    v = (sort_value or "expiring_soon").strip().lower()
+    return v if v in _ALLOWED_SORTS else "expiring_soon"
+
+
+def _matches_filter(plan_type: str, status: str, filter_value: str) -> bool:
+    if filter_value == "all":
+        return True
+    if filter_value in {"active", "expired"}:
+        return status == filter_value
+    return plan_type == filter_value
+
+
+def _apply_sort(cards: List[Card], sort_value: str) -> List[Card]:
+    if sort_value == "created_new":
+        return sorted(cards, key=lambda c: c.created_at or datetime.min, reverse=True)
+    if sort_value == "created_old":
+        return sorted(cards, key=lambda c: c.created_at or datetime.min)
+    if sort_value == "company_az":
+        return sorted(cards, key=lambda c: (c.company_name or "").strip().lower())
+    if sort_value == "expiring_far":
+        # Les cartes sans expiration restent en bas pour garder la lisibilité.
+        return sorted(
+            cards,
+            key=lambda c: (
+                c.expires_at is None,
+                0 if c.expires_at is None else -c.expires_at.timestamp(),
+            ),
+        )
+    # expiring_soon par défaut
+    return sorted(
+        cards,
+        key=lambda c: (
+            c.expires_at is None,
+            c.expires_at.timestamp() if c.expires_at else float("inf"),
+        ),
+    )
+
+
+def _build_business_dashboard_html(
+    db: Session,
+    *,
+    filter_value: str,
+    search_query: str,
+    sort_value: str,
+) -> str:
+    cards = db.query(Card).all()
 
     total_cards = len(cards)
     active_cards = 0
@@ -40,13 +93,12 @@ def _build_business_dashboard_html(db: Session) -> str:
     expiring_7 = 0
     expiring_30 = 0
 
-    rows_html: List[str] = []
+    filtered_cards: List[Card] = []
+    search_q_norm = search_query.strip().lower()
     for card in cards:
         plan_type = _format_plan(card.plan_type)
         status = _computed_status(card)
         days_remaining = _days_remaining(card)
-        company_name = card.company_name or "—"
-        expiration_label = _format_expiration_label(plan_type, card.expires_at)
 
         if status == "active":
             active_cards += 1
@@ -61,6 +113,26 @@ def _build_business_dashboard_html(db: Session) -> str:
             expiring_7 += 1
         if status == "active" and days_remaining is not None and days_remaining <= 30:
             expiring_30 += 1
+
+        company_raw = card.company_name or ""
+        slug_raw = card.slug or ""
+        matches_search = (
+            not search_q_norm
+            or search_q_norm in company_raw.lower()
+            or search_q_norm in slug_raw.lower()
+        )
+        if _matches_filter(plan_type, status, filter_value) and matches_search:
+            filtered_cards.append(card)
+
+    sorted_cards = _apply_sort(filtered_cards, sort_value)
+
+    rows_html: List[str] = []
+    for card in sorted_cards:
+        plan_type = _format_plan(card.plan_type)
+        status = _computed_status(card)
+        days_remaining = _days_remaining(card)
+        company_name = card.company_name or "—"
+        expiration_label = _format_expiration_label(plan_type, card.expires_at)
 
         days_label = "—" if days_remaining is None else str(days_remaining)
         status_badge_class = "status-expired" if status == "expired" else "status-active"
@@ -82,7 +154,7 @@ def _build_business_dashboard_html(db: Session) -> str:
     if not rows_html:
         rows_html.append(
             '<tr><td colspan="7" style="color:rgba(229,231,235,.7)">'
-            "Aucune carte en base.</td></tr>"
+            "Aucune carte pour ce filtre/recherche.</td></tr>"
         )
 
     return f"""<!DOCTYPE html>
@@ -123,6 +195,24 @@ def _build_business_dashboard_html(db: Session) -> str:
     }}
     .kpi-label {{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }}
     .kpi-val {{ font-size: 26px; font-weight: 700; color: #fff; }}
+    .filters {{
+      margin-bottom: 14px; display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;
+      align-items:end;
+    }}
+    .filters label {{ font-size: 12px; color: var(--muted); display:block; margin-bottom: 4px; }}
+    .filters input, .filters select {{
+      width: 100%; background: var(--card); color: var(--text); border: 1px solid var(--line);
+      border-radius: 10px; padding: 9px 10px; font-size: 13px;
+    }}
+    .filters button, .filters a {{
+      background: rgba(96,165,250,.2); color: #bfdbfe; border: 1px solid rgba(96,165,250,.4);
+      border-radius: 10px; padding: 9px 12px; font-size: 13px; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
+    }}
+    .table-meta {{ margin: 8px 0 10px; color: var(--muted); font-size: 12px; }}
+    @media (max-width: 980px) {{
+      .filters {{ grid-template-columns: 1fr; }}
+    }}
     table {{
       width: 100%; border-collapse: collapse; background: var(--card);
       border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
@@ -161,6 +251,40 @@ def _build_business_dashboard_html(db: Session) -> str:
       <div class="kpi"><div class="kpi-label">Expire sous 7 jours</div><div class="kpi-val">{expiring_7}</div></div>
       <div class="kpi"><div class="kpi-label">Expire sous 30 jours</div><div class="kpi-val">{expiring_30}</div></div>
     </div>
+    <form method="get" action="/admin/business" class="filters">
+      <div>
+        <label for="filter">Filtre</label>
+        <select id="filter" name="filter">
+          <option value="all" {"selected" if filter_value == "all" else ""}>Toutes</option>
+          <option value="active" {"selected" if filter_value == "active" else ""}>Active</option>
+          <option value="expired" {"selected" if filter_value == "expired" else ""}>Expired</option>
+          <option value="trial" {"selected" if filter_value == "trial" else ""}>Trial</option>
+          <option value="solo" {"selected" if filter_value == "solo" else ""}>Solo</option>
+          <option value="business" {"selected" if filter_value == "business" else ""}>Business</option>
+          <option value="demo" {"selected" if filter_value == "demo" else ""}>Demo</option>
+          <option value="lifetime" {"selected" if filter_value == "lifetime" else ""}>Lifetime</option>
+        </select>
+      </div>
+      <div>
+        <label for="q">Recherche (entreprise ou slug)</label>
+        <input id="q" name="q" type="text" value="{escape(search_query)}" placeholder="Ex. plomberie ou jules-card" />
+      </div>
+      <div>
+        <label for="sort">Tri</label>
+        <select id="sort" name="sort">
+          <option value="expiring_soon" {"selected" if sort_value == "expiring_soon" else ""}>Expiration la plus proche</option>
+          <option value="expiring_far" {"selected" if sort_value == "expiring_far" else ""}>Expiration la plus lointaine</option>
+          <option value="created_new" {"selected" if sort_value == "created_new" else ""}>Création la plus récente</option>
+          <option value="created_old" {"selected" if sort_value == "created_old" else ""}>Création la plus ancienne</option>
+          <option value="company_az" {"selected" if sort_value == "company_az" else ""}>Entreprise A→Z</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px; align-items:end;">
+        <button type="submit">Appliquer</button>
+        <a href="/admin/business">Reset</a>
+      </div>
+    </form>
+    <div class="table-meta">{len(sorted_cards)} carte(s) affichée(s) sur {total_cards}.</div>
     <table>
       <thead>
         <tr>
@@ -184,8 +308,18 @@ def _build_business_dashboard_html(db: Session) -> str:
 
 @router_pages.get("/admin/business", response_class=HTMLResponse, include_in_schema=False)
 def business_dashboard_page(
+    filter: str = Query("all"),
+    q: str = Query(""),
+    sort: str = Query("expiring_soon"),
     db: Session = Depends(get_db),
     _: None = Depends(require_admin_http_basic),
 ):
-    html = _build_business_dashboard_html(db)
+    filter_value = _normalize_filter(filter)
+    sort_value = _normalize_sort(sort)
+    html = _build_business_dashboard_html(
+        db,
+        filter_value=filter_value,
+        search_query=q,
+        sort_value=sort_value,
+    )
     return HTMLResponse(content=html)
