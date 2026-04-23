@@ -1855,21 +1855,11 @@
     }
 
     async function ensureReferrerProfileForRecommendationLink(storageKey) {
-      var state = readReferrerStorageState(storageKey);
-      if (state.kind === "ready") {
-        return {
-          referrerId: state.referrerId,
-          firstName: state.firstName,
-          lastName: state.lastName,
-        };
-      }
-      var pf = "";
-      var pl = "";
-      if (state.kind === "incomplete") {
-        pf = state.firstName || "";
-        pl = state.lastName || "";
-      }
-      return await showRecommendIdentityModal(storageKey, pf, pl);
+      // Règle métier: chaque nouvelle action de recommandation repart de zéro.
+      // Aucun profil antérieur (ready/legacy/incomplete) ne doit bypasser la saisie.
+      // On garde l'écriture storage pour compat/traçabilité locale, mais la lecture
+      // ne sert plus à auto-réinjecter ni à sauter la modale.
+      return await showRecommendIdentityModal(storageKey, "", "");
     }
 
     function guessEmoji(card) {
