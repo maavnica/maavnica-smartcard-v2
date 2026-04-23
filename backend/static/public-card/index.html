@@ -1796,7 +1796,7 @@
       }
     }
 
-    function showRecommendIdentityModal(storageKey, prefillFirst, prefillLast, fixedReferrerId) {
+    function showRecommendIdentityModal(storageKey, prefillFirst, prefillLast) {
       return new Promise(function (resolve) {
         var modal = document.getElementById("recommend-identity-modal");
         var firstEl = document.getElementById("recommend-id-first");
@@ -1831,8 +1831,9 @@
             showToast("Merci de renseigner votre prénom et votre nom.", true);
             return;
           }
-          var rid = fixedReferrerId ? sanitizeReferrerId(fixedReferrerId) : "";
-          if (!rid) rid = generateRecommendationToken();
+          // Dès qu'un nouveau profil est validé, on force un nouvel ID opaque "rec_*".
+          // On n'hérite jamais d'un ancien ID legacy (ex: "marc").
+          var rid = generateRecommendationToken();
           if (!rid) {
             showToast("Impossible de créer le lien. Réessayez.", true);
             return;
@@ -1862,17 +1863,13 @@
           lastName: state.lastName,
         };
       }
-      var fixedId = null;
       var pf = "";
       var pl = "";
-      if (state.kind === "legacy_id") {
-        fixedId = state.referrerId;
-      } else if (state.kind === "incomplete") {
-        fixedId = state.referrerId || null;
+      if (state.kind === "incomplete") {
         pf = state.firstName || "";
         pl = state.lastName || "";
       }
-      return await showRecommendIdentityModal(storageKey, pf, pl, fixedId);
+      return await showRecommendIdentityModal(storageKey, pf, pl);
     }
 
     function guessEmoji(card) {
@@ -2777,8 +2774,7 @@
               const sharePayload = {
                 title: "Recommandation professionnelle",
                 text:
-                  "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
-                  recommendShareUrl,
+                  "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici.",
                 url: recommendShareUrl
               };
               if (typeof navigator.share === "function") {
