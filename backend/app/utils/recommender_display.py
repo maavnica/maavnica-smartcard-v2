@@ -30,9 +30,14 @@ def effective_recommender_label(
     display_name: Optional[str],
     legacy_referrer_id: Optional[str],
 ) -> str:
-    """Libellé humain : display si présent, sinon identifiant technique (ex. ancien ?r=marc)."""
+    """Libellé humain : display si présent ; sinon anciens id lisibles (ex. ?r=marc).
+    Les jetons opaques rec_* ne sont pas affichés à l'artisan (traçabilité interne uniquement)."""
     d = normalize_recommender_part(display_name) if display_name else ""
     if d:
         return d
     rid = (legacy_referrer_id or "").strip()
-    return rid if rid else "—"
+    if not rid:
+        return "—"
+    if rid.lower().startswith("rec_"):
+        return "—"
+    return rid

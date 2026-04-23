@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
-from sqlalchemy import or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 from html import escape
 import re
@@ -38,20 +38,43 @@ def get_card_by_slug_or_404(slug: str, db: Session) -> Card:
     return card
 
 
-def _latest_recommender_row_for_token(db: Session, token: str) -> Optional[RecommendationEvent]:
-    return (
+def _latest_recommender_row_for_token(
+    db: Session, token: str, card_slug: str
+) -> Optional[RecommendationEvent]:
+    """
+    Dernière ligne d'événement portant une identité humaine pour ce token,
+    sur la même carte. Préfère recommend_link_created (où prénom/nom sont renseignés).
+    Comparaison de token insensible à la casse (URL vs stockage).
+    """
+    tnorm = (token or "").strip().lower()
+    slug = (card_slug or "").strip()
+    if not tnorm or not slug:
+        return None
+
+    disp = RecommendationEvent.recommender_display_name
+    fn = RecommendationEvent.recommender_first_name
+    ln = RecommendationEvent.recommender_last_name
+    has_human = or_(
+        and_(disp.isnot(None), func.length(func.trim(disp)) > 0),
+        and_(fn.isnot(None), func.length(func.trim(fn)) > 0),
+        and_(ln.isnot(None), func.length(func.trim(ln)) > 0),
+    )
+
+    q = (
         db.query(RecommendationEvent)
-        .filter(RecommendationEvent.referrer_id == token)
-        .filter(
-            or_(
-                RecommendationEvent.recommender_display_name.isnot(None),
-                RecommendationEvent.recommender_first_name.isnot(None),
-                RecommendationEvent.recommender_last_name.isnot(None),
-            )
-        )
+        .filter(func.lower(RecommendationEvent.referrer_id) == tnorm)
+        .filter(RecommendationEvent.card_slug == slug)
+    )
+
+    row = (
+        q.filter(RecommendationEvent.event_type == "recommend_link_created")
+        .filter(has_human)
         .order_by(RecommendationEvent.id.desc())
         .first()
     )
+    if row:
+        return row
+    return q.filter(has_human).order_by(RecommendationEvent.id.desc()).first()
 
 
 def _card_url(card: Card) -> str:
@@ -370,7 +393,7 @@ def create_quote(
     reco_last: Optional[str] = None
     reco_display: Optional[str] = None
     if payload.source_type == "recommendation" and payload.referrer_id:
-        ev = _latest_recommender_row_for_token(db, payload.referrer_id)
+        ev = _latest_recommender_row_for_token(db, payload.referrer_id, card.slug)
         if ev:
             reco_first = ev.recommender_first_name
             reco_last = ev.recommender_last_name

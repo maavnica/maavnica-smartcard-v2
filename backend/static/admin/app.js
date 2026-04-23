@@ -562,9 +562,14 @@ async function loadFeedbackAndQuotes() {
             <div><strong>Origine :</strong> ${
               q.source_type === "recommendation" ? "recommandation" : "directe / autre"
             }</div>
-            <div><strong>Recommandé par :</strong> ${
-              q.recommender_display_name || q.referrer_id || "—"
-            }</div>
+            <div><strong>Recommandé par :</strong> ${(() => {
+              const d = (q.recommender_display_name || "").trim();
+              if (d) return d;
+              const rid = (q.referrer_id || "").trim();
+              if (!rid) return "—";
+              if (rid.toLowerCase().startsWith("rec_")) return "—";
+              return rid;
+            })()}</div>
             <div class="item-meta">${new Date(
               q.created_at
             ).toLocaleString()}</div>
