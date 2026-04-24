@@ -273,23 +273,35 @@
 
     .hero-main-row {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
       min-width: 0; /* ✅ important pour ellipsis */
     }
 
     .hero-avatar {
-      width: 46px;
-      height: 46px;
+      width: clamp(60px, 18vw, 68px);
+      height: clamp(60px, 18vw, 68px);
       position: relative;
       overflow: hidden;
       border-radius: 50%;
       flex: 0 0 auto;
       background-color: #111827;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.34);
       box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.08);
+        0 8px 20px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 0 20px rgba(255, 255, 255, 0.08),
+        0 0 26px var(--primary-soft);
+    }
+
+    @media (max-width: 380px) {
+      .hero-main-row {
+        gap: 10px;
+      }
+      .hero-avatar {
+        width: 58px;
+        height: 58px;
+      }
     }
 
     #hero-avatar-img {
@@ -1693,9 +1705,23 @@
         visitor_id: visitorId || null,
         event_type: eventType,
       };
-      if (recommenderFirst) body.recommender_first_name = recommenderFirst;
-      if (recommenderLast) body.recommender_last_name = recommenderLast;
-      postAnalytics("/api/analytics/recommendation-event", body);
+      if (eventType === "recommend_link_created") {
+        body.recommender_first_name = recommenderFirst || null;
+        body.recommender_last_name = recommenderLast || null;
+      } else {
+        if (recommenderFirst) body.recommender_first_name = recommenderFirst;
+        if (recommenderLast) body.recommender_last_name = recommenderLast;
+      }
+      // fetch + Content-Type explicite : sendBeacon + Blob est peu fiable pour le JSON côté API.
+      try {
+        var json = JSON.stringify(body);
+        fetch("/api/analytics/recommendation-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: json,
+          keepalive: true,
+        }).catch(function () {});
+      } catch (e) {}
     }
 
     function sanitizeReferrerId(input) {
@@ -2056,6 +2082,11 @@
         }
 
         const card = await res.json();
+        // Slug canonique API (lookup devis / recommendation_events) — évite écart casse/path vs DB.
+        const analyticsSlug =
+          (card.slug != null && card.slug !== undefined && String(card.slug).trim())
+            ? String(card.slug).trim()
+            : slug;
 
         var showOwnerShareTools = !!isDemoCard || card.owner_mode === true;
         document.body.classList.toggle("owner-share-tools", showOwnerShareTools);
@@ -2086,7 +2117,7 @@
 
         if (referrerIdFromUrl) {
           trackRecommendationEvent(
-            slug,
+            analyticsSlug,
             "recommend_visit",
             referrerIdFromUrl,
             recommendationVisitorId
@@ -2401,7 +2432,7 @@
               trackCardEvent(slug, "whatsapp_click");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
-                  slug,
+                  analyticsSlug,
                   "recommend_contact",
                   referrerIdFromUrl,
                   recommendationVisitorId
@@ -2430,7 +2461,7 @@
               trackCardEvent(slug, "phone_click");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
-                  slug,
+                  analyticsSlug,
                   "recommend_contact",
                   referrerIdFromUrl,
                   recommendationVisitorId
@@ -2637,7 +2668,7 @@
               trackCardEvent(slug, "rdv_request");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
-                  slug,
+                  analyticsSlug,
                   "recommend_contact",
                   referrerIdFromUrl,
                   recommendationVisitorId
@@ -2772,7 +2803,7 @@
                   await navigator.share(sharePayload);
                   trackCardEvent(slug, "recommend_click");
                   trackRecommendationEvent(
-                    slug,
+                    analyticsSlug,
                     "recommend_link_created",
                     referrerId,
                     null,
@@ -2784,7 +2815,7 @@
                   await copyPublicUrlToClipboard(recommendShareUrl);
                   trackCardEvent(slug, "recommend_click");
                   trackRecommendationEvent(
-                    slug,
+                    analyticsSlug,
                     "recommend_link_created",
                     referrerId,
                     null,
@@ -2796,7 +2827,7 @@
                 await copyPublicUrlToClipboard(recommendShareUrl);
                 trackCardEvent(slug, "recommend_click");
                 trackRecommendationEvent(
-                  slug,
+                  analyticsSlug,
                   "recommend_link_created",
                   referrerId,
                   null,
@@ -2826,7 +2857,7 @@
                 recommendShareUrl;
               trackCardEvent(slug, "recommend_share_sms");
               trackRecommendationEvent(
-                slug,
+                analyticsSlug,
                 "recommend_link_created",
                 referrerId,
                 null,
@@ -2846,7 +2877,7 @@
                 origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
               trackCardEvent(slug, "recommend_share_copy");
               trackRecommendationEvent(
-                slug,
+                analyticsSlug,
                 "recommend_link_created",
                 referrerId,
                 null,
@@ -2869,7 +2900,7 @@
                 recommendShareUrl;
               trackCardEvent(slug, "recommend_share_email");
               trackRecommendationEvent(
-                slug,
+                analyticsSlug,
                 "recommend_link_created",
                 referrerId,
                 null,
