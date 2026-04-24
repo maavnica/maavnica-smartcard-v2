@@ -579,11 +579,13 @@
     if(offre === "business"){
       badge.textContent = "OFFRE BUSINESS";
       title.textContent = "SmartCard Business";
-      price.textContent = "99€ HT / an (5 cartes)";
+      price.textContent = "99€ HT / an";
       bullets.innerHTML = `
-        <li>Pack de 5 SmartCards (idéal équipe / multi-activités)</li>
-        <li>Configuration sur mesure + support</li>
-        <li>Livraison rapide + prochaines étapes après paiement</li>`;
+        <li>Tout le contenu de SmartCard Solo</li>
+        <li>Parcours de recommandation client intégré</li>
+        <li>Bouton de recommandation intégré</li>
+        <li>Bouche-à-oreille facilité après chaque prestation</li>
+        <li>Vos clients satisfaits peuvent vous recommander plus facilement</li>`;
       fieldOffre.value = "business";
       fieldStripe.value = STRIPE_BUSINESS_URL;
     } else {
