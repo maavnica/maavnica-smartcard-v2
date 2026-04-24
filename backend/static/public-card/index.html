@@ -1068,6 +1068,27 @@
   overflow-wrap: anywhere;  /* coupe même les mots longs */
 }
 
+.qr-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.qr-copy-main {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(226, 232, 240, 0.96);
+  letter-spacing: 0.01em;
+}
+
+.qr-copy-hint {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.92);
+}
+
 
     .footer {
       margin-top: 10px;
@@ -1541,8 +1562,9 @@
 
           <div class="qr-wrap">
             <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
-            <div>
-              Scannez pour accéder à la carte
+            <div class="qr-copy">
+              <div class="qr-copy-main">Scannez pour accéder à la carte</div>
+              <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
             </div>
           </div>
         </div>
