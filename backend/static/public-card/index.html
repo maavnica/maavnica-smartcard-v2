@@ -1628,6 +1628,22 @@
   </div>
 
   <script>
+    (function syncAdminViewFromUrlEarly() {
+      try {
+        const params = new URLSearchParams(window.location.search || "");
+
+        if (params.get("admin_view") === "1") {
+          localStorage.setItem("smartcard_admin_view", "1");
+          console.info("[SmartCard analytics] internal admin view enabled");
+        }
+
+        if (params.get("admin_view") === "0") {
+          localStorage.removeItem("smartcard_admin_view");
+          console.info("[SmartCard analytics] internal admin view disabled");
+        }
+      } catch (e) {}
+    })();
+
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
       const cIndex = parts.indexOf("c");
@@ -1752,6 +1768,10 @@
       recommenderFirst,
       recommenderLast
     ) {
+      if (shouldSkipAnalyticsTracking()) {
+        console.info("[SmartCard analytics] skipped internal recommendation event");
+        return;
+      }
       if (!cardSlug || !eventType || !referrerId) return;
       var body = {
         card_slug: cardSlug,
@@ -1797,6 +1817,28 @@
       }
     }
 
+    function shouldSkipAnalyticsTracking() {
+      try {
+        return localStorage.getItem("smartcard_admin_view") === "1";
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function syncAdminViewFromUrl() {
+      try {
+        const p = new URLSearchParams(window.location.search || "");
+        const adminView = p.get("admin_view");
+        if (adminView === "1") {
+          localStorage.setItem("smartcard_admin_view", "1");
+          return;
+        }
+        if (adminView === "0") {
+          localStorage.removeItem("smartcard_admin_view");
+        }
+      } catch (e) {}
+    }
+
     function postAnalytics(url, body) {
       try {
         const json = JSON.stringify(body);
@@ -1815,6 +1857,10 @@
     }
 
     function trackCardVisit(slug) {
+      if (shouldSkipAnalyticsTracking()) {
+        console.info("[SmartCard analytics] skipped internal card visit");
+        return;
+      }
       const t = getUrlTrackingParams();
       postAnalytics("/api/analytics/visit", {
         slug: slug,
@@ -1825,6 +1871,10 @@
     }
 
     function trackCardEvent(slug, eventType) {
+      if (shouldSkipAnalyticsTracking()) {
+        console.info("[SmartCard analytics] skipped internal card event", eventType);
+        return;
+      }
       const t = getUrlTrackingParams();
       postAnalytics("/api/analytics/event", {
         slug: slug,
@@ -2088,6 +2138,8 @@
     }
 
     async function loadCard() {
+      syncAdminViewFromUrl();
+
       const slug = getSlugFromPath();
       if (!slug) {
         showToast("Slug introuvable dans l’URL", true);
@@ -2167,9 +2219,11 @@
           }
         }
 
-        trackCardVisit(slug);
+        if (!shouldSkipAnalyticsTracking()) {
+          trackCardVisit(slug);
+        }
 
-        if (referrerIdFromUrl) {
+        if (!shouldSkipAnalyticsTracking() && referrerIdFromUrl) {
           trackRecommendationEvent(
             analyticsSlug,
             "recommend_visit",
@@ -2178,7 +2232,11 @@
           );
         }
 
-        if (!visitFromRecommendationEventDone && isRecommendSourceParam()) {
+        if (
+          !shouldSkipAnalyticsTracking() &&
+          !visitFromRecommendationEventDone &&
+          isRecommendSourceParam()
+        ) {
           visitFromRecommendationEventDone = true;
           trackCardEvent(slug, "visit_from_recommendation");
         }
