@@ -54,6 +54,7 @@ document.getElementById("last-name").value = card.last_name || "";
 
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("plan-type").value = card.plan_type || "demo";
+  document.getElementById("region-version").value = card.region || "fr";
   document.getElementById("expires-at").value = toDatetimeLocalValue(card.expires_at);
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
@@ -108,6 +109,7 @@ document.getElementById("last-name").value = "";
 
   document.getElementById("slug").value = "";
   document.getElementById("plan-type").value = "demo";
+  document.getElementById("region-version").value = "fr";
   document.getElementById("expires-at").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
@@ -324,6 +326,7 @@ async function saveCard() {
     company_name: companyName,
     slug,
     plan_type: document.getElementById("plan-type").value || "demo",
+    region: document.getElementById("region-version").value || "fr",
     expires_at: (() => {
       const v = document.getElementById("expires-at").value;
       return v ? new Date(v).toISOString() : null;
@@ -452,7 +455,7 @@ async function loadAllCards() {
       <table class="cards-table">
         <thead>
           <tr>
-            <th>Slug</th><th>Plan</th><th>Expiration</th><th>Statut</th><th>Jours restants</th>
+            <th>Slug</th><th>Plan</th><th>Région</th><th>Expiration</th><th>Statut</th><th>Jours restants</th>
           </tr>
         </thead>
         <tbody>
@@ -460,6 +463,7 @@ async function loadAllCards() {
             <tr data-slug="${c.slug}" class="card-row">
               <td>${c.slug}</td>
               <td>${c.plan_type || "demo"}</td>
+              <td>${c.region || "fr"}</td>
               <td>${formatExpiration(c)}</td>
               <td><span class="status-badge ${c.computed_status === "expired" ? "status-expired" : "status-active"}">${c.computed_status || "active"}</span></td>
               <td>${c.days_remaining == null ? "—" : c.days_remaining}</td>

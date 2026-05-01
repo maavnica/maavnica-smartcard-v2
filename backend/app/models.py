@@ -48,6 +48,7 @@ class Card(Base):
     company_name = Column(String, nullable=False)
     slug = Column(String, unique=True, index=True, nullable=False)
     plan_type = Column(String(32), nullable=False, default="demo")
+    region = Column(String(16), nullable=False, default="fr")
     expires_at = Column(DateTime, nullable=True)
 
     # 🔹 NOUVEAUX CHAMPS – PROFIL & INFOS DIGITALES

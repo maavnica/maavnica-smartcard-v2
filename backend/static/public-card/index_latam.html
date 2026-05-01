@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartCard LATAM</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f7f8fb; color: #101828; }
+    .wrap { max-width: 520px; margin: 0 auto; padding: 20px 14px 28px; }
+    .card { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 8px 24px rgba(16,24,40,.08); }
+    .top { display: flex; gap: 14px; align-items: center; }
+    .avatar { width: 78px; height: 78px; border-radius: 50%; object-fit: cover; background: #d0d5dd; }
+    h1 { margin: 0; font-size: 22px; line-height: 1.2; }
+    .meta { margin-top: 4px; color: #475467; font-size: 14px; }
+    .lead { margin: 14px 0 8px; font-size: 19px; font-weight: 700; line-height: 1.25; }
+    .desc { margin: 0 0 16px; color: #475467; }
+    .btn { width: 100%; border: 0; border-radius: 12px; padding: 13px 14px; font-weight: 700; font-size: 16px; cursor: pointer; }
+    .btn + .btn { margin-top: 10px; }
+    .btn-wa { background: #1fa855; color: #fff; }
+    .btn-review { background: #f2f4f7; color: #101828; }
+    .btn-reco { background: #0b63f6; color: #fff; }
+    .hint { margin-top: 14px; text-align: center; font-size: 13px; color: #475467; }
+    .foot { margin-top: 12px; text-align: center; font-size: 12px; color: #667085; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="top">
+        <img id="avatar" class="avatar" alt="Foto profesional" />
+        <div>
+          <h1 id="display-name">SmartCard</h1>
+          <div class="meta" id="job-line"></div>
+          <div class="meta" id="city-line"></div>
+        </div>
+      </div>
+
+      <p class="lead">Tus clientes satisfechos pueden traerte nuevos clientes.</p>
+      <p class="desc">Una tarjeta simple para recibir mensajes, opiniones y recomendaciones por WhatsApp.</p>
+
+      <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
+      <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
+      <button class="btn btn-reco" id="btn-recommend" type="button">Recomendar a un amigo</button>
+
+      <div class="hint">Demo interactiva — sin compromiso.</div>
+      <div class="foot">Propulsado por Maavnica</div>
+    </section>
+  </main>
+
+  <script>
+    function getSlugFromPath() {
+      var parts = (window.location.pathname || "").split("/").filter(Boolean);
+      if (parts.length >= 2 && parts[0] === "c") return decodeURIComponent(parts[1]);
+      return null;
+    }
+
+    function getUrlTrackingParams() {
+      try {
+        var p = new URLSearchParams(window.location.search || "");
+        return { src: p.get("src") || null, ref: p.get("ref") || null, rec: p.get("rec") || null };
+      } catch (e) {
+        return { src: null, ref: null, rec: null };
+      }
+    }
+
+    function postAnalytics(url, body) {
+      try {
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+          keepalive: true
+        }).catch(function () {});
+      } catch (e) {}
+    }
+
+    function trackCardVisit(slug) {
+      var t = getUrlTrackingParams();
+      postAnalytics("/api/analytics/visit", { slug: slug, src: t.src, ref: t.ref, rec: t.rec });
+    }
+
+    function trackCardEvent(slug, eventType) {
+      var t = getUrlTrackingParams();
+      postAnalytics("/api/analytics/event", {
+        slug: slug,
+        event_type: eventType,
+        src: t.src,
+        ref: t.ref,
+        rec: t.rec
+      });
+    }
+
+    function generateRecommendationToken() {
+      return "rec_" + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
+    }
+
+    async function ensureReferrerProfileForRecommendationLink() {
+      // Version simplifiée LATAM: identité facultative, token opaque côté tracking.
+      return { referrerId: generateRecommendationToken() };
+    }
+
+    function trackRecommendationEvent(cardSlug, eventType, referrerId) {
+      if (!cardSlug || !eventType || !referrerId) return;
+      postAnalytics("/api/analytics/recommendation-event", {
+        card_slug: cardSlug,
+        referrer_id: referrerId,
+        visitor_id: null,
+        event_type: eventType
+      });
+    }
+
+    /** Digits only for https://wa.me/<number> (leading + must not be URL-encoded in path). */
+    function whatsAppMeDigits(phone) {
+      var d = (phone || "").replace(/\D/g, "");
+      return d || "";
+    }
+
+    async function loadCard() {
+      var slug = getSlugFromPath();
+      if (!slug) return;
+
+      var cardSection = document.querySelector(".card");
+      var res = await fetch("/api/public/cards/" + encodeURIComponent(slug));
+      if (!res.ok) {
+        var msg =
+          res.status === 403
+            ? "Esta tarjeta ya no está activa."
+            : "No se encontró esta tarjeta.";
+        if (cardSection) {
+          cardSection.innerHTML =
+            '<p style="padding:20px 14px;text-align:center;margin:0;color:#475467;">' +
+            msg +
+            "</p>";
+        }
+        return;
+      }
+      var card = await res.json();
+
+      var publicUrl = (window.location.origin || "") + "/c/" + encodeURIComponent(slug);
+      var fullName = (card.display_name || card.company_name || "SmartCard").trim();
+      var job = (card.job_title || "").trim();
+      var city = (card.business_name || "").trim();
+
+      document.getElementById("display-name").textContent = fullName;
+      document.getElementById("job-line").textContent = job;
+      document.getElementById("city-line").textContent = city;
+      document.getElementById("avatar").src = card.avatar_url || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+      document.title = fullName + " - SmartCard LATAM";
+
+      var waBtn = document.getElementById("btn-whatsapp");
+      var reviewBtn = document.getElementById("btn-review");
+      var recoBtn = document.getElementById("btn-recommend");
+
+      waBtn.onclick = function () {
+        var waDigits = whatsAppMeDigits(card.whatsapp || card.phone || "");
+        if (!waDigits) return;
+        trackCardEvent(slug, "whatsapp_click");
+        window.location.href = "https://wa.me/" + waDigits;
+      };
+
+      reviewBtn.onclick = function () {
+        if (!card.google_review_link) return;
+        trackCardEvent(slug, "google_review_click");
+        window.open(card.google_review_link, "_blank", "noopener");
+      };
+      if (!card.google_review_link) {
+        reviewBtn.disabled = true;
+        reviewBtn.style.opacity = "0.5";
+        reviewBtn.style.cursor = "not-allowed";
+      }
+      if (!whatsAppMeDigits(card.whatsapp || card.phone || "")) {
+        waBtn.disabled = true;
+        waBtn.style.opacity = "0.5";
+        waBtn.style.cursor = "not-allowed";
+      }
+
+      recoBtn.onclick = async function () {
+        var profile = await ensureReferrerProfileForRecommendationLink();
+        if (!profile || !profile.referrerId) return;
+        var recommendUrl = publicUrl + "?r=" + encodeURIComponent(profile.referrerId);
+        var msg = "Hola, te recomiendo este profesional 👍\n" + recommendUrl;
+        trackCardEvent(slug, "recommend_click");
+        trackCardEvent(slug, "recommend_share_whatsapp");
+        trackRecommendationEvent(slug, "recommend_link_created", profile.referrerId);
+        window.location.href = "https://wa.me/?text=" + encodeURIComponent(msg);
+      };
+
+      trackCardVisit(slug);
+    }
+
+    loadCard();
+  </script>
+</body>
+</html>

@@ -65,6 +65,7 @@ def _create_db_tables():
         ensure_recommendation_event_display_columns,
         ensure_owner_share_key_column,
         ensure_card_plan_columns,
+        ensure_card_region_column,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -74,6 +75,7 @@ def _create_db_tables():
     ensure_recommendation_code_column()
     ensure_owner_share_key_column()
     ensure_card_plan_columns()
+    ensure_card_region_column()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
 
@@ -180,7 +182,18 @@ async def serve_public_card(slug: str):
     Affiche la carte publique pour un slug donné.
     Le template est statique ; le JS récupère le slug via l'URL et charge les données via l'API.
     """
+    from app.database import SessionLocal
+    from app.models import Card
+
     file_path = STATIC_DIR / "public-card" / "index.html"
+    db = SessionLocal()
+    try:
+        card = db.query(Card).filter(Card.slug == slug).first()
+        if card and (getattr(card, "region", "fr") or "fr").lower() == "latam":
+            file_path = STATIC_DIR / "public-card" / "index_latam.html"
+    finally:
+        db.close()
+
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")
     return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")

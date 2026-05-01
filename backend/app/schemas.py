@@ -14,6 +14,7 @@ _PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
 _AFFILIATE_REF_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{0,31}$")
 _RECOMMENDATION_CODE_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,64}$")
 _ALLOWED_PLAN_TYPES = {"demo", "lifetime", "trial", "solo", "business"}
+_ALLOWED_REGIONS = {"fr", "latam"}
 
 
 def _reject_urls_and_angle_brackets(v: str) -> str:
@@ -42,6 +43,7 @@ class CardBase(BaseModel):
     company_name: str
     slug: str
     plan_type: str = "demo"
+    region: str = "fr"
     expires_at: Optional[datetime] = None
 
     # 🔹 NOUVEAUX CHAMPS — PROFIL & INFOS MÉTIER
@@ -133,6 +135,22 @@ class CardBase(BaseModel):
             raise ValueError("plan_type invalide.")
         return v
 
+    @field_validator("region", mode="before")
+    @classmethod
+    def _region_normalize(cls, v):
+        if v is None:
+            return "fr"
+        if isinstance(v, str):
+            return v.strip().lower() or "fr"
+        return v
+
+    @field_validator("region")
+    @classmethod
+    def _region_validate(cls, v: str) -> str:
+        if v not in _ALLOWED_REGIONS:
+            raise ValueError("region invalide.")
+        return v
+
     @model_validator(mode="after")
     def _expires_at_vs_plan_type(self):
         plan_type = self.plan_type or "demo"
@@ -160,6 +178,7 @@ class CardUpdate(BaseModel):
     company_name: Optional[str] = None
     slug: Optional[str] = None
     plan_type: Optional[str] = None
+    region: Optional[str] = None
     expires_at: Optional[datetime] = None
 
     # 🔹 Nouveaux champs
@@ -249,6 +268,25 @@ class CardUpdate(BaseModel):
             raise ValueError("plan_type invalide.")
         return v
 
+    @field_validator("region", mode="before")
+    @classmethod
+    def _region_update_normalize(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            return s if s else None
+        return v
+
+    @field_validator("region")
+    @classmethod
+    def _region_update_validate(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if v not in _ALLOWED_REGIONS:
+            raise ValueError("region invalide.")
+        return v
+
 
 # =============================================================
 #  SMARTCARD — RÉPONSE API (PUBLIC + ADMIN)
@@ -263,6 +301,7 @@ class CardPublic(BaseModel):
     company_name: str
     slug: str
     plan_type: str = "demo"
+    region: str = "fr"
     expires_at: Optional[datetime] = None
     computed_status: str = "active"
     days_remaining: Optional[int] = None

@@ -250,3 +250,26 @@ def ensure_card_plan_columns() -> None:
             conn.execute(text(stmt))
 
 
+def ensure_card_region_column() -> None:
+    """Ajoute region sur cards si colonne manquante (default fr)."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "region" in existing:
+        return
+
+    dialect = engine.dialect.name
+    if dialect == "sqlite":
+        stmt = "ALTER TABLE cards ADD COLUMN region VARCHAR(16) NOT NULL DEFAULT 'fr'"
+    else:
+        stmt = "ALTER TABLE cards ADD COLUMN region VARCHAR(16) NOT NULL DEFAULT 'fr'"
+    with engine.begin() as conn:
+        conn.execute(text(stmt))
+
+

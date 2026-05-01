@@ -60,10 +60,11 @@ def _latest_recommender_row_for_token(
         and_(ln.isnot(None), func.length(func.trim(ln)) > 0),
     )
 
+    slug_norm = slug.lower()
     q = (
         db.query(RecommendationEvent)
         .filter(func.lower(RecommendationEvent.referrer_id) == tnorm)
-        .filter(RecommendationEvent.card_slug == slug)
+        .filter(func.lower(RecommendationEvent.card_slug) == slug_norm)
     )
 
     row = (
