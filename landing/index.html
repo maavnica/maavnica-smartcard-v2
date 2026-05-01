@@ -24,10 +24,61 @@
 
     /* ---------- HERO ---------- */
     .hero-wrap {
+      position:relative;
       background: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 55%, #000 100%);
       color:#fff;
       padding:72px 0 56px;
       border-bottom:1px solid rgba(148,163,184,0.15);
+    }
+
+    .lang-switch {
+      position:absolute;
+      top:18px;
+      right:20px;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      gap:2px;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:#94a3b8;
+    }
+    .lang-switch-btn {
+      margin:0;
+      padding:6px 10px;
+      border:none;
+      border-radius:999px;
+      background:rgba(15,23,42,0.65);
+      border:1px solid rgba(148,163,184,0.25);
+      color:#cbd5e1;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:color .15s, border-color .15s, background .15s;
+    }
+    .lang-switch-btn:hover {
+      color:#fff;
+      border-color:rgba(250,204,21,0.45);
+    }
+    .lang-switch-btn[aria-current="true"] {
+      color:#020617;
+      background:#FACC15;
+      border-color:#FACC15;
+    }
+    .lang-switch-sep {
+      color:#475569;
+      padding:0 2px;
+      user-select:none;
+    }
+    @media (max-width:640px) {
+      .lang-switch {
+        top:12px;
+        right:12px;
+        font-size:11px;
+      }
+      .lang-switch-btn { padding:5px 8px; }
     }
     .hero {
       display:flex;
@@ -580,6 +631,11 @@
 
   <!-- HERO -->
   <header class="hero-wrap">
+    <div class="lang-switch" role="navigation" aria-label="Idioma / Language">
+      <button type="button" class="lang-switch-btn" data-lang-pick="fr" aria-current="true">FR</button>
+      <span class="lang-switch-sep" aria-hidden="true">|</span>
+      <button type="button" class="lang-switch-btn" data-lang-pick="es" aria-current="false">ES</button>
+    </div>
     <div class="hero">
       <div class="hero-left">
         <p class="hero-kicker">Pour artisans & indépendants</p>
@@ -810,26 +866,54 @@
 
   <script>
     (function () {
-      var params = new URLSearchParams(window.location.search);
-      var langParam = params.get("lang");
-      var langStored = null;
-      try {
-        langStored = localStorage.getItem("maavnica_lang");
-      } catch (e) {}
-      var lang = (langParam || langStored || "fr").toLowerCase();
-      if (lang !== "fr" && lang !== "es") lang = "fr";
-      if (langParam) {
-        try {
-          localStorage.setItem("maavnica_lang", lang);
-        } catch (e) {}
-      }
-      document.documentElement.lang = lang;
-      const isLatam = lang === "es";
-
       var ADMIN_LATAM = "/admin?region=latam";
 
-      function applyLatamLanding() {
-        if (!isLatam) return;
+      function resolveLang() {
+        var params = new URLSearchParams(window.location.search);
+        var raw = (params.get("lang") || "").toLowerCase();
+        if (raw === "es" || raw === "fr") {
+          try {
+            localStorage.setItem("maavnica_lang", raw);
+          } catch (e) {}
+          return raw;
+        }
+        return "fr";
+      }
+
+      var lang = resolveLang();
+      const isLatam = lang === "es";
+      document.documentElement.lang = lang;
+
+      function switchLanguage(next) {
+        if (next !== "fr" && next !== "es") return;
+        var p = new URLSearchParams(window.location.search);
+        if (next === "fr") p.delete("lang");
+        else p.set("lang", next);
+        try {
+          localStorage.setItem("maavnica_lang", next);
+        } catch (e) {}
+        var q = p.toString();
+        window.location.href =
+          window.location.pathname + (q ? "?" + q : "") + window.location.hash;
+      }
+
+      function bindLangSwitch() {
+        var wrap = document.querySelector(".lang-switch");
+        if (!wrap) return;
+        wrap.querySelectorAll("[data-lang-pick]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var next = btn.getAttribute("data-lang-pick");
+            if (next === lang) return;
+            switchLanguage(next);
+          });
+          var pick = btn.getAttribute("data-lang-pick");
+          btn.setAttribute("aria-current", pick === lang ? "true" : "false");
+        });
+      }
+
+      function applyEsLatam() {
+        document.title =
+          "Maavnica SmartCard – Opiniones, WhatsApp y recomendaciones";
 
         var kicker = document.querySelector(".hero-kicker");
         var h1 = document.querySelector(".hero-left h1");
@@ -837,6 +921,7 @@
         var punch = document.querySelector(".hero-punchline");
         var hint = document.querySelector(".hero-cta-hint");
         var previewNote = document.querySelector(".hero-preview-note");
+        var heroIframe = document.querySelector(".hero-preview-iframe");
         var ctaPrimary = document.querySelector(".hero-cta-row .cta-primary");
         var ctaRecontact = document.querySelector(".hero-cta-row .cta-recontact");
         var ctaSecondary = document.querySelector(".hero-cta-row .cta-secondary");
@@ -849,13 +934,14 @@
         }
         if (punch) {
           punch.textContent =
-            "Recomendación y WhatsApp: un solo enlace para crecer con tus clientes.";
+            "Una tarjeta simple para profesionales que viven del boca a boca.";
         }
-        if (hint) hint.textContent = "Sin compromiso";
+        if (hint) hint.textContent = "Sin compromiso · Prueba gratuita 30 días";
         if (previewNote) {
           previewNote.textContent =
             "Tarjeta real: botones, WhatsApp y formularios interactivos.";
         }
+        if (heroIframe) heroIframe.setAttribute("title", "Vista previa SmartCard");
 
         if (ctaPrimary) {
           ctaPrimary.setAttribute("href", ADMIN_LATAM);
@@ -863,15 +949,91 @@
           if (span) span.textContent = "Crear mi SmartCard";
           else ctaPrimary.textContent = "Crear mi SmartCard";
         }
-        if (ctaRecontact) ctaRecontact.style.display = "none";
-        if (ctaSecondary) ctaSecondary.style.display = "none";
+        if (ctaRecontact) ctaRecontact.textContent = "Que me contacten de nuevo";
+        if (ctaSecondary) ctaSecondary.textContent = "Ver una demo (30 segundos)";
+
+        var beforeH = document.querySelector(".compare-card.before h3");
+        var afterH = document.querySelector(".compare-card.after h3");
+        var beforeUl = document.querySelector(".compare-card.before ul");
+        var afterUl = document.querySelector(".compare-card.after ul");
+        if (beforeH) beforeH.textContent = "Antes";
+        if (afterH) afterH.textContent = "Después";
+        if (beforeUl) {
+          beforeUl.innerHTML =
+            "<li>❌ pierdes opiniones y reseñas</li>" +
+            "<li>❌ tus clientes dejan de escribirte</li>";
+        }
+        if (afterUl) {
+          afterUl.innerHTML =
+            "<li>✔ compartes tu SmartCard: un solo enlace para opiniones, recordatorios y mensajes</li>" +
+            "<li>✔ ganas visibilidad y nuevos clientes pueden encontrarte</li>";
+        }
+
+        var visH = document.querySelector(".visibility-box h2");
+        var visLis = document.querySelectorAll(".visibility-list li");
+        if (visH) visH.textContent = "Presencia, confianza, oportunidades";
+        if (visLis[0]) {
+          visLis[0].textContent =
+            "Presencia — sigues ahí cuando el cliente decide";
+        }
+        if (visLis[1]) {
+          visLis[1].textContent =
+            "Confianza — una tarjeta pro que tranquiliza al instante";
+        }
+        if (visLis[2]) {
+          visLis[2].textContent =
+            "Oportunidad — cada envío puede generar una opinión, una consulta o un nuevo contacto";
+        }
+
+        var scenH = document.querySelector(".scenario-box h2");
+        var scenLis = document.querySelectorAll(".scenario-steps li");
+        if (scenH) scenH.textContent = "Después de cada servicio:";
+        if (scenLis[0]) scenLis[0].textContent = "Envías tu SmartCard";
+        if (scenLis[1]) scenLis[1].textContent = "Tu cliente deja una opinión";
+        if (scenLis[2]) scenLis[2].textContent = "Nuevos clientes te descubren";
+
+        var demoH = document.querySelector(".demo-title-wrap h2");
+        var demoP = document.querySelector(".demo-title-wrap p");
+        var demoNote = document.querySelector(".demo-viewer-note");
+        var demoFrame = document.getElementById("demoFrame");
+        if (demoH) demoH.textContent = "Ver una tarjeta en acción";
+        if (demoP) {
+          demoP.textContent =
+            "Elige un ejemplo — contacto, opiniones y recomendación en una situación real.";
+        }
+        if (demoNote) demoNote.textContent = "Prueba los botones como un cliente.";
+        if (demoFrame) demoFrame.setAttribute("title", "Demo SmartCard");
+
+        var demoLabels = {
+          artisan: {
+            title: "Oficios",
+            sub: "Fontanero, electricista, multiservicios"
+          },
+          gold: {
+            title: "Premium",
+            sub: "Imagen cuidada, servicios de alta gama"
+          },
+          sante: {
+            title: "Bienestar",
+            sub: "Salud, profesionales, citas"
+          }
+        };
+        document.querySelectorAll(".demo-thumb").forEach(function (btn) {
+          var key = btn.getAttribute("data-demo");
+          var d = demoLabels[key];
+          if (!d) return;
+          var tEl = btn.querySelector(".demo-thumb-title");
+          var sEl = btn.querySelector(".demo-thumb-sub");
+          if (tEl) tEl.textContent = d.title;
+          if (sEl) sEl.textContent = d.sub;
+        });
 
         var ph2 = document.querySelector(".pricing-section-header h2");
         var pp = document.querySelector(".pricing-section-header p");
-        if (ph2) ph2.textContent = "Una oferta clara";
+        if (ph2) ph2.textContent = "Precio claro";
         if (pp) {
           pp.textContent =
-            "Mensajes, opiniones y recomendaciones por WhatsApp. Prueba gratuita incluida.";
+            "Una tarjeta simple para profesionales que viven del boca a boca.";
         }
 
         var badge = document.getElementById("pricingBadgePopular");
@@ -894,9 +1056,10 @@
           }
           if (featEl) {
             featEl.innerHTML =
-              "<li>WhatsApp y contacto directo en un toque</li>" +
-              "<li>Opiniones y recomendaciones de tus clientes satisfechos</li>" +
-              "<li>Una tarjeta profesional, un solo enlace para compartir</li>";
+              "<li>Contacto directo por WhatsApp</li>" +
+              "<li>Opiniones de clientes</li>" +
+              "<li>Recomendaciones simples</li>" +
+              "<li>Enlace fácil de compartir</li>";
           }
           if (ctaP) {
             ctaP.setAttribute("href", ADMIN_LATAM);
@@ -909,13 +1072,64 @@
         var team = document.getElementById("pricingTeamNote");
         if (team) team.style.display = "none";
 
-        if (document.getElementById("pricingGrid")) {
-          document.getElementById("pricingGrid").style.maxWidth = "420px";
-          document.getElementById("pricingGrid").style.margin = "0 auto";
+        var grid = document.getElementById("pricingGrid");
+        if (grid) {
+          grid.style.maxWidth = "420px";
+          grid.style.margin = "0 auto";
         }
+
+        var faqH = document.querySelector(".faq-section h2");
+        if (faqH) faqH.textContent = "Preguntas frecuentes";
+        var faqItems = document.querySelectorAll(".faq-item");
+        if (faqItems[0]) {
+          faqItems[0].querySelector("h4").textContent = "¿Cómo funciona?";
+          faqItems[0].querySelector("p").textContent =
+            "Compartes el enlace de tu tarjeta (SMS, WhatsApp, QR en la factura…). El cliente abre la página: opinión, contacto o mensaje — sin instalar ninguna app.";
+        }
+        if (faqItems[1]) {
+          faqItems[1].querySelector("h4").textContent =
+            "¿Qué diferencia hay con otras soluciones?";
+          faqItems[1].querySelector("p").textContent =
+            "SmartCard concentra en un solo enlace el contacto por WhatsApp, las opiniones y las recomendaciones de tus clientes satisfechos.";
+        }
+        if (faqItems[2]) {
+          faqItems[2].querySelector("h4").textContent = "¿Hay oferta para varias tarjetas?";
+          faqItems[2].querySelector("p").textContent =
+            "Para equipos o varios locales, se puede estudiar una propuesta a medida. Escríbenos desde la tarjeta de contacto.";
+        }
+        if (faqItems[3]) {
+          faqItems[3].querySelector("h4").textContent = "¿Cómo recibo los mensajes?";
+          faqItems[3].querySelector("p").innerHTML =
+            "Cada mensaje u opinión te llega por <strong>correo electrónico</strong> con el texto y los datos del cliente.";
+        }
+        if (faqItems[4]) {
+          faqItems[4].querySelector("h4").textContent = "¿Hay que instalar una app?";
+          faqItems[4].querySelector("p").textContent =
+            "No. Tu tarjeta se abre en el navegador del teléfono del cliente. Tú tampoco tienes que descargar nada.";
+        }
+
+        var affH = document.querySelector(".aff-inner h3");
+        var affPs = document.querySelectorAll(".aff-inner > p");
+        var affCta = document.querySelector(".aff-cta");
+        if (affH) affH.textContent = "💸 Programa de afiliación";
+        if (affPs[0]) {
+          affPs[0].textContent =
+            "¿Conoces profesionales que necesiten una SmartCard? El programa te permite recomendar Maavnica y recibir una comisión en su primera suscripción.";
+        }
+        if (affPs[1]) {
+          affPs[1].textContent =
+            "Recibes comisión en la primera suscripción de cada cliente recomendado. Las renovaciones no generan comisión.";
+        }
+        if (affCta) affCta.textContent = "Ser afiliado →";
+
+        var footLinks = document.querySelectorAll(".footer-links a");
+        if (footLinks[0]) footLinks[0].textContent = "Aviso legal";
+        if (footLinks[1]) footLinks[1].textContent = "Términos";
+        if (footLinks[2]) footLinks[2].textContent = "Privacidad";
       }
 
-      applyLatamLanding();
+      bindLangSwitch();
+      if (isLatam) applyEsLatam();
 
       var urls = {
         artisan: "https://maavnica-smartcard-v2.onrender.com/c/demo-artisan",
