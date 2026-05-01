@@ -196,6 +196,24 @@ function updatePlanExpirationUI(autoPrefill = true) {
 /* ============================================================
    AFFICHAGE DU LIEN PUBLIC
 ============================================================ */
+function getOriginBase() {
+  return window.location.origin.replace(/\/admin$/, "");
+}
+
+/** Lien public client : /c/{slug} (sans query). */
+function publicCardUrlForSlug(slug) {
+  const s = (slug || "").trim();
+  if (!s) return "";
+  return getOriginBase() + "/c/" + encodeURIComponent(s);
+}
+
+/** Prévisualisation admin : n’impacte pas les analytics publiques. */
+function adminPreviewUrlForSlug(slug) {
+  const pub = publicCardUrlForSlug(slug);
+  if (!pub) return "";
+  return pub + "?admin_view=1";
+}
+
 function updatePublicLink() {
   const slug = document.getElementById("slug").value.trim();
   const box = document.getElementById("public-link");
@@ -207,9 +225,7 @@ function updatePublicLink() {
     return;
   }
 
-  const base = window.location.origin;
-  const origin = base.replace(/\/admin$/, "");
-  const publicUrl = origin + "/c/" + slug;
+  const publicUrl = publicCardUrlForSlug(slug);
   box.textContent = publicUrl;
 
   if (ownerBox) {
@@ -225,9 +241,21 @@ function updatePublicLink() {
 
 function getComputedPublicLink() {
   const slug = document.getElementById("slug")?.value.trim() || "";
-  if (!slug) return "";
-  const origin = window.location.origin.replace(/\/admin$/, "");
-  return origin + "/c/" + slug;
+  return publicCardUrlForSlug(slug);
+}
+
+function getComputedAdminPreviewLink() {
+  const slug = document.getElementById("slug")?.value.trim() || "";
+  return adminPreviewUrlForSlug(slug);
+}
+
+function openAdminCardPreview() {
+  const url = getComputedAdminPreviewLink();
+  if (!url) {
+    showToast("Prévisualisation impossible sans slug.", true);
+    return;
+  }
+  window.open(url, "_blank", "noopener");
 }
 
 function getComputedOwnerLink() {
@@ -460,6 +488,7 @@ async function loadAllCards() {
         <thead>
           <tr>
             <th>Slug</th><th>Plan</th><th>Région</th><th>Expiration</th><th>Statut</th><th>Jours restants</th>
+            <th>Prévisualiser</th>
           </tr>
         </thead>
         <tbody>
@@ -471,6 +500,7 @@ async function loadAllCards() {
               <td>${formatExpiration(c)}</td>
               <td><span class="status-badge ${c.computed_status === "expired" ? "status-expired" : "status-active"}">${c.computed_status || "active"}</span></td>
               <td>${c.days_remaining == null ? "—" : c.days_remaining}</td>
+              <td><a href="${adminPreviewUrlForSlug(c.slug)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Ouvrir</a></td>
             </tr>
           `).join("")}
         </tbody>
@@ -661,6 +691,8 @@ document.getElementById("slug").addEventListener("input", updatePublicLink);
 document.getElementById("plan-type").addEventListener("change", () => updatePlanExpirationUI(true));
 document.getElementById("btn-copy-owner-link").addEventListener("click", copyOwnerLink);
 document.getElementById("btn-copy-public-link").addEventListener("click", copyPublicLink);
+const btnOpenPreview = document.getElementById("btn-open-preview");
+if (btnOpenPreview) btnOpenPreview.addEventListener("click", openAdminCardPreview);
 document.getElementById("btn-refresh-cards").addEventListener("click", loadAllCards);
 initAvatarUpload();
 updatePlanExpirationUI(false);

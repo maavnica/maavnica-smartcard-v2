@@ -43,7 +43,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from html import escape
 from typing import List, Optional, Tuple
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -273,10 +273,14 @@ def _build_business_dashboard_html(
             f"<tr class=\"{row_priority_class}\">" if row_priority_class else "<tr>"
         )
         edit_href = f"/admin?slug={escape(card.slug)}"
+        preview_href = f"/c/{quote(str(card.slug), safe='')}?admin_view=1"
         can_convert = plan_type == "trial"
         can_extend_30 = plan_type in {"trial", "solo", "business"}
 
-        actions_html: List[str] = [f'<a href="{edit_href}">Editer</a>']
+        actions_html: List[str] = [
+            f'<a href="{edit_href}">Editer</a>',
+            f'<a href="{preview_href}" target="_blank" rel="noopener">Prévisualiser</a>',
+        ]
         if can_convert:
             actions_html.append(
                 "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"

@@ -21,6 +21,19 @@
       text-align: center;
       display: none;
     }
+    .admin-preview-badge {
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto 10px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: rgba(226, 232, 240, 0.88);
+      background: rgba(30, 58, 138, 0.38);
+      border: 1px solid rgba(96, 165, 250, 0.28);
+      text-align: center;
+    }
     :root {
       --bg-page: #020617;
 
@@ -1295,6 +1308,9 @@
 
 <body class="theme-apple">
   <div id="inactive-card-message" class="inactive-card-message"></div>
+  <div id="admin-preview-badge" class="admin-preview-badge" hidden>
+    Mode prévisualisation — statistiques non comptabilisées
+  </div>
   <div class="phone-shell">
     <div class="phone-inner">
       <div class="notch"></div>
@@ -1628,21 +1644,11 @@
   </div>
 
   <script>
-    (function syncAdminViewFromUrlEarly() {
-      try {
-        const params = new URLSearchParams(window.location.search || "");
-
-        if (params.get("admin_view") === "1") {
-          localStorage.setItem("smartcard_admin_view", "1");
-          console.info("[SmartCard analytics] internal admin view enabled");
-        }
-
-        if (params.get("admin_view") === "0") {
-          localStorage.removeItem("smartcard_admin_view");
-          console.info("[SmartCard analytics] internal admin view disabled");
-        }
-      } catch (e) {}
-    })();
+    /**
+     * TODO(analytics): Les données déjà comptabilisées avant ce correctif peuvent rester polluées.
+     * Le filtrage isInternalView s’applique à partir du déploiement du patch (aucune purge auto côté client).
+     */
+    const INTERNAL_CARDS_LS_KEY = "maavnica_internal_cards";
 
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -1651,6 +1657,100 @@
         return decodeURIComponent(parts[cIndex + 1]);
       }
       return null;
+    }
+
+    function internalSlugStorageKey(slug) {
+      const s = (slug || "").trim().toLowerCase();
+      return s || "";
+    }
+
+    function getInternalSlugsMap() {
+      try {
+        const raw = localStorage.getItem(INTERNAL_CARDS_LS_KEY);
+        if (!raw) return {};
+        const o = JSON.parse(raw);
+        return o !== null && typeof o === "object" && !Array.isArray(o) ? o : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function markSlugAsInternal(slug) {
+      const key = internalSlugStorageKey(slug);
+      if (!key) return;
+      try {
+        const m = getInternalSlugsMap();
+        m[key] = true;
+        localStorage.setItem(INTERNAL_CARDS_LS_KEY, JSON.stringify(m));
+      } catch (e) {}
+    }
+
+    function unmarkSlugInternal(slug) {
+      const key = internalSlugStorageKey(slug);
+      if (!key) return;
+      try {
+        const m = getInternalSlugsMap();
+        delete m[key];
+        localStorage.setItem(INTERNAL_CARDS_LS_KEY, JSON.stringify(m));
+      } catch (e) {}
+    }
+
+    function isSlugMarkedInternal(slug) {
+      const key = internalSlugStorageKey(slug);
+      if (!key) return false;
+      return !!getInternalSlugsMap()[key];
+    }
+
+    function urlHasAdminViewFlag() {
+      try {
+        return new URLSearchParams(window.location.search || "").get("admin_view") === "1";
+      } catch (e) {
+        return false;
+      }
+    }
+
+    /** True si la page est une consultation interne (param URL ou slug marqué localement pour ce navigateur). */
+    let isInternalView = false;
+
+    function migrateLegacyAdminViewFlag(slug) {
+      try {
+        if (localStorage.getItem("smartcard_admin_view") === "1" && slug) {
+          markSlugAsInternal(slug);
+          localStorage.removeItem("smartcard_admin_view");
+        }
+      } catch (e) {}
+    }
+
+    function refreshIsInternalView(slug) {
+      migrateLegacyAdminViewFlag(slug);
+      isInternalView = !!(slug && (urlHasAdminViewFlag() || isSlugMarkedInternal(slug)));
+      const badge = document.getElementById("admin-preview-badge");
+      if (badge) {
+        badge.hidden = !isInternalView;
+      }
+    }
+
+    function shouldTrackAnalytics() {
+      return !isInternalView;
+    }
+
+    function syncInternalViewFromUrl(slug) {
+      try {
+        const p = new URLSearchParams(window.location.search || "");
+        if (p.get("admin_view") === "1" && slug) {
+          markSlugAsInternal(slug);
+        }
+        if (p.get("admin_view") === "0" && slug) {
+          unmarkSlugInternal(slug);
+        }
+      } catch (e) {}
+    }
+
+    /** URL publique canonique sans query (partage, QR, textes clients). */
+    function getPublicCardUrl(slug) {
+      if (!slug) return "";
+      const origin = window.location.origin || "";
+      return origin + "/c/" + encodeURIComponent(slug);
     }
 
     /** Carte marketing / démo : slug commence par « demo » (ex. demo, demo2, demo-artisan). */
@@ -1768,7 +1868,7 @@
       recommenderFirst,
       recommenderLast
     ) {
-      if (shouldSkipAnalyticsTracking()) {
+      if (!shouldTrackAnalytics()) {
         console.info("[SmartCard analytics] skipped internal recommendation event");
         return;
       }
@@ -1817,28 +1917,6 @@
       }
     }
 
-    function shouldSkipAnalyticsTracking() {
-      try {
-        return localStorage.getItem("smartcard_admin_view") === "1";
-      } catch (e) {
-        return false;
-      }
-    }
-
-    function syncAdminViewFromUrl() {
-      try {
-        const p = new URLSearchParams(window.location.search || "");
-        const adminView = p.get("admin_view");
-        if (adminView === "1") {
-          localStorage.setItem("smartcard_admin_view", "1");
-          return;
-        }
-        if (adminView === "0") {
-          localStorage.removeItem("smartcard_admin_view");
-        }
-      } catch (e) {}
-    }
-
     function postAnalytics(url, body) {
       try {
         const json = JSON.stringify(body);
@@ -1857,7 +1935,7 @@
     }
 
     function trackCardVisit(slug) {
-      if (shouldSkipAnalyticsTracking()) {
+      if (!shouldTrackAnalytics()) {
         console.info("[SmartCard analytics] skipped internal card visit");
         return;
       }
@@ -1871,7 +1949,7 @@
     }
 
     function trackCardEvent(slug, eventType) {
-      if (shouldSkipAnalyticsTracking()) {
+      if (!shouldTrackAnalytics()) {
         console.info("[SmartCard analytics] skipped internal card event", eventType);
         return;
       }
@@ -2043,8 +2121,7 @@
     function updateQrCode(slug) {
       const img = document.getElementById("qr-image");
       if (!img || !slug) return;
-      const baseUrl = window.location.origin || "";
-      const url = baseUrl + "/c/" + encodeURIComponent(slug);
+      const url = getPublicCardUrl(slug);
       img.src =
         "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
         encodeURIComponent(url) +
@@ -2138,14 +2215,15 @@
     }
 
     async function loadCard() {
-      syncAdminViewFromUrl();
-
       const slug = getSlugFromPath();
       if (!slug) {
         showToast("Slug introuvable dans l’URL", true);
         revealCardShell();
         return;
       }
+
+      syncInternalViewFromUrl(slug);
+      refreshIsInternalView(slug);
 
       const isDemoCard = isDemoSlug(slug);
       document.body.classList.toggle("client-card-mode", !isDemoCard);
@@ -2219,11 +2297,9 @@
           }
         }
 
-        if (!shouldSkipAnalyticsTracking()) {
-          trackCardVisit(slug);
-        }
+        trackCardVisit(slug);
 
-        if (!shouldSkipAnalyticsTracking() && referrerIdFromUrl) {
+        if (shouldTrackAnalytics() && referrerIdFromUrl) {
           trackRecommendationEvent(
             analyticsSlug,
             "recommend_visit",
@@ -2233,7 +2309,7 @@
         }
 
         if (
-          !shouldSkipAnalyticsTracking() &&
+          shouldTrackAnalytics() &&
           !visitFromRecommendationEventDone &&
           isRecommendSourceParam()
         ) {
@@ -2826,8 +2902,7 @@
         const btnShareCopy = document.getElementById("btn-share-copy");
         const btnShareEmail = document.getElementById("btn-share-email");
 
-        const origin = window.location.origin || "";
-        const cardPublicUrl = origin + "/c/" + encodeURIComponent(slug);
+        const cardPublicUrl = getPublicCardUrl(slug);
         const referrerStorageKey = "smartcard_recommend_referrer_" + slug;
         async function ensureReferrerProfileForCard() {
           return await ensureReferrerProfileForRecommendationLink(referrerStorageKey);
@@ -2912,7 +2987,7 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
               const sharePayload = {
                 title: "Recommandation professionnelle",
                 text:
@@ -2972,7 +3047,7 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage =
                 "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
                 recommendShareUrl;
@@ -2995,7 +3070,7 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
               trackCardEvent(slug, "recommend_share_copy");
               trackRecommendationEvent(
                 analyticsSlug,
@@ -3015,7 +3090,7 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                origin + "/c/" + encodeURIComponent(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage =
                 "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
                 recommendShareUrl;
