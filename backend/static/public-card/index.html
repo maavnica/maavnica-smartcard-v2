@@ -1649,6 +1649,15 @@
      * Le filtrage isInternalView s’applique à partir du déploiement du patch (aucune purge auto côté client).
      */
     const INTERNAL_CARDS_LS_KEY = "maavnica_internal_cards";
+    const INTERNAL_MODE_LS_KEY = "maavnica_internal_mode";
+
+    function deviceInternalModeActive() {
+      try {
+        return localStorage.getItem(INTERNAL_MODE_LS_KEY) === "1";
+      } catch (e) {
+        return false;
+      }
+    }
 
     function getSlugFromPath() {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -1723,7 +1732,10 @@
 
     function refreshIsInternalView(slug) {
       migrateLegacyAdminViewFlag(slug);
-      isInternalView = !!(slug && (urlHasAdminViewFlag() || isSlugMarkedInternal(slug)));
+      isInternalView =
+        deviceInternalModeActive() ||
+        urlHasAdminViewFlag() ||
+        !!(slug && isSlugMarkedInternal(slug));
       const badge = document.getElementById("admin-preview-badge");
       if (badge) {
         badge.hidden = !isInternalView;
@@ -1737,11 +1749,13 @@
     function syncInternalViewFromUrl(slug) {
       try {
         const p = new URLSearchParams(window.location.search || "");
-        if (p.get("admin_view") === "1" && slug) {
-          markSlugAsInternal(slug);
+        if (p.get("admin_view") === "1") {
+          if (slug) markSlugAsInternal(slug);
+          localStorage.setItem(INTERNAL_MODE_LS_KEY, "1");
         }
-        if (p.get("admin_view") === "0" && slug) {
-          unmarkSlugInternal(slug);
+        if (p.get("admin_view") === "0") {
+          if (slug) unmarkSlugInternal(slug);
+          localStorage.removeItem(INTERNAL_MODE_LS_KEY);
         }
       } catch (e) {}
     }
