@@ -595,7 +595,7 @@
           <a href="/static/recontact-smartcard.html" class="cta-recontact">Être recontacté</a>
           <a href="#demos" class="cta-secondary">Voir une démo (30 secondes)</a>
         </div>
-        <p style="margin-top:10px;font-size:12px;color:#94a3b8;line-height:1.45;max-width:46ch;">Simple à envoyer après chaque prestation</p>
+        <p class="hero-cta-hint" style="margin-top:10px;font-size:12px;color:#94a3b8;line-height:1.45;max-width:46ch;">Simple à envoyer après chaque prestation</p>
       </div>
       <div class="hero-right">
         <div>
@@ -713,9 +713,9 @@
         <h2>Tarifs simples</h2>
         <p>Une offre essentielle pour démarrer, une offre avancée pour activer le bouche-à-oreille client.</p>
       </div>
-      <div class="pricing-grid">
-        <div class="pricing-card highlight">
-          <div class="badge-popular">Le plus choisi</div>
+      <div class="pricing-grid" id="pricingGrid">
+        <div class="pricing-card highlight" id="pricingCardPrimary">
+          <div class="badge-popular" id="pricingBadgePopular">Le plus choisi</div>
           <div class="pricing-title">SmartCard Solo</div>
           <div class="pricing-price">39€ <span>HT / an</span></div>
           <p class="price-note">TVA non applicable – art. 293B du CGI</p>
@@ -729,7 +729,7 @@
           </ul>
           <a href="/static/contact-smartcard.html?offre=solo" class="pricing-cta primary-fill">Créer ma SmartCard</a>
         </div>
-        <div class="pricing-card">
+        <div class="pricing-card" id="pricingCardBusiness">
           <div class="pricing-title">SmartCard Business</div>
           <div class="pricing-price">99€ <span>HT / an</span></div>
           <p class="price-note">TVA non applicable – art. 293B du CGI</p>
@@ -744,7 +744,7 @@
           <a href="/static/contact-smartcard.html?offre=business" class="pricing-cta primary-outline">Parler de Business</a>
         </div>
       </div>
-      <p style="margin-top:16px;font-size:13px;color:#475569;text-align:center;">
+      <p id="pricingTeamNote" style="margin-top:16px;font-size:13px;color:#475569;text-align:center;">
         Vous avez besoin de plusieurs cartes pour une équipe, une agence ou plusieurs établissements ? Une solution sur mesure peut être proposée sur devis.
       </p>
     </div>
@@ -810,6 +810,113 @@
 
   <script>
     (function () {
+      var params = new URLSearchParams(window.location.search);
+      var langParam = params.get("lang");
+      var langStored = null;
+      try {
+        langStored = localStorage.getItem("maavnica_lang");
+      } catch (e) {}
+      var lang = (langParam || langStored || "fr").toLowerCase();
+      if (lang !== "fr" && lang !== "es") lang = "fr";
+      if (langParam) {
+        try {
+          localStorage.setItem("maavnica_lang", lang);
+        } catch (e) {}
+      }
+      document.documentElement.lang = lang;
+      const isLatam = lang === "es";
+
+      var ADMIN_LATAM = "/admin?region=latam";
+
+      function applyLatamLanding() {
+        if (!isLatam) return;
+
+        var kicker = document.querySelector(".hero-kicker");
+        var h1 = document.querySelector(".hero-left h1");
+        var sub = document.querySelector(".hero-sub");
+        var punch = document.querySelector(".hero-punchline");
+        var hint = document.querySelector(".hero-cta-hint");
+        var previewNote = document.querySelector(".hero-preview-note");
+        var ctaPrimary = document.querySelector(".hero-cta-row .cta-primary");
+        var ctaRecontact = document.querySelector(".hero-cta-row .cta-recontact");
+        var ctaSecondary = document.querySelector(".hero-cta-row .cta-secondary");
+
+        if (kicker) kicker.textContent = "Para profesionales independientes";
+        if (h1) h1.textContent = "Tus clientes satisfechos pueden traerte nuevos clientes.";
+        if (sub) {
+          sub.textContent =
+            "Una forma simple de recibir mensajes, opiniones y recomendaciones por WhatsApp.";
+        }
+        if (punch) {
+          punch.textContent =
+            "Recomendación y WhatsApp: un solo enlace para crecer con tus clientes.";
+        }
+        if (hint) hint.textContent = "Sin compromiso";
+        if (previewNote) {
+          previewNote.textContent =
+            "Tarjeta real: botones, WhatsApp y formularios interactivos.";
+        }
+
+        if (ctaPrimary) {
+          ctaPrimary.setAttribute("href", ADMIN_LATAM);
+          var span = ctaPrimary.querySelector("span");
+          if (span) span.textContent = "Crear mi SmartCard";
+          else ctaPrimary.textContent = "Crear mi SmartCard";
+        }
+        if (ctaRecontact) ctaRecontact.style.display = "none";
+        if (ctaSecondary) ctaSecondary.style.display = "none";
+
+        var ph2 = document.querySelector(".pricing-section-header h2");
+        var pp = document.querySelector(".pricing-section-header p");
+        if (ph2) ph2.textContent = "Una oferta clara";
+        if (pp) {
+          pp.textContent =
+            "Mensajes, opiniones y recomendaciones por WhatsApp. Prueba gratuita incluida.";
+        }
+
+        var badge = document.getElementById("pricingBadgePopular");
+        if (badge) badge.style.display = "none";
+
+        var card = document.getElementById("pricingCardPrimary");
+        if (card) {
+          var titleEl = card.querySelector(".pricing-title");
+          var priceEl = card.querySelector(".pricing-price");
+          var noteEl = card.querySelector(".price-note");
+          var featEl = card.querySelector(".pricing-features");
+          var ctaP = card.querySelector(".pricing-cta.primary-fill");
+          if (titleEl) titleEl.textContent = "SmartCard";
+          if (priceEl) {
+            priceEl.innerHTML = "39&nbsp;$ <span>/ año</span>";
+          }
+          if (noteEl) {
+            noteEl.textContent = "Prueba gratuita 30 días";
+            noteEl.style.display = "";
+          }
+          if (featEl) {
+            featEl.innerHTML =
+              "<li>WhatsApp y contacto directo en un toque</li>" +
+              "<li>Opiniones y recomendaciones de tus clientes satisfechos</li>" +
+              "<li>Una tarjeta profesional, un solo enlace para compartir</li>";
+          }
+          if (ctaP) {
+            ctaP.setAttribute("href", ADMIN_LATAM);
+            ctaP.textContent = "Crear mi SmartCard";
+          }
+        }
+
+        var biz = document.getElementById("pricingCardBusiness");
+        if (biz) biz.style.display = "none";
+        var team = document.getElementById("pricingTeamNote");
+        if (team) team.style.display = "none";
+
+        if (document.getElementById("pricingGrid")) {
+          document.getElementById("pricingGrid").style.maxWidth = "420px";
+          document.getElementById("pricingGrid").style.margin = "0 auto";
+        }
+      }
+
+      applyLatamLanding();
+
       var urls = {
         artisan: "https://maavnica-smartcard-v2.onrender.com/c/demo-artisan",
         gold: "https://maavnica-smartcard-v2.onrender.com/c/demo-gold",
