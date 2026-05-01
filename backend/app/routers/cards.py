@@ -223,6 +223,10 @@ def update_card(
         )
 
     update_data = _card_update_payload(card_in)
+    # Garantir la persistance de region si le client l'envoie (évite tout écart exclude_unset / proxy).
+    if "region" in card_in.model_fields_set:
+        r = card_in.region
+        update_data["region"] = r if r is not None else "fr"
 
     # Vérifier que le profil envoyé est autorisé
     if "profile" in update_data:

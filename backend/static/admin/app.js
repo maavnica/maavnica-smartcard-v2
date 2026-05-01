@@ -326,7 +326,11 @@ async function saveCard() {
     company_name: companyName,
     slug,
     plan_type: document.getElementById("plan-type").value || "demo",
-    region: document.getElementById("region-version").value || "fr",
+    region: (() => {
+      const el = document.getElementById("region-version");
+      const v = el && el.value ? el.value.trim().toLowerCase() : "";
+      return v === "latam" ? "latam" : "fr";
+    })(),
     expires_at: (() => {
       const v = document.getElementById("expires-at").value;
       return v ? new Date(v).toISOString() : null;
