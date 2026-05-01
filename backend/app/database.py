@@ -137,8 +137,12 @@ def ensure_recommendation_code_column() -> None:
         conn.execute(text(sql))
 
 
-def ensure_owner_share_key_column() -> None:
-    """Ajoute owner_share_key (nullable) et remplit les cartes existantes sans clé."""
+def ensure_card_owner_share_key_column() -> None:
+    """
+    Ajoute owner_share_key (nullable) si absente, puis remplit les cartes sans clé.
+    PostgreSQL : ADD COLUMN IF NOT EXISTS (idempotent, robuste prod / introspection).
+    Backfill en SQL brut pour éviter toute requête ORM avant que la colonne soit réelle.
+    """
     from sqlalchemy import inspect, text
     import secrets
 
@@ -148,31 +152,41 @@ def ensure_owner_share_key_column() -> None:
         return
     if not insp.has_table("cards"):
         return
-    existing = {c["name"] for c in insp.get_columns("cards")}
-    if "owner_share_key" not in existing:
-        dialect = engine.dialect.name
-        if dialect == "sqlite":
-            sql = "ALTER TABLE cards ADD COLUMN owner_share_key VARCHAR(64)"
-        else:
-            sql = "ALTER TABLE cards ADD COLUMN owner_share_key VARCHAR(64)"
+
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
         with engine.begin() as conn:
-            conn.execute(text(sql))
+            conn.execute(
+                text(
+                    "ALTER TABLE cards ADD COLUMN IF NOT EXISTS owner_share_key VARCHAR(128)"
+                )
+            )
+    else:
+        existing = {c["name"] for c in insp.get_columns("cards")}
+        if "owner_share_key" not in existing:
+            with engine.begin() as conn:
+                conn.execute(
+                    text("ALTER TABLE cards ADD COLUMN owner_share_key VARCHAR(128)")
+                )
 
-    from sqlalchemy import or_
-    from sqlalchemy.orm import sessionmaker
-    from app.models import Card
+    with engine.begin() as conn:
+        rows = conn.execute(
+            text(
+                "SELECT id FROM cards WHERE owner_share_key IS NULL OR owner_share_key = ''"
+            )
+        ).fetchall()
+        for row in rows:
+            cid = row[0]
+            key = secrets.token_urlsafe(10)
+            conn.execute(
+                text("UPDATE cards SET owner_share_key = :k WHERE id = :id"),
+                {"k": key, "id": cid},
+            )
 
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    db = SessionLocal()
-    try:
-        q = db.query(Card).filter(
-            or_(Card.owner_share_key.is_(None), Card.owner_share_key == "")
-        )
-        for card in q.all():
-            card.owner_share_key = secrets.token_urlsafe(10)
-        db.commit()
-    finally:
-        db.close()
+
+def ensure_owner_share_key_column() -> None:
+    """Alias historique — conservé pour compatibilité des imports."""
+    ensure_card_owner_share_key_column()
 
 
 def ensure_quote_recommendation_columns() -> None:
