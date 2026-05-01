@@ -867,6 +867,18 @@
   <script>
     (function () {
       var ADMIN_LATAM = "/admin?region=latam";
+      /** Même origine que les iframes démo FR. Cartes à créer en admin : region=latam, slugs ci-dessous (contenu ES dans l’API). */
+      var DEMO_ORIGIN = "https://maavnica-smartcard-v2.onrender.com";
+      var URLS_FR = {
+        artisan: DEMO_ORIGIN + "/c/demo-artisan",
+        gold: DEMO_ORIGIN + "/c/demo-gold",
+        sante: DEMO_ORIGIN + "/c/demo-sante"
+      };
+      var URLS_LATAM = {
+        artisan: DEMO_ORIGIN + "/c/demo-latam-plomero",
+        gold: DEMO_ORIGIN + "/c/demo-latam-estilista",
+        sante: DEMO_ORIGIN + "/c/demo-latam-terapeuta"
+      };
 
       function resolveLang() {
         var params = new URLSearchParams(window.location.search);
@@ -939,9 +951,12 @@
         if (hint) hint.textContent = "Sin compromiso · Prueba gratuita 30 días";
         if (previewNote) {
           previewNote.textContent =
-            "Tarjeta real: botones, WhatsApp y formularios interactivos.";
+            "Ejemplo LATAM — Contactar por WhatsApp, Dejar una opinión, Recomendar a un amigo. Compartir la tarjeta en un enlace.";
         }
-        if (heroIframe) heroIframe.setAttribute("title", "Vista previa SmartCard");
+        if (heroIframe) {
+          heroIframe.setAttribute("title", "Vista previa SmartCard — Ana Morales, Estilista");
+          heroIframe.src = URLS_LATAM.gold;
+        }
 
         if (ctaPrimary) {
           ctaPrimary.setAttribute("href", ADMIN_LATAM);
@@ -999,23 +1014,29 @@
         if (demoH) demoH.textContent = "Ver una tarjeta en acción";
         if (demoP) {
           demoP.textContent =
-            "Elige un ejemplo — contacto, opiniones y recomendación en una situación real.";
+            "Elige un perfil — mismos botones que verán tus clientes: WhatsApp, opinión y recomendación.";
         }
-        if (demoNote) demoNote.textContent = "Prueba los botones como un cliente.";
-        if (demoFrame) demoFrame.setAttribute("title", "Demo SmartCard");
+        if (demoNote) {
+          demoNote.textContent =
+            "Prueba Contactar por WhatsApp, Dejar una opinión y Recomendar a un amigo, como un cliente.";
+        }
+        if (demoFrame) {
+          demoFrame.setAttribute("title", "Demo SmartCard LATAM");
+          demoFrame.src = URLS_LATAM.artisan;
+        }
 
         var demoLabels = {
           artisan: {
-            title: "Oficios",
-            sub: "Fontanero, electricista, multiservicios"
+            title: "Carlos Méndez",
+            sub: "Plomero · Granada, NI"
           },
           gold: {
-            title: "Premium",
-            sub: "Imagen cuidada, servicios de alta gama"
+            title: "Ana Morales",
+            sub: "Estilista · Managua"
           },
           sante: {
-            title: "Bienestar",
-            sub: "Salud, profesionales, citas"
+            title: "Laura Castillo",
+            sub: "Terapeuta · San José"
           }
         };
         document.querySelectorAll(".demo-thumb").forEach(function (btn) {
@@ -1131,11 +1152,7 @@
       bindLangSwitch();
       if (isLatam) applyEsLatam();
 
-      var urls = {
-        artisan: "https://maavnica-smartcard-v2.onrender.com/c/demo-artisan",
-        gold: "https://maavnica-smartcard-v2.onrender.com/c/demo-gold",
-        sante: "https://maavnica-smartcard-v2.onrender.com/c/demo-sante"
-      };
+      var urls = isLatam ? URLS_LATAM : URLS_FR;
       var frame = document.getElementById("demoFrame");
       var buttons = document.querySelectorAll(".demo-thumb");
       buttons.forEach(function (btn) {
