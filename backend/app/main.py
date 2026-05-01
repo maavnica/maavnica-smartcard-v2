@@ -1,5 +1,6 @@
 # backend/app/main.py
 
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -48,6 +49,8 @@ LANDING_INDEX = LANDING_DIR / "index.html"
 # App
 # ------------------------------------------------------------
 app = FastAPI(title="Maavnica SmartCard API")
+
+_public_card_log = logging.getLogger(__name__)
 
 
 @app.on_event("startup")
@@ -181,18 +184,41 @@ async def serve_public_card(slug: str):
     """
     Affiche la carte publique pour un slug donné.
     Le template est statique ; le JS récupère le slug via l'URL et charge les données via l'API.
+    Choix FR vs LATAM : colonne Card.region (voir aussi ensure_card_region_column au startup).
     """
+    from sqlalchemy import func
+
     from app.database import SessionLocal
     from app.models import Card
 
-    file_path = STATIC_DIR / "public-card" / "index.html"
+    path_fr = STATIC_DIR / "public-card" / "index.html"
+    path_latam = STATIC_DIR / "public-card" / "index_latam.html"
+    file_path = path_fr
+    slug_norm = (slug or "").strip()
+    card_region_log = "n/a"
+    template_log = "fr"
+
     db = SessionLocal()
     try:
-        card = db.query(Card).filter(Card.slug == slug).first()
-        if card and (getattr(card, "region", "fr") or "fr").lower() == "latam":
-            file_path = STATIC_DIR / "public-card" / "index_latam.html"
+        card = (
+            db.query(Card)
+            .filter(func.lower(Card.slug) == slug_norm.lower())
+            .first()
+        )
+        if card:
+            card_region_log = (getattr(card, "region", None) or "fr").strip().lower()
+            if card_region_log == "latam":
+                file_path = path_latam
+                template_log = "latam"
     finally:
         db.close()
+
+    _public_card_log.info(
+        "public_card slug=%s region=%s template=%s",
+        slug_norm,
+        card_region_log,
+        template_log,
+    )
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")

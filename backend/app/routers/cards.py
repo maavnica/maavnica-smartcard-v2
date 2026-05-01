@@ -4,6 +4,7 @@ import math
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from sqlalchemy import func
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
@@ -117,6 +118,11 @@ def _serialize_card_public(
     d = _card_to_public_dict(card)
     if not d.get("plan_type"):
         d["plan_type"] = "demo"
+    r = d.get("region")
+    if r is None or not str(r).strip():
+        d["region"] = "fr"
+    else:
+        d["region"] = str(r).strip().lower()
     if "expires_at" not in d:
         d["expires_at"] = None
     base = schemas.CardPublic.model_validate(d)
@@ -301,9 +307,10 @@ def get_card_by_slug(
     db: Session = Depends(get_db),
 ) -> schemas.CardPublic:
 
+    s = (slug or "").strip()
     card = (
         db.query(models.Card)
-        .filter(models.Card.slug == slug)
+        .filter(func.lower(models.Card.slug) == s.lower())
         .first()
     )
     if not card:

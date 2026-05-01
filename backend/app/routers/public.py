@@ -32,7 +32,12 @@ def get_card_by_id_or_404(card_id: int, db: Session) -> Card:
 
 
 def get_card_by_slug_or_404(slug: str, db: Session) -> Card:
-    card = db.query(Card).filter(Card.slug == slug).first()
+    s = (slug or "").strip()
+    card = (
+        db.query(Card)
+        .filter(func.lower(Card.slug) == s.lower())
+        .first()
+    )
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
     return card
