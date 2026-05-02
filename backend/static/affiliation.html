@@ -147,30 +147,41 @@
       const CONTENT_ES = {
         docTitle: "Programa de afiliación — Maavnica SmartCard",
         metaDescription:
-          "Recomienda SmartCard y gana 10$ por cliente en su primera suscripción. Sin comisión en renovaciones.",
+          "Recomienda SmartCard y gana 10$ por venta. Comisión solo en el primer pago; sin comisión en renovaciones.",
         topLabel: "Programa de afiliación SmartCard",
         topHome: "← Inicio",
-        heroTitle: "Gana dinero recomendando SmartCard",
-        heroBody:
-          "Recomienda SmartCard a profesionales de tu entorno y gana:<br/><strong>10$ por cada cliente que se suscriba.</strong><br/>Pago válido solo en el primer pago del cliente.<br/>(No hay comisión en renovaciones)<br/><br/>Una demo ya está lista para compartir y mostrar cómo funciona.",
-        btnPrimary: "Convertirme en afiliado",
-        btnPrimaryHref: "/?lang=es#contact-smartcard-latam",
-        btnSecondary: "Ver una demo",
-        btnSecondaryHref: "/c/demo-latam-plomero",
-        block1Title: "Simple y directo",
-        block1Html:
-          "<ul><li>Compartes tu enlace o la demo</li><li>El profesional se registra</li><li>Recibes tu comisión</li></ul>" +
-          "<p>Sin gestión cliente.<br/>Sin soporte.<br/><strong>Maavnica se encarga de todo.</strong></p>",
-        block2Title: "Condiciones",
-        block2Html:
-          "<ul>" +
-          "<li>✔ Comisión solo en el primer pago del cliente</li>" +
-          "<li>✔ No hay comisión en renovaciones</li>" +
-          "<li>✔ Pago después de validación</li>" +
-          "</ul>",
-        block3Title: "Para tu red",
-        block3Html:
-          "<p>Independientes, artesanos, comercios, redes profesionales, agencias...</p>"
+        title: "Gana dinero recomendando SmartCard",
+        body:
+          "Recomienda SmartCard a profesionales de tu entorno y gana:<br/><strong>10$ por cada cliente que se suscriba.</strong><br/><br/>Pago válido solo en el primer pago del cliente.<br/>(No hay comisión en renovaciones)<br/><br/>Una demo ya está lista para compartir y mostrar cómo funciona.",
+        buttons: {
+          primary: {
+            text: "Convertirme en afiliado",
+            href: "/?lang=es#contact-smartcard-latam"
+          },
+          secondary: { text: "Ver una demo", href: "/c/demo-latam-plomero" }
+        },
+        blockMain: {
+          title: "Simple y directo",
+          html:
+            "<p>👉 Compartes tu demo o enlace</p>" +
+            "<p>👉 El profesional se registra</p>" +
+            "<p>👉 Recibes tu comisión</p>" +
+            "<p>Sin gestión cliente<br/>Sin soporte<br/>Maavnica se encarga de todo</p>"
+        },
+        blockConditions: {
+          title: "Condiciones",
+          html:
+            "<ul>" +
+            "<li>✔ Comisión solo en el primer pago</li>" +
+            "<li>✔ No hay comisión en renovaciones</li>" +
+            "<li>✔ Pago después de validación</li>" +
+            "</ul>"
+        },
+        blockNetwork: {
+          title: "Para tu red",
+          html:
+            "<p>Independientes, artesanos, comercios, agencias, redes profesionales...</p>"
+        }
       };
 
       document.title = CONTENT_ES.docTitle;
@@ -184,23 +195,25 @@
 
       var hero = document.querySelector(".card.hero");
       if (hero) {
+        var bp = CONTENT_ES.buttons.primary;
+        var bs = CONTENT_ES.buttons.secondary;
         hero.innerHTML =
           "<h1>" +
-          CONTENT_ES.heroTitle +
+          CONTENT_ES.title +
           "</h1>" +
           "<p>" +
-          CONTENT_ES.heroBody +
+          CONTENT_ES.body +
           "</p>" +
           '<div class="btns">' +
           '<a class="btn main" href="' +
-          CONTENT_ES.btnPrimaryHref +
+          bp.href +
           '">' +
-          CONTENT_ES.btnPrimary +
+          bp.text +
           "</a>" +
           '<a class="btn" href="' +
-          CONTENT_ES.btnSecondaryHref +
+          bs.href +
           '">' +
-          CONTENT_ES.btnSecondary +
+          bs.text +
           "</a>" +
           "</div>";
       }
@@ -210,17 +223,23 @@
         var c1 = cards[1];
         if (c1) {
           c1.innerHTML =
-            "<h2>" + CONTENT_ES.block1Title + "</h2>" + CONTENT_ES.block1Html;
+            "<h2>" + CONTENT_ES.blockMain.title + "</h2>" + CONTENT_ES.blockMain.html;
         }
         var c2 = cards[2];
         if (c2) {
           c2.innerHTML =
-            "<h2>" + CONTENT_ES.block2Title + "</h2>" + CONTENT_ES.block2Html;
+            "<h2>" +
+            CONTENT_ES.blockConditions.title +
+            "</h2>" +
+            CONTENT_ES.blockConditions.html;
         }
         var c3 = cards[3];
         if (c3) {
           c3.innerHTML =
-            "<h2>" + CONTENT_ES.block3Title + "</h2>" + CONTENT_ES.block3Html;
+            "<h2>" +
+            CONTENT_ES.blockNetwork.title +
+            "</h2>" +
+            CONTENT_ES.blockNetwork.html;
           c3.style.gridTemplateColumns = "1fr";
         }
       }
