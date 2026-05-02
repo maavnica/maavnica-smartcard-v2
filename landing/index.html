@@ -625,6 +625,84 @@
       text-underline-offset:3px;
       margin:0 8px;
     }
+
+    /* Formulaire demande SmartCard (visible uniquement en ES / LATAM, cf. html[lang="es"]) */
+    .latam-only { display: none; }
+    html[lang="es"] .latam-only { display: block; }
+    #contact-smartcard-latam { scroll-margin-top: 24px; }
+    .latam-contact-card {
+      background:#020617;
+      border:1px solid rgba(30,64,175,0.45);
+      border-radius:16px;
+      padding:22px 24px;
+      max-width:520px;
+      margin:0 auto;
+    }
+    .latam-contact-card h2 {
+      font-size:1.25rem;
+      font-weight:800;
+      margin-bottom:8px;
+      color:#fff;
+    }
+    .latam-contact-sub {
+      font-size:14px;
+      color:#94a3b8;
+      margin-bottom:18px;
+      line-height:1.5;
+    }
+    .latam-form-row { margin-bottom:14px; }
+    .latam-form-row label {
+      display:block;
+      font-size:12px;
+      font-weight:600;
+      color:#cbd5e1;
+      margin-bottom:6px;
+    }
+    .latam-form-row input,
+    .latam-form-row textarea {
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,0.35);
+      background:rgba(15,23,42,0.85);
+      color:#e5e7eb;
+      font:inherit;
+      box-sizing:border-box;
+    }
+    .latam-form-row textarea { min-height:72px; resize:vertical; }
+    .latam-form-optional { font-weight:500; color:#64748b; }
+    .latam-form-submit {
+      margin-top:18px;
+      width:100%;
+      padding:14px 22px;
+      border-radius:999px;
+      border:none;
+      background:#FACC15;
+      color:#020617;
+      font-weight:700;
+      font-size:15px;
+      cursor:pointer;
+      transition:transform .15s, opacity .15s;
+    }
+    .latam-form-submit:hover { transform:translateY(-1px); }
+    .latam-form-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .latam-form-ok {
+      display:none;
+      margin-top:16px;
+      padding:14px;
+      border-radius:12px;
+      background:rgba(34,197,94,0.12);
+      border:1px solid rgba(34,197,94,0.35);
+      color:#bbf7d0;
+      font-size:14px;
+      line-height:1.45;
+    }
+    .latam-form-err {
+      display:none;
+      margin-top:12px;
+      color:#fecaca;
+      font-size:13px;
+    }
   </style>
 </head>
 <body>
@@ -806,6 +884,46 @@
     </div>
   </section>
 
+  <!-- Demande SmartCard LATAM (ES uniquement) -->
+  <section class="section latam-contact-section latam-only" id="contact-smartcard-latam" aria-hidden="true">
+    <div class="container">
+      <div class="latam-contact-card">
+        <h2>Solicita tu SmartCard</h2>
+        <p class="latam-contact-sub">
+          Deja tus datos y te contactamos por WhatsApp para seguir con tu alta.
+        </p>
+        <form id="latamSmartcardForm" novalidate>
+          <input type="text" name="honey" id="latamHoney" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
+          <div class="latam-form-row">
+            <label for="latamNombreApellido">Nombre y apellido</label>
+            <input type="text" id="latamNombreApellido" name="nombre_apellido" required autocomplete="name" placeholder="Ej. Ana Morales" />
+          </div>
+          <div class="latam-form-row">
+            <label for="latamProfesion">Profesión</label>
+            <input type="text" id="latamProfesion" name="profesion" required autocomplete="organization-title" placeholder="Ej. estilista, plomero…" />
+          </div>
+          <div class="latam-form-row">
+            <label for="latamCiudad">Ciudad</label>
+            <input type="text" id="latamCiudad" name="ciudad" required autocomplete="address-level2" placeholder="Ej. Managua" />
+          </div>
+          <div class="latam-form-row">
+            <label for="latamDireccion">Dirección <span class="latam-form-optional">(opcional)</span></label>
+            <input type="text" id="latamDireccion" name="direccion" autocomplete="street-address" placeholder="Calle, barrio, referencias…" />
+          </div>
+          <div class="latam-form-row">
+            <label for="latamWhatsapp">Número WhatsApp</label>
+            <input type="tel" id="latamWhatsapp" name="whatsapp" required autocomplete="tel" placeholder="Ej. +505 8888 8888" inputmode="tel" />
+          </div>
+          <p class="latam-form-err" id="latamFormErr" role="alert"></p>
+          <button type="submit" class="latam-form-submit" id="latamFormSubmit">Solicitar mi SmartCard</button>
+          <div class="latam-form-ok" id="latamFormOk" role="status">
+            Solicitud enviada. Te contactaremos por WhatsApp.
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section class="faq-section">
     <div class="container">
@@ -866,8 +984,7 @@
 
   <script>
     (function () {
-      var ADMIN_LATAM = "/admin?region=latam";
-      /** Même origine que les iframes démo FR. Cartes à créer en admin : region=latam, slugs ci-dessous (contenu ES dans l’API). */
+      /** Même origine que les iframes démo FR. Démos LATAM : slugs ci-dessous (contenu ES dans l’API). */
       var DEMO_ORIGIN = "https://maavnica-smartcard-v2.onrender.com";
       var URLS_FR = {
         artisan: DEMO_ORIGIN + "/c/demo-artisan",
@@ -895,6 +1012,10 @@
       var lang = resolveLang();
       const isLatam = lang === "es";
       document.documentElement.lang = lang;
+      var latamSection = document.getElementById("contact-smartcard-latam");
+      if (latamSection) {
+        latamSection.setAttribute("aria-hidden", isLatam ? "false" : "true");
+      }
 
       function switchLanguage(next) {
         if (next !== "fr" && next !== "es") return;
@@ -959,10 +1080,10 @@
         }
 
         if (ctaPrimary) {
-          ctaPrimary.setAttribute("href", ADMIN_LATAM);
+          ctaPrimary.setAttribute("href", "#contact-smartcard-latam");
           var span = ctaPrimary.querySelector("span");
-          if (span) span.textContent = "Crear mi SmartCard";
-          else ctaPrimary.textContent = "Crear mi SmartCard";
+          if (span) span.textContent = "Solicitar mi SmartCard";
+          else ctaPrimary.textContent = "Solicitar mi SmartCard";
         }
         if (ctaRecontact) ctaRecontact.textContent = "Que me contacten de nuevo";
         if (ctaSecondary) ctaSecondary.textContent = "Ver una demo (30 segundos)";
@@ -1083,8 +1204,8 @@
               "<li>Enlace fácil de compartir</li>";
           }
           if (ctaP) {
-            ctaP.setAttribute("href", ADMIN_LATAM);
-            ctaP.textContent = "Crear mi SmartCard";
+            ctaP.setAttribute("href", "#contact-smartcard-latam");
+            ctaP.textContent = "Solicitar mi SmartCard";
           }
         }
 
@@ -1162,6 +1283,121 @@
           var key = btn.getAttribute("data-demo");
           if (urls[key] && frame) frame.src = urls[key];
         });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var CONTACT_API = (function () {
+        try {
+          var o = window.location.origin;
+          if (o && o !== "null" && o.indexOf("http") === 0) return o + "/api/contact";
+        } catch (e) {}
+        return "https://maavnica-smartcard-v2.onrender.com/api/contact";
+      })();
+
+      function maavnicaReadAffiliateRef() {
+        var TTL_MS = 30 * 24 * 60 * 60 * 1000;
+        var REF_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+        function clearBoth() {
+          try {
+            localStorage.removeItem("maavnica_affiliate_ref");
+            localStorage.removeItem("maavnica_affiliate_ref_ts");
+          } catch (e2) {}
+        }
+        try {
+          var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
+          if (!s) return "";
+          var tsRaw = localStorage.getItem("maavnica_affiliate_ref_ts");
+          var ts = tsRaw != null && tsRaw !== "" ? parseInt(tsRaw, 10) : NaN;
+          if (!Number.isFinite(ts)) {
+            clearBoth();
+            return "";
+          }
+          if (Date.now() - ts > TTL_MS) {
+            clearBoth();
+            return "";
+          }
+          if (!REF_RE.test(s)) {
+            clearBoth();
+            return "";
+          }
+          return s;
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function splitNombreApellido(full) {
+        var t = (full || "").trim();
+        if (!t) return { first_name: "", last_name: "" };
+        var parts = t.split(/\s+/);
+        if (parts.length === 1) return { first_name: parts[0], last_name: parts[0] };
+        return { first_name: parts[0], last_name: parts.slice(1).join(" ") };
+      }
+
+      var form = document.getElementById("latamSmartcardForm");
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var btn = document.getElementById("latamFormSubmit");
+        var errEl = document.getElementById("latamFormErr");
+        var okEl = document.getElementById("latamFormOk");
+        var honey = document.getElementById("latamHoney");
+        var nombre = document.getElementById("latamNombreApellido");
+        var prof = document.getElementById("latamProfesion");
+        var ciudad = document.getElementById("latamCiudad");
+        var dir = document.getElementById("latamDireccion");
+        var wa = document.getElementById("latamWhatsapp");
+
+        if (errEl) {
+          errEl.style.display = "none";
+          errEl.textContent = "";
+        }
+
+        var names = splitNombreApellido(nombre ? nombre.value : "");
+        var msgParts = [];
+        if (ciudad && ciudad.value.trim()) msgParts.push("Ciudad: " + ciudad.value.trim());
+        if (dir && dir.value.trim()) msgParts.push("Dirección: " + dir.value.trim());
+        var messageText = msgParts.join("\n");
+
+        var payload = {
+          first_name: names.first_name,
+          last_name: names.last_name,
+          email: null,
+          phone: wa ? wa.value.trim() : "",
+          company_name: prof ? prof.value.trim() : "",
+          message: messageText,
+          source: "smartcard_latam",
+          langue: "es",
+          honey: honey ? honey.value.trim() : "",
+          affiliate_ref: maavnicaReadAffiliateRef()
+        };
+
+        if (btn) btn.disabled = true;
+        try {
+          var response = await fetch(CONTACT_API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) throw new Error("Contact API failed");
+          form.reset();
+          if (okEl) okEl.style.display = "block";
+          if (btn) btn.style.display = "none";
+          form.querySelectorAll(".latam-form-row").forEach(function (row) {
+            row.style.display = "none";
+          });
+        } catch (err) {
+          if (errEl) {
+            errEl.textContent =
+              "No se pudo enviar. Comprueba tu conexión o escribe a contact@maavnica.com";
+            errEl.style.display = "block";
+          }
+        } finally {
+          if (btn) btn.disabled = false;
+        }
       });
     })();
   </script>

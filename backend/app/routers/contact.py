@@ -74,17 +74,20 @@ def _send_contact_email(payload: ContactRequest) -> None:
     msg["From"] = mail_from
     msg["To"] = mail_to
     msg["Subject"] = f"Nouveau contact SmartCard - {payload.company_name}"
-    msg["Reply-To"] = payload.email
+    if payload.email:
+        msg["Reply-To"] = str(payload.email)
     body_lines = [
         "Nouveau message du formulaire SmartCard",
         "",
         f"Prénom: {payload.first_name}",
         f"Nom: {payload.last_name}",
-        f"Email: {payload.email}",
+        f"Email: {payload.email or '(non communiqué)'}",
         f"Téléphone: {payload.phone}",
         f"Entreprise: {payload.company_name}",
         f"Source: {payload.source}",
     ]
+    if payload.langue:
+        body_lines.append(f"Langue: {payload.langue}")
     if payload.affiliate_ref:
         body_lines.append(f"Réf. affiliation: {payload.affiliate_ref}")
     body_lines.extend(["", "Message:", payload.message])
@@ -148,6 +151,7 @@ async def submit_contact(
         company_name=html.escape(payload.company_name, quote=False),
         message=html.escape(payload.message, quote=False),
         source=html.escape(payload.source, quote=False),
+        langue=html.escape(payload.langue, quote=False) if payload.langue else "",
         honey=payload.honey,
         affiliate_ref=html.escape(payload.affiliate_ref, quote=False)
         if payload.affiliate_ref

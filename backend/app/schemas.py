@@ -483,13 +483,22 @@ class QuoteOut(BaseModel):
 class ContactRequest(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=80)
     last_name: str = Field(..., min_length=1, max_length=80)
-    email: EmailStr
+    email: Optional[EmailStr] = None
     phone: str = Field(default="", min_length=0, max_length=25)
     company_name: str = Field(default="", min_length=0, max_length=120)
     message: str = Field(default="", min_length=0, max_length=4000)
     source: str = Field(..., min_length=1, max_length=80)
+    langue: str = Field(default="", min_length=0, max_length=10)
     honey: str = Field(default="", max_length=200)
     affiliate_ref: str = Field(default="", max_length=32)
+
+    @validator("email", pre=True)
+    def contact_email_empty_to_none(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
 
     @validator("affiliate_ref", pre=True)
     def affiliate_ref_normalize(cls, v):
@@ -505,11 +514,11 @@ class ContactRequest(BaseModel):
             raise ValueError("Référence affiliation invalide.")
         return v
 
-    @validator("first_name", "last_name", "phone", "company_name", "message", "source", "honey", pre=True)
+    @validator("first_name", "last_name", "phone", "company_name", "message", "source", "langue", "honey", pre=True)
     def strip_strings(cls, v):
         return v.strip() if isinstance(v, str) else v
 
-    @validator("first_name", "last_name", "phone", "company_name", "message", "source")
+    @validator("first_name", "last_name", "phone", "company_name", "message", "source", "langue")
     def block_urls_in_text_fields(cls, v: str) -> str:
         return _reject_urls_and_angle_brackets(v)
 
@@ -520,6 +529,14 @@ class ContactRequest(BaseModel):
         if not _PHONE_PATTERN.match(v):
             raise ValueError("Numéro de téléphone invalide.")
         return v
+
+    @model_validator(mode="after")
+    def contact_email_or_phone(self):
+        has_email = self.email is not None
+        has_phone = bool(self.phone and self.phone.strip())
+        if not has_email and not has_phone:
+            raise ValueError("Email ou téléphone requis.")
+        return self
 
 
 # =============================================================
