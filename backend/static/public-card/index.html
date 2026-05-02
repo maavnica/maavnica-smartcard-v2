@@ -292,8 +292,8 @@
     }
 
     .hero-avatar {
-      width: clamp(72px, 22vw, 84px);
-      height: clamp(72px, 22vw, 84px);
+      width: clamp(68px, 17.5vw, 84px);
+      height: clamp(68px, 17.5vw, 84px);
       position: relative;
       overflow: hidden;
       border-radius: 50%;
@@ -310,10 +310,6 @@
     @media (max-width: 380px) {
       .hero-main-row {
         gap: 10px;
-      }
-      .hero-avatar {
-        width: 62px;
-        height: 62px;
       }
     }
 
@@ -1351,7 +1347,7 @@
 
         <div class="hero-main-row">
           <div class="hero-avatar" aria-label="Photo ou logo">
-            <img id="hero-avatar-img" alt="" />
+            <img id="hero-avatar-img" alt="" width="84" height="84" />
             <span id="hero-avatar-fallback">MC</span>
           </div>
 
@@ -2423,11 +2419,7 @@
 
           avatarImg.onload = () => {
             avatarImg.style.display = "block";
-            avatarImg.style.position = "absolute";
-            avatarImg.style.inset = "0";
-            avatarImg.style.zIndex = "2";
             avatarFallback.style.display = "none";
-            avatarFallback.style.zIndex = "1";
           };
 
           avatarImg.onerror = () => {
@@ -2437,7 +2429,7 @@
             showFallback();
           };
 
-          avatarImg.src = avatarUrl + (avatarUrl.includes("?") ? "&" : "?") + "cb=" + Date.now();
+          avatarImg.src = avatarUrl;
         }
 
         runAvatarBlock(card);
