@@ -14,13 +14,58 @@
       align-items: center;
       margin-bottom: 16px;
     }
-    .avatar {
+    .avatar-shell {
+      position: relative;
       width: 72px;
       height: 72px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: #e8eaef;
+    }
+    #avatar {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      background: #d0d5dd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: block;
+      opacity: 0;
+      z-index: 2;
+      transition: opacity 0.2s ease-out;
+    }
+    #avatar.is-loaded {
+      opacity: 1;
+    }
+    #avatar-placeholder {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(208, 213, 221, 0.85) 50%,
+        rgba(189, 196, 208, 0.95) 100%
+      );
+    }
+    #avatar-placeholder.is-hidden {
+      display: none;
+    }
+    #avatar-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      font-size: 15px;
+      font-weight: 700;
+      color: #344054;
+      background: linear-gradient(145deg, #f2f4f7 0%, #d0d5dd 100%);
     }
     #display-name {
       margin: 0;
@@ -89,7 +134,11 @@
   <main class="wrap">
     <section class="card">
       <div class="top">
-        <img id="avatar" class="avatar" alt="Foto profesional" />
+        <div class="avatar-shell">
+          <img id="avatar" alt="Foto profesional" width="72" height="72" />
+          <span id="avatar-placeholder" aria-hidden="true"></span>
+          <span id="avatar-fallback"></span>
+        </div>
         <div>
           <h1 id="display-name">SmartCard</h1>
           <div class="meta" id="job-line"></div>
@@ -322,7 +371,84 @@
       document.getElementById("display-name").textContent = fullName;
       document.getElementById("job-line").textContent = job;
       document.getElementById("city-line").textContent = city;
-      document.getElementById("avatar").src = card.avatar_url || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+
+      var avatarImg = document.getElementById("avatar");
+      var avatarPh = document.getElementById("avatar-placeholder");
+      var avatarFb = document.getElementById("avatar-fallback");
+      var avatarUrl = (card.avatar_url || "").toString().trim();
+
+      function getAvatarInitials() {
+        var dn = (card.display_name || "").toString().trim();
+        if (dn) {
+          var parts = dn.split(/\s+/).filter(Boolean);
+          if (parts.length >= 2) {
+            var s = ((parts[0][0] || "") + (parts[1][0] || "")).toUpperCase();
+            if (s) return s;
+          }
+          if (parts.length === 1 && parts[0].length) {
+            return parts[0].slice(0, 2).toUpperCase();
+          }
+        }
+        var co = (card.company_name || "").toString().trim();
+        if (co) return co.slice(0, 2).toUpperCase();
+        return fullName.slice(0, 2).toUpperCase() || "SC";
+      }
+
+      var phTimer = null;
+      function clearPhTimer() {
+        if (phTimer != null) {
+          clearTimeout(phTimer);
+          phTimer = null;
+        }
+      }
+
+      function showLatamInitialsOnly() {
+        clearPhTimer();
+        if (avatarPh) avatarPh.classList.add("is-hidden");
+        if (avatarImg) {
+          avatarImg.classList.remove("is-loaded");
+          avatarImg.removeAttribute("src");
+          avatarImg.onload = null;
+          avatarImg.onerror = null;
+        }
+        if (avatarFb) {
+          avatarFb.textContent = getAvatarInitials();
+          avatarFb.style.display = "flex";
+        }
+      }
+
+      if (avatarImg && avatarPh && avatarFb) {
+        if (!avatarUrl) {
+          showLatamInitialsOnly();
+        } else {
+          avatarFb.style.display = "none";
+          avatarFb.textContent = "";
+          avatarPh.classList.remove("is-hidden");
+          clearPhTimer();
+          avatarImg.classList.remove("is-loaded");
+          avatarImg.onload = null;
+          avatarImg.onerror = null;
+          avatarImg.removeAttribute("src");
+          avatarImg.onload = function () {
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                clearPhTimer();
+                avatarImg.classList.add("is-loaded");
+                phTimer = window.setTimeout(function () {
+                  avatarPh.classList.add("is-hidden");
+                  phTimer = null;
+                }, 220);
+              });
+            });
+          };
+          avatarImg.onerror = function () {
+            clearPhTimer();
+            showLatamInitialsOnly();
+          };
+          avatarImg.src = avatarUrl;
+        }
+      }
+
       document.title = fullName + " - SmartCard LATAM";
 
       var waBtn = document.getElementById("btn-whatsapp");

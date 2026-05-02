@@ -319,10 +319,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none;
+      display: block;
       opacity: 0;
       z-index: 2;
-      transition: opacity 0.22s ease-out;
+      transition: opacity 0.2s ease-out;
       pointer-events: none;
     }
 
@@ -330,10 +330,28 @@
       opacity: 1;
     }
 
+    #hero-avatar-placeholder {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.04) 45%,
+        rgba(0, 0, 0, 0.18) 100%
+      );
+    }
+
+    #hero-avatar-placeholder.is-hidden {
+      display: none;
+    }
+
     #hero-avatar-fallback {
       position: absolute;
       inset: 0;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       color: white;
@@ -1355,7 +1373,8 @@
         <div class="hero-main-row">
           <div class="hero-avatar" aria-label="Photo ou logo">
             <img id="hero-avatar-img" alt="" width="84" height="84" />
-            <span id="hero-avatar-fallback">MC</span>
+            <span id="hero-avatar-placeholder" aria-hidden="true"></span>
+            <span id="hero-avatar-fallback"></span>
           </div>
 
           <div class="hero-texts">
@@ -2378,7 +2397,8 @@
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
           const avatarFallback = document.getElementById("hero-avatar-fallback");
-          if (!avatarImg || !avatarFallback) return;
+          const avatarPlaceholder = document.getElementById("hero-avatar-placeholder");
+          if (!avatarImg || !avatarFallback || !avatarPlaceholder) return;
 
           const avatarUrl = (card.avatar_url || "").toString().trim();
 
@@ -2405,64 +2425,59 @@
             return "MC";
           };
 
-          let fallbackHideTimer = null;
-          const clearFallbackHideTimer = () => {
-            if (fallbackHideTimer != null) {
-              clearTimeout(fallbackHideTimer);
-              fallbackHideTimer = null;
+          let placeholderHideTimer = null;
+          const clearPlaceholderHideTimer = () => {
+            if (placeholderHideTimer != null) {
+              clearTimeout(placeholderHideTimer);
+              placeholderHideTimer = null;
             }
           };
 
-          const showFallback = () => {
-            clearFallbackHideTimer();
+          const showInitialsOnly = () => {
+            clearPlaceholderHideTimer();
+            avatarPlaceholder.classList.add("is-hidden");
             avatarImg.classList.remove("is-loaded");
-            avatarImg.style.display = "none";
             avatarImg.removeAttribute("src");
+            avatarImg.onload = null;
+            avatarImg.onerror = null;
             avatarFallback.textContent = getInitials();
             avatarFallback.style.display = "flex";
+            avatarFallback.style.zIndex = "1";
           };
 
           if (!avatarUrl) {
-            clearFallbackHideTimer();
-            avatarImg.classList.remove("is-loaded");
-            avatarImg.style.display = "none";
-            avatarFallback.style.display = "flex";
-            avatarFallback.style.zIndex = "1";
-            avatarFallback.textContent = getInitials();
+            showInitialsOnly();
             return;
           }
 
           avatarImg.onload = null;
           avatarImg.onerror = null;
-          clearFallbackHideTimer();
+          clearPlaceholderHideTimer();
           avatarImg.classList.remove("is-loaded");
-          avatarImg.style.display = "block";
-          avatarFallback.style.display = "flex";
+          avatarFallback.style.display = "none";
+          avatarFallback.textContent = "";
+          avatarPlaceholder.classList.remove("is-hidden");
           avatarImg.removeAttribute("src");
 
           avatarImg.onload = () => {
-            avatarImg.style.display = "block";
-
             requestAnimationFrame(function () {
               requestAnimationFrame(function () {
-                clearFallbackHideTimer();
+                clearPlaceholderHideTimer();
                 avatarImg.classList.add("is-loaded");
 
-                fallbackHideTimer = window.setTimeout(function () {
-                  avatarFallback.style.display = "none";
-                  fallbackHideTimer = null;
-                }, 260);
+                placeholderHideTimer = window.setTimeout(function () {
+                  avatarPlaceholder.classList.add("is-hidden");
+                  placeholderHideTimer = null;
+                }, 220);
               });
             });
           };
 
           avatarImg.onerror = () => {
-            clearFallbackHideTimer();
+            clearPlaceholderHideTimer();
             avatarImg.classList.remove("is-loaded");
-            avatarImg.style.display = "none";
-            avatarFallback.style.display = "flex";
-            avatarFallback.style.zIndex = "1";
-            showFallback();
+            avatarImg.removeAttribute("src");
+            showInitialsOnly();
           };
 
           avatarImg.src = avatarUrl;
