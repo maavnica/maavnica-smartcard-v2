@@ -1263,6 +1263,9 @@
             "Recibes comisión en la primera suscripción de cada cliente recomendado. Las renovaciones no generan comisión.";
         }
         if (affCta) affCta.textContent = "Ser afiliado →";
+        document.querySelectorAll('a[href="/static/affiliation.html"]').forEach(function (a) {
+          a.setAttribute("href", "/static/affiliation.html?lang=es");
+        });
 
         var footLinks = document.querySelectorAll(".footer-links a");
         if (footLinks[0]) footLinks[0].textContent = "Aviso legal";
