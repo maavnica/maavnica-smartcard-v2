@@ -216,6 +216,13 @@
           bs.text +
           "</a>" +
           "</div>";
+        var primaryBtn = hero.querySelector(".btn.main");
+        if (primaryBtn) {
+          primaryBtn.setAttribute(
+            "href",
+            "https://smartcard.maavnica.com/static/devenir-affilie.html?lang=es"
+          );
+        }
       }
 
       var cards = document.querySelectorAll(".wrap > section.card");
