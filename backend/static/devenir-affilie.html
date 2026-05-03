@@ -362,20 +362,41 @@
                 <label>Email *</label>
                 <input type="email" name="email" required placeholder="ex: julie@exemple.com" />
               </div>
+            <div>
+              <label>Téléphone (optionnel)</label>
+              <input name="telephone" id="affTelephone" placeholder="Ex: 06 00 00 00 00" />
+            </div>
+            </div>
+
+            <div class="aff-row-fr">
+              <label>Ville / Région (optionnel)</label>
+              <input name="zone" id="affZone" placeholder="Ex: Auxerre / Bourgogne" />
+            </div>
+
+            <div class="row aff-es-block" style="display:none">
               <div>
-                <label>Téléphone (optionnel)</label>
-                <input name="telephone" placeholder="Ex: 06 00 00 00 00" />
+                <label>País *</label>
+                <input name="pays" id="affPays" placeholder="Ej. Nicaragua" />
+              </div>
+              <div>
+                <label>Ciudad *</label>
+                <input name="ciudad" id="affCiudad" placeholder="Ej. Managua" />
               </div>
             </div>
 
-            <div>
-              <label>Ville / Région (optionnel)</label>
-              <input name="zone" placeholder="Ex: Auxerre / Bourgogne" />
+            <div class="aff-es-block" style="display:none">
+              <label>Perfil / actividad *</label>
+              <input name="profil" id="affProfil" placeholder="Ej. red profesional, comunidad local…" />
             </div>
 
             <div>
-              <label>Comment comptez-vous recommander ? (optionnel)</label>
-              <textarea name="canal" placeholder="Ex: réseau pro, artisans, réseaux sociaux, partenaires, etc."></textarea>
+              <label id="lblCanal">Comment comptez-vous recommander ? (optionnel)</label>
+              <textarea name="canal" id="affCanal" placeholder="Ex: réseau pro, artisans, réseaux sociaux, partenaires, etc."></textarea>
+            </div>
+
+            <div class="aff-es-block" style="display:none">
+              <label>Código afiliado deseado (opcional)</label>
+              <input name="code_affilie" id="affCode" placeholder="Ej. mi-ref-2025" maxlength="32" />
             </div>
 
             <div class="actions">
@@ -435,8 +456,129 @@
         }
       }
 
+      try {
+        var qp = new URLSearchParams(window.location.search);
+        if ((qp.get("lang") || "").toLowerCase() === "es") {
+          document.documentElement.lang = "es";
+        }
+      } catch (e) {}
+      var isLatam = document.documentElement.lang === "es";
+
       var form = document.getElementById("affiliateForm");
       if (!form) return;
+
+      if (isLatam) {
+        document.title = "Registro afiliado — Maavnica SmartCard";
+        var m = document.querySelector('meta[name="description"]');
+        if (m) {
+          m.setAttribute(
+            "content",
+            "Regístrate como afiliado SmartCard LATAM: 10$ por venta confirmada, solo primer pago, sin comisión en renovaciones."
+          );
+        }
+
+        var brandSpan = document.querySelector(".brand span");
+        if (brandSpan) brandSpan.textContent = "Programa de afiliación";
+        var navBtns = document.querySelectorAll(".nav .btn");
+        if (navBtns[0]) navBtns[0].textContent = "← Volver al sitio";
+        if (navBtns[1]) navBtns[1].textContent = "Registrarme";
+
+        var hero = document.querySelector(".hero");
+        if (hero) {
+          hero.querySelector("h1").textContent =
+            "Gana dinero recomendando SmartCard Maavnica";
+          hero.querySelector("p").textContent =
+            "Recomienda SmartCard a profesionales de tu entorno. Maavnica se encarga de la entrega y del soporte.";
+          var kpis = hero.querySelectorAll(".kpi");
+          if (kpis[0]) {
+            kpis[0].innerHTML = "<b>Gratis</b><span>Inscripción sin compromiso</span>";
+          }
+          if (kpis[1]) {
+            kpis[1].innerHTML =
+              "<b>Simple</b><span>Tú recomiendas, Maavnica se encarga del resto</span>";
+          }
+          if (kpis[2]) {
+            kpis[2].innerHTML =
+              "<b>Pago</b><span>Comisiones pagadas sobre ventas confirmadas</span>";
+          }
+        }
+
+        var leftCard = document.querySelectorAll(".grid > .card")[0];
+        if (leftCard) {
+          var hd = leftCard.querySelector(".hd h2");
+          var hint = leftCard.querySelector(".hd .hint");
+          if (hd) hd.textContent = "Cómo funciona";
+          if (hint) hint.textContent = "En 4 pasos, sin complicaciones.";
+          var bd = leftCard.querySelector(".bd");
+          if (bd) {
+            bd.innerHTML =
+              '<div class="steps">' +
+              '<div class="step"><div class="chip">1</div><div><b>Te registras</b><p>Validamos tu perfil y te enviamos tus enlaces y materiales.</p></div></div>' +
+              '<div class="step"><div class="chip">2</div><div><b>Compartes la demo</b><p>Puedes compartir la SmartCard con profesionales de tu red.</p></div></div>' +
+              '<div class="step"><div class="chip">3</div><div><b>El cliente se suscribe</b><p>La venta se confirma por Maavnica.</p></div></div>' +
+              '<div class="step"><div class="chip">4</div><div><b>Recibes tu comisión</b><p>10$ por venta confirmada, solo en el primer pago.</p></div></div>' +
+              "</div>" +
+              '<div style="height:14px"></div>' +
+              '<h2 style="margin:0 0 8px; font-size:16px">Oferta</h2>' +
+              '<p class="mini">10$ por cada venta confirmada<br/>' +
+              "Comisión válida solo en el primer pago del cliente<br/>" +
+              "No hay comisión en renovaciones</p>";
+          }
+        }
+
+        var formHd = document.querySelector("#form .hd h2");
+        var formHint = document.querySelector("#form .hd .hint");
+        if (formHd) formHd.textContent = "Inscripción afiliado";
+        if (formHint) formHint.textContent = "Respuesta rápida por WhatsApp o email.";
+
+        function prevLab(el) {
+          return el && el.previousElementSibling && el.previousElementSibling.tagName === "LABEL"
+            ? el.previousElementSibling
+            : null;
+        }
+        var elPrenom = form.elements["prenom"];
+        var elNom = form.elements["nom"];
+        var elEmail = form.elements["email"];
+        var elTel = document.getElementById("affTelephone");
+        var pl;
+        if ((pl = prevLab(elPrenom))) pl.textContent = "Nombre *";
+        if ((pl = prevLab(elNom))) pl.textContent = "Apellido *";
+        if ((pl = prevLab(elEmail))) pl.textContent = "Email *";
+        if ((pl = prevLab(elTel))) pl.textContent = "WhatsApp *";
+        var lblCanal = document.getElementById("lblCanal");
+        if (lblCanal) {
+          lblCanal.textContent = "¿Cómo piensas recomendar SmartCard? *";
+        }
+        document.getElementById("affCanal").placeholder =
+          "Ej. WhatsApp, comunidad profesional, red local…";
+
+        var submitBtnLabel = document.querySelector("#affiliateForm button.submit");
+        if (submitBtnLabel) submitBtnLabel.textContent = "Enviar mi solicitud";
+
+        var backFormBtn = document.querySelector("#affiliateForm .actions .btn");
+        if (backFormBtn) backFormBtn.textContent = "Volver al sitio";
+
+        var fine = document.querySelector("#affiliateForm .fine");
+        if (fine) {
+          fine.textContent =
+            "Tus datos se usan solo para contactarte sobre el programa de afiliación. No se venden ni se comparten.";
+        }
+
+        var foot = document.querySelector("footer");
+        if (foot) foot.textContent = "© Maavnica — SmartCard • Programa de afiliación";
+
+        document.querySelectorAll(".aff-es-block").forEach(function (el) {
+          el.style.display = "";
+        });
+        var frZone = document.querySelector(".aff-row-fr");
+        if (frZone) frZone.style.display = "none";
+
+        if (elTel) elTel.setAttribute("required", "required");
+        document.getElementById("affCanal").setAttribute("required", "required");
+        document.getElementById("affPays").setAttribute("required", "required");
+        document.getElementById("affCiudad").setAttribute("required", "required");
+        document.getElementById("affProfil").setAttribute("required", "required");
+      }
 
       var okbox = document.getElementById("okbox");
       var errbox = document.getElementById("errbox");
@@ -455,11 +597,14 @@
         }
       }
 
+      var OFFRE_LATAM =
+        "10 USD por venta confirmada, primer pago únicamente, sin comisión en renovaciones";
+
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         if (submitBtn) submitBtn.disabled = true;
-        setMessage(true, "Envoi en cours...");
+        setMessage(true, isLatam ? "Enviando…" : "Envoi en cours...");
 
         var prenom = (form.elements["prenom"] && form.elements["prenom"].value || "").trim();
         var nom = (form.elements["nom"] && form.elements["nom"].value || "").trim();
@@ -467,21 +612,61 @@
         var telephone = (form.elements["telephone"] && form.elements["telephone"].value || "").trim();
         var zone = (form.elements["zone"] && form.elements["zone"].value || "").trim();
         var canal = (form.elements["canal"] && form.elements["canal"].value || "").trim();
+        var honey = (form.elements["honey"] && form.elements["honey"].value || "").trim();
+        var pays = (form.elements["pays"] && form.elements["pays"].value || "").trim();
+        var ciudad = (form.elements["ciudad"] && form.elements["ciudad"].value || "").trim();
+        var profil = (form.elements["profil"] && form.elements["profil"].value || "").trim();
+        var codeAff = (form.elements["code_affilie"] && form.elements["code_affilie"].value || "").trim();
 
-        var payload = {
-          first_name: (prenom || "").trim(),
-          last_name: (nom || "").trim(),
-          email: (email || "").trim(),
-          phone: (telephone || "").trim(),
-          company_name: (zone || "").trim(),
-          message:
-            "Demande affiliation SmartCard\n" +
-            "Zone: " + (zone || "N/A") + "\n" +
-            "Canal: " + (canal || "N/A"),
-          source: "landing/devenir-affilie",
-          honey: "",
-          affiliate_ref: maavnicaReadAffiliateRef()
-        };
+        var payload;
+        if (isLatam) {
+          payload = {
+            first_name: prenom,
+            last_name: nom,
+            email: email,
+            phone: telephone,
+            company_name: profil,
+            message:
+              "Demande affiliation SmartCard (LATAM)\n" +
+              "region: latam\n" +
+              "offre: " +
+              OFFRE_LATAM +
+              "\n" +
+              "País: " +
+              (pays || "N/A") +
+              "\n" +
+              "Ciudad: " +
+              (ciudad || "N/A") +
+              "\n" +
+              "Código afiliado deseado: " +
+              (codeAff || "N/A") +
+              "\n" +
+              "¿Cómo recomendar?: " +
+              (canal || "N/A"),
+            source: "landing/devenir-affilie",
+            langue: "es",
+            honey: honey,
+            affiliate_ref: maavnicaReadAffiliateRef()
+          };
+        } else {
+          payload = {
+            first_name: prenom,
+            last_name: nom,
+            email: email,
+            phone: telephone,
+            company_name: zone,
+            message:
+              "Demande affiliation SmartCard\n" +
+              "Zone: " +
+              (zone || "N/A") +
+              "\n" +
+              "Canal: " +
+              (canal || "N/A"),
+            source: "landing/devenir-affilie",
+            honey: honey,
+            affiliate_ref: maavnicaReadAffiliateRef()
+          };
+        }
 
         try {
           var response = await fetch(form.action, {
@@ -491,19 +676,36 @@
           });
 
           if (!response.ok) {
-            setMessage(false, "Impossible d'envoyer votre inscription pour le moment. Merci de reessayer.");
+            setMessage(
+              false,
+              isLatam
+                ? "No se pudo enviar. Inténtalo de nuevo o escribe a contact@maavnica.com."
+                : "Impossible d'envoyer votre inscription pour le moment. Merci de reessayer."
+            );
             if (submitBtn) submitBtn.disabled = false;
             return;
           }
 
-          setMessage(true, "Inscription envoyée. Redirection...");
+          setMessage(
+            true,
+            isLatam
+              ? "Solicitud enviada. Te contactaremos por WhatsApp o email."
+              : "Inscription envoyée. Redirection..."
+          );
           await new Promise(function (resolve) {
-            setTimeout(resolve, 700);
+            setTimeout(resolve, isLatam ? 1200 : 700);
           });
           if (submitBtn) submitBtn.disabled = false;
-          window.location.href = "https://smartcard.maavnica.com/static/devenir-affilie-merci.html";
+          if (!isLatam) {
+            window.location.href = "https://smartcard.maavnica.com/static/devenir-affilie-merci.html";
+          }
         } catch (err) {
-          setMessage(false, "Erreur reseau. Merci de verifier votre connexion puis de reessayer.");
+          setMessage(
+            false,
+            isLatam
+              ? "Error de red. Comprueba tu conexión e inténtalo de nuevo."
+              : "Erreur reseau. Merci de verifier votre connexion puis de reessayer."
+          );
           if (submitBtn) submitBtn.disabled = false;
         }
       });
