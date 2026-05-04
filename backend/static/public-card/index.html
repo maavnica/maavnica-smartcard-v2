@@ -1390,9 +1390,22 @@
       margin-bottom: 1px;
     }
     body.public-card--compact .hero-recommend-count {
-      margin: 2px 0 4px;
+      margin: 3px 0 5px;
       font-size: 10px;
-      padding: 3px 8px;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(15, 23, 42, 0.55) 100%
+      );
+      border: 1px solid rgba(226, 232, 240, 0.42);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 4px 12px -6px rgba(0, 0, 0, 0.35);
+      color: rgba(248, 250, 252, 0.98);
+      letter-spacing: 0.03em;
     }
     body.public-card--compact #hero-tagline-row {
       display: none !important;
@@ -1407,12 +1420,15 @@
 
     body.public-card--compact .hero-compact-contact-row {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
       gap: 8px;
       margin-top: 8px;
       padding-top: 8px;
       border-top: 1px solid rgba(148, 163, 184, 0.22);
+    }
+    body.public-card--compact .hero-compact-tel-row {
+      width: 100%;
     }
     body.public-card--legacy .hero-compact-contact-row,
     body.public-card--legacy .hero-compact-social {
@@ -1425,6 +1441,7 @@
       min-width: 0;
     }
     body.public-card--compact .hero-slot-add-contact {
+      width: 100%;
       flex: 0 0 auto;
     }
     body.public-card--compact .hero-compact-social {
@@ -1457,8 +1474,7 @@
     }
 
     body.public-card--compact #btn-call,
-    body.public-card--compact #btn-whatsapp,
-    body.public-card--compact #btn-add-contact {
+    body.public-card--compact #btn-whatsapp {
       flex: 1 1 0;
       min-width: 0;
       margin-top: 0 !important;
@@ -1471,18 +1487,51 @@
       gap: 6px;
     }
     body.public-card--compact #btn-add-contact {
-      flex: 0 1 auto;
-      min-width: 0;
-      max-width: 38%;
+      width: 100%;
+      max-width: none;
+      flex: 1 1 auto;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      min-height: 42px;
+      padding: 8px 12px;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 12px;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.58) !important;
+      border: 1px solid rgba(148, 163, 184, 0.42) !important;
+      color: #e5e7eb !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.07) inset,
+        0 6px 16px -10px rgba(0, 0, 0, 0.45);
+      transition: border-color 0.15s ease-out, background 0.15s ease-out, transform 0.12s ease-out;
+    }
+    @media (hover: hover) {
+      body.public-card--compact #btn-add-contact:hover {
+        border-color: rgba(253, 186, 116, 0.45) !important;
+        background: rgba(30, 41, 59, 0.72) !important;
+      }
+    }
+    body.public-card--compact #btn-add-contact:active {
+      transform: scale(0.98);
     }
     body.public-card--compact #btn-call .btn-link-text,
-    body.public-card--compact #btn-whatsapp .btn-link-text,
-    body.public-card--compact #btn-add-contact .btn-link-text {
+    body.public-card--compact #btn-whatsapp .btn-link-text {
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: left;
+    }
+    body.public-card--compact #btn-add-contact .btn-link-text {
+      overflow: visible;
+      text-overflow: unset;
+      white-space: normal;
+      text-align: center;
+    }
+    body.public-card--compact #btn-add-contact .btn-link-leading {
+      flex-shrink: 0;
     }
 
     body.public-card--compact .compact-primary-cta-wrap {
@@ -1502,6 +1551,7 @@
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.18) inset,
         0 10px 26px -8px rgba(249, 115, 22, 0.45);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
     }
 
     body.public-card--compact .compact-primary-cta-wrap > .btn-primary {
@@ -1509,7 +1559,7 @@
       margin-top: 0;
     }
     body.public-card--compact .compact-primary-cta-wrap > .btn-primary + .btn-primary {
-      margin-top: 7px;
+      margin-top: 10px;
     }
     body.public-card--compact .btn-primary-stack-cta {
       padding: 9px 14px;
@@ -1520,6 +1570,34 @@
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.14) inset,
         0 6px 18px -10px rgba(249, 115, 22, 0.32);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
+    }
+    @media (hover: hover) {
+      body.public-card--compact .btn-primary-contact-hero:hover,
+      body.public-card--compact .btn-primary-stack-cta:hover {
+        filter: brightness(1.05);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.2) inset,
+          0 12px 28px -8px rgba(249, 115, 22, 0.5);
+      }
+    }
+    body.public-card--compact .btn-primary-contact-hero:active,
+    body.public-card--compact .btn-primary-stack-cta:active {
+      transform: scale(0.97);
+    }
+
+    body.public-card--compact .compact-cta-reassurance {
+      margin: 10px 0 0;
+      padding: 0 4px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: rgba(148, 163, 184, 0.88);
+      line-height: 1.35;
+    }
+    body.public-card--legacy .compact-cta-reassurance {
+      display: none !important;
     }
 
     body.public-card--compact .compact-discrete-row {
@@ -1545,9 +1623,15 @@
       text-decoration: underline;
       text-underline-offset: 2px;
       width: auto;
+      transition: color 0.15s ease-out, transform 0.12s ease-out;
     }
-    body.public-card--compact .compact-discrete-link:hover:not(:disabled) {
-      color: rgba(253, 186, 116, 0.95);
+    @media (hover: hover) {
+      body.public-card--compact .compact-discrete-link:hover:not(:disabled) {
+        color: rgba(253, 186, 116, 0.95);
+      }
+    }
+    body.public-card--compact .compact-discrete-link:active:not(:disabled) {
+      transform: scale(0.97);
     }
 
     body.public-card--compact .compact-acc-triggers-host {
@@ -1621,6 +1705,21 @@
       pointer-events: none;
     }
 
+    .qr-copy-main--compact-fr {
+      display: none;
+    }
+    body.public-card--compact .qr-wrap .qr-copy-main--default {
+      display: none !important;
+    }
+    body.public-card--compact .qr-wrap .qr-copy-main--compact-fr {
+      display: block !important;
+    }
+    body.public-card--legacy .qr-wrap .qr-copy-main--compact-fr {
+      display: none !important;
+    }
+    body.public-card--legacy .qr-wrap .qr-copy-main--default {
+      display: block !important;
+    }
     body.public-card--compact .qr-copy-main {
       font-size: 11px;
     }
@@ -1796,7 +1895,9 @@
         </div>
 
         <div class="hero-compact-contact-row" id="hero-compact-contact-row">
-          <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
+          <div class="hero-compact-tel-row">
+            <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
+          </div>
           <div id="slot-add-contact-hero" class="hero-slot-add-contact"></div>
         </div>
         <div id="hero-compact-social" class="hero-compact-social" hidden>
@@ -1844,6 +1945,9 @@
         >
           Recommander ce professionnel
         </button>
+        <p class="compact-cta-reassurance" id="compact-cta-reassurance">
+          Réponse rapide • Sans engagement
+        </p>
         <div class="compact-discrete-row" id="compact-discrete-row">
           <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-partager" hidden>
             Envoyer ma carte
@@ -1984,7 +2088,7 @@
           <div id="legacy-contact-row" class="legacy-contact-row">
             <div id="slot-add-legacy">
               <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter au contact"
-                ><span class="btn-link-leading" aria-hidden="true">👤</span
+                ><span class="btn-link-leading" aria-hidden="true">➕</span
                 ><span class="btn-link-text">Ajouter au contact</span></a
               >
             </div>
@@ -2110,7 +2214,10 @@
           <div class="qr-wrap">
             <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
             <div class="qr-copy">
-              <div class="qr-copy-main">Scannez pour accéder à la carte</div>
+              <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
+              <div class="qr-copy-main qr-copy-main--compact-fr" aria-hidden="true">
+                Scannez pour retrouver la carte
+              </div>
               <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
             </div>
           </div>
