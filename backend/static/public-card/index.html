@@ -1795,6 +1795,42 @@
     body.public-card--legacy #panel-quote {
       display: block !important;
     }
+
+    /* Note Google dans le hero (compact FR uniquement — bloc colonne masqué en compact) */
+    body.public-card--compact .hero-google-badge-wrap {
+      display: none !important;
+    }
+    body.public-card--compact .hero-google-rating-inline {
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: rgba(203, 213, 225, 0.92);
+      margin: 4px 0 3px;
+      padding: 0;
+      max-width: 100%;
+      width: fit-content;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    body.public-card--compact .hero-google-rating-inline a {
+      color: inherit;
+      text-decoration: none;
+    }
+    body.public-card--compact .hero-google-rating-inline a:hover {
+      text-decoration: underline;
+      color: rgba(253, 186, 116, 0.95);
+    }
+    body.public-card--legacy #hero-google-badge-compact {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -1860,6 +1896,12 @@
               class="hero-recommend-count"
               id="hero-recommend-count"
               hidden
+              aria-hidden="true"
+            ></div>
+            <div
+              id="hero-google-badge-compact"
+              class="hero-google-badge hero-google-rating-inline"
+              style="display: none;"
               aria-hidden="true"
             ></div>
             <div
@@ -3421,35 +3463,45 @@
           }
         }
 
-        const googleBadgeEl = document.getElementById("hero-google-badge");
-        if (googleBadgeEl) {
-          const rating = card.google_rating != null && card.google_rating !== "" ? parseFloat(card.google_rating) : null;
-          const count = card.google_review_count != null && card.google_review_count !== "" ? parseInt(card.google_review_count, 10) : null;
+        (function renderHeroGoogleRatingBadges() {
+          const rating =
+            card.google_rating != null && card.google_rating !== ""
+              ? parseFloat(card.google_rating)
+              : null;
+          const count =
+            card.google_review_count != null && card.google_review_count !== ""
+              ? parseInt(card.google_review_count, 10)
+              : null;
           const hasRating = typeof rating === "number" && !isNaN(rating);
           const hasCount = typeof count === "number" && !isNaN(count) && count >= 0;
-          if (hasRating && hasCount) {
-            const ratingStr = rating.toFixed(1).replace(".", ",");
-            const text = "⭐ " + ratingStr + " sur Google · " + count + " avis";
-            const reviewLink = (card.google_review_link || "").toString().trim();
-            googleBadgeEl.textContent = "";
-            if (reviewLink) {
-              const a = document.createElement("a");
-              a.href = reviewLink;
-              a.target = "_blank";
-              a.rel = "noopener";
-              a.textContent = text;
-              a.addEventListener("click", function () {
-                trackCardEvent(slug, "google_review_click");
-              });
-              googleBadgeEl.appendChild(a);
+          const reviewLink = (card.google_review_link || "").toString().trim();
+          ["hero-google-badge", "hero-google-badge-compact"].forEach(function (id) {
+            const googleBadgeEl = document.getElementById(id);
+            if (!googleBadgeEl) return;
+            if (hasRating && hasCount) {
+              const ratingStr = rating.toFixed(1).replace(".", ",");
+              const text = "⭐ " + ratingStr + " sur Google • " + count + " avis";
+              googleBadgeEl.textContent = "";
+              if (reviewLink) {
+                const a = document.createElement("a");
+                a.href = reviewLink;
+                a.target = "_blank";
+                a.rel = "noopener";
+                a.textContent = text;
+                a.addEventListener("click", function () {
+                  trackCardEvent(slug, "google_review_click");
+                });
+                googleBadgeEl.appendChild(a);
+              } else {
+                googleBadgeEl.textContent = text;
+              }
+              googleBadgeEl.style.display = "flex";
             } else {
-              googleBadgeEl.textContent = text;
+              googleBadgeEl.textContent = "";
+              googleBadgeEl.style.display = "none";
             }
-            googleBadgeEl.style.display = "flex";
-          } else {
-            googleBadgeEl.style.display = "none";
-          }
-        }
+          });
+        })();
 
         const btnWhats = document.getElementById("btn-whatsapp");
         if (btnWhats) {
