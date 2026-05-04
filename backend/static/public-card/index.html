@@ -1550,7 +1550,7 @@
       border-radius: 14px;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.18) inset,
-        0 10px 26px -8px rgba(249, 115, 22, 0.45);
+        0 12px 30px -8px rgba(249, 115, 22, 0.52);
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
     }
 
@@ -1567,18 +1567,26 @@
       font-weight: 700;
       letter-spacing: 0.02em;
       border-radius: 13px;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.9), rgba(249, 115, 22, 0.78));
+      color: rgba(12, 20, 34, 0.95);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.14) inset,
-        0 6px 18px -10px rgba(249, 115, 22, 0.32);
+        0 1px 0 rgba(255, 255, 255, 0.11) inset,
+        0 5px 14px -10px rgba(249, 115, 22, 0.24);
+      opacity: 0.97;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
     }
     @media (hover: hover) {
-      body.public-card--compact .btn-primary-contact-hero:hover,
-      body.public-card--compact .btn-primary-stack-cta:hover {
-        filter: brightness(1.05);
+      body.public-card--compact .btn-primary-contact-hero:hover {
+        filter: brightness(1.06);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.2) inset,
-          0 12px 28px -8px rgba(249, 115, 22, 0.5);
+          0 14px 30px -8px rgba(249, 115, 22, 0.56);
+      }
+      body.public-card--compact .btn-primary-stack-cta:hover {
+        filter: brightness(1.02);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.16) inset,
+          0 8px 18px -10px rgba(249, 115, 22, 0.3);
       }
     }
     body.public-card--compact .btn-primary-contact-hero:active,
@@ -2087,9 +2095,9 @@
 
           <div id="legacy-contact-row" class="legacy-contact-row">
             <div id="slot-add-legacy">
-              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter au contact"
+              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter à mes contacts"
                 ><span class="btn-link-leading" aria-hidden="true">➕</span
-                ><span class="btn-link-text">Ajouter au contact</span></a
+                ><span class="btn-link-text">Ajouter à mes contacts</span></a
               >
             </div>
             <div id="slot-wa-legacy">
@@ -2216,7 +2224,7 @@
             <div class="qr-copy">
               <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
               <div class="qr-copy-main qr-copy-main--compact-fr" aria-hidden="true">
-                Scannez pour retrouver la carte
+                Scannez pour enregistrer le contact
               </div>
               <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
             </div>
