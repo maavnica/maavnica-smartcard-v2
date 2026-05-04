@@ -1324,6 +1324,276 @@
       --primary: #a5b4fc;
       --primary-soft: rgba(129, 140, 248, 0.32);
     }
+
+    /* ——— Variante compacte (FR / index.html — LATAM utilise index_latam.html) ——— */
+    body.public-card--compact .phone-inner {
+      min-height: 0;
+      padding-bottom: 14px;
+    }
+    body.public-card--compact .hero {
+      padding: 10px 11px 9px;
+      margin-bottom: 10px;
+    }
+    body.public-card--compact .hero-badges,
+    body.public-card--compact .hero-reassurance,
+    body.public-card--compact .hero-social-proof,
+    body.public-card--compact .hero-subtitle,
+    body.public-card--compact #hero-recommend-conversion {
+      display: none !important;
+    }
+    body.public-card--compact .hero-professional-tagline {
+      font-size: 11px;
+      margin: 2px 0 3px;
+      line-height: 1.3;
+    }
+    body.public-card--compact .hero-title {
+      font-size: 16px;
+    }
+    body.public-card--compact .hero-company {
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+    body.public-card--compact .hero-job-title {
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+    body.public-card--compact .hero-subline {
+      font-size: 10px;
+      margin-bottom: 1px;
+    }
+    body.public-card--compact .hero-recommend-count {
+      margin: 2px 0 4px;
+      font-size: 10px;
+      padding: 3px 8px;
+    }
+    body.public-card--compact #hero-tagline-row {
+      display: none !important;
+    }
+    body.public-card--compact .hero-meta {
+      margin-top: 2px;
+      gap: 2px;
+    }
+    body.public-card--compact .hero-contact-line {
+      margin-top: 4px;
+    }
+
+    body.public-card--compact .hero-compact-contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.22);
+    }
+    body.public-card--legacy .hero-compact-contact-row,
+    body.public-card--legacy .hero-compact-social {
+      display: none !important;
+    }
+    body.public-card--compact .hero-slot-call-wa {
+      display: flex;
+      flex: 1 1 auto;
+      gap: 6px;
+      min-width: 0;
+    }
+    body.public-card--compact .hero-slot-add-contact {
+      flex: 0 0 auto;
+    }
+    body.public-card--compact .hero-compact-social {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    body.public-card--compact .hero-compact-social[hidden] {
+      display: none !important;
+    }
+    body.public-card--compact .hero-social-ic {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.88);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    }
+    body.public-card--compact .hero-social-ic:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    body.public-card--compact #btn-call,
+    body.public-card--compact #btn-whatsapp,
+    body.public-card--compact #btn-add-contact {
+      flex: 1 1 0;
+      min-width: 0;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      padding: 8px 8px;
+      justify-content: center;
+    }
+    body.public-card--compact #btn-add-contact {
+      flex: 0 0 36px;
+      width: 36px;
+      min-width: 36px;
+      padding: 0;
+    }
+    body.public-card--compact #btn-call .btn-link-text,
+    body.public-card--compact #btn-whatsapp .btn-link-text,
+    body.public-card--compact #btn-add-contact .btn-link-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    body.public-card--compact #btn-call,
+    body.public-card--compact #btn-whatsapp,
+    body.public-card--compact #btn-add-contact {
+      position: relative;
+    }
+
+    body.public-card--compact .compact-action-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    body.public-card--compact .compact-action-bar .compact-acc-trigger[hidden] {
+      display: none !important;
+    }
+    body.public-card--legacy .compact-action-bar,
+    body.public-card--legacy #acc-trigger-quote {
+      display: none !important;
+    }
+    .compact-acc-trigger {
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      background: rgba(15, 23, 42, 0.92);
+      color: #e5e7eb;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color 0.15s ease-out, transform 0.12s ease-out;
+      padding: 0;
+    }
+    .compact-acc-trigger:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .compact-acc-trigger[aria-expanded="true"] {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    body.public-card--compact #acc-trigger-quote {
+      width: 100%;
+      margin-bottom: 8px;
+      min-height: 44px;
+    }
+
+    body.public-card--compact .acc-panel:not(.is-open) {
+      display: none !important;
+    }
+    body.public-card--legacy .acc-panel {
+      display: block !important;
+    }
+    body.public-card--compact .acc-panel {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+    body.public-card--compact .acc-panel:last-of-type {
+      border-bottom: none;
+    }
+
+    body.public-card--compact #left-col-head {
+      display: none !important;
+    }
+    body.public-card--compact .legacy-contact-row {
+      display: none !important;
+    }
+    body.public-card--compact #slot-call-legacy {
+      display: none !important;
+    }
+    body.public-card--compact #panel-feedback > .section-label:first-of-type {
+      display: none !important;
+    }
+    body.public-card--compact .section-label--autres-facons {
+      display: none !important;
+    }
+    body.public-card--compact #hint-share-signature,
+    body.public-card--compact #hint-post-prestation {
+      display: none !important;
+    }
+    body.public-card--compact #contact-actions-guide,
+    body.public-card--compact #pill-section-hint {
+      display: none !important;
+    }
+    body.public-card--compact #panel-pay {
+      border: none;
+      padding-bottom: 0;
+      margin-bottom: 4px;
+    }
+    body.public-card--compact #panel-pay:not(.is-open) .btn-link {
+      pointer-events: none;
+    }
+    body.public-card--compact #panel-quote:not(.is-open) .quote-input,
+    body.public-card--compact #panel-quote:not(.is-open) #btn-send-quote {
+      pointer-events: none;
+    }
+
+    body.public-card--compact .qr-copy-main {
+      font-size: 11px;
+    }
+    body.public-card--compact .qr-copy-hint {
+      display: none;
+    }
+    body.public-card--compact .main-grid {
+      gap: 10px;
+    }
+    body.public-card--compact .card-block {
+      padding: 10px 10px 9px;
+    }
+    body.public-card--compact .post-share-block {
+      margin-top: 0;
+      padding: 10px;
+    }
+    body.public-card--compact .post-share-title,
+    body.public-card--compact .post-share-hint,
+    body.public-card--compact .post-share-kicker,
+    body.public-card--compact .post-share-benefits {
+      display: none !important;
+    }
+    body.public-card--compact #post-share-block .btn-share-card-main {
+      margin-bottom: 6px;
+    }
+    body.public-card--compact #recommend-block .post-share-title,
+    body.public-card--compact #recommend-block .post-share-hint {
+      display: none !important;
+    }
+    body.public-card--compact .feedback-recommend-nudge {
+      padding: 10px;
+      margin-top: 8px;
+    }
+    body.public-card--compact .feedback-recommend-nudge-hint {
+      display: none;
+    }
+
+    body.public-card--legacy #panel-quote {
+      display: block !important;
+    }
   </style>
 </head>
 
@@ -1430,100 +1700,192 @@
             </div>
           </div>
         </div>
+
+        <div class="hero-compact-contact-row" id="hero-compact-contact-row">
+          <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
+          <div id="slot-add-contact-hero" class="hero-slot-add-contact"></div>
+        </div>
+        <div id="hero-compact-social" class="hero-compact-social" hidden>
+          <a
+            id="hero-link-facebook"
+            class="hero-social-ic hero-social-ic--fb"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            aria-label="Facebook"
+            >f</a
+          >
+          <a
+            id="hero-link-instagram"
+            class="hero-social-ic hero-social-ic--ig"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            aria-label="Instagram"
+            >◎</a
+          >
+        </div>
       </div>
 
       <!-- CONTENU PRINCIPAL -->
       <div class="main-grid">
         <!-- Colonne gauche -->
         <div class="card-block">
-          <div class="block-title" id="block-title-main">Avis & contacts simplifiés</div>
-          <div class="block-sub" id="left-block-sub">
-            Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
+          <div id="left-col-head">
+            <div class="block-title" id="block-title-main">Avis & contacts simplifiés</div>
+            <div class="block-sub" id="left-block-sub">
+              Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
+            </div>
+            <div class="hint" id="left-block-tags-hint">
+              Avis Google · Contact rapide · Demande de devis
+            </div>
           </div>
-          <div class="hint" id="left-block-tags-hint">
-            Avis Google · Contact rapide · Demande de devis
+
+          <div class="compact-action-bar" id="compact-action-bar">
+            <button
+              type="button"
+              class="compact-acc-trigger"
+              id="acc-trigger-feedback"
+              data-acc-trigger="feedback"
+              aria-expanded="false"
+              aria-label="Laisser un avis"
+            >
+              😊
+            </button>
+            <button
+              type="button"
+              class="compact-acc-trigger"
+              id="acc-trigger-share"
+              data-acc-trigger="share"
+              aria-expanded="false"
+              aria-label="Envoyer ma carte"
+              hidden
+            >
+              📲
+            </button>
+            <button
+              type="button"
+              class="compact-acc-trigger"
+              id="acc-trigger-recommend"
+              data-acc-trigger="recommend"
+              aria-expanded="false"
+              aria-label="Recommander ce professionnel"
+              hidden
+            >
+              👍
+            </button>
+            <button
+              type="button"
+              class="compact-acc-trigger"
+              id="acc-trigger-pay"
+              data-acc-trigger="pay"
+              aria-expanded="false"
+              aria-label="Payer en ligne"
+              hidden
+            >
+              💳
+            </button>
           </div>
 
           <div class="hero-google-badge-wrap">
             <div id="hero-google-badge" class="hero-google-badge" style="display:none;"></div>
           </div>
 
-          <button class="btn-link" id="btn-call">
-            📞 Appeler directement
-          </button>
-
-          <div class="section-label">Votre avis rapide</div>
-          <p class="contact-actions-guide" id="contact-actions-guide">
-            Choisissez l’action la plus simple pour vous
-          </p>
-          <div class="hint" id="pill-section-hint" style="margin-top: -2px; margin-bottom: 6px;">
-            Vos clients peuvent laisser un avis en quelques secondes.
-          </div>
-          <div class="pill-row">
-            <button class="pill" id="pill-yes">
-              <span class="emoji">😊</span>
-              <span>Je suis satisfait</span>
-            </button>
-            <button class="pill" id="pill-no">
-              <span class="emoji">😐</span>
-              <span>Je ne suis pas satisfait</span>
+          <div id="slot-call-legacy">
+            <button class="btn-link" id="btn-call" type="button" aria-label="Appeler">
+              📞 Appeler directement
             </button>
           </div>
 
-          <div class="hint" id="feedback-helper-text">
-            Choisissez une option ci-dessus pour nous laisser un retour rapide.
-          </div>
-
-          <textarea
-            id="feedback-comment"
-            class="feedback-input"
-            placeholder="Un mot sur votre expérience (optionnel)"
-          ></textarea>
-
-          <button class="btn-primary" id="btn-send-feedback">
-            ✨ Envoyer mon avis
-          </button>
-
-          <div
-            class="feedback-recommend-nudge"
-            id="feedback-recommend-nudge"
-            hidden
-          >
-            <p class="feedback-recommend-nudge-thanks">Merci 🙏</p>
-            <p class="feedback-recommend-nudge-hint">
-              Connaissez-vous quelqu’un qui pourrait avoir besoin de ce professionnel ?
+          <div class="acc-panel" id="panel-feedback" data-acc-panel="feedback">
+            <div class="section-label">Votre avis rapide</div>
+            <p class="contact-actions-guide" id="contact-actions-guide">
+              Choisissez l’action la plus simple pour vous
             </p>
-            <button
-              class="btn-primary btn-share-card-main"
-              id="btn-feedback-recommend-nudge"
-              type="button"
+            <div class="hint" id="pill-section-hint" style="margin-top: -2px; margin-bottom: 6px;">
+              Vos clients peuvent laisser un avis en quelques secondes.
+            </div>
+            <div class="pill-row">
+              <button class="pill" id="pill-yes">
+                <span class="emoji">😊</span>
+                <span>Je suis satisfait</span>
+              </button>
+              <button class="pill" id="pill-no">
+                <span class="emoji">😐</span>
+                <span>Je ne suis pas satisfait</span>
+              </button>
+            </div>
+
+            <div class="hint" id="feedback-helper-text">
+              Choisissez une option ci-dessus pour nous laisser un retour rapide.
+            </div>
+
+            <textarea
+              id="feedback-comment"
+              class="feedback-input"
+              placeholder="Un mot sur votre expérience (optionnel)"
+            ></textarea>
+
+            <button class="btn-primary" id="btn-send-feedback">
+              ✨ Envoyer mon avis
+            </button>
+
+            <div
+              class="feedback-recommend-nudge"
+              id="feedback-recommend-nudge"
+              hidden
             >
-              Recommander ce professionnel
+              <p class="feedback-recommend-nudge-thanks">Merci 🙏</p>
+              <p class="feedback-recommend-nudge-hint">
+                Connaissez-vous quelqu’un qui pourrait avoir besoin de ce professionnel ?
+              </p>
+              <button
+                class="btn-primary btn-share-card-main"
+                id="btn-feedback-recommend-nudge"
+                type="button"
+              >
+                Recommander ce professionnel
+              </button>
+            </div>
+
+            <div class="section-label section-label--autres-facons" style="margin-top:10px;">
+              Autres façons de vous contacter
+            </div>
+
+            <button class="btn-link" id="btn-google-review" type="button">
+              <span class="btn-link-leading" aria-hidden="true">⭐</span
+              ><span class="btn-link-text">Laisser un avis Google</span>
             </button>
           </div>
 
-          <div class="section-label" style="margin-top:10px;">Autres façons de vous contacter</div>
+          <div id="legacy-contact-row" class="legacy-contact-row">
+            <div id="slot-add-legacy">
+              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter au contact"
+                ><span class="btn-link-leading" aria-hidden="true">👤</span
+                ><span class="btn-link-text">Ajouter au contact</span></a
+              >
+            </div>
+            <div id="slot-wa-legacy">
+              <button class="btn-link" id="btn-whatsapp" type="button" aria-label="WhatsApp">
+                <span class="btn-link-leading" aria-hidden="true">💬</span
+                ><span class="btn-link-text">Écrire sur WhatsApp</span>
+              </button>
+            </div>
+          </div>
 
-          <button class="btn-link" id="btn-google-review" type="button">
-            <span class="btn-link-leading" aria-hidden="true">⭐</span
-            ><span class="btn-link-text">Laisser un avis Google</span>
-          </button>
-          <a class="btn-link" id="btn-add-contact" href="#"
-            ><span class="btn-link-leading" aria-hidden="true">👤</span
-            ><span class="btn-link-text">Ajouter au contact</span></a
-          >
-          <button class="btn-link" id="btn-whatsapp" type="button">
-            <span class="btn-link-leading" aria-hidden="true">💬</span
-            ><span class="btn-link-text">Écrire sur WhatsApp</span>
-          </button>
-          <button class="btn-link" id="btn-pay" disabled>
-            💳 Payer en ligne (si disponible)
-          </button>
+          <div class="acc-panel" id="panel-pay" data-acc-panel="pay">
+            <button class="btn-link" id="btn-pay" disabled>
+              💳 Payer en ligne (si disponible)
+            </button>
+          </div>
 
           <div class="hint" id="hint-share-signature">
             Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
           </div>
 
+          <div class="acc-panel" id="panel-share" data-acc-panel="share">
           <div class="post-share-block" id="post-share-block">
             <div class="post-share-kicker post-share-demo-only">
               APRÈS CHAQUE INTERVENTION
@@ -1558,7 +1920,9 @@
             </div>
 
           </div>
+          </div>
 
+          <div class="acc-panel" id="panel-recommend" data-acc-panel="recommend">
           <div class="post-share-block" id="recommend-block" style="display: none;">
             <div class="post-share-title">Aidez quelqu’un autour de vous 👇</div>
             <div class="post-share-hint" style="margin-bottom: 10px;">
@@ -1573,6 +1937,7 @@
               <button class="btn-link" id="btn-recommend-email" type="button">Envoyer par email ✉️</button>
             </div>
           </div>
+          </div>
 
           <div class="hint" id="hint-post-prestation" style="margin-top:6px;">
             Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
@@ -1580,7 +1945,19 @@
         </div>
 
         <!-- Colonne droite -->
-        <div class="card-block">
+        <div class="card-block card-block--quote">
+          <button
+            type="button"
+            class="compact-acc-trigger compact-acc-trigger--quote"
+            id="acc-trigger-quote"
+            data-acc-trigger="quote"
+            aria-expanded="false"
+            aria-label="Demande de contact"
+          >
+            📝
+          </button>
+
+          <div class="acc-panel acc-panel--quote" id="panel-quote" data-acc-panel="quote">
           <div class="section-label" id="quote-section-label">Demande de devis</div>
 
           <div class="form-row">
@@ -1606,6 +1983,7 @@
 
           <div class="hint">
             Vous ne serez contacté que par ce professionnel. Vos informations ne sont ni revendues ni partagées.
+          </div>
           </div>
 
           <div class="qr-wrap">
@@ -2250,7 +2628,138 @@
       });
     }
 
+    function resolvePublicCardUiLegacy(card) {
+      try {
+        var p = new URLSearchParams(window.location.search || "");
+        if ((p.get("lang") || "").trim().toLowerCase() === "es") return true;
+      } catch (e) {}
+      if (card && (card.region || "").toString().trim().toLowerCase() === "latam") return true;
+      return false;
+    }
+
+    function applyPublicCardUiMode(card) {
+      var legacy = resolvePublicCardUiLegacy(card);
+      document.body.classList.toggle("public-card--legacy", legacy);
+      document.body.classList.toggle("public-card--compact", !legacy);
+    }
+
+    function syncCompactContactSlots() {
+      var compact = document.body.classList.contains("public-card--compact");
+      var heroTel = document.getElementById("slot-call-wa-hero");
+      var heroAdd = document.getElementById("slot-add-contact-hero");
+      var slotCall = document.getElementById("slot-call-legacy");
+      var slotWa = document.getElementById("slot-wa-legacy");
+      var slotAdd = document.getElementById("slot-add-legacy");
+      var call = document.getElementById("btn-call");
+      var wa = document.getElementById("btn-whatsapp");
+      var add = document.getElementById("btn-add-contact");
+      if (!call || !wa || !add) return;
+      if (compact && heroTel && heroAdd) {
+        heroTel.appendChild(call);
+        heroTel.appendChild(wa);
+        heroAdd.appendChild(add);
+      } else if (!compact && slotCall && slotWa && slotAdd) {
+        slotCall.appendChild(call);
+        slotWa.appendChild(wa);
+        slotAdd.appendChild(add);
+      }
+    }
+
+    function setupHeroSocialLinks(card) {
+      var wrap = document.getElementById("hero-compact-social");
+      var elFb = document.getElementById("hero-link-facebook");
+      var elIg = document.getElementById("hero-link-instagram");
+      if (!elFb || !elIg) return;
+      function normUrl(u) {
+        var s = (u || "").toString().trim();
+        if (!s) return "";
+        return /^https?:\/\//i.test(s) ? s : "https://" + s;
+      }
+      var fb = (card && card.facebook) ? normUrl(card.facebook) : "";
+      var ig = (card && card.instagram) ? normUrl(card.instagram) : "";
+      var show = false;
+      if (fb) {
+        elFb.href = fb;
+        elFb.removeAttribute("hidden");
+        show = true;
+      } else {
+        elFb.setAttribute("hidden", "");
+      }
+      if (ig) {
+        elIg.href = ig;
+        elIg.removeAttribute("hidden");
+        show = true;
+      } else {
+        elIg.setAttribute("hidden", "");
+      }
+      if (wrap) {
+        var compact = document.body.classList.contains("public-card--compact");
+        wrap.hidden = !compact || !show;
+      }
+    }
+
+    function syncCompactActionTriggers(showRecommendBlock) {
+      if (!document.body.classList.contains("public-card--compact")) return;
+      var shareT = document.getElementById("acc-trigger-share");
+      var recT = document.getElementById("acc-trigger-recommend");
+      var payT = document.getElementById("acc-trigger-pay");
+      var payBtn = document.getElementById("btn-pay");
+      if (shareT) {
+        shareT.hidden = !document.body.classList.contains("owner-share-tools");
+      }
+      if (recT) {
+        recT.hidden = !showRecommendBlock;
+      }
+      if (payT && payBtn) {
+        payT.hidden = !!payBtn.disabled;
+      }
+    }
+
+    function initPublicCardAccordion() {
+      if (!document.body.classList.contains("public-card--compact")) return;
+      var triggers = document.querySelectorAll("[data-acc-trigger]");
+      var panels = document.querySelectorAll(".acc-panel[data-acc-panel]");
+      triggers.forEach(function (t) {
+        if (t.getAttribute("data-acc-bound") === "1") return;
+        t.setAttribute("data-acc-bound", "1");
+        t.addEventListener("click", function (e) {
+          e.preventDefault();
+          var key = t.getAttribute("data-acc-trigger");
+          if (!key) return;
+          var panel = document.querySelector('.acc-panel[data-acc-panel="' + key + '"]');
+          var nowOpen = panel && panel.classList.contains("is-open");
+          panels.forEach(function (p) {
+            p.classList.remove("is-open");
+          });
+          triggers.forEach(function (x) {
+            x.setAttribute("aria-expanded", "false");
+          });
+          if (!nowOpen && panel) {
+            panel.classList.add("is-open");
+            t.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+    }
+
+    function openCompactAccordionPanel(key) {
+      if (!document.body.classList.contains("public-card--compact") || !key) return;
+      var panel = document.querySelector('.acc-panel[data-acc-panel="' + key + '"]');
+      var tr = document.querySelector('[data-acc-trigger="' + key + '"]');
+      var panels = document.querySelectorAll(".acc-panel[data-acc-panel]");
+      var triggers = document.querySelectorAll("[data-acc-trigger]");
+      panels.forEach(function (p) {
+        p.classList.remove("is-open");
+      });
+      triggers.forEach(function (x) {
+        x.setAttribute("aria-expanded", "false");
+      });
+      if (panel) panel.classList.add("is-open");
+      if (tr) tr.setAttribute("aria-expanded", "true");
+    }
+
     async function loadCard() {
+      applyPublicCardUiMode(null);
       const slug = getSlugFromPath();
       if (!slug) {
         showToast("Slug introuvable dans l’URL", true);
@@ -2776,6 +3285,7 @@
 
           if (pillYes) {
             pillYes.onclick = () => {
+              openCompactAccordionPanel("feedback");
               selectFeedback("yes");
               const googleReviewUrl = (card.google_review_link || "").toString().trim();
               if (helperTextEl) {
@@ -2802,6 +3312,7 @@
 
           if (pillNo) {
             pillNo.onclick = () => {
+              openCompactAccordionPanel("feedback");
               selectFeedback("no");
               if (commentEl) {
                 commentEl.focus();
@@ -3166,6 +3677,12 @@
             };
           }
         }
+
+        applyPublicCardUiMode(card);
+        syncCompactContactSlots();
+        setupHeroSocialLinks(card);
+        syncCompactActionTriggers(showRecommendBlock);
+        initPublicCardAccordion();
 
         revealCardShell();
       } catch (e) {
