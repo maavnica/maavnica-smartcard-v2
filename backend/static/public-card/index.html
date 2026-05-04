@@ -1504,104 +1504,67 @@
         0 10px 26px -8px rgba(249, 115, 22, 0.45);
     }
 
-    body.public-card--compact .compact-actions-shell {
-      margin-bottom: 10px;
-    }
-    body.public-card--compact .compact-actions-kicker {
-      margin: 0 0 7px;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: rgba(148, 163, 184, 0.92);
-      line-height: 1.35;
-    }
-    body.public-card--compact .compact-action-bar {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      padding: 9px 9px;
-      border-radius: 14px;
-      background: rgba(2, 6, 23, 0.42);
-      border: 1px solid rgba(148, 163, 184, 0.26);
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.06) inset,
-        0 8px 22px -14px rgba(0, 0, 0, 0.5);
-    }
-    body.public-card--compact .compact-action-bar .compact-acc-trigger[hidden] {
-      display: none !important;
-    }
-    body.public-card--legacy .compact-actions-shell,
-    body.public-card--legacy #acc-trigger-quote {
-      display: none !important;
-    }
-    .compact-acc-trigger {
-      min-height: 48px;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      background: linear-gradient(180deg, rgba(51, 65, 85, 0.55) 0%, rgba(15, 23, 42, 0.98) 100%);
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: border-color 0.15s ease-out, transform 0.12s ease-out, box-shadow 0.15s ease-out;
-      padding: 0 11px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
+    body.public-card--compact .compact-primary-cta-wrap > .btn-primary {
       width: 100%;
-      text-align: left;
-      -webkit-tap-highlight-color: transparent;
+      margin-top: 0;
     }
-    .compact-acc-inner {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      min-width: 0;
-      width: 100%;
+    body.public-card--compact .compact-primary-cta-wrap > .btn-primary + .btn-primary {
+      margin-top: 7px;
     }
-    .compact-acc-ic {
-      font-size: 18px;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-    .compact-acc-textwrap {
-      min-width: 0;
-      flex: 1 1 auto;
-    }
-    .compact-acc-lbl {
-      display: block;
+    body.public-card--compact .btn-primary-stack-cta {
+      padding: 9px 14px;
       font-size: 12px;
-      font-weight: 600;
-      line-height: 1.25;
-      letter-spacing: 0.01em;
-      text-transform: none;
-      color: rgba(241, 245, 249, 0.98);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-radius: 13px;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.14) inset,
+        0 6px 18px -10px rgba(249, 115, 22, 0.32);
     }
-    body.public-card--compact .compact-acc-lbl--brief {
+
+    body.public-card--compact .compact-discrete-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 16px;
+      margin-top: 9px;
+      padding-top: 4px;
+    }
+    body.public-card--compact .compact-discrete-row:not(:has(button:not([hidden]))) {
       display: none;
     }
-    @media (max-width: 360px) {
-      body.public-card--compact .compact-action-bar {
-        grid-template-columns: 1fr;
-      }
-      body.public-card--compact .compact-acc-lbl--full {
-        display: none;
-      }
-      body.public-card--compact .compact-acc-lbl--brief {
-        display: block;
-      }
+    body.public-card--compact .compact-discrete-link {
+      padding: 4px 2px;
+      margin: 0;
+      font-size: 11px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: rgba(148, 163, 184, 0.96);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      width: auto;
     }
-    .compact-acc-trigger:hover {
-      border-color: var(--primary);
-      transform: translateY(-1px);
+    body.public-card--compact .compact-discrete-link:hover:not(:disabled) {
+      color: rgba(253, 186, 116, 0.95);
     }
-    .compact-acc-trigger[aria-expanded="true"] {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary-soft);
-      background: rgba(255, 255, 255, 0.07);
+
+    body.public-card--compact .compact-acc-triggers-host {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    body.public-card--legacy .compact-acc-triggers-host,
+    body.public-card--legacy #acc-trigger-quote {
+      display: none !important;
     }
     body.public-card--compact #acc-trigger-quote {
       display: none !important;
@@ -1665,16 +1628,37 @@
       display: none;
     }
     body.public-card--compact .main-grid {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
       align-items: stretch;
+    }
+    body.public-card--compact .main-grid > .card-block:first-child {
+      order: 2;
+      position: relative;
+    }
+    body.public-card--compact .main-grid > .card-block--quote {
+      order: 1;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    body.public-card--compact .card-block--quote .qr-wrap {
+      order: -2;
+      margin-top: 0;
+    }
+    body.public-card--compact .card-block--quote .qr-powered-by {
+      order: -1;
+      margin-top: 0;
+    }
+    body.public-card--compact .card-block--quote .acc-panel--quote {
+      order: 0;
     }
     body.public-card--compact .card-block {
       padding: 11px 11px 10px;
       display: flex;
       flex-direction: column;
-    }
-    body.public-card--compact .card-block--quote {
-      flex: 1 1 auto;
     }
     body.public-card--compact .post-share-block {
       margin-top: 0;
@@ -1843,6 +1827,31 @@
         <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
           Demande de contact
         </button>
+        <button
+          type="button"
+          class="btn-primary btn-primary-stack-cta"
+          id="btn-cta-laisser-avis"
+          aria-label="Laisser un avis"
+        >
+          Laisser un avis
+        </button>
+        <button
+          type="button"
+          class="btn-primary btn-primary-stack-cta"
+          id="btn-cta-recommander"
+          hidden
+          aria-label="Recommander ce professionnel"
+        >
+          Recommander ce professionnel
+        </button>
+        <div class="compact-discrete-row" id="compact-discrete-row">
+          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-partager" hidden>
+            Envoyer ma carte
+          </button>
+          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-paiement" hidden>
+            Paiement en ligne
+          </button>
+        </div>
       </div>
 
       <!-- CONTENU PRINCIPAL -->
@@ -1859,75 +1868,46 @@
             </div>
           </div>
 
-          <div class="compact-actions-shell" id="compact-actions-shell">
-            <p class="compact-actions-kicker">Votre avis / recommandation</p>
-            <div class="compact-action-bar" id="compact-action-bar">
+          <div id="compact-acc-triggers-host" class="compact-acc-triggers-host">
             <button
               type="button"
-              class="compact-acc-trigger"
               id="acc-trigger-feedback"
+              class="visually-hidden"
               data-acc-trigger="feedback"
               aria-expanded="false"
-              aria-label="Laisser un avis"
             >
-              <span class="compact-acc-inner"
-                ><span class="compact-acc-ic" aria-hidden="true">😊</span
-                ><span class="compact-acc-textwrap"
-                  ><span class="compact-acc-lbl compact-acc-lbl--full">Laisser un avis</span
-                  ><span class="compact-acc-lbl compact-acc-lbl--brief">Avis</span></span
-                ></span
-              >
+              Laisser un avis
             </button>
             <button
               type="button"
-              class="compact-acc-trigger"
               id="acc-trigger-share"
+              class="visually-hidden"
               data-acc-trigger="share"
               aria-expanded="false"
-              aria-label="Envoyer ma carte"
               hidden
             >
-              <span class="compact-acc-inner"
-                ><span class="compact-acc-ic" aria-hidden="true">📲</span
-                ><span class="compact-acc-textwrap"
-                  ><span class="compact-acc-lbl">Partager</span></span
-                ></span
-              >
+              Partager
             </button>
             <button
               type="button"
-              class="compact-acc-trigger"
               id="acc-trigger-recommend"
+              class="visually-hidden"
               data-acc-trigger="recommend"
               aria-expanded="false"
-              aria-label="Recommander ce professionnel"
               hidden
             >
-              <span class="compact-acc-inner"
-                ><span class="compact-acc-ic" aria-hidden="true">👍</span
-                ><span class="compact-acc-textwrap"
-                  ><span class="compact-acc-lbl compact-acc-lbl--full">Recommander ce professionnel</span
-                  ><span class="compact-acc-lbl compact-acc-lbl--brief">Recommander</span></span
-                ></span
-              >
+              Recommander
             </button>
             <button
               type="button"
-              class="compact-acc-trigger"
               id="acc-trigger-pay"
+              class="visually-hidden"
               data-acc-trigger="pay"
               aria-expanded="false"
-              aria-label="Payer en ligne"
               hidden
             >
-              <span class="compact-acc-inner"
-                ><span class="compact-acc-ic" aria-hidden="true">💳</span
-                ><span class="compact-acc-textwrap"
-                  ><span class="compact-acc-lbl">Paiement</span></span
-                ></span
-              >
+              Paiement
             </button>
-            </div>
           </div>
 
           <div class="hero-google-badge-wrap">
@@ -2841,18 +2821,22 @@
 
     function syncCompactActionTriggers(showRecommendBlock) {
       if (!document.body.classList.contains("public-card--compact")) return;
+      var ownerShare = document.body.classList.contains("owner-share-tools");
       var shareT = document.getElementById("acc-trigger-share");
       var recT = document.getElementById("acc-trigger-recommend");
       var payT = document.getElementById("acc-trigger-pay");
       var payBtn = document.getElementById("btn-pay");
-      if (shareT) {
-        shareT.hidden = !document.body.classList.contains("owner-share-tools");
-      }
-      if (recT) {
-        recT.hidden = !showRecommendBlock;
-      }
+      var btnRec = document.getElementById("btn-cta-recommander");
+      var btnShareD = document.getElementById("btn-discrete-partager");
+      var btnPayD = document.getElementById("btn-discrete-paiement");
+      if (shareT) shareT.hidden = !ownerShare;
+      if (btnShareD) btnShareD.hidden = !ownerShare;
+      if (recT) recT.hidden = !showRecommendBlock;
+      if (btnRec) btnRec.hidden = !showRecommendBlock;
       if (payT && payBtn) {
-        payT.hidden = !!payBtn.disabled;
+        var payOff = !!payBtn.disabled;
+        payT.hidden = payOff;
+        if (btnPayD) btnPayD.hidden = payOff;
       }
     }
 
@@ -3859,13 +3843,21 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      var b = document.getElementById("btn-primary-demande-contact");
       var q = document.getElementById("acc-trigger-quote");
-      if (b && q) {
-        b.addEventListener("click", function () {
-          q.click();
-        });
-      }
+      var b = document.getElementById("btn-primary-demande-contact");
+      if (b && q) b.addEventListener("click", function () { q.click(); });
+      var fa = document.getElementById("btn-cta-laisser-avis");
+      var tf = document.getElementById("acc-trigger-feedback");
+      if (fa && tf) fa.addEventListener("click", function () { tf.click(); });
+      var br = document.getElementById("btn-cta-recommander");
+      var tr = document.getElementById("acc-trigger-recommend");
+      if (br && tr) br.addEventListener("click", function () { tr.click(); });
+      var sd = document.getElementById("btn-discrete-partager");
+      var ts = document.getElementById("acc-trigger-share");
+      if (sd && ts) sd.addEventListener("click", function () { ts.click(); });
+      var pd = document.getElementById("btn-discrete-paiement");
+      var tp = document.getElementById("acc-trigger-pay");
+      if (pd && tp) pd.addEventListener("click", function () { tp.click(); });
       loadCard();
     });
   </script>
