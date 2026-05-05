@@ -2564,7 +2564,7 @@
       if (!slug || isLatamDemoSlugPrefix(slug)) return;
       var el = document.getElementById("seo-og-image");
       if (!el) return;
-      var defaultImage = "https://maavnica-smartcard-v2.onrender.com/static/og-default.jpg";
+      var defaultImage = "https://smartcard.maavnica.com/static/og-default.jpg";
       var raw = card && card.photo_url != null ? String(card.photo_url).trim() : "";
       var url = raw ? raw : defaultImage;
       el.setAttribute("content", url);

@@ -222,7 +222,25 @@ async def serve_public_card(slug: str):
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")
-    return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
+
+    # Injection légère de métadonnées Open Graph dans le HTML initial pour les cartes FR.
+    # Objectif : exposer og:image / og:url dès la réponse initiale, sans dépendre du JS,
+    # afin d'améliorer les previews (ex. Facebook) qui n'exécutent pas le JavaScript.
+    html = file_path.read_text(encoding="utf-8")
+    if template_log == "fr":
+        og_image_url = "https://smartcard.maavnica.com/static/og-default.jpg"
+        card_url = f"https://smartcard.maavnica.com/c/{slug_norm}"
+        meta_block = (
+            '\n  <meta property="og:image" content="' + og_image_url + '">\n'
+            '  <meta property="og:image:width" content="1200">\n'
+            '  <meta property="og:image:height" content="630">\n'
+            '  <meta property="og:type" content="website">\n'
+            '  <meta property="og:url" content="' + card_url + '">\n'
+        )
+        if "</head>" in html:
+            html = html.replace("</head>", meta_block + "</head>", 1)
+
+    return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
 
 
 
