@@ -1,7 +1,10 @@
 # backend/app/main.py
 
 import logging
+import re
+from html import escape
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -51,6 +54,86 @@ LANDING_INDEX = LANDING_DIR / "index.html"
 app = FastAPI(title="Maavnica SmartCard API")
 
 _public_card_log = logging.getLogger(__name__)
+
+
+def _fr_public_card_seo_strings(seo: Optional[Dict[str, Any]]) -> tuple[str, str, str, str]:
+    """Titres et descriptions FR pour le HTML initial (crawlers sans exécution JS)."""
+    if not seo:
+        return (
+            "Maavnica SmartCard – Carte publique",
+            "Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations.",
+            "Maavnica SmartCard",
+            "Contact direct, avis clients et recommandation simplifiée.",
+        )
+    name = (seo.get("name") or "").strip()
+    job = (seo.get("job") or "").strip()
+    city = (seo.get("city") or "").strip()
+
+    if job and city and name:
+        title = f"{job} à {city} | {name}"
+        meta_desc = (
+            f"{name}, {job} à {city}. Contact rapide, avis clients et recommandations."
+        )
+        og_title = f"{job} recommandé à {city} | {name}"
+    elif job and name:
+        title = f"{job} | {name}"
+        meta_desc = f"{name}, {job}. Contact rapide, avis clients et recommandations."
+        og_title = f"{job} recommandé | {name}"
+    elif name and city:
+        title = f"{name} | Maavnica"
+        meta_desc = f"{name} à {city}. Contact rapide, avis clients et recommandations."
+        og_title = f"{name} | Maavnica"
+    elif name:
+        title = f"{name} | Maavnica"
+        meta_desc = f"{name}. Contact rapide, avis clients et recommandations."
+        og_title = f"{name} | Maavnica"
+    else:
+        title = "Maavnica SmartCard – Carte publique"
+        meta_desc = (
+            "Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations."
+        )
+        og_title = "Maavnica SmartCard"
+
+    if name:
+        og_desc = (
+            f"Découvrez {name}. Contact direct, avis clients et recommandation simplifiée."
+        )
+    else:
+        og_desc = (
+            "Découvrez cette carte professionnelle. Contact direct, avis clients "
+            "et recommandation simplifiée."
+        )
+
+    return title, meta_desc, og_title, og_desc
+
+
+def _inject_fr_public_card_head(html: str, seo: Optional[Dict[str, Any]]) -> str:
+    title, meta_desc, og_title, og_desc = _fr_public_card_seo_strings(seo)
+    html = re.sub(
+        r"<title>[^<]*</title>",
+        "<title>" + escape(title, quote=False) + "</title>",
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'<meta name="description" content="[^"]*"\s*/>',
+        '<meta name="description" content="' + escape(meta_desc, quote=True) + '" />',
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'<meta property="og:title" content="[^"]*"\s*/>',
+        '<meta property="og:title" content="' + escape(og_title, quote=True) + '" />',
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'<meta property="og:description" content="[^"]*"\s*/>',
+        '<meta property="og:description" content="' + escape(og_desc, quote=True) + '" />',
+        html,
+        count=1,
+    )
+    return html
 
 
 @app.on_event("startup")
@@ -199,6 +282,7 @@ async def serve_public_card(slug: str):
     slug_norm = (slug or "").strip()
     card_region_log = "n/a"
     template_log = "fr"
+    seo_fr: Optional[Dict[str, Any]] = None
 
     db = SessionLocal()
     try:
@@ -212,6 +296,14 @@ async def serve_public_card(slug: str):
             if card_region_log == "latam":
                 file_path = path_latam
                 template_log = "latam"
+            else:
+                dn = (getattr(card, "display_name", None) or "").strip()
+                cn = (getattr(card, "company_name", None) or "").strip()
+                seo_fr = {
+                    "name": dn or cn,
+                    "job": (getattr(card, "job_title", None) or "").strip(),
+                    "city": (getattr(card, "city", None) or "").strip(),
+                }
     finally:
         db.close()
 
@@ -229,9 +321,10 @@ async def serve_public_card(slug: str):
     if template_log != "fr":
         return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
-    # Injection OG robuste FR : en cas d'erreur, fallback obligatoire sur FileResponse.
+    # Injection SEO + OG robuste FR : en cas d'erreur, fallback obligatoire sur FileResponse.
     try:
         html = file_path.read_text(encoding="utf-8")
+        html = _inject_fr_public_card_head(html, seo_fr)
         og_image_url = "https://smartcard.maavnica.com/static/og-default.jpg"
         card_url = f"https://smartcard.maavnica.com/c/{slug_norm}"
         meta_block = (
