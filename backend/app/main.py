@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -223,11 +223,13 @@ async def serve_public_card(slug: str):
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")
 
-    # Injection légère de métadonnées Open Graph dans le HTML initial pour les cartes FR.
-    # Objectif : exposer og:image / og:url dès la réponse initiale, sans dépendre du JS,
-    # afin d'améliorer les previews (ex. Facebook) qui n'exécutent pas le JavaScript.
-    html = file_path.read_text(encoding="utf-8")
-    if template_log == "fr":
+    # Comportement historique inchangé pour LATAM.
+    if template_log != "fr":
+        return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
+
+    # Injection OG robuste FR : en cas d'erreur, fallback obligatoire sur FileResponse.
+    try:
+        html = file_path.read_text(encoding="utf-8")
         og_image_url = "https://smartcard.maavnica.com/static/og-default.jpg"
         card_url = f"https://smartcard.maavnica.com/c/{slug_norm}"
         meta_block = (
@@ -239,8 +241,10 @@ async def serve_public_card(slug: str):
         )
         if "</head>" in html:
             html = html.replace("</head>", meta_block + "</head>", 1)
-
-    return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
+        return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
+    except Exception:
+        _public_card_log.exception("public_card og_injection_failed slug=%s", slug_norm)
+        return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
 
 
