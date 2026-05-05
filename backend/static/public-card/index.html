@@ -6,6 +6,7 @@
   <meta name="description" content="Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations." />
   <meta property="og:title" content="Maavnica SmartCard" />
   <meta property="og:description" content="Contact direct, avis clients et recommandation simplifiée." />
+  <meta property="og:image" id="seo-og-image" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <link rel="manifest" href="/static/manifest.webmanifest">
   <meta name="theme-color" content="#000000">
@@ -2556,6 +2557,19 @@
       }
     }
 
+    /**
+     * Image Open Graph pour les partages (réseaux / messageries) — cartes FR seulement (pas demo-latam-*).
+     */
+    function updateFrenchCardOgImage(card, slug) {
+      if (!slug || isLatamDemoSlugPrefix(slug)) return;
+      var el = document.getElementById("seo-og-image");
+      if (!el) return;
+      var defaultImage = "https://maavnica-smartcard-v2.onrender.com/static/og-default.jpg";
+      var raw = card && card.photo_url != null ? String(card.photo_url).trim() : "";
+      var url = raw ? raw : defaultImage;
+      el.setAttribute("content", url);
+    }
+
     /** Clé mode propriétaire : /c/{slug}?o=… (ne pas inclure dans les SMS / mails clients). */
     function getOwnerShareKeyFromUrl() {
       try {
@@ -3290,6 +3304,7 @@
 
         applyPublicShellCopy(isDemoCard, companyName, primaryName);
         updateFrenchCardSeo(card, slug, primaryName);
+        updateFrenchCardOgImage(card, slug);
 
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
