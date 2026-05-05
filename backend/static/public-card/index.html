@@ -2345,6 +2345,7 @@
      */
     const INTERNAL_CARDS_LS_KEY = "maavnica_internal_cards";
     const INTERNAL_MODE_LS_KEY = "maavnica_internal_mode";
+    const baseUrl = window.location.origin || "";
 
     function deviceInternalModeActive() {
       try {
@@ -2458,8 +2459,7 @@
     /** URL publique canonique sans query (partage, QR, textes clients). */
     function getPublicCardUrl(slug) {
       if (!slug) return "";
-      const origin = window.location.origin || "";
-      return origin + "/c/" + encodeURIComponent(slug);
+      return `${baseUrl}/c/${encodeURIComponent(slug)}`;
     }
 
     /** Carte marketing / démo : slug commence par « demo » (ex. demo, demo2, demo-artisan). */
@@ -2564,7 +2564,7 @@
       if (!slug || isLatamDemoSlugPrefix(slug)) return;
       var el = document.getElementById("seo-og-image");
       if (!el) return;
-      var defaultImage = "https://smartcard.maavnica.com/static/og-default.jpg";
+      var defaultImage = `${baseUrl}/static/og-default.jpg`;
       var raw = card && card.photo_url != null ? String(card.photo_url).trim() : "";
       var url = raw ? raw : defaultImage;
       el.setAttribute("content", url);
