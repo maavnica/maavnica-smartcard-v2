@@ -227,6 +227,9 @@ def update_card(
     if "region" in card_in.model_fields_set:
         r = card_in.region
         update_data["region"] = r if r is not None else "fr"
+    # Même principe que region pour city (SEO local).
+    if "city" in card_in.model_fields_set:
+        update_data["city"] = card_in.city
 
     # Vérifier que le profil envoyé est autorisé
     if "profile" in update_data:

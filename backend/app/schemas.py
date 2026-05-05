@@ -152,6 +152,16 @@ class CardBase(BaseModel):
             raise ValueError("region invalide.")
         return v
 
+    @field_validator("city", mode="before")
+    @classmethod
+    def _city_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
+
     @model_validator(mode="after")
     def _expires_at_vs_plan_type(self):
         plan_type = self.plan_type or "demo"
@@ -206,6 +216,16 @@ class CardUpdate(BaseModel):
     hero_title: Optional[str] = Field(None, max_length=200)
     hero_text: Optional[str] = Field(None, max_length=1200)
     hero_cta_text: Optional[str] = Field(None, max_length=500)
+
+    @field_validator("city", mode="before")
+    @classmethod
+    def _city_update_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip()
+            return s if s else None
+        return v
 
     @validator("hero_title", "hero_text", "hero_cta_text", pre=True)
     def _hero_update_strip_empty(cls, v):

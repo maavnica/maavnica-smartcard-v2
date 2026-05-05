@@ -1,4 +1,5 @@
 const API_BASE = "/api/cards";
+const baseUrl = window.location.origin || "";
 let ADMIN_API_KEY = sessionStorage.getItem("ADMIN_API_KEY") || "";
 let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
@@ -49,7 +50,8 @@ function fillForm(card) {
 
   // Champs existants
   document.getElementById("company-name").value = card.company_name || "";
-  document.getElementById("city").value = card.city || "";
+  const cityInput = document.getElementById("city");
+  if (cityInput) cityInput.value = card.city || "";
 document.getElementById("first-name").value = card.first_name || "";
 document.getElementById("last-name").value = card.last_name || "";
 
@@ -105,7 +107,8 @@ function resetForm() {
 
   // Champs existants
   document.getElementById("company-name").value = "";
-  document.getElementById("city").value = "";
+  const cityInputReset = document.getElementById("city");
+  if (cityInputReset) cityInputReset.value = "";
 document.getElementById("first-name").value = "";
 document.getElementById("last-name").value = "";
 
@@ -198,15 +201,11 @@ function updatePlanExpirationUI(autoPrefill = true) {
 /* ============================================================
    AFFICHAGE DU LIEN PUBLIC
 ============================================================ */
-function getOriginBase() {
-  return window.location.origin.replace(/\/admin$/, "");
-}
-
 /** Lien public client : /c/{slug} (sans query). */
 function publicCardUrlForSlug(slug) {
   const s = (slug || "").trim();
   if (!s) return "";
-  return getOriginBase() + "/c/" + encodeURIComponent(s);
+  return `${baseUrl}/c/${encodeURIComponent(s)}`;
 }
 
 /** Prévisualisation admin : n’impacte pas les analytics publiques. */
@@ -227,13 +226,13 @@ function updatePublicLink() {
     return;
   }
 
-  const publicUrl = publicCardUrlForSlug(slug);
+  const publicUrl = `${baseUrl}/c/${encodeURIComponent(slug)}`;
   box.textContent = publicUrl;
 
   if (ownerBox) {
     const ok = (document.getElementById("owner-share-key")?.value || "").trim();
     if (ok) {
-      ownerBox.textContent = publicUrl + "?o=" + encodeURIComponent(ok);
+      ownerBox.textContent = `${baseUrl}/c/${encodeURIComponent(slug)}?o=${encodeURIComponent(ok)}`;
     } else {
       ownerBox.textContent =
         "Chargez ou enregistrez la carte pour générer le lien personnel.";
@@ -354,7 +353,7 @@ async function saveCard() {
  first_name: document.getElementById("first-name")?.value.trim() || null,
   last_name: document.getElementById("last-name")?.value.trim() || null,
     company_name: companyName,
-    city: document.getElementById("city").value.trim() || null,
+    city: (document.getElementById("city")?.value ?? "").trim() || null,
     slug,
     plan_type: document.getElementById("plan-type").value || "demo",
     region: (() => {
