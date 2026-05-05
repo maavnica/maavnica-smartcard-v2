@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <title>Maavnica SmartCard – Carte publique</title>
+  <meta name="description" content="Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations." />
+  <meta property="og:title" content="Maavnica SmartCard" />
+  <meta property="og:description" content="Contact direct, avis clients et recommandation simplifiée." />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <link rel="manifest" href="/static/manifest.webmanifest">
   <meta name="theme-color" content="#000000">
 
   <style>
+    /* SEO / accessibilité : texte masqué visuellement, conservé pour lecteurs d’écran */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
     .inactive-card-message {
       max-width: 420px;
       width: 100%;
@@ -1835,6 +1850,7 @@
 </head>
 
 <body class="theme-apple">
+  <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
   <div id="inactive-card-message" class="inactive-card-message"></div>
   <div id="admin-preview-badge" class="admin-preview-badge" hidden>
     Mode prévisualisation — statistiques non comptabilisées
@@ -2449,6 +2465,95 @@
     function isDemoSlug(slug) {
       if (!slug) return false;
       return slug.toLowerCase().startsWith("demo");
+    }
+
+    /** Démos LATAM (servies par index_latam en prod) — pas de surcouche SEO FR sur ce préfixe. */
+    function isLatamDemoSlugPrefix(slug) {
+      return !!(slug && String(slug).trim().toLowerCase().startsWith("demo-latam-"));
+    }
+
+    /**
+     * Métadonnées SEO (title, meta, Open Graph) + H1 hors écran pour les cartes FR (index.html).
+     * Données : champs API existants ; ville optionnelle si ajoutée plus tard (city / service_city).
+     */
+    function updateFrenchCardSeo(card, slug, resolvedDisplayName) {
+      if (!card || !slug || isLatamDemoSlugPrefix(slug)) return;
+
+      const name =
+        (resolvedDisplayName != null && String(resolvedDisplayName).trim()) ||
+        (card.display_name != null && String(card.display_name).trim()) ||
+        (card.company_name != null && String(card.company_name).trim()) ||
+        "";
+      const job = (card.job_title != null && String(card.job_title).trim()) || "";
+      const city =
+        (card.city != null && String(card.city).trim()) ||
+        (card.service_city != null && String(card.service_city).trim()) ||
+        "";
+
+      const fallbackTitle = "Carte professionnelle | Maavnica";
+      let pageTitle = fallbackTitle;
+      if (job && city && name) pageTitle = job + " à " + city + " | " + name;
+      else if (job && name) pageTitle = job + " | " + name;
+      else if (name) pageTitle = name + " | Maavnica";
+      document.title = pageTitle;
+
+      let metaDesc = "";
+      if (name && job && city) {
+        metaDesc =
+          name + ", " + job + " à " + city + ". Contact rapide, avis clients et recommandations.";
+      } else if (name && job) {
+        metaDesc =
+          name +
+          ", " +
+          job +
+          ". Contact rapide, avis clients et recommandations.";
+      } else if (name && city) {
+        metaDesc =
+          name +
+          " à " +
+          city +
+          ". Contact rapide, avis clients et recommandations.";
+      } else if (name) {
+        metaDesc =
+          name + ". Contact rapide, avis clients et recommandations.";
+      } else {
+        metaDesc =
+          "Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations.";
+      }
+
+      let ogTitle = "";
+      if (job && city && name) ogTitle = job + " recommandé à " + city + " | " + name;
+      else if (job && name) ogTitle = job + " recommandé | " + name;
+      else if (name) ogTitle = name + " | Maavnica";
+      else ogTitle = "Maavnica SmartCard";
+
+      const ogDesc =
+        name !== ""
+          ? "Découvrez " + name + ". Contact direct, avis clients et recommandation simplifiée."
+          : "Découvrez cette carte professionnelle. Contact direct, avis clients et recommandation simplifiée.";
+
+      function upsertMeta(attr, key, content) {
+        if (content === undefined || content === null) return;
+        const sel = 'meta[' + attr + '="' + key.replace(/"/g, '\\"') + '"]';
+        var el = document.head.querySelector(sel);
+        if (!el) {
+          el = document.createElement("meta");
+          el.setAttribute(attr, key);
+          document.head.appendChild(el);
+        }
+        el.setAttribute("content", String(content));
+      }
+      upsertMeta("name", "description", metaDesc);
+      upsertMeta("property", "og:title", ogTitle);
+      upsertMeta("property", "og:description", ogDesc);
+
+      var h1 = document.getElementById("public-card-seo-h1");
+      if (h1) {
+        if (name && job && city) h1.textContent = name + " — " + job + " à " + city;
+        else if (name && job) h1.textContent = name + " — " + job;
+        else if (name) h1.textContent = name;
+        else h1.textContent = "Carte professionnelle Maavnica";
+      }
     }
 
     /** Clé mode propriétaire : /c/{slug}?o=… (ne pas inclure dans les SMS / mails clients). */
@@ -3184,6 +3289,7 @@
         }
 
         applyPublicShellCopy(isDemoCard, companyName, primaryName);
+        updateFrenchCardSeo(card, slug, primaryName);
 
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
