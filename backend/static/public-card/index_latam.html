@@ -7,7 +7,50 @@
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #f7f8fb; color: #101828; }
     .wrap { max-width: 520px; margin: 0 auto; padding: 20px 14px 28px; }
-    .card { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 8px 24px rgba(16,24,40,.08); }
+    .card { background: #fff; border-radius: 16px; padding: 0; overflow: hidden; box-shadow: 0 8px 24px rgba(16,24,40,.08); }
+    .card-inner { padding: 18px; }
+    .compact-hero {
+      display: none;
+      height: 88px;
+      max-height: 95px;
+      background: linear-gradient(125deg, #0f766e 0%, #0d9488 42%, #14b8a6 100%);
+      position: relative;
+    }
+    .compact-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, transparent 42%);
+      pointer-events: none;
+    }
+    .latam-premium-wa-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #0f766e;
+      background: linear-gradient(180deg, rgba(20, 184, 166, 0.14), rgba(20, 184, 166, 0.08));
+      border: 1px solid rgba(13, 148, 136, 0.22);
+      margin: 0 0 10px;
+      line-height: 1.25;
+    }
+    .latam-premium-wa-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #25d366;
+      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.35);
+      flex-shrink: 0;
+    }
+    .lead--premium,
+    .desc--premium {
+      display: none;
+    }
     .top {
       display: flex;
       gap: 12px;
@@ -125,36 +168,185 @@
       border: 1px solid #c7d2fe;
       text-align: center;
     }
+
+    /* Démos LATAM premium (slugs: demo-latam-*) — activé via JS sur body */
+    body.latam-premium-card {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(1200px 480px at 50% -12%, rgba(20, 184, 166, 0.22), transparent 55%),
+        linear-gradient(165deg, #e8f4f2 0%, #f0fdfa 45%, #ecfdf5 100%);
+    }
+    body.latam-premium-card .wrap {
+      max-width: 420px;
+      padding: 14px 12px 20px;
+    }
+    body.latam-premium-card .admin-preview-badge {
+      max-width: 420px;
+      border-radius: 12px;
+    }
+    body.latam-premium-card .card {
+      border-radius: 22px;
+      border: 1px solid rgba(15, 118, 110, 0.14);
+      box-shadow:
+        0 22px 50px -18px rgba(15, 23, 42, 0.22),
+        0 0 0 1px rgba(15, 118, 110, 0.08);
+    }
+    body.latam-premium-card .compact-hero {
+      display: block;
+    }
+    body.latam-premium-card .card-inner {
+      padding: 0 16px 16px;
+      position: relative;
+    }
+    body.latam-premium-card .top {
+      align-items: flex-end;
+      margin-top: -38px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+    body.latam-premium-card .avatar-shell {
+      border: 3px solid #fff;
+      box-shadow:
+        0 10px 28px rgba(15, 23, 42, 0.14),
+        0 0 0 1px rgba(15, 118, 110, 0.12);
+    }
+    body.latam-premium-card #display-name {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    body.latam-premium-card #job-line {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #475467;
+      font-weight: 500;
+    }
+    body.latam-premium-card #city-line {
+      font-size: 12px;
+      color: #667085;
+    }
+    body.latam-premium-card .latam-premium-wa-badge {
+      display: inline-flex;
+    }
+    body.latam-premium-card .lead--classic,
+    body.latam-premium-card .desc--classic {
+      display: none;
+    }
+    body.latam-premium-card .lead--premium {
+      display: block;
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.28;
+      letter-spacing: -0.02em;
+    }
+    body.latam-premium-card .desc--premium {
+      display: block;
+      margin: 0 0 12px;
+      font-size: 13.5px;
+      line-height: 1.38;
+      color: #475467;
+    }
+    body.latam-premium-card .btn {
+      border-radius: 13px;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) inset;
+    }
+    body.latam-premium-card .btn:active:not(:disabled) {
+      transform: scale(0.985);
+    }
+    body.latam-premium-card .btn + .btn {
+      margin-top: 9px;
+    }
+    body.latam-premium-card .btn-wa {
+      background: linear-gradient(180deg, #1fa855 0%, #128c3a 100%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 10px 22px -10px rgba(18, 140, 58, 0.65);
+    }
+    body.latam-premium-card .btn-wa:hover:not(:disabled) {
+      filter: brightness(1.04);
+    }
+    body.latam-premium-card .btn-review {
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.18);
+    }
+    body.latam-premium-card .btn-review:hover:not(:disabled) {
+      filter: brightness(1.02);
+    }
+    body.latam-premium-card .btn-reco {
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.18) inset,
+        0 10px 22px -10px rgba(29, 78, 216, 0.55);
+    }
+    body.latam-premium-card .btn-reco:hover:not(:disabled) {
+      filter: brightness(1.04);
+    }
+    body.latam-premium-card .hint {
+      margin-top: 12px;
+      font-size: 12px;
+    }
+    body.latam-premium-card .foot {
+      margin-top: 8px;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
+  <script>
+    window.__MAAVNICA_LATAM_PREMIUM = {
+      "demo-latam-plomero": 1,
+      "demo-latam-estilista": 1,
+      "demo-latam-terapeuta": 1
+    };
+    (function (S) {
+      var parts = (location.pathname || "").split("/").filter(Boolean);
+      var slug =
+        parts.length >= 2 && parts[0] === "c"
+          ? decodeURIComponent(parts[1]).toLowerCase()
+          : "";
+      if (S[slug]) document.body.classList.add("latam-premium-card");
+    })(window.__MAAVNICA_LATAM_PREMIUM);
+  </script>
   <div id="admin-preview-badge" class="admin-preview-badge" hidden>
     Mode prévisualisation — statistiques non comptabilisées
   </div>
   <main class="wrap">
     <section class="card">
-      <div class="top">
-        <div class="avatar-shell">
-          <img id="avatar" alt="Foto profesional" width="72" height="72" />
-          <span id="avatar-placeholder" aria-hidden="true"></span>
-          <span id="avatar-fallback"></span>
+      <div class="compact-hero" aria-hidden="true"></div>
+      <div class="card-inner">
+        <div class="top">
+          <div class="avatar-shell">
+            <img id="avatar" alt="Foto profesional" width="72" height="72" />
+            <span id="avatar-placeholder" aria-hidden="true"></span>
+            <span id="avatar-fallback"></span>
+          </div>
+          <div>
+            <h1 id="display-name">SmartCard</h1>
+            <div class="meta" id="job-line"></div>
+            <div class="meta" id="city-line"></div>
+          </div>
         </div>
-        <div>
-          <h1 id="display-name">SmartCard</h1>
-          <div class="meta" id="job-line"></div>
-          <div class="meta" id="city-line"></div>
-        </div>
+
+        <p class="latam-premium-wa-badge" role="status">Atención rápida por WhatsApp</p>
+
+        <p class="lead lead--classic">Tus clientes satisfechos pueden traerte nuevos clientes.</p>
+        <p class="lead lead--premium">Convierte cada cliente satisfecho en una nueva oportunidad.</p>
+        <p class="desc desc--classic">Una tarjeta simple para recibir mensajes, opiniones y recomendaciones por WhatsApp.</p>
+        <p class="desc desc--premium">Opiniones, mensajes y recomendaciones en una sola tarjeta.</p>
+
+        <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
+        <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
+        <button class="btn btn-reco" id="btn-recommend" type="button">Recomendar a un amigo</button>
+
+        <div class="hint">Demo interactiva — sin compromiso.</div>
+        <div class="foot">Propulsado por Maavnica</div>
       </div>
-
-      <p class="lead">Tus clientes satisfechos pueden traerte nuevos clientes.</p>
-      <p class="desc">Una tarjeta simple para recibir mensajes, opiniones y recomendaciones por WhatsApp.</p>
-
-      <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
-      <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
-      <button class="btn btn-reco" id="btn-recommend" type="button">Recomendar a un amigo</button>
-
-      <div class="hint">Demo interactiva — sin compromiso.</div>
-      <div class="foot">Propulsado por Maavnica</div>
     </section>
   </main>
 
@@ -178,6 +370,12 @@
       var parts = (window.location.pathname || "").split("/").filter(Boolean);
       if (parts.length >= 2 && parts[0] === "c") return decodeURIComponent(parts[1]);
       return null;
+    }
+
+    function isLatamDemoPremiumSlug(slug) {
+      var S = window.__MAAVNICA_LATAM_PREMIUM;
+      if (!slug || !S) return false;
+      return !!S[String(slug).trim().toLowerCase()];
     }
 
     function internalSlugStorageKey(slug) {
@@ -342,6 +540,10 @@
     async function loadCard() {
       var slug = getSlugFromPath();
       if (!slug) return;
+
+      if (isLatamDemoPremiumSlug(slug)) {
+        document.body.classList.add("latam-premium-card");
+      }
 
       syncInternalViewFromUrl(slug);
       refreshIsInternalView(slug);
