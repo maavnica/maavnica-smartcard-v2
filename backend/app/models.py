@@ -46,6 +46,7 @@ class Card(Base):
 
     # Infos business
     company_name = Column(String, nullable=False)
+    city = Column(String(120), nullable=True)
     slug = Column(String, unique=True, index=True, nullable=False)
     plan_type = Column(String(32), nullable=False, default="demo")
     region = Column(String(16), nullable=False, default="fr")

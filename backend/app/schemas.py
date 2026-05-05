@@ -41,6 +41,7 @@ class CardBase(BaseModel):
     IMPORTANT : les clés doivent correspondre exactement à celles envoyées par le front.
     """
     company_name: str
+    city: Optional[str] = Field(None, max_length=120)
     slug: str
     plan_type: str = "demo"
     region: str = "fr"
@@ -176,6 +177,7 @@ class CardUpdate(BaseModel):
     Utilisé en PUT/PATCH /api/cards/{id}
     """
     company_name: Optional[str] = None
+    city: Optional[str] = Field(None, max_length=120)
     slug: Optional[str] = None
     plan_type: Optional[str] = None
     region: Optional[str] = None
@@ -299,6 +301,7 @@ class CardPublic(BaseModel):
 
     id: int
     company_name: str
+    city: Optional[str] = None
     slug: str
     plan_type: str = "demo"
     region: str = "fr"

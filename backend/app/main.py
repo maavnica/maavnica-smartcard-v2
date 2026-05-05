@@ -69,6 +69,7 @@ def _create_db_tables():
         ensure_recommendation_event_display_columns,
         ensure_card_plan_columns,
         ensure_card_region_column,
+        ensure_card_city_column,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -79,6 +80,7 @@ def _create_db_tables():
     ensure_recommendation_code_column()
     ensure_card_plan_columns()
     ensure_card_region_column()
+    ensure_card_city_column()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
 

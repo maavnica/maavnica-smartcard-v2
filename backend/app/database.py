@@ -287,3 +287,22 @@ def ensure_card_region_column() -> None:
         conn.execute(text(stmt))
 
 
+def ensure_card_city_column() -> None:
+    """Ajoute city sur cards si colonne manquante (nullable)."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "city" in existing:
+        return
+
+    stmt = "ALTER TABLE cards ADD COLUMN city VARCHAR(120)"
+    with engine.begin() as conn:
+        conn.execute(text(stmt))
+
+

@@ -49,6 +49,7 @@ function fillForm(card) {
 
   // Champs existants
   document.getElementById("company-name").value = card.company_name || "";
+  document.getElementById("city").value = card.city || "";
 document.getElementById("first-name").value = card.first_name || "";
 document.getElementById("last-name").value = card.last_name || "";
 
@@ -104,6 +105,7 @@ function resetForm() {
 
   // Champs existants
   document.getElementById("company-name").value = "";
+  document.getElementById("city").value = "";
 document.getElementById("first-name").value = "";
 document.getElementById("last-name").value = "";
 
@@ -352,6 +354,7 @@ async function saveCard() {
  first_name: document.getElementById("first-name")?.value.trim() || null,
   last_name: document.getElementById("last-name")?.value.trim() || null,
     company_name: companyName,
+    city: document.getElementById("city").value.trim() || null,
     slug,
     plan_type: document.getElementById("plan-type").value || "demo",
     region: (() => {
