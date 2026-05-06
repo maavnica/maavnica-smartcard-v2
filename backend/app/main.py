@@ -74,11 +74,11 @@ def _fr_public_card_seo_strings(seo: Optional[Dict[str, Any]]) -> tuple[str, str
         meta_desc = (
             f"{name}, {job} à {city}. Contact rapide, avis clients et recommandations."
         )
-        og_title = f"{job} recommandé à {city} | {name}"
+        og_title = f"{job} à {city} recommandé par ses clients | {name}"
     elif job and name:
         title = f"{job} | {name}"
         meta_desc = f"{name}, {job}. Contact rapide, avis clients et recommandations."
-        og_title = f"{job} recommandé | {name}"
+        og_title = f"{job} recommandé par ses clients | {name}"
     elif name and city:
         title = f"{name} | Maavnica"
         meta_desc = f"{name} à {city}. Contact rapide, avis clients et recommandations."
