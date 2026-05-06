@@ -738,7 +738,7 @@
               <iframe
                 class="hero-preview-iframe"
                 title="Aperçu SmartCard"
-                src="/c/arnaud-huard"
+                src="https://smartcard.maavnica.com/c/arnaud-huard"
                 loading="lazy"></iframe>
             </div>
           </div>
@@ -833,7 +833,7 @@
               id="demoFrame"
               class="demo-iframe"
               title="Démo SmartCard"
-              src="/c/demo"></iframe>
+              src="https://smartcard.maavnica.com/c/demo"></iframe>
           </div>
           <p class="demo-viewer-note">Testez les boutons comme un client.</p>
         </div>
@@ -993,7 +993,7 @@
   <script>
     (function () {
       /** Même origine que les iframes démo FR. Démos LATAM : slugs ci-dessous (contenu ES dans l’API). */
-      var DEMO_ORIGIN = window.location.origin;
+      var DEMO_ORIGIN = "https://smartcard.maavnica.com";
       var URLS_FR = {
         artisan: DEMO_ORIGIN + "/c/demo",
         gold: "https://smartcard.maavnica.com/c/demo3",
@@ -1310,13 +1310,7 @@
   </script>
   <script>
     (function () {
-      var CONTACT_API = (function () {
-        try {
-          var o = window.location.origin;
-          if (o && o !== "null" && o.indexOf("http") === 0) return o + "/api/contact";
-        } catch (e) {}
-        return window.location.origin + "/api/contact";
-      })();
+      var CONTACT_API = "https://smartcard.maavnica.com/api/contact";
 
       function maavnicaReadAffiliateRef() {
         var TTL_MS = 30 * 24 * 60 * 60 * 1000;
