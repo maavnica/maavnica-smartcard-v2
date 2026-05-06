@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maavnica SmartCard – Visibilité, crédibilité & nouveaux clients</title>
+  <title>SmartCard Maavnica – Carte digitale, avis Google & visibilité locale</title>
   <meta name="description"
-        content="Carte digitale avec QR code : plus de visibilité, plus de crédibilité, plus de demandes clients. Trouvez de nouveaux clients et fidélisez les anciens." />
+        content="Collectez des avis, facilitez le contact et améliorez votre visibilité locale sur Google avec votre SmartCard." />
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -719,7 +719,7 @@
         <p class="hero-kicker">Pour artisans & indépendants</p>
         <h1>Facilitez le contact, obtenez plus d’avis, et ne ratez plus aucune opportunité.</h1>
         <p class="hero-sub">
-          Une carte simple à partager après chaque prestation pour être contacté facilement, guider vos clients vers vos avis Google et valoriser votre activité.
+          Votre SmartCard est aussi une page web légère, pensée pour être comprise par Google et renforcer votre visibilité locale.
         </p>
         <p class="hero-punchline">Un simple geste, un vrai levier de croissance</p>
         <div class="hero-cta-row">
@@ -738,7 +738,7 @@
               <iframe
                 class="hero-preview-iframe"
                 title="Aperçu SmartCard"
-                src="https://maavnica-smartcard-v2.onrender.com/c/arnaud-huard"
+                src="/c/arnaud-huard"
                 loading="lazy"></iframe>
             </div>
           </div>
@@ -763,7 +763,7 @@
           <h3>Après</h3>
           <ul>
             <li>✔ vous partagez votre SmartCard : un seul lien pour avis, rappels et demandes</li>
-            <li>✔ vous gagnez en visibilité et de nouveaux clients peuvent vous découvrir</li>
+            <li>✔ vous gagnez en visibilité et de nouveaux clients peuvent vous découvrir, y compris via la recherche locale sur Google</li>
           </ul>
         </div>
       </div>
@@ -779,6 +779,7 @@
           <li>Visibilité — vous restez présent au moment où le client décide</li>
           <li>Crédibilité — une carte pro qui rassure dès le premier regard</li>
           <li>Opportunité — chaque envoi peut déclencher un avis, une demande ou un nouveau contact</li>
+          <li>Visibilité locale — une page structurée qui aide Google à relier votre activité, votre ville et vos avis.</li>
         </ul>
       </div>
     </div>
@@ -832,7 +833,7 @@
               id="demoFrame"
               class="demo-iframe"
               title="Démo SmartCard"
-              src="https://maavnica-smartcard-v2.onrender.com/c/demo"></iframe>
+              src="/c/demo"></iframe>
           </div>
           <p class="demo-viewer-note">Testez les boutons comme un client.</p>
         </div>
@@ -858,6 +859,7 @@
             <li>Une carte professionnelle à partager en un lien</li>
             <li>Boutons de contact : téléphone, email, WhatsApp</li>
             <li>Parcours d’avis Google facilité</li>
+            <li>Page publique optimisée pour votre visibilité locale sur Google</li>
             <li>Demandes de devis ou de contact centralisées</li>
             <li>Idéal pour indépendants, artisans et professionnels de service</li>
           </ul>
@@ -958,6 +960,12 @@
           Non. Votre carte s’ouvre dans le navigateur du téléphone du client. Rien à télécharger de votre côté non plus.
         </p>
       </div>
+      <div class="faq-item">
+        <h4>La SmartCard m’aide-t-elle à être trouvé sur Google dans ma ville ?</h4>
+        <p>
+          Oui. Votre SmartCard est une page web structurée avec votre activité, votre zone et vos avis. Elle complète votre présence Google et facilite votre découverte locale.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -985,7 +993,7 @@
   <script>
     (function () {
       /** Même origine que les iframes démo FR. Démos LATAM : slugs ci-dessous (contenu ES dans l’API). */
-      var DEMO_ORIGIN = "https://maavnica-smartcard-v2.onrender.com";
+      var DEMO_ORIGIN = window.location.origin;
       var URLS_FR = {
         artisan: DEMO_ORIGIN + "/c/demo",
         gold: "https://smartcard.maavnica.com/c/demo3",
@@ -1063,7 +1071,7 @@
         if (h1) h1.textContent = "Tus clientes satisfechos pueden traerte nuevos clientes.";
         if (sub) {
           sub.textContent =
-            "Una forma simple de recibir mensajes, opiniones y recomendaciones por WhatsApp.";
+            "Tu SmartCard es también una mini página pensada para mejorar tu visibilidad local en Google.";
         }
         if (punch) {
           punch.textContent =
@@ -1102,7 +1110,7 @@
         if (afterUl) {
           afterUl.innerHTML =
             "<li>✔ compartes tu SmartCard: un solo enlace para opiniones, recordatorios y mensajes</li>" +
-            "<li>✔ ganas visibilidad y nuevos clientes pueden encontrarte</li>";
+            "<li>✔ ganas visibilidad y nuevos clientes pueden encontrarte, incluso a través de la búsqueda local en Google</li>";
         }
 
         var visH = document.querySelector(".visibility-box h2");
@@ -1119,6 +1127,10 @@
         if (visLis[2]) {
           visLis[2].textContent =
             "Oportunidad — cada envío puede generar una opinión, una consulta o un nuevo contacto";
+        }
+        if (visLis[3]) {
+          visLis[3].textContent =
+            "Visibilidad local — una página que ayuda a Google a entender tu actividad, tu ciudad y tus opiniones.";
         }
 
         var scenH = document.querySelector(".scenario-box h2");
@@ -1201,7 +1213,8 @@
               "<li>Contacto directo por WhatsApp</li>" +
               "<li>Opiniones de clientes</li>" +
               "<li>Recomendaciones simples</li>" +
-              "<li>Enlace fácil de compartir</li>";
+              "<li>Enlace fácil de compartir</li>" +
+              "<li>Página optimizada para tu visibilidad local en Google</li>";
           }
           if (ctaP) {
             ctaP.setAttribute("href", "#contact-smartcard-latam");
@@ -1248,6 +1261,12 @@
           faqItems[4].querySelector("h4").textContent = "¿Hay que instalar una app?";
           faqItems[4].querySelector("p").textContent =
             "No. Tu tarjeta se abre en el navegador del teléfono del cliente. Tú tampoco tienes que descargar nada.";
+        }
+        if (faqItems[5]) {
+          faqItems[5].querySelector("h4").textContent =
+            "¿Me ayuda a aparecer en Google en mi ciudad?";
+          faqItems[5].querySelector("p").textContent =
+            "Sí. Tu SmartCard es una página web estructurada con tu actividad, tu ciudad y tus opiniones. Complementa tu presencia en Google y facilita que te encuentren localmente.";
         }
 
         var affH = document.querySelector(".aff-inner h3");
@@ -1296,7 +1315,7 @@
           var o = window.location.origin;
           if (o && o !== "null" && o.indexOf("http") === 0) return o + "/api/contact";
         } catch (e) {}
-        return "https://maavnica-smartcard-v2.onrender.com/api/contact";
+        return window.location.origin + "/api/contact";
       })();
 
       function maavnicaReadAffiliateRef() {
