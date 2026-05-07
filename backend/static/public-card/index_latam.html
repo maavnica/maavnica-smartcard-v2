@@ -469,8 +469,29 @@
 
     function getPublicCardUrl(slug) {
       if (!slug) return "";
-      var origin = window.location.origin || "";
-      return origin + "/c/" + encodeURIComponent(slug);
+      return "https://smartcard.maavnica.com/c/" + encodeURIComponent(slug);
+    }
+
+    function openRecommendationShareUrl(url) {
+      if (!url) return;
+      try {
+        if (window.self !== window.top) {
+          var w = window.open(url, "_blank", "noopener,noreferrer");
+          if (w) return;
+          var a = document.createElement("a");
+          a.href = url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return;
+        }
+      } catch (e) {
+        window.open(url, "_blank", "noopener,noreferrer");
+        return;
+      }
+      window.location.href = url;
     }
 
     function getUrlTrackingParams() {
@@ -688,7 +709,7 @@
         trackCardEvent(slug, "recommend_click");
         trackCardEvent(slug, "recommend_share_whatsapp");
         trackRecommendationEvent(slug, "recommend_link_created", profile.referrerId);
-        window.location.href = "https://wa.me/?text=" + encodeURIComponent(msg);
+        openRecommendationShareUrl("https://wa.me/?text=" + encodeURIComponent(msg));
       };
 
       trackCardVisit(slug);
