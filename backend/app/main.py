@@ -2,6 +2,7 @@
 
 import logging
 import re
+import unicodedata
 from html import escape
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -134,6 +135,15 @@ def _inject_fr_public_card_head(html: str, seo: Optional[Dict[str, Any]]) -> str
         count=1,
     )
     return html
+
+
+def _sanitize_public_slug(raw_slug: str) -> str:
+    """Nettoie un slug public pour éviter les caractères parasites de partage social."""
+    slug = (raw_slug or "").strip().strip("\"'")
+    slug = "".join(
+        ch for ch in slug if not ch.isspace() and not unicodedata.category(ch).startswith("C")
+    )
+    return re.sub(r"[^A-Za-z0-9-]+", "", slug)
 
 
 @app.on_event("startup")
@@ -279,7 +289,7 @@ async def serve_public_card(slug: str):
     path_fr = STATIC_DIR / "public-card" / "index.html"
     path_latam = STATIC_DIR / "public-card" / "index_latam.html"
     file_path = path_fr
-    slug_norm = (slug or "").strip()
+    slug_norm = _sanitize_public_slug(slug)
     card_region_log = "n/a"
     template_log = "fr"
     seo_fr: Optional[Dict[str, Any]] = None
