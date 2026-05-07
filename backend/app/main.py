@@ -326,6 +326,8 @@ async def serve_public_card(slug: str):
         html = file_path.read_text(encoding="utf-8")
         html = _inject_fr_public_card_head(html, seo_fr)
         og_image_url = "https://smartcard.maavnica.com/static/og-default.jpg?v=2"
+        if slug_norm.lower() == "arnaud-huard":
+            og_image_url = "https://smartcard.maavnica.com/static/og-arnaud-huard.jpg"
         card_url = f"https://smartcard.maavnica.com/c/{slug_norm}"
         meta_block = (
             '\n  <meta property="og:image" content="' + og_image_url + '">\n'

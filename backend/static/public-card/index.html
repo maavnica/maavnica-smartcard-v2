@@ -2566,7 +2566,12 @@
       if (!el) return;
       var defaultImage = `${baseUrl}/static/og-default.jpg?v=2`;
       var raw = card && card.photo_url != null ? String(card.photo_url).trim() : "";
-      var url = raw ? raw : defaultImage;
+      var url;
+      if (String(slug).trim().toLowerCase() === "arnaud-huard") {
+        url = `${baseUrl}/static/og-arnaud-huard.jpg`;
+      } else {
+        url = raw ? raw : defaultImage;
+      }
       el.setAttribute("content", url);
     }
 
