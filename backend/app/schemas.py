@@ -748,3 +748,85 @@ class RecommendationEventIn(BaseModel):
         return t
 
 
+# =============================================================
+#  ANALYTICS SITE / LANDING
+# =============================================================
+
+_SITE_ANALYTICS_EVENT_TYPES = frozenset(
+    {
+        "page_view",
+        "cta_click",
+        "demo_click",
+        "affiliate_click",
+        "contact_click",
+        "lang_switch",
+        "outbound_click",
+        "scroll_50",
+        "scroll_90",
+    }
+)
+
+_SITE_ANALYTICS_PAGE_TYPES = frozenset({"landing", "contact", "affiliate", "other"})
+
+
+class SiteAnalyticsEventIn(BaseModel):
+    domain: str = Field(..., min_length=1, max_length=255)
+    path: str = Field(..., min_length=1, max_length=1024)
+    page_type: str = Field(..., min_length=1, max_length=64)
+    event_type: str = Field(..., min_length=1, max_length=64)
+    source: Optional[str] = Field(None, max_length=255)
+    referrer: Optional[str] = Field(None, max_length=512)
+    utm_source: Optional[str] = Field(None, max_length=255)
+    utm_medium: Optional[str] = Field(None, max_length=255)
+    utm_campaign: Optional[str] = Field(None, max_length=255)
+    lang: Optional[str] = Field(None, max_length=16)
+    target: Optional[str] = Field(None, max_length=512)
+    visitor_id: Optional[str] = Field(None, max_length=80)
+
+    @validator("domain", "path")
+    def _site_analytics_no_ctl(cls, v: str) -> str:
+        if v is None:
+            return v
+        if "\n" in v or "\r" in v or "\x00" in v:
+            raise ValueError("Valeur invalide.")
+        return v
+
+    @validator("event_type")
+    def _site_analytics_event_type(cls, v: str) -> str:
+        t = (v or "").strip()
+        if t not in _SITE_ANALYTICS_EVENT_TYPES:
+            raise ValueError("Type d’événement site non reconnu.")
+        return t
+
+    @validator("page_type")
+    def _site_analytics_page_type(cls, v: str) -> str:
+        t = (v or "").strip()
+        if t not in _SITE_ANALYTICS_PAGE_TYPES:
+            raise ValueError("Type de page non reconnu.")
+        return t
+
+    @validator(
+        "source",
+        "referrer",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "lang",
+        "target",
+        "visitor_id",
+        pre=True,
+    )
+    def _site_analytics_empty_str(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
+
+    @validator("lang")
+    def _site_analytics_lang_norm(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        s = v.strip().lower()[:16]
+        return s if s else None
+

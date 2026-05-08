@@ -695,6 +695,15 @@
             return;
           }
 
+          if (window.maavnicaSiteAnalytics) {
+            window.maavnicaSiteAnalytics.track({
+              event_type: "affiliate_click",
+              page_type: "affiliate",
+              lang: isLatam ? "es" : "fr",
+              target: "affiliate_form_submit",
+            });
+          }
+
           if (isLatam) {
             if (okbox) {
               okbox.style.whiteSpace = "pre-line";
@@ -720,6 +729,37 @@
           if (submitBtn) submitBtn.disabled = false;
         }
       });
+    })();
+  </script>
+  <script src="/static/site-analytics.js"></script>
+  <script>
+    (function () {
+      var SA = window.maavnicaSiteAnalytics;
+      if (!SA) return;
+      SA.init({ pageType: "affiliate" });
+      document.querySelectorAll('a[href*="smartcard.maavnica.com"], a[href="/"]').forEach(
+        function (a) {
+          var h = a.getAttribute("href") || "";
+          if (h.indexOf("devenir-affilie-merci") !== -1) return;
+          if (h === "#form") {
+            a.addEventListener("click", function () {
+              SA.track({
+                event_type: "affiliate_click",
+                page_type: "affiliate",
+                target: "scroll_to_form",
+              });
+            });
+            return;
+          }
+          a.addEventListener("click", function () {
+            SA.track({
+              event_type: "cta_click",
+              page_type: "affiliate",
+              target: "back_landing",
+            });
+          });
+        }
+      );
     })();
   </script>
 </body>

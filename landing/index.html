@@ -1053,6 +1053,14 @@
 
       function switchLanguage(next) {
         if (next !== "fr" && next !== "es") return;
+        if (window.maavnicaSiteAnalytics) {
+          window.maavnicaSiteAnalytics.track({
+            event_type: "lang_switch",
+            page_type: "landing",
+            lang: lang,
+            target: lang + ">" + next,
+          });
+        }
         var p = new URLSearchParams(window.location.search);
         if (next === "fr") p.delete("lang");
         else p.set("lang", next);
@@ -1329,7 +1337,16 @@
           buttons.forEach(function (b) { b.classList.remove("active"); });
           btn.classList.add("active");
           var key = btn.getAttribute("data-demo");
-          if (urls[key] && frame) frame.src = urls[key];
+          if (urls[key] && frame) {
+            if (window.maavnicaSiteAnalytics) {
+              window.maavnicaSiteAnalytics.track({
+                event_type: "demo_click",
+                page_type: "landing",
+                target: urls[key],
+              });
+            }
+            frame.src = urls[key];
+          }
         });
       });
     })();
@@ -1427,6 +1444,14 @@
           if (!response.ok) throw new Error("Contact API failed");
           form.reset();
           if (okEl) okEl.style.display = "block";
+          if (window.maavnicaSiteAnalytics) {
+            window.maavnicaSiteAnalytics.track({
+              event_type: "contact_click",
+              page_type: "landing",
+              lang: "es",
+              target: "latam_smartcard_form",
+            });
+          }
           if (btn) btn.style.display = "none";
           form.querySelectorAll(".latam-form-row").forEach(function (row) {
             row.style.display = "none";
@@ -1453,6 +1478,62 @@
         localStorage.setItem("maavnica_affiliate_ref", s);
         localStorage.setItem("maavnica_affiliate_ref_ts", String(Date.now()));
       } catch (e) {}
+    })();
+  </script>
+  <script src="/static/site-analytics.js"></script>
+  <script>
+    (function () {
+      var SA = window.maavnicaSiteAnalytics;
+      if (!SA) return;
+      SA.init({ pageType: "landing" });
+      function cta(t) {
+        SA.track({ event_type: "cta_click", page_type: "landing", target: t });
+      }
+      function contact(t) {
+        SA.track({ event_type: "contact_click", page_type: "landing", target: t });
+      }
+      function aff(t) {
+        SA.track({ event_type: "affiliate_click", page_type: "landing", target: t });
+      }
+      var hp = document.querySelector(".hero-cta-row .cta-primary");
+      if (hp) {
+        hp.addEventListener("click", function () {
+          var href = hp.getAttribute("href") || "";
+          if (href.indexOf("offre=solo") !== -1) cta("hero_solo");
+          else if (href.indexOf("offre=business") !== -1) cta("hero_business");
+          else if (href.indexOf("contact-smartcard-latam") !== -1) cta("hero_latam_cta");
+        });
+      }
+      var hs = document.querySelector(".hero-cta-row .cta-secondary");
+      if (hs) {
+        hs.addEventListener("click", function () {
+          cta("see_demo_section");
+        });
+      }
+      var hr = document.querySelector(".hero-cta-row .cta-recontact");
+      if (hr) {
+        hr.addEventListener("click", function () {
+          contact("recontact_smartcard");
+        });
+      }
+      var ps = document.querySelector(".pricing-cta.primary-fill");
+      if (ps) {
+        ps.addEventListener("click", function () {
+          cta("pricing_solo");
+        });
+      }
+      var pb = document.querySelector(".pricing-cta.primary-outline");
+      if (pb) {
+        pb.addEventListener("click", function () {
+          cta("pricing_business");
+        });
+      }
+      var ax = document.querySelector(".aff-cta");
+      if (ax) {
+        ax.addEventListener("click", function () {
+          aff("affiliation_landing_link");
+        });
+      }
     })();
   </script>
 </body>

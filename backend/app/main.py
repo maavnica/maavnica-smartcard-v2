@@ -18,6 +18,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 # Routes API
 from app.routers import public, cards
 from app.routers import analytics as analytics_router
+from app.routers import site_analytics as site_analytics_router
 from app.routers import business as business_router
 from app.routers.stripe_webhook import router as stripe_webhook_router
 from app.routers.checkout import router as checkout_router
@@ -246,6 +247,9 @@ app.include_router(affiliate_kit_router)
 # Analytics (API + page /admin/analytics)
 app.include_router(analytics_router.router_api)
 app.include_router(analytics_router.router_pages)
+# Analytics site / landing (isolé des cartes)
+app.include_router(site_analytics_router.router_api)
+app.include_router(site_analytics_router.router_pages)
 app.include_router(business_router.router_pages)
 
 

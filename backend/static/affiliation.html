@@ -259,5 +259,48 @@
       if (note) note.style.display = "none";
     })();
   </script>
+  <script src="/static/site-analytics.js"></script>
+  <script>
+    (function () {
+      var SA = window.maavnicaSiteAnalytics;
+      if (!SA) return;
+      SA.init({ pageType: "affiliate" });
+      document.addEventListener(
+        "click",
+        function (e) {
+          var a = e.target.closest("a");
+          if (!a) return;
+          var h = a.getAttribute("href") || "";
+          if (h.indexOf("/c/") === 0 || h.indexOf("/c/") !== -1) {
+            SA.track({
+              event_type: "demo_click",
+              page_type: "affiliate",
+              target: h.split("?")[0].slice(0, 200),
+            });
+            return;
+          }
+          if (
+            h.indexOf("devenir-affilie") !== -1 ||
+            h.indexOf("kit-affilie") !== -1
+          ) {
+            SA.track({
+              event_type: "affiliate_click",
+              page_type: "affiliate",
+              target: h.split("?")[0].slice(0, 200),
+            });
+            return;
+          }
+          if (h === "/" || h.indexOf("smartcard.maavnica.com") !== -1) {
+            SA.track({
+              event_type: "cta_click",
+              page_type: "affiliate",
+              target: "back_landing",
+            });
+          }
+        },
+        true
+      );
+    })();
+  </script>
 </body>
 </html>

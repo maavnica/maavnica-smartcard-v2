@@ -224,3 +224,30 @@ class RecommendationEvent(Base):
     recommender_display_name = Column(String(200), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
+
+# =============================================================
+#  ANALYTICS SITE / LANDING (isolé des cartes /c/...)
+# =============================================================
+
+
+class SiteAnalyticsEvent(Base):
+    """Événement marketing (landing, contact, affiliation) — table dédiée."""
+
+    __tablename__ = "site_analytics_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    domain = Column(String(255), nullable=False, index=True)
+    path = Column(String(1024), nullable=False)
+    page_type = Column(String(64), nullable=False, index=True)
+    event_type = Column(String(64), nullable=False, index=True)
+    source = Column(String(255), nullable=True)
+    referrer = Column(String(512), nullable=True)
+    utm_source = Column(String(255), nullable=True)
+    utm_medium = Column(String(255), nullable=True)
+    utm_campaign = Column(String(255), nullable=True)
+    lang = Column(String(16), nullable=True, index=True)
+    target = Column(String(512), nullable=True)
+    visitor_id = Column(String(80), nullable=True, index=True)
+    user_agent = Column(String(256), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+

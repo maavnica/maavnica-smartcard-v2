@@ -765,6 +765,13 @@
         }
 
         if (okbox) okbox.style.display = "block";
+        if (window.maavnicaSiteAnalytics) {
+          window.maavnicaSiteAnalytics.track({
+            event_type: "contact_click",
+            page_type: "contact",
+            target: "order_form_submit",
+          });
+        }
         if (payBtn) {
           payBtn.style.display = stripeUrl ? "block" : "none";
         }
@@ -783,6 +790,24 @@
     setupContactSubmit();
   })();
 </script>
+  <script src="/static/site-analytics.js"></script>
+  <script>
+    (function () {
+      var SA = window.maavnicaSiteAnalytics;
+      if (!SA) return;
+      SA.init({ pageType: "contact" });
+      var back = document.querySelector("a.back-link");
+      if (back) {
+        back.addEventListener("click", function () {
+          SA.track({
+            event_type: "cta_click",
+            page_type: "contact",
+            target: "back_landing",
+          });
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
 
