@@ -5,11 +5,12 @@ from __future__ import annotations
 from collections import defaultdict
 from datetime import datetime, timedelta
 from html import escape
+import logging
 from typing import Any, DefaultDict, Dict, List, Tuple
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, Response
-from sqlalchemy import case, func
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -20,6 +21,7 @@ from app.utils.rate_limit import rate_limit_by_ip
 
 router_api = APIRouter(prefix="/api/site-analytics", tags=["site-analytics"])
 router_pages = APIRouter(tags=["site-analytics"])
+_log = logging.getLogger(__name__)
 
 
 def _utc_day_start() -> datetime:
@@ -27,12 +29,11 @@ def _utc_day_start() -> datetime:
     return now.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def _path_key_expr():
-    p = SiteAnalyticsEvent.path
-    return case(
-        (func.instr(p, "?") > 0, func.substr(p, 1, func.instr(p, "?") - 1)),
-        else_=p,
-    )
+def _path_without_query(path: str) -> str:
+    raw = (path or "").strip()
+    if not raw:
+        return "/"
+    return raw.split("?", 1)[0]
 
 
 def _normalize_optional(v: str | None, max_len: int) -> str | None:
@@ -69,6 +70,7 @@ def record_site_event(
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(120, 60)),
 ):
+    _log.info("site_analytics.event.start path=%s", request.url.path)
     ua_raw = request.headers.get("user-agent") or ""
     ua = ua_raw[:256] if ua_raw else None
 
@@ -89,6 +91,12 @@ def record_site_event(
     )
     db.add(row)
     db.commit()
+    _log.info(
+        "site_analytics.event.inserted domain=%s page_type=%s event_type=%s",
+        row.domain,
+        row.page_type,
+        row.event_type,
+    )
     return Response(status_code=204)
 
 
@@ -111,11 +119,10 @@ def _count_events(
 def _top_pages(
     db: Session, d7: datetime, d30: datetime
 ) -> List[Tuple[str, str, str, int, int]]:
-    pk = _path_key_expr()
     rows7 = (
         db.query(
             SiteAnalyticsEvent.domain,
-            pk.label("path_key"),
+            SiteAnalyticsEvent.path,
             func.coalesce(SiteAnalyticsEvent.lang, "").label("lang"),
             func.count(SiteAnalyticsEvent.id),
         )
@@ -123,13 +130,13 @@ def _top_pages(
             SiteAnalyticsEvent.event_type == "page_view",
             SiteAnalyticsEvent.created_at >= d7,
         )
-        .group_by(SiteAnalyticsEvent.domain, pk, SiteAnalyticsEvent.lang)
+        .group_by(SiteAnalyticsEvent.domain, SiteAnalyticsEvent.path, SiteAnalyticsEvent.lang)
         .all()
     )
     rows30 = (
         db.query(
             SiteAnalyticsEvent.domain,
-            pk.label("path_key"),
+            SiteAnalyticsEvent.path,
             func.coalesce(SiteAnalyticsEvent.lang, "").label("lang"),
             func.count(SiteAnalyticsEvent.id),
         )
@@ -137,15 +144,17 @@ def _top_pages(
             SiteAnalyticsEvent.event_type == "page_view",
             SiteAnalyticsEvent.created_at >= d30,
         )
-        .group_by(SiteAnalyticsEvent.domain, pk, SiteAnalyticsEvent.lang)
+        .group_by(SiteAnalyticsEvent.domain, SiteAnalyticsEvent.path, SiteAnalyticsEvent.lang)
         .all()
     )
-    m7: Dict[Tuple[str, str, str], int] = {}
-    for dom, pkey, lang, cnt in rows7:
-        m7[(str(dom), str(pkey), str(lang or ""))] = int(cnt)
-    m30: Dict[Tuple[str, str, str], int] = {}
-    for dom, pkey, lang, cnt in rows30:
-        m30[(str(dom), str(pkey), str(lang or ""))] = int(cnt)
+    m7: Dict[Tuple[str, str, str], int] = defaultdict(int)
+    for dom, path, lang, cnt in rows7:
+        key = (str(dom), _path_without_query(str(path)), str(lang or ""))
+        m7[key] += int(cnt)
+    m30: Dict[Tuple[str, str, str], int] = defaultdict(int)
+    for dom, path, lang, cnt in rows30:
+        key = (str(dom), _path_without_query(str(path)), str(lang or ""))
+        m30[key] += int(cnt)
     keys = set(m7.keys()) | set(m30.keys())
     out: List[Tuple[str, str, str, int, int]] = []
     for dom, pkey, lang in sorted(
@@ -224,6 +233,7 @@ def site_analytics_dashboard(
     db: Session = Depends(get_db),
     _: None = Depends(require_admin_http_basic),
 ):
+    _log.info("site_analytics.dashboard.start path=/admin/site-analytics")
     now = datetime.utcnow()
     today0 = _utc_day_start()
     d7 = now - timedelta(days=7)
@@ -236,6 +246,16 @@ def site_analytics_dashboard(
     demo_7 = _count_events(db, d7, "demo_click")
     contact_7 = _count_events(db, d7, "contact_click")
     aff_7 = _count_events(db, d7, "affiliate_click")
+    _log.info(
+        "site_analytics.dashboard.counts visits_today=%s visits_7=%s visits_30=%s cta_7=%s demo_7=%s contact_7=%s aff_7=%s",
+        visits_today,
+        visits_7,
+        visits_30,
+        cta_7,
+        demo_7,
+        contact_7,
+        aff_7,
+    )
 
     top_pages = _top_pages(db, d7, d30)
     sources = _sources_breakdown(db, d7)
@@ -246,6 +266,7 @@ def site_analytics_dashboard(
         .limit(100)
         .all()
     )
+    _log.info("site_analytics.dashboard.recent_rows count=%s", len(recent_rows))
 
     def tr_pages(cells: List[str]) -> str:
         return "<tr>" + "".join(f"<td>{c}</td>" for c in cells) + "</tr>"
