@@ -208,34 +208,161 @@
     }
 
     .hero-preview-shell {
-      border-radius:24px;
-      padding:10px;
+      border-radius:28px;
+      padding:12px;
       background:
-        radial-gradient(circle at 0% 0%, rgba(250,204,21,0.18) 0, transparent 50%),
-        #0f172a;
-      box-shadow:0 24px 60px rgba(0,0,0,0.85);
-      border:1px solid rgba(148,163,184,0.35);
-      max-width:360px;
+        radial-gradient(circle at 18% 4%, rgba(250,204,21,0.2) 0, transparent 48%),
+        radial-gradient(circle at 84% 100%, rgba(96,165,250,0.3) 0, transparent 44%),
+        linear-gradient(145deg, rgba(15,23,42,0.92), rgba(2,6,23,0.98));
+      box-shadow:0 30px 80px rgba(0,0,0,0.75);
+      border:1px solid rgba(148,163,184,0.32);
+      max-width:370px;
       width:100%;
+      position:relative;
+      isolation:isolate;
+    }
+    .hero-preview-shell::after {
+      content:"";
+      position:absolute;
+      inset:-12% -16% auto;
+      height:56%;
+      z-index:-1;
+      background:radial-gradient(circle, rgba(99,102,241,0.25), transparent 72%);
+      filter:blur(24px);
+      pointer-events:none;
     }
     .hero-preview-inner {
-      border-radius:18px;
+      border-radius:22px;
+      border:1px solid rgba(148,163,184,0.28);
+      background:linear-gradient(180deg, #090f1f 0%, #020617 100%);
       overflow:hidden;
-      border:1px solid rgba(148,163,184,0.25);
-      background:#020617;
+      padding:14px 14px 16px;
     }
-    .hero-preview-iframe {
-      width:100%;
-      height:min(520px, 70vh);
-      border:0;
-      display:block;
+    .hero-phone-mock {
+      border-radius:24px;
+      border:1px solid rgba(148,163,184,0.3);
+      background:
+        linear-gradient(165deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.96) 42%, rgba(2,6,23,1) 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 22px 50px rgba(0,0,0,0.4);
+      padding:14px 12px 12px;
+    }
+    .hero-phone-notch {
+      width:34%;
+      min-width:90px;
+      height:16px;
+      border-radius:999px;
+      margin:0 auto 14px;
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(148,163,184,0.22);
+    }
+    .hero-card-preview {
+      border-radius:18px;
+      padding:14px 12px 12px;
+      border:1px solid rgba(148,163,184,0.26);
+      background:
+        radial-gradient(circle at 88% 0%, rgba(250,204,21,0.14), transparent 38%),
+        linear-gradient(180deg, rgba(15,23,42,0.98), rgba(2,6,23,0.96));
+    }
+    .hero-card-top {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .hero-card-avatar {
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-size:15px;
+      font-weight:700;
+      color:#f8fafc;
+      border:1px solid rgba(148,163,184,0.5);
+      background:linear-gradient(135deg, #1d4ed8, #7c3aed);
+      box-shadow:0 8px 22px rgba(29,78,216,0.45);
+    }
+    .hero-card-identity {
+      flex:1;
+      min-width:0;
+    }
+    .hero-card-name {
+      font-size:13px;
+      font-weight:700;
+      color:#f8fafc;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .hero-card-job {
+      font-size:11px;
+      color:#93c5fd;
+      margin-top:1px;
+    }
+    .hero-card-rating {
+      font-size:10px;
+      font-weight:700;
+      color:#facc15;
+      letter-spacing:0.02em;
+      white-space:nowrap;
+    }
+    .hero-card-actions {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:8px;
+      margin:10px 0;
+    }
+    .hero-card-action {
+      font-size:11px;
+      font-weight:600;
+      text-align:center;
+      color:#e2e8f0;
+      padding:9px 6px;
+      border-radius:11px;
+      border:1px solid rgba(148,163,184,0.28);
+      background:rgba(15,23,42,0.72);
+    }
+    .hero-card-trust {
+      margin-top:4px;
+      border-radius:12px;
+      border:1px solid rgba(34,197,94,0.35);
+      background:rgba(22,163,74,0.1);
+      padding:9px 10px;
+      font-size:10px;
+      color:#bbf7d0;
+      line-height:1.45;
     }
     .hero-preview-note {
       font-size:11px;
       color:#94a3b8;
       text-align:center;
       margin-top:10px;
-      max-width:360px;
+      max-width:370px;
+    }
+    .hero-preview-demo-link {
+      margin-top:10px;
+      display:flex;
+      justify-content:center;
+    }
+    .hero-real-demo-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:11px 18px;
+      border-radius:999px;
+      border:1px solid rgba(96,165,250,0.45);
+      background:rgba(30,41,59,0.82);
+      color:#bfdbfe;
+      font-size:13px;
+      font-weight:700;
+      transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .hero-real-demo-btn:hover {
+      transform:translateY(-1px);
+      border-color:rgba(250,204,21,0.6);
+      background:rgba(30,41,59,0.95);
     }
 
     @media (max-width:900px) {
@@ -414,64 +541,72 @@
     }
     .demo-layout {
       display:grid;
-      grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
-      gap:24px;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:14px;
       align-items:stretch;
     }
     @media (max-width:900px) {
       .demo-layout { grid-template-columns:1fr; }
     }
-    .demo-thumbs {
+    .demo-card {
       display:flex;
       flex-direction:column;
       gap:10px;
-    }
-    .demo-thumb {
       text-align:left;
-      border-radius:14px;
-      padding:3px;
-      background:#0f172a;
-      border:1px solid rgba(148,163,184,0.2);
-      cursor:pointer;
-      transition:border-color .2s, box-shadow .2s;
+      border-radius:16px;
+      padding:15px;
+      border:1px solid rgba(148,163,184,0.28);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(59,130,246,0.22), transparent 42%),
+        linear-gradient(165deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
+      box-shadow:0 14px 38px rgba(0,0,0,0.35);
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
-    .demo-thumb.active {
-      border-color:#2563eb;
-      box-shadow:0 8px 24px rgba(37,99,235,0.35);
+    .demo-card:hover {
+      transform:translateY(-2px);
+      border-color:rgba(96,165,250,0.8);
+      box-shadow:0 18px 46px rgba(37,99,235,0.24);
     }
-    .demo-thumb-inner {
-      border-radius:12px;
-      padding:12px 14px;
+    .demo-card-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .demo-card-title {
+      font-weight:800;
+      font-size:15px;
+      color:#fff;
+    }
+    .demo-card-tag {
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.35);
+      padding:4px 8px;
+      font-size:10px;
+      color:#cbd5e1;
+      background:rgba(15,23,42,0.72);
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+    .demo-card-sub {
       font-size:12px;
-      color:#e5e7eb;
-      background:#1e293b;
+      color:#cbd5e1;
+      line-height:1.45;
+      min-height:40px;
     }
-    .demo-thumb-title { font-weight:700; font-size:14px; margin-bottom:4px; color:#fff; }
-    .demo-thumb-sub { font-size:11px; color:#94a3b8; line-height:1.4; }
-
-    .demo-viewer {
-      border-radius:18px;
-      padding:12px;
-      background:#0b1120;
-      border:1px solid rgba(37,99,235,0.35);
-      box-shadow:0 20px 50px rgba(0,0,0,0.5);
-    }
-    .demo-viewer-inner {
-      border-radius:14px;
-      overflow:hidden;
-      border:1px solid rgba(148,163,184,0.2);
-      background:#020617;
-    }
-    .demo-iframe {
-      display:block;
-      width:100%;
-      height:min(560px, 75vh);
-      border:0;
+    .demo-card-cta {
+      margin-top:auto;
+      font-size:12px;
+      font-weight:700;
+      color:#bfdbfe;
+      text-decoration:underline;
+      text-underline-offset:4px;
     }
     .demo-viewer-note {
       font-size:11px;
       color:#64748b;
-      margin-top:8px;
+      margin-top:10px;
       text-align:center;
     }
 
@@ -761,14 +896,34 @@
         <div>
           <div class="hero-preview-shell">
             <div class="hero-preview-inner">
-              <iframe
-                class="hero-preview-iframe"
-                title="Aperçu SmartCard"
-                src="https://smartcard.maavnica.com/c/arnaud-huard"
-                loading="lazy"></iframe>
+              <div class="hero-phone-mock" aria-hidden="true">
+                <div class="hero-phone-notch"></div>
+                <div class="hero-card-preview">
+                  <div class="hero-card-top">
+                    <div class="hero-card-avatar">AH</div>
+                    <div class="hero-card-identity">
+                      <div class="hero-card-name">Arnaud Huard</div>
+                      <div class="hero-card-job">SmartCard Business</div>
+                    </div>
+                    <div class="hero-card-rating">★ 4.9</div>
+                  </div>
+                  <div class="hero-card-actions">
+                    <div class="hero-card-action">Appeler</div>
+                    <div class="hero-card-action">WhatsApp</div>
+                    <div class="hero-card-action">Email</div>
+                    <div class="hero-card-action">Itinéraire</div>
+                  </div>
+                  <div class="hero-card-trust">
+                    Recommandé par 39 clients ce mois-ci · Avis Google + contact direct en 1 clic.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <p class="hero-preview-note">Carte réelle — boutons et formulaires interactifs.</p>
+          <p class="hero-preview-note">Aperçu visuel premium. La démo réelle reste accessible en un clic.</p>
+          <div class="hero-preview-demo-link">
+            <a class="hero-real-demo-btn" id="heroRealDemoBtn" href="https://smartcard.maavnica.com/c/demo" target="_blank" rel="noopener noreferrer">Voir la vraie démo</a>
+          </div>
         </div>
       </div>
     </div>
@@ -833,37 +988,32 @@
         <p>Choisissez un exemple — contact, avis et recommandation Business en situation réelle.</p>
       </div>
       <div class="demo-layout">
-        <div class="demo-thumbs">
-          <button class="demo-thumb active" type="button" data-demo="artisan">
-            <div class="demo-thumb-inner">
-              <div class="demo-thumb-title">Artisan</div>
-              <div class="demo-thumb-sub">Plombier, électricien, multiservices</div>
-            </div>
-          </button>
-          <button class="demo-thumb" type="button" data-demo="gold">
-            <div class="demo-thumb-inner">
-              <div class="demo-thumb-title">Premium</div>
-              <div class="demo-thumb-sub">Image soignée, services haut de gamme</div>
-            </div>
-          </button>
-          <button class="demo-thumb" type="button" data-demo="sante">
-            <div class="demo-thumb-inner">
-              <div class="demo-thumb-title">Bien-être</div>
-              <div class="demo-thumb-sub">Santé, praticiens, rendez-vous</div>
-            </div>
-          </button>
-        </div>
-        <div class="demo-viewer">
-          <div class="demo-viewer-inner">
-            <iframe
-              id="demoFrame"
-              class="demo-iframe"
-              title="Démo SmartCard"
-              src="https://smartcard.maavnica.com/c/demo"></iframe>
+        <a class="demo-card" data-demo="artisan" href="https://smartcard.maavnica.com/c/demo" target="_blank" rel="noopener noreferrer">
+          <div class="demo-card-head">
+            <div class="demo-card-title">Artisan</div>
+            <span class="demo-card-tag">Service local</span>
           </div>
-          <p class="demo-viewer-note">Testez les boutons comme un client.</p>
-        </div>
+          <div class="demo-card-sub">Plombier, électricien, multiservices : prise de contact rapide et collecte d’avis Google.</div>
+          <span class="demo-card-cta">Voir la démo</span>
+        </a>
+        <a class="demo-card" data-demo="sante" href="https://smartcard.maavnica.com/c/demo2" target="_blank" rel="noopener noreferrer">
+          <div class="demo-card-head">
+            <div class="demo-card-title">Bien-être</div>
+            <span class="demo-card-tag">Relation confiance</span>
+          </div>
+          <div class="demo-card-sub">Praticien, accompagnement, suivi client : image pro, recommandations et conversion simple.</div>
+          <span class="demo-card-cta">Voir la démo</span>
+        </a>
+        <a class="demo-card" data-demo="gold" href="https://smartcard.maavnica.com/c/demo3" target="_blank" rel="noopener noreferrer">
+          <div class="demo-card-head">
+            <div class="demo-card-title">Immobilier</div>
+            <span class="demo-card-tag">Mise en relation</span>
+          </div>
+          <div class="demo-card-sub">Agent, mandats, recommandations : parcours orienté crédibilité et acquisition locale.</div>
+          <span class="demo-card-cta">Voir la démo</span>
+        </a>
       </div>
+      <p class="demo-viewer-note">Ouverture directe des démos réelles dans un nouvel onglet.</p>
     </div>
   </section>
 
@@ -1096,7 +1246,9 @@
         var punch = document.querySelector(".hero-punchline");
         var hint = document.querySelector(".hero-cta-hint");
         var previewNote = document.querySelector(".hero-preview-note");
-        var heroIframe = document.querySelector(".hero-preview-iframe");
+        var heroCardName = document.querySelector(".hero-card-name");
+        var heroCardJob = document.querySelector(".hero-card-job");
+        var heroRealDemoBtn = document.getElementById("heroRealDemoBtn");
         var ctaPrimary = document.querySelector(".hero-cta-row .cta-primary");
         var ctaRecontact = document.querySelector(".hero-cta-row .cta-recontact");
         var ctaSecondary = document.querySelector(".hero-cta-row .cta-secondary");
@@ -1114,11 +1266,13 @@
         if (hint) hint.textContent = "Sin compromiso · Prueba gratuita 30 días";
         if (previewNote) {
           previewNote.textContent =
-            "Ejemplo LATAM — Contactar por WhatsApp, Dejar una opinión, Recomendar a un amigo. Compartir la tarjeta en un enlace.";
+            "Vista premium del resultado final. Abre la demo real en un clic.";
         }
-        if (heroIframe) {
-          heroIframe.setAttribute("title", "Vista previa SmartCard — Ana Morales, Estilista");
-          heroIframe.src = URLS_LATAM.gold;
+        if (heroCardName) heroCardName.textContent = "Ana Morales";
+        if (heroCardJob) heroCardJob.textContent = "Estilista · SmartCard";
+        if (heroRealDemoBtn) {
+          heroRealDemoBtn.textContent = "Ver demo real";
+          heroRealDemoBtn.setAttribute("href", URLS_LATAM.artisan);
         }
 
         if (ctaPrimary) {
@@ -1177,43 +1331,44 @@
         var demoH = document.querySelector(".demo-title-wrap h2");
         var demoP = document.querySelector(".demo-title-wrap p");
         var demoNote = document.querySelector(".demo-viewer-note");
-        var demoFrame = document.getElementById("demoFrame");
         if (demoH) demoH.textContent = "Ver una tarjeta en acción";
         if (demoP) {
           demoP.textContent =
-            "Elige un perfil — mismos botones que verán tus clientes: WhatsApp, opinión y recomendación.";
+            "Elige un perfil y abre la tarjeta real en un clic: WhatsApp, opinión y recomendación.";
         }
         if (demoNote) {
           demoNote.textContent =
-            "Prueba Contactar por WhatsApp, Dejar una opinión y Recomendar a un amigo, como un cliente.";
-        }
-        if (demoFrame) {
-          demoFrame.setAttribute("title", "Demo SmartCard LATAM");
-          demoFrame.src = URLS_LATAM.artisan;
+            "Apertura directa de las demos reales en una nueva pestaña.";
         }
 
         var demoLabels = {
           artisan: {
-            title: "Carlos Méndez",
-            sub: "Plomero · Granada, NI"
+            title: "Artesano",
+            sub: "Plomero, electricista, multiservicios",
+            tag: "Servicio local"
           },
           gold: {
-            title: "Ana Morales",
-            sub: "Estilista · Managua"
+            title: "Inmobiliaria",
+            sub: "Agente, visitas, recomendaciones",
+            tag: "Referidos"
           },
           sante: {
-            title: "Laura Castillo",
-            sub: "Terapeuta · San José"
+            title: "Bienestar",
+            sub: "Salud, terapeutas, citas",
+            tag: "Confianza"
           }
         };
-        document.querySelectorAll(".demo-thumb").forEach(function (btn) {
-          var key = btn.getAttribute("data-demo");
+        document.querySelectorAll(".demo-card").forEach(function (card) {
+          var key = card.getAttribute("data-demo");
           var d = demoLabels[key];
           if (!d) return;
-          var tEl = btn.querySelector(".demo-thumb-title");
-          var sEl = btn.querySelector(".demo-thumb-sub");
+          var tEl = card.querySelector(".demo-card-title");
+          var sEl = card.querySelector(".demo-card-sub");
+          var tagEl = card.querySelector(".demo-card-tag");
           if (tEl) tEl.textContent = d.title;
           if (sEl) sEl.textContent = d.sub;
+          if (tagEl) tagEl.textContent = d.tag;
+          if (URLS_LATAM[key]) card.setAttribute("href", URLS_LATAM[key]);
         });
 
         var ph2 = document.querySelector(".pricing-section-header h2");
@@ -1330,22 +1485,25 @@
       if (isLatam) applyEsLatam();
 
       var urls = isLatam ? URLS_LATAM : URLS_FR;
-      var frame = document.getElementById("demoFrame");
-      var buttons = document.querySelectorAll(".demo-thumb");
-      buttons.forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          buttons.forEach(function (b) { b.classList.remove("active"); });
-          btn.classList.add("active");
-          var key = btn.getAttribute("data-demo");
-          if (urls[key] && frame) {
-            if (window.maavnicaSiteAnalytics) {
-              window.maavnicaSiteAnalytics.track({
-                event_type: "demo_click",
-                page_type: "landing",
-                target: urls[key],
-              });
-            }
-            frame.src = urls[key];
+      if (window.matchMedia && window.matchMedia("(max-width: 767px)").matches) {
+        var heroDemoMobile = document.getElementById("heroRealDemoBtn");
+        if (heroDemoMobile) {
+          heroDemoMobile.removeAttribute("target");
+          heroDemoMobile.removeAttribute("rel");
+        }
+      }
+
+      var demoLinks = document.querySelectorAll(".demo-card[data-demo]");
+      demoLinks.forEach(function (link) {
+        var key = link.getAttribute("data-demo");
+        if (urls[key]) link.setAttribute("href", urls[key]);
+        link.addEventListener("click", function () {
+          if (window.maavnicaSiteAnalytics && urls[key]) {
+            window.maavnicaSiteAnalytics.track({
+              event_type: "demo_click",
+              page_type: "landing",
+              target: urls[key],
+            });
           }
         });
       });
@@ -1508,6 +1666,12 @@
       if (hs) {
         hs.addEventListener("click", function () {
           cta("see_demo_section");
+        });
+      }
+      var hd = document.getElementById("heroRealDemoBtn");
+      if (hd) {
+        hd.addEventListener("click", function () {
+          cta("hero_real_demo");
         });
       }
       var hr = document.querySelector(".hero-cta-row .cta-recontact");
