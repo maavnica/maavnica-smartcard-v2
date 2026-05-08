@@ -90,6 +90,28 @@
       padding:0 20px;
     }
     .hero-left { flex:1.1; min-width:min(100%, 280px); }
+    .hero-brand-row {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .hero-brand-mark {
+      width:clamp(26px, 4.5vw, 36px);
+      height:clamp(26px, 4.5vw, 36px);
+      object-fit:contain;
+      flex-shrink:0;
+      opacity:0.94;
+    }
+    .hero-brand-wordmark {
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:0.04em;
+      color:rgba(248,250,252,0.9);
+    }
+    @media (max-width:640px) {
+      .hero-brand-wordmark { font-size:12px; }
+    }
     .hero-right {
       flex:0.95;
       min-width:min(100%, 280px);
@@ -716,6 +738,10 @@
     </div>
     <div class="hero">
       <div class="hero-left">
+        <div class="hero-brand-row">
+          <img class="hero-brand-mark" src="/static/logo-palmier.png" alt="" width="36" height="36" decoding="async" role="presentation" />
+          <span class="hero-brand-wordmark">Maavnica</span>
+        </div>
         <p class="hero-kicker">Pour artisans & indépendants</p>
         <h1>Facilitez le contact, obtenez plus d’avis, et ne ratez plus aucune opportunité.</h1>
         <p class="hero-sub">
