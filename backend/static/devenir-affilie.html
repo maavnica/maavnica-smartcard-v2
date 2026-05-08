@@ -49,11 +49,12 @@
     }
     .logo{
       width:38px; height:38px; border-radius:12px;
-      display:grid; place-items:center;
+      display:flex; align-items:center; justify-content:center;
+      padding:6px; flex-shrink:0;
       background:linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
       border:1px solid var(--line);
-      font-weight:800;
     }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
     .brand strong{display:block; font-size:14px; letter-spacing:.3px}
     .brand span{display:block; font-size:12px; color:var(--muted2)}
     .nav{
@@ -232,7 +233,7 @@
 
     <div class="topbar">
       <a class="brand" href="https://smartcard.maavnica.com">
-        <div class="logo">M</div>
+        <div class="logo" aria-hidden="true"><img src="/static/logo-palmier.png" alt="" width="26" height="26" decoding="async" /></div>
         <div>
           <strong>Maavnica SmartCard</strong>
           <span>Programme d’affiliation</span>
@@ -341,7 +342,7 @@
         </div>
         <div class="bd">
 
-          <form id="affiliateForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST">
+          <form id="affiliateForm" action="/api/contact" method="POST">
             <!-- honeypot anti-spam -->
             <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;opacity:0;pointer-events:none;">
 

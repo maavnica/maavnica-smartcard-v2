@@ -153,6 +153,28 @@
       color: #6b7280;
       margin-bottom: 10px;
       letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .status-bar-inner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 0;
+    }
+    .status-bar-mark {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+    .status-bar-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Surcouche marketing — uniquement activée en JS si slug === "demo" */
@@ -1859,7 +1881,12 @@
   <div class="phone-shell">
     <div class="phone-inner">
       <div class="notch"></div>
-      <div class="status-bar" id="status-bar">Maavnica SmartCard</div>
+      <div class="status-bar" id="status-bar">
+        <span class="status-bar-inner">
+          <img class="status-bar-mark" src="/static/logo-palmier.png" alt="" width="14" height="14" decoding="async" />
+          <span class="status-bar-label" id="status-bar-label">Maavnica SmartCard</span>
+        </span>
+      </div>
 
       <div id="demo-banner-shell" class="demo-marketing" aria-hidden="true">
         <div class="demo-banner">
@@ -2609,7 +2636,7 @@
     }
 
     function applyPublicShellCopy(isDemoCard, companyName, fullName) {
-      const sb = document.getElementById("status-bar");
+      const sb = document.getElementById("status-bar-label");
       const subline = document.getElementById("hero-subline");
       const foot = document.getElementById("public-card-footer");
       const tagRow = document.getElementById("hero-tagline-row");

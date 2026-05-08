@@ -31,8 +31,10 @@
     header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
     .logo{
       width:42px;height:42px;border-radius:12px;background:#0e1830;border:1px solid var(--line);
-      display:grid;place-items:center;font-weight:800;
+      display:flex;align-items:center;justify-content:center;
+      padding:7px;flex-shrink:0;
     }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
     h1{margin:0;font-size:22px}
     .sub{margin:8px 0 0;color:var(--mut);font-size:14px;line-height:1.45}
     .sub-terrain{margin-top:10px;font-size:15px;color:#eaf1ff;line-height:1.45}
@@ -341,7 +343,7 @@
     <a href="/" class="back-link">← Retour à la présentation</a>
 
     <header>
-      <div class="logo">M</div>
+      <div class="logo" aria-hidden="true"><img src="/static/logo-palmier.png" alt="" width="28" height="28" decoding="async" /></div>
       <div>
         <h1>Commander votre SmartCard</h1>
         <p class="sub sub-terrain">
@@ -367,7 +369,7 @@
         </ul>
 
         <!-- FORM (Backend API) -->
-        <form id="orderForm" action="https://maavnica-smartcard-v2.onrender.com/api/contact" method="POST" enctype="multipart/form-data">
+        <form id="orderForm" action="/api/contact" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="Nouvelle commande SmartCard (pré-paiement)" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
