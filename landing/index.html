@@ -180,11 +180,23 @@
     .cta-primary:hover { transform:translateY(-2px); }
 
     .cta-secondary {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
       font-size:14px;
-      color:#93c5fd;
-      text-decoration:underline;
-      text-underline-offset:4px;
-      font-weight:600;
+      font-weight:700;
+      padding:12px 18px;
+      border-radius:999px;
+      color:#e2e8f0;
+      border:1px solid rgba(148,163,184,0.42);
+      background:rgba(2,6,23,0.15);
+      transition:border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+    .cta-secondary:hover {
+      border-color:rgba(96,165,250,0.75);
+      background:rgba(30,41,59,0.65);
+      transform:translateY(-1px);
     }
 
     /* Secondaire conversion : rappel (moins dominant que le CTA jaune) */
@@ -260,8 +272,54 @@
       padding:14px 12px 12px;
       border:1px solid rgba(148,163,184,0.26);
       background:
-        radial-gradient(circle at 88% 0%, rgba(250,204,21,0.14), transparent 38%),
+        radial-gradient(circle at 90% 6%, rgba(250,204,21,0.16), transparent 42%),
+        radial-gradient(circle at 0% 100%, rgba(59,130,246,0.18), transparent 48%),
         linear-gradient(180deg, rgba(15,23,42,0.98), rgba(2,6,23,0.96));
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card-preview::before {
+      content:"";
+      position:absolute;
+      inset:-60px -40px auto;
+      height:160px;
+      background:radial-gradient(circle, rgba(99,102,241,0.22), transparent 70%);
+      filter:blur(12px);
+      pointer-events:none;
+    }
+    .hero-card-badges {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+      position:relative;
+      z-index:1;
+    }
+    .hero-pill {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      border:1px solid rgba(148,163,184,0.26);
+      background:rgba(15,23,42,0.62);
+      color:#e2e8f0;
+      white-space:nowrap;
+    }
+    .hero-pill.reco {
+      border-color:rgba(34,197,94,0.38);
+      background:rgba(22,163,74,0.12);
+      color:#bbf7d0;
+    }
+    .hero-pill.live {
+      border-color:rgba(96,165,250,0.45);
+      background:rgba(59,130,246,0.1);
+      color:#bfdbfe;
     }
     .hero-card-top {
       display:flex;
@@ -269,6 +327,8 @@
       justify-content:space-between;
       gap:10px;
       margin-bottom:10px;
+      position:relative;
+      z-index:1;
     }
     .hero-card-avatar {
       width:44px;
@@ -307,21 +367,51 @@
       letter-spacing:0.02em;
       white-space:nowrap;
     }
+    .hero-card-rating small {
+      display:block;
+      font-size:9px;
+      color:#94a3b8;
+      font-weight:700;
+      margin-top:2px;
+      letter-spacing:0.02em;
+      text-align:right;
+    }
     .hero-card-actions {
       display:grid;
       grid-template-columns:repeat(2, minmax(0,1fr));
       gap:8px;
       margin:10px 0;
+      position:relative;
+      z-index:1;
     }
     .hero-card-action {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
       font-size:11px;
-      font-weight:600;
+      font-weight:700;
       text-align:center;
       color:#e2e8f0;
-      padding:9px 6px;
-      border-radius:11px;
+      padding:10px 10px;
+      border-radius:13px;
       border:1px solid rgba(148,163,184,0.28);
       background:rgba(15,23,42,0.72);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .hero-card-action .icon {
+      width:22px;
+      height:22px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      font-size:12px;
+      border:1px solid rgba(148,163,184,0.25);
+      background:rgba(2,6,23,0.35);
+    }
+    .hero-card-action.primary {
+      border-color:rgba(96,165,250,0.55);
+      background:linear-gradient(180deg, rgba(37,99,235,0.35), rgba(15,23,42,0.72));
     }
     .hero-card-trust {
       margin-top:4px;
@@ -332,6 +422,65 @@
       font-size:10px;
       color:#bbf7d0;
       line-height:1.45;
+      position:relative;
+      z-index:1;
+    }
+    .hero-card-bottom {
+      display:grid;
+      grid-template-columns:1fr 86px;
+      gap:10px;
+      margin-top:10px;
+      position:relative;
+      z-index:1;
+    }
+    .hero-card-quote {
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,0.22);
+      background:rgba(2,6,23,0.35);
+      padding:10px 10px;
+      font-size:10px;
+      color:#cbd5e1;
+      line-height:1.45;
+    }
+    .hero-card-quote strong {
+      display:block;
+      font-size:10px;
+      color:#fff;
+      margin-bottom:4px;
+    }
+    .hero-card-qr {
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,0.22);
+      background:rgba(2,6,23,0.35);
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .hero-qr-grid {
+      width:54px;
+      height:54px;
+      border-radius:10px;
+      background:
+        linear-gradient(90deg, rgba(148,163,184,0.24) 1px, transparent 1px) 0 0 / 7px 7px,
+        linear-gradient(rgba(148,163,184,0.24) 1px, transparent 1px) 0 0 / 7px 7px,
+        radial-gradient(circle at 20% 20%, rgba(250,204,21,0.55) 0 3px, transparent 4px),
+        radial-gradient(circle at 78% 28%, rgba(96,165,250,0.55) 0 3px, transparent 4px),
+        radial-gradient(circle at 56% 76%, rgba(34,197,94,0.55) 0 3px, transparent 4px),
+        rgba(2,6,23,0.25);
+      border:1px solid rgba(148,163,184,0.2);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .hero-qr-label {
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:#94a3b8;
+      text-align:center;
+      line-height:1.2;
     }
     .hero-preview-note {
       font-size:11px;
@@ -561,6 +710,28 @@
         linear-gradient(165deg, rgba(15,23,42,0.95), rgba(2,6,23,0.92));
       box-shadow:0 14px 38px rgba(0,0,0,0.35);
       transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .demo-card::before {
+      content:"";
+      position:absolute;
+      inset:-40px -40px auto;
+      height:160px;
+      background:radial-gradient(circle, rgba(250,204,21,0.12), transparent 70%);
+      filter:blur(14px);
+      pointer-events:none;
+      opacity:0.8;
+    }
+    .demo-card::after {
+      content:"";
+      position:absolute;
+      inset:auto -50px -50px auto;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle, rgba(99,102,241,0.2), transparent 70%);
+      filter:blur(18px);
+      pointer-events:none;
     }
     .demo-card:hover {
       transform:translateY(-2px);
@@ -572,6 +743,8 @@
       align-items:center;
       justify-content:space-between;
       gap:8px;
+      position:relative;
+      z-index:1;
     }
     .demo-card-title {
       font-weight:800;
@@ -593,15 +766,74 @@
       font-size:12px;
       color:#cbd5e1;
       line-height:1.45;
-      min-height:40px;
+      min-height:36px;
+      position:relative;
+      z-index:1;
+    }
+    .demo-card-benefits {
+      list-style:none;
+      margin:2px 0 0;
+      padding:0;
+      display:grid;
+      gap:8px;
+      position:relative;
+      z-index:1;
+    }
+    .demo-card-benefits li {
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      font-size:12px;
+      color:#e2e8f0;
+      line-height:1.35;
+    }
+    .demo-card-benefits li::before {
+      content:"✓";
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-size:11px;
+      font-weight:900;
+      color:#052e16;
+      background:rgba(34,197,94,0.95);
+      flex:0 0 18px;
+      margin-top:1px;
+      box-shadow:0 10px 22px rgba(34,197,94,0.18);
+    }
+    .demo-card-actions {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:6px;
+      position:relative;
+      z-index:1;
     }
     .demo-card-cta {
-      margin-top:auto;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:11px 14px;
+      border-radius:12px;
+      border:1px solid rgba(96,165,250,0.55);
+      background:rgba(37,99,235,0.18);
+      color:#e0f2fe;
       font-size:12px;
-      font-weight:700;
-      color:#bfdbfe;
-      text-decoration:underline;
-      text-underline-offset:4px;
+      font-weight:800;
+      letter-spacing:0.01em;
+      white-space:nowrap;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    .demo-card-cta .arrow { opacity:0.9; }
+    .demo-card-mini {
+      font-size:11px;
+      color:#94a3b8;
+      line-height:1.35;
+      flex:1;
+      min-width:0;
     }
     .demo-viewer-note {
       font-size:11px;
@@ -899,22 +1131,36 @@
               <div class="hero-phone-mock" aria-hidden="true">
                 <div class="hero-phone-notch"></div>
                 <div class="hero-card-preview">
+                  <div class="hero-card-badges">
+                    <span class="hero-pill reco" data-i18n="hero_reco">Recommandé par 12 clients</span>
+                    <span class="hero-pill live" data-i18n="hero_live">Démo interactive</span>
+                  </div>
                   <div class="hero-card-top">
-                    <div class="hero-card-avatar">AH</div>
+                    <div class="hero-card-avatar">JM</div>
                     <div class="hero-card-identity">
-                      <div class="hero-card-name">Arnaud Huard</div>
-                      <div class="hero-card-job">SmartCard Business</div>
+                      <div class="hero-card-name">Jean Martin</div>
+                      <div class="hero-card-job">Artisan plombier</div>
                     </div>
-                    <div class="hero-card-rating">★ 4.9</div>
+                    <div class="hero-card-rating">★ 4.9<small>Google</small></div>
                   </div>
                   <div class="hero-card-actions">
-                    <div class="hero-card-action">Appeler</div>
-                    <div class="hero-card-action">WhatsApp</div>
-                    <div class="hero-card-action">Email</div>
-                    <div class="hero-card-action">Itinéraire</div>
+                    <div class="hero-card-action primary"><span class="icon">📞</span>Appeler</div>
+                    <div class="hero-card-action"><span class="icon">💬</span>WhatsApp</div>
+                    <div class="hero-card-action"><span class="icon">✉️</span>Email</div>
+                    <div class="hero-card-action"><span class="icon">📍</span>Itinéraire</div>
                   </div>
                   <div class="hero-card-trust">
                     Recommandé par 39 clients ce mois-ci · Avis Google + contact direct en 1 clic.
+                  </div>
+                  <div class="hero-card-bottom">
+                    <div class="hero-card-quote">
+                      <strong data-i18n="hero_review_title">Avis client</strong>
+                      <span data-i18n="hero_review_body">“Réponse rapide, très pro. Je recommande.”</span>
+                    </div>
+                    <div class="hero-card-qr" aria-hidden="true">
+                      <div class="hero-qr-grid"></div>
+                      <div class="hero-qr-label">scan</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -993,24 +1239,48 @@
             <div class="demo-card-title">Artisan</div>
             <span class="demo-card-tag">Service local</span>
           </div>
-          <div class="demo-card-sub">Plombier, électricien, multiservices : prise de contact rapide et collecte d’avis Google.</div>
-          <span class="demo-card-cta">Voir la démo</span>
+          <div class="demo-card-sub">Pour convertir après intervention et gagner en visibilité locale.</div>
+          <ul class="demo-card-benefits">
+            <li>Contact en 1 clic</li>
+            <li>Avis Google simplifiés</li>
+            <li>Devis / demande centralisés</li>
+          </ul>
+          <div class="demo-card-actions">
+            <div class="demo-card-mini">Démo réelle — sans prototype.</div>
+            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+          </div>
         </a>
         <a class="demo-card" data-demo="sante" href="https://smartcard.maavnica.com/c/demo2" target="_blank" rel="noopener noreferrer">
           <div class="demo-card-head">
             <div class="demo-card-title">Bien-être</div>
             <span class="demo-card-tag">Relation confiance</span>
           </div>
-          <div class="demo-card-sub">Praticien, accompagnement, suivi client : image pro, recommandations et conversion simple.</div>
-          <span class="demo-card-cta">Voir la démo</span>
+          <div class="demo-card-sub">Pour rassurer dès le premier regard et faciliter la recommandation.</div>
+          <ul class="demo-card-benefits">
+            <li>Image pro & crédible</li>
+            <li>Recommandation simple</li>
+            <li>Prise de contact fluide</li>
+          </ul>
+          <div class="demo-card-actions">
+            <div class="demo-card-mini">Conçu pour mobile.</div>
+            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+          </div>
         </a>
         <a class="demo-card" data-demo="gold" href="https://smartcard.maavnica.com/c/demo3" target="_blank" rel="noopener noreferrer">
           <div class="demo-card-head">
             <div class="demo-card-title">Immobilier</div>
             <span class="demo-card-tag">Mise en relation</span>
           </div>
-          <div class="demo-card-sub">Agent, mandats, recommandations : parcours orienté crédibilité et acquisition locale.</div>
-          <span class="demo-card-cta">Voir la démo</span>
+          <div class="demo-card-sub">Pour maximiser les contacts et activer le bouche‑à‑oreille.</div>
+          <ul class="demo-card-benefits">
+            <li>Présentation claire</li>
+            <li>Partage en 1 lien</li>
+            <li>Acquisition locale</li>
+          </ul>
+          <div class="demo-card-actions">
+            <div class="demo-card-mini">Idéal recommandation.</div>
+            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+          </div>
         </a>
       </div>
       <p class="demo-viewer-note">Ouverture directe des démos réelles dans un nouvel onglet.</p>
@@ -1248,6 +1518,11 @@
         var previewNote = document.querySelector(".hero-preview-note");
         var heroCardName = document.querySelector(".hero-card-name");
         var heroCardJob = document.querySelector(".hero-card-job");
+        var heroCardAvatar = document.querySelector(".hero-card-avatar");
+        var heroReco = document.querySelector('[data-i18n="hero_reco"]');
+        var heroLive = document.querySelector('[data-i18n="hero_live"]');
+        var heroReviewTitle = document.querySelector('[data-i18n="hero_review_title"]');
+        var heroReviewBody = document.querySelector('[data-i18n="hero_review_body"]');
         var heroRealDemoBtn = document.getElementById("heroRealDemoBtn");
         var ctaPrimary = document.querySelector(".hero-cta-row .cta-primary");
         var ctaRecontact = document.querySelector(".hero-cta-row .cta-recontact");
@@ -1268,8 +1543,13 @@
           previewNote.textContent =
             "Vista premium del resultado final. Abre la demo real en un clic.";
         }
-        if (heroCardName) heroCardName.textContent = "Ana Morales";
-        if (heroCardJob) heroCardJob.textContent = "Estilista · SmartCard";
+        if (heroCardAvatar) heroCardAvatar.textContent = "CM";
+        if (heroCardName) heroCardName.textContent = "Carlos Méndez";
+        if (heroCardJob) heroCardJob.textContent = "Plomero";
+        if (heroReco) heroReco.textContent = "Recomendado por 12 clientes";
+        if (heroLive) heroLive.textContent = "Demo interactiva";
+        if (heroReviewTitle) heroReviewTitle.textContent = "Opinión";
+        if (heroReviewBody) heroReviewBody.textContent = "“Rápido, profesional. Lo recomiendo.”";
         if (heroRealDemoBtn) {
           heroRealDemoBtn.textContent = "Ver demo real";
           heroRealDemoBtn.setAttribute("href", URLS_LATAM.artisan);
@@ -1344,18 +1624,24 @@
         var demoLabels = {
           artisan: {
             title: "Artesano",
-            sub: "Plomero, electricista, multiservicios",
-            tag: "Servicio local"
+            sub: "Para convertir y ganar visibilidad local.",
+            tag: "Servicio local",
+            benefits: ["Contacto en 1 clic", "Opiniones Google", "Mensajes centralizados"],
+            ctaMini: "Demo real — sin prototipo."
           },
           gold: {
             title: "Inmobiliaria",
-            sub: "Agente, visitas, recomendaciones",
-            tag: "Referidos"
+            sub: "Para maximizar contactos y recomendaciones.",
+            tag: "Referidos",
+            benefits: ["Presentación clara", "Compartir en 1 enlace", "Adquisición local"],
+            ctaMini: "Ideal para referidos."
           },
           sante: {
             title: "Bienestar",
-            sub: "Salud, terapeutas, citas",
-            tag: "Confianza"
+            sub: "Para confianza inmediata y recomendación simple.",
+            tag: "Confianza",
+            benefits: ["Imagen profesional", "Recomendación simple", "Contacto fluido"],
+            ctaMini: "Diseñado para móvil."
           }
         };
         document.querySelectorAll(".demo-card").forEach(function (card) {
@@ -1365,9 +1651,17 @@
           var tEl = card.querySelector(".demo-card-title");
           var sEl = card.querySelector(".demo-card-sub");
           var tagEl = card.querySelector(".demo-card-tag");
+          var miniEl = card.querySelector(".demo-card-mini");
+          var benefitsEl = card.querySelector(".demo-card-benefits");
           if (tEl) tEl.textContent = d.title;
           if (sEl) sEl.textContent = d.sub;
           if (tagEl) tagEl.textContent = d.tag;
+          if (miniEl && d.ctaMini) miniEl.textContent = d.ctaMini;
+          if (benefitsEl && d.benefits && d.benefits.length) {
+            benefitsEl.innerHTML = d.benefits.slice(0, 3).map(function (x) {
+              return "<li>" + x + "</li>";
+            }).join("");
+          }
           if (URLS_LATAM[key]) card.setAttribute("href", URLS_LATAM[key]);
         });
 
