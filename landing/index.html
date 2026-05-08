@@ -220,267 +220,81 @@
     }
 
     .hero-preview-shell {
-      border-radius:28px;
-      padding:12px;
-      background:
-        radial-gradient(circle at 18% 4%, rgba(250,204,21,0.2) 0, transparent 48%),
-        radial-gradient(circle at 84% 100%, rgba(96,165,250,0.3) 0, transparent 44%),
-        linear-gradient(145deg, rgba(15,23,42,0.92), rgba(2,6,23,0.98));
-      box-shadow:0 30px 80px rgba(0,0,0,0.75);
-      border:1px solid rgba(148,163,184,0.32);
-      max-width:370px;
+      max-width:460px;
       width:100%;
       position:relative;
       isolation:isolate;
     }
-    .hero-preview-shell::after {
+    .hero-preview-shell::before {
       content:"";
       position:absolute;
-      inset:-12% -16% auto;
-      height:56%;
+      inset:-14% -18%;
       z-index:-1;
-      background:radial-gradient(circle, rgba(99,102,241,0.25), transparent 72%);
-      filter:blur(24px);
+      background:
+        radial-gradient(circle at 35% 20%, rgba(99,102,241,0.28), transparent 60%),
+        radial-gradient(circle at 78% 84%, rgba(250,204,21,0.18), transparent 58%),
+        radial-gradient(circle at 18% 92%, rgba(96,165,250,0.24), transparent 58%);
+      filter:blur(26px);
       pointer-events:none;
+      opacity:0.95;
     }
     .hero-preview-inner {
       border-radius:22px;
-      border:1px solid rgba(148,163,184,0.28);
-      background:linear-gradient(180deg, #090f1f 0%, #020617 100%);
       overflow:hidden;
-      padding:14px 14px 16px;
+      background:linear-gradient(145deg, rgba(15,23,42,0.75), rgba(2,6,23,0.55));
+      box-shadow:0 30px 80px rgba(0,0,0,0.55);
     }
-    .hero-phone-mock {
-      border-radius:24px;
-      border:1px solid rgba(148,163,184,0.3);
+    .hero-visual-img {
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:22px;
+    }
+    .hero-visual-fallback {
+      display:none;
+      padding:22px 18px;
+      border-radius:22px;
       background:
-        linear-gradient(165deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.96) 42%, rgba(2,6,23,1) 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 22px 50px rgba(0,0,0,0.4);
-      padding:14px 12px 12px;
+        radial-gradient(circle at 90% 6%, rgba(250,204,21,0.14), transparent 46%),
+        radial-gradient(circle at 0% 100%, rgba(59,130,246,0.18), transparent 52%),
+        linear-gradient(180deg, rgba(15,23,42,0.92), rgba(2,6,23,0.96));
+      color:#e2e8f0;
     }
-    .hero-phone-notch {
-      width:34%;
-      min-width:90px;
-      height:16px;
-      border-radius:999px;
-      margin:0 auto 14px;
-      background:rgba(15,23,42,0.95);
-      border:1px solid rgba(148,163,184,0.22);
+    .hero-visual-fallback h3 {
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:-0.02em;
+      color:#fff;
+      margin-bottom:8px;
     }
-    .hero-card-preview {
-      border-radius:18px;
-      padding:14px 12px 12px;
-      border:1px solid rgba(148,163,184,0.26);
-      background:
-        radial-gradient(circle at 90% 6%, rgba(250,204,21,0.16), transparent 42%),
-        radial-gradient(circle at 0% 100%, rgba(59,130,246,0.18), transparent 48%),
-        linear-gradient(180deg, rgba(15,23,42,0.98), rgba(2,6,23,0.96));
-      position:relative;
-      overflow:hidden;
+    .hero-visual-fallback p {
+      font-size:12px;
+      color:#cbd5e1;
+      line-height:1.45;
+      margin-bottom:12px;
+      max-width:42ch;
     }
-    .hero-card-preview::before {
-      content:"";
-      position:absolute;
-      inset:-60px -40px auto;
-      height:160px;
-      background:radial-gradient(circle, rgba(99,102,241,0.22), transparent 70%);
-      filter:blur(12px);
-      pointer-events:none;
-    }
-    .hero-card-badges {
+    .hero-visual-fallback .chips {
       display:flex;
-      align-items:center;
-      justify-content:space-between;
+      flex-wrap:wrap;
       gap:8px;
-      margin-bottom:10px;
-      position:relative;
-      z-index:1;
     }
-    .hero-pill {
+    .hero-visual-fallback .chip {
       display:inline-flex;
       align-items:center;
       gap:6px;
-      padding:6px 10px;
+      padding:7px 10px;
       border-radius:999px;
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:0.04em;
-      text-transform:uppercase;
-      border:1px solid rgba(148,163,184,0.26);
-      background:rgba(15,23,42,0.62);
+      font-size:11px;
+      font-weight:700;
+      border:1px solid rgba(148,163,184,0.22);
+      background:rgba(15,23,42,0.55);
       color:#e2e8f0;
       white-space:nowrap;
     }
-    .hero-pill.reco {
-      border-color:rgba(34,197,94,0.38);
-      background:rgba(22,163,74,0.12);
-      color:#bbf7d0;
-    }
-    .hero-pill.live {
-      border-color:rgba(96,165,250,0.45);
-      background:rgba(59,130,246,0.1);
-      color:#bfdbfe;
-    }
-    .hero-card-top {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-      position:relative;
-      z-index:1;
-    }
-    .hero-card-avatar {
-      width:44px;
-      height:44px;
-      border-radius:999px;
-      display:grid;
-      place-items:center;
-      font-size:15px;
-      font-weight:700;
-      color:#f8fafc;
-      border:1px solid rgba(148,163,184,0.5);
-      background:linear-gradient(135deg, #1d4ed8, #7c3aed);
-      box-shadow:0 8px 22px rgba(29,78,216,0.45);
-    }
-    .hero-card-identity {
-      flex:1;
-      min-width:0;
-    }
-    .hero-card-name {
-      font-size:13px;
-      font-weight:700;
-      color:#f8fafc;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .hero-card-job {
-      font-size:11px;
-      color:#93c5fd;
-      margin-top:1px;
-    }
-    .hero-card-rating {
-      font-size:10px;
-      font-weight:700;
+    .hero-visual-fallback .chip strong {
       color:#facc15;
-      letter-spacing:0.02em;
-      white-space:nowrap;
-    }
-    .hero-card-rating small {
-      display:block;
-      font-size:9px;
-      color:#94a3b8;
-      font-weight:700;
-      margin-top:2px;
-      letter-spacing:0.02em;
-      text-align:right;
-    }
-    .hero-card-actions {
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:8px;
-      margin:10px 0;
-      position:relative;
-      z-index:1;
-    }
-    .hero-card-action {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      font-size:11px;
-      font-weight:700;
-      text-align:center;
-      color:#e2e8f0;
-      padding:10px 10px;
-      border-radius:13px;
-      border:1px solid rgba(148,163,184,0.28);
-      background:rgba(15,23,42,0.72);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .hero-card-action .icon {
-      width:22px;
-      height:22px;
-      border-radius:10px;
-      display:grid;
-      place-items:center;
-      font-size:12px;
-      border:1px solid rgba(148,163,184,0.25);
-      background:rgba(2,6,23,0.35);
-    }
-    .hero-card-action.primary {
-      border-color:rgba(96,165,250,0.55);
-      background:linear-gradient(180deg, rgba(37,99,235,0.35), rgba(15,23,42,0.72));
-    }
-    .hero-card-trust {
-      margin-top:4px;
-      border-radius:12px;
-      border:1px solid rgba(34,197,94,0.35);
-      background:rgba(22,163,74,0.1);
-      padding:9px 10px;
-      font-size:10px;
-      color:#bbf7d0;
-      line-height:1.45;
-      position:relative;
-      z-index:1;
-    }
-    .hero-card-bottom {
-      display:grid;
-      grid-template-columns:1fr 86px;
-      gap:10px;
-      margin-top:10px;
-      position:relative;
-      z-index:1;
-    }
-    .hero-card-quote {
-      border-radius:14px;
-      border:1px solid rgba(148,163,184,0.22);
-      background:rgba(2,6,23,0.35);
-      padding:10px 10px;
-      font-size:10px;
-      color:#cbd5e1;
-      line-height:1.45;
-    }
-    .hero-card-quote strong {
-      display:block;
-      font-size:10px;
-      color:#fff;
-      margin-bottom:4px;
-    }
-    .hero-card-qr {
-      border-radius:14px;
-      border:1px solid rgba(148,163,184,0.22);
-      background:rgba(2,6,23,0.35);
-      padding:10px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-    }
-    .hero-qr-grid {
-      width:54px;
-      height:54px;
-      border-radius:10px;
-      background:
-        linear-gradient(90deg, rgba(148,163,184,0.24) 1px, transparent 1px) 0 0 / 7px 7px,
-        linear-gradient(rgba(148,163,184,0.24) 1px, transparent 1px) 0 0 / 7px 7px,
-        radial-gradient(circle at 20% 20%, rgba(250,204,21,0.55) 0 3px, transparent 4px),
-        radial-gradient(circle at 78% 28%, rgba(96,165,250,0.55) 0 3px, transparent 4px),
-        radial-gradient(circle at 56% 76%, rgba(34,197,94,0.55) 0 3px, transparent 4px),
-        rgba(2,6,23,0.25);
-      border:1px solid rgba(148,163,184,0.2);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .hero-qr-label {
-      font-size:9px;
-      font-weight:800;
-      letter-spacing:0.06em;
-      text-transform:uppercase;
-      color:#94a3b8;
-      text-align:center;
-      line-height:1.2;
+      font-weight:900;
     }
     .hero-preview-note {
       font-size:11px;
@@ -1128,40 +942,20 @@
         <div>
           <div class="hero-preview-shell">
             <div class="hero-preview-inner">
-              <div class="hero-phone-mock" aria-hidden="true">
-                <div class="hero-phone-notch"></div>
-                <div class="hero-card-preview">
-                  <div class="hero-card-badges">
-                    <span class="hero-pill reco" data-i18n="hero_reco">Recommandé par 12 clients</span>
-                    <span class="hero-pill live" data-i18n="hero_live">Démo interactive</span>
-                  </div>
-                  <div class="hero-card-top">
-                    <div class="hero-card-avatar">JM</div>
-                    <div class="hero-card-identity">
-                      <div class="hero-card-name">Jean Martin</div>
-                      <div class="hero-card-job">Artisan plombier</div>
-                    </div>
-                    <div class="hero-card-rating">★ 4.9<small>Google</small></div>
-                  </div>
-                  <div class="hero-card-actions">
-                    <div class="hero-card-action primary"><span class="icon">📞</span>Appeler</div>
-                    <div class="hero-card-action"><span class="icon">💬</span>WhatsApp</div>
-                    <div class="hero-card-action"><span class="icon">✉️</span>Email</div>
-                    <div class="hero-card-action"><span class="icon">📍</span>Itinéraire</div>
-                  </div>
-                  <div class="hero-card-trust">
-                    Recommandé par 39 clients ce mois-ci · Avis Google + contact direct en 1 clic.
-                  </div>
-                  <div class="hero-card-bottom">
-                    <div class="hero-card-quote">
-                      <strong data-i18n="hero_review_title">Avis client</strong>
-                      <span data-i18n="hero_review_body">“Réponse rapide, très pro. Je recommande.”</span>
-                    </div>
-                    <div class="hero-card-qr" aria-hidden="true">
-                      <div class="hero-qr-grid"></div>
-                      <div class="hero-qr-label">scan</div>
-                    </div>
-                  </div>
+              <img
+                id="heroPremiumImg"
+                class="hero-visual-img"
+                src="/static/hero-smartcard-premium.png"
+                alt="Aperçu premium SmartCard Maavnica"
+                loading="eager"
+                decoding="async" />
+              <div class="hero-visual-fallback" id="heroPremiumFallback" role="note" aria-live="polite">
+                <h3>Aperçu SmartCard (visuel premium)</h3>
+                <p>Image `hero-smartcard-premium.png` attendue. En attendant, la démo réelle reste accessible ci-dessous.</p>
+                <div class="chips">
+                  <span class="chip">★ <strong>4.9</strong> Google</span>
+                  <span class="chip">Recommandation</span>
+                  <span class="chip">Contact 1 clic</span>
                 </div>
               </div>
             </div>
@@ -1516,13 +1310,8 @@
         var punch = document.querySelector(".hero-punchline");
         var hint = document.querySelector(".hero-cta-hint");
         var previewNote = document.querySelector(".hero-preview-note");
-        var heroCardName = document.querySelector(".hero-card-name");
-        var heroCardJob = document.querySelector(".hero-card-job");
-        var heroCardAvatar = document.querySelector(".hero-card-avatar");
-        var heroReco = document.querySelector('[data-i18n="hero_reco"]');
-        var heroLive = document.querySelector('[data-i18n="hero_live"]');
-        var heroReviewTitle = document.querySelector('[data-i18n="hero_review_title"]');
-        var heroReviewBody = document.querySelector('[data-i18n="hero_review_body"]');
+        var heroImg = document.getElementById("heroPremiumImg");
+        var heroFallback = document.getElementById("heroPremiumFallback");
         var heroRealDemoBtn = document.getElementById("heroRealDemoBtn");
         var ctaPrimary = document.querySelector(".hero-cta-row .cta-primary");
         var ctaRecontact = document.querySelector(".hero-cta-row .cta-recontact");
@@ -1543,13 +1332,13 @@
           previewNote.textContent =
             "Vista premium del resultado final. Abre la demo real en un clic.";
         }
-        if (heroCardAvatar) heroCardAvatar.textContent = "CM";
-        if (heroCardName) heroCardName.textContent = "Carlos Méndez";
-        if (heroCardJob) heroCardJob.textContent = "Plomero";
-        if (heroReco) heroReco.textContent = "Recomendado por 12 clientes";
-        if (heroLive) heroLive.textContent = "Demo interactiva";
-        if (heroReviewTitle) heroReviewTitle.textContent = "Opinión";
-        if (heroReviewBody) heroReviewBody.textContent = "“Rápido, profesional. Lo recomiendo.”";
+        if (heroImg) heroImg.setAttribute("alt", "Vista premium de SmartCard Maavnica");
+        if (heroFallback) {
+          var h3 = heroFallback.querySelector("h3");
+          var p = heroFallback.querySelector("p");
+          if (h3) h3.textContent = "Vista SmartCard (premium)";
+          if (p) p.textContent = "Imagen `hero-smartcard-premium.png` pendiente. Mientras tanto, abre la demo real abajo.";
+        }
         if (heroRealDemoBtn) {
           heroRealDemoBtn.textContent = "Ver demo real";
           heroRealDemoBtn.setAttribute("href", URLS_LATAM.artisan);
@@ -1777,6 +1566,31 @@
 
       bindLangSwitch();
       if (isLatam) applyEsLatam();
+
+      (function setupHeroPremiumImage() {
+        var img = document.getElementById("heroPremiumImg");
+        var fb = document.getElementById("heroPremiumFallback");
+        if (!img || !fb) return;
+        function showFallback() {
+          img.style.display = "none";
+          fb.style.display = "block";
+        }
+        function hideFallback() {
+          fb.style.display = "none";
+          img.style.display = "block";
+        }
+        img.addEventListener("error", showFallback);
+        img.addEventListener("load", function () {
+          if (img.naturalWidth && img.naturalHeight) hideFallback();
+          else showFallback();
+        });
+        if (img.complete) {
+          if (img.naturalWidth && img.naturalHeight) hideFallback();
+          else showFallback();
+        } else {
+          fb.style.display = "none";
+        }
+      })();
 
       var urls = isLatam ? URLS_LATAM : URLS_FR;
       if (window.matchMedia && window.matchMedia("(max-width: 767px)").matches) {
