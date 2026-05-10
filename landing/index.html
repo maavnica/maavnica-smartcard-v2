@@ -1065,7 +1065,7 @@
             <span>📲 Obtenir plus de clients</span>
           </a>
           <a href="/static/recontact-smartcard.html" class="cta-recontact">Être recontacté</a>
-          <a href="#demos" class="cta-secondary">Voir une démo (30 secondes)</a>
+          <a href="#demos" class="cta-secondary">Voir les cartes exemple</a>
         </div>
         <p class="hero-cta-hint" style="margin-top:10px;font-size:12px;color:#94a3b8;line-height:1.45;max-width:46ch;">Simple à envoyer après chaque prestation</p>
       </div>
@@ -1077,12 +1077,12 @@
                 id="heroPremiumImg"
                 class="hero-visual-img"
                 src="/static/hero-smartcard-premium.png"
-                alt="Aperçu premium SmartCard Maavnica"
+                alt="SmartCard Maavnica — aperçu mobile"
                 loading="eager"
                 decoding="async" />
               <div class="hero-visual-fallback" id="heroPremiumFallback" role="note" aria-live="polite">
-                <h3>Aperçu SmartCard (visuel premium)</h3>
-                <p>Image `hero-smartcard-premium.png` attendue. En attendant, la démo réelle reste accessible ci-dessous.</p>
+                <h3>Aperçu SmartCard</h3>
+                <p>Visuel en chargement. Vous pouvez ouvrir une carte ci-dessous.</p>
                 <div class="chips">
                   <span class="chip">★ <strong>4.9</strong> Google</span>
                   <span class="chip">Recommandation</span>
@@ -1091,9 +1091,9 @@
               </div>
             </div>
           </div>
-          <p class="hero-preview-note">Aperçu visuel premium. La démo réelle reste accessible en un clic.</p>
+          <p class="hero-preview-note">Rendu type smartphone. Ouvrez une carte ci-dessous pour voir le parcours complet.</p>
           <div class="hero-preview-demo-link">
-            <a class="hero-real-demo-btn" id="heroRealDemoBtn" href="https://smartcard.maavnica.com/c/demo" target="_blank" rel="noopener noreferrer">Voir la vraie démo</a>
+            <a class="hero-real-demo-btn" id="heroRealDemoBtn" href="https://smartcard.maavnica.com/c/demo" target="_blank" rel="noopener noreferrer">Voir la carte artisan</a>
           </div>
         </div>
       </div>
@@ -1155,8 +1155,8 @@
   <section class="demo-section" id="demos">
     <div class="container">
       <div class="demo-title-wrap">
-        <h2>Voir une carte en action</h2>
-        <p>Choisissez un exemple — contact, avis et recommandation Business en situation réelle.</p>
+        <h2>Comme vos clients vous découvrent sur mobile</h2>
+        <p>Choisissez un profil : le parcours reste simple — contact, avis et recommandation en quelques secondes.</p>
       </div>
       <div class="demo-layout">
         <a class="demo-card" data-demo="artisan" href="https://smartcard.maavnica.com/c/demo" target="_blank" rel="noopener noreferrer">
@@ -1164,15 +1164,15 @@
             <div class="demo-card-title">Artisan</div>
             <span class="demo-card-tag">Service local</span>
           </div>
-          <div class="demo-card-sub">Pour convertir après intervention et gagner en visibilité locale.</div>
+          <div class="demo-card-sub">Pour rester facile à contacter après une intervention et être recommandé autour de soi.</div>
           <ul class="demo-card-benefits">
             <li>Contact en 1 clic</li>
             <li>Avis Google simplifiés</li>
             <li>Devis / demande centralisés</li>
           </ul>
           <div class="demo-card-actions">
-            <div class="demo-card-mini">Démo réelle — sans prototype.</div>
-            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+            <div class="demo-card-mini">Même expérience que vos clients, directement sur mobile.</div>
+            <span class="demo-card-cta">Voir la carte artisan <span class="arrow">→</span></span>
           </div>
         </a>
         <a class="demo-card" data-demo="sante" href="https://smartcard.maavnica.com/c/demo2" target="_blank" rel="noopener noreferrer">
@@ -1188,7 +1188,7 @@
           </ul>
           <div class="demo-card-actions">
             <div class="demo-card-mini">Conçu pour mobile.</div>
-            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+            <span class="demo-card-cta">Voir la carte bien-être <span class="arrow">→</span></span>
           </div>
         </a>
         <a class="demo-card" data-demo="gold" href="https://smartcard.maavnica.com/c/demo3" target="_blank" rel="noopener noreferrer">
@@ -1200,15 +1200,15 @@
           <ul class="demo-card-benefits">
             <li>Présentation claire</li>
             <li>Partage en 1 lien</li>
-            <li>Acquisition locale</li>
+            <li>Présence locale claire</li>
           </ul>
           <div class="demo-card-actions">
-            <div class="demo-card-mini">Idéal recommandation.</div>
-            <span class="demo-card-cta">Voir la démo <span class="arrow">→</span></span>
+            <div class="demo-card-mini">Pensée pour être partagée simplement.</div>
+            <span class="demo-card-cta">Voir la carte immobilier <span class="arrow">→</span></span>
           </div>
         </a>
       </div>
-      <p class="demo-viewer-note">Ouverture directe des démos réelles dans un nouvel onglet.</p>
+      <p class="demo-viewer-note">Même parcours que sur le téléphone de vos clients.</p>
     </div>
   </section>
 
@@ -1461,17 +1461,17 @@
         if (hint) hint.textContent = "Sin compromiso · Prueba gratuita 30 días";
         if (previewNote) {
           previewNote.textContent =
-            "Vista premium del resultado final. Abre la demo real en un clic.";
+            "Vista tipo smartphone. Abre una tarjeta abajo para ver el recorrido completo.";
         }
-        if (heroImg) heroImg.setAttribute("alt", "Vista premium de SmartCard Maavnica");
+        if (heroImg) heroImg.setAttribute("alt", "SmartCard Maavnica — vista móvil");
         if (heroFallback) {
           var h3 = heroFallback.querySelector("h3");
           var p = heroFallback.querySelector("p");
-          if (h3) h3.textContent = "Vista SmartCard (premium)";
-          if (p) p.textContent = "Imagen `hero-smartcard-premium.png` pendiente. Mientras tanto, abre la demo real abajo.";
+          if (h3) h3.textContent = "Vista SmartCard";
+          if (p) p.textContent = "Imagen en carga. Puedes abrir una tarjeta abajo.";
         }
         if (heroRealDemoBtn) {
-          heroRealDemoBtn.textContent = "Ver demo real";
+          heroRealDemoBtn.textContent = "Ver la tarjeta artesano";
           heroRealDemoBtn.setAttribute("href", URLS_LATAM.artisan);
         }
 
@@ -1482,7 +1482,7 @@
           else ctaPrimary.textContent = "Solicitar mi SmartCard";
         }
         if (ctaRecontact) ctaRecontact.textContent = "Que me contacten de nuevo";
-        if (ctaSecondary) ctaSecondary.textContent = "Ver una demo (30 segundos)";
+        if (ctaSecondary) ctaSecondary.textContent = "Ver ejemplos de tarjetas";
 
         var beforeH = document.querySelector(".compare-card.before h3");
         var afterH = document.querySelector(".compare-card.after h3");
@@ -1531,37 +1531,40 @@
         var demoH = document.querySelector(".demo-title-wrap h2");
         var demoP = document.querySelector(".demo-title-wrap p");
         var demoNote = document.querySelector(".demo-viewer-note");
-        if (demoH) demoH.textContent = "Ver una tarjeta en acción";
+        if (demoH) demoH.textContent = "Cómo tus clientes te descubren en el móvil";
         if (demoP) {
           demoP.textContent =
-            "Elige un perfil y abre la tarjeta real en un clic: WhatsApp, opinión y recomendación.";
+            "Elige un perfil: el recorrido sigue siendo simple — contacto, opinión y recomendación en segundos.";
         }
         if (demoNote) {
           demoNote.textContent =
-            "Apertura directa de las demos reales en una nueva pestaña.";
+            "El mismo recorrido que en el móvil de tus clientes.";
         }
 
         var demoLabels = {
           artisan: {
             title: "Artesano",
-            sub: "Para convertir y ganar visibilidad local.",
+            sub: "Para que te contacten fácil después de un servicio y te recomiendan a su alrededor.",
             tag: "Servicio local",
             benefits: ["Contacto en 1 clic", "Opiniones Google", "Mensajes centralizados"],
-            ctaMini: "Demo real — sin prototipo."
+            ctaMini: "La misma experiencia que ven tus clientes en el móvil.",
+            cta: "Ver la tarjeta artesano"
           },
           gold: {
             title: "Estilista",
             sub: "Salón y belleza: reservas por WhatsApp, imagen cuidada y clientes que te recomiendan.",
             tag: "BELLEZA",
-            benefits: ["WhatsApp rápido", "Recomendaciones simples", "Imagen profesional"],
-            ctaMini: "Demo real para estética y peluquería."
+            benefits: ["WhatsApp rápido", "Recomendaciones simples", "Presencia local clara"],
+            ctaMini: "Pensada para compartirse con facilidad.",
+            cta: "Ver la tarjeta estilista"
           },
           sante: {
             title: "Bienestar",
             sub: "Para confianza inmediata y recomendación simple.",
             tag: "Confianza",
             benefits: ["Imagen profesional", "Recomendación simple", "Contacto fluido"],
-            ctaMini: "Diseñado para móvil."
+            ctaMini: "Diseñado para móvil.",
+            cta: "Ver la tarjeta bienestar"
           }
         };
         document.querySelectorAll(".demo-card").forEach(function (card) {
@@ -1573,10 +1576,14 @@
           var tagEl = card.querySelector(".demo-card-tag");
           var miniEl = card.querySelector(".demo-card-mini");
           var benefitsEl = card.querySelector(".demo-card-benefits");
+          var ctaEl = card.querySelector(".demo-card-cta");
           if (tEl) tEl.textContent = d.title;
           if (sEl) sEl.textContent = d.sub;
           if (tagEl) tagEl.textContent = d.tag;
           if (miniEl && d.ctaMini) miniEl.textContent = d.ctaMini;
+          if (ctaEl && d.cta) {
+            ctaEl.innerHTML = d.cta + ' <span class="arrow">→</span>';
+          }
           if (benefitsEl && d.benefits && d.benefits.length) {
             benefitsEl.innerHTML = d.benefits.slice(0, 3).map(function (x) {
               return "<li>" + x + "</li>";
