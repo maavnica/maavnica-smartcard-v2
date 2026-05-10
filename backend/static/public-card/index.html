@@ -3967,6 +3967,129 @@
           });
         })();
 
+        const cardPublicUrl = getPublicCardUrl(slug);
+        const cityShare = (
+          (card.city != null && String(card.city).trim()) ||
+          (card.service_city != null && String(card.service_city).trim()) ||
+          ""
+        )
+          .toString()
+          .trim();
+
+        function trimShareText(s) {
+          return (s || "").toString().replace(/\s+/g, " ").trim();
+        }
+
+        /** Libellé humain court : nom / métier / ville / société (fallbacks propres). */
+        function getProViralLabelForShare() {
+          const placeholderName = /^prénom\s*nom$/i.test((primaryName || "").trim());
+          const name =
+            primaryName &&
+            !placeholderName &&
+            primaryName !== "Votre entreprise"
+              ? primaryName.trim()
+              : "";
+          const job = (rawJobTitle || "").trim();
+          const city = cityShare;
+          const biz = (businessNameRaw || "").trim();
+          const co =
+            companyName && companyName !== "Votre entreprise"
+              ? companyName.trim()
+              : "";
+          if (name && job && city) return name + ", " + job + " à " + city;
+          if (name && job) return name + ", " + job;
+          if (name && city) return name + " à " + city;
+          if (name) return name;
+          if (biz) return biz;
+          if (co) return co;
+          return "";
+        }
+
+        /** Texte partage natif (sans URL — passée à part via sharePayload.url). */
+        function getOwnerShareTextNative() {
+          const who = getProViralLabelForShare();
+          if (isDemoCard) {
+            if (who) {
+              return trimShareText(
+                "Bonjour 👋 Je te partage ma carte Maavnica — " +
+                  who +
+                  ". Tu peux me contacter ou laisser un avis si tu veux."
+              );
+            }
+            return trimShareText(
+              "Bonjour 👋 Je te partage ma carte Maavnica pour qu’on reste en contact facilement."
+            );
+          }
+          if (who) {
+            return trimShareText(
+              "Bonjour 👋 Voici ma carte — " +
+                who +
+                ". N’hésite pas si tu as besoin de moi."
+            );
+          }
+          return trimShareText(
+            "Bonjour 👋 Voici ma carte de contact : tu peux me joindre ou me laisser un message."
+          );
+        }
+
+        /** SMS / e-mail : une seule URL en fin de message. */
+        function getOwnerShareTextWithLink() {
+          return trimShareText(getOwnerShareTextNative() + "\n\n" + cardPublicUrl);
+        }
+
+        function getOwnerShareTitle() {
+          if (isDemoCard) return "Ma carte Maavnica";
+          const who = getProViralLabelForShare();
+          if (who) {
+            var short = who.split(",")[0].trim();
+            if (short.length > 42) short = short.slice(0, 39).trim() + "…";
+            return "Ma carte — " + short;
+          }
+          return "Ma carte de contact";
+        }
+
+        function getOwnerEmailSubject() {
+          return getOwnerShareTitle();
+        }
+
+        function getRecommendShareTextNative() {
+          const who = getProViralLabelForShare();
+          if (who) {
+            return trimShareText(
+              "Je te recommande " + who + " 👌 Petite carte simple pour le contacter."
+            );
+          }
+          return trimShareText(
+            "Je te recommande ce professionnel 👌 Voici sa carte pour le contacter facilement."
+          );
+        }
+
+        function getRecommendShareTextWithLink(recommendShareUrl) {
+          return trimShareText(
+            getRecommendShareTextNative() + "\n\n" + recommendShareUrl
+          );
+        }
+
+        function getRecommendShareTitle() {
+          const who = getProViralLabelForShare();
+          if (who) {
+            var head = who.split(",")[0].trim();
+            if (head.length > 36) head = head.slice(0, 33).trim() + "…";
+            return "Reco — " + head;
+          }
+          return "Une recommandation pour toi";
+        }
+
+        function getRecommendEmailSubject() {
+          const who = getProViralLabelForShare();
+          if (who) {
+            var head = who.split(",")[0].trim();
+            if (head.length > 48) head = head.slice(0, 45).trim() + "…";
+            return "Je te recommande " + head;
+          }
+          return "Je te recommande ce professionnel";
+        }
+
         const btnWhats = document.getElementById("btn-whatsapp");
         if (btnWhats) {
           const waNumber = card.whatsapp || card.phone;
@@ -3983,10 +4106,23 @@
                 );
               }
               const base = "https://wa.me/";
+              const whoWa = getProViralLabelForShare();
               const msg = encodeURIComponent(
                 isDemoCard
-                  ? "Bonjour, je vous contacte via votre SmartCard Maavnica."
-                  : "Bonjour, je vous contacte depuis votre carte de contact."
+                  ? whoWa
+                    ? trimShareText(
+                        "Bonjour, je vous écris en découvrant votre carte Maavnica (" +
+                          whoWa +
+                          ")."
+                      )
+                    : "Bonjour, je vous écris en découvrant votre carte Maavnica."
+                  : whoWa
+                    ? trimShareText(
+                        "Bonjour, je vous contacte après avoir vu votre carte (" +
+                          whoWa +
+                          ")."
+                      )
+                    : "Bonjour, je vous contacte depuis votre carte en ligne."
               );
               const digits = waNumber.toString().replace(/[^\d]/g, "");
               window.open(base + digits + "?text=" + msg, "_blank");
@@ -4251,24 +4387,21 @@
         const btnShareCopy = document.getElementById("btn-share-copy");
         const btnShareEmail = document.getElementById("btn-share-email");
 
-        const cardPublicUrl = getPublicCardUrl(slug);
         const referrerStorageKey = "smartcard_recommend_referrer_" + slug;
         async function ensureReferrerProfileForCard() {
           return await ensureReferrerProfileForRecommendationLink(referrerStorageKey);
         }
-        const shareMessage = isDemoCard
-          ? "Bonjour, voici ma carte de contact SmartCard. Vous pouvez y retrouver mes coordonnées, laisser un avis ou me contacter facilement : " +
-            cardPublicUrl
-          : "Bonjour, voici ma carte de contact. Vous y trouverez mes coordonnées et pourrez me contacter ou laisser un avis : " +
-            cardPublicUrl;
-        const shareCardTitle = isDemoCard ? "Ma carte SmartCard" : "Ma carte de contact";
+
+        const shareTextNative = getOwnerShareTextNative();
+        const shareTextWithLink = getOwnerShareTextWithLink();
+        const shareCardTitle = getOwnerShareTitle();
 
         if (btnShareMain) {
           btnShareMain.onclick = async function () {
             trackCardEvent(slug, "share_click");
             const sharePayload = {
               title: shareCardTitle,
-              text: shareMessage,
+              text: shareTextNative,
               url: cardPublicUrl
             };
             if (typeof navigator.share === "function") {
@@ -4291,7 +4424,7 @@
         if (btnShareSms) {
           btnShareSms.onclick = () => {
             trackCardEvent(slug, "share_click");
-            const body = encodeURIComponent(shareMessage);
+            const body = encodeURIComponent(shareTextWithLink);
             const smsUrl = "sms:?&body=" + body;
             window.location.href = smsUrl;
           };
@@ -4307,10 +4440,8 @@
         if (btnShareEmail) {
           btnShareEmail.onclick = () => {
             trackCardEvent(slug, "share_click");
-            const subject = encodeURIComponent(
-              isDemoCard ? "Votre carte de contact SmartCard" : "Carte de contact"
-            );
-            const body = encodeURIComponent(shareMessage);
+            const subject = encodeURIComponent(getOwnerEmailSubject());
+            const body = encodeURIComponent(shareTextWithLink);
             const mailto = "mailto:?subject=" + subject + "&body=" + body;
             window.location.href = mailto;
           };
@@ -4338,9 +4469,8 @@
               const recommendShareUrl =
                 getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
               const sharePayload = {
-                title: "Recommandation professionnelle",
-                text:
-                  "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici.",
+                title: getRecommendShareTitle(),
+                text: getRecommendShareTextNative(),
                 url: recommendShareUrl
               };
               if (typeof navigator.share === "function") {
@@ -4397,9 +4527,7 @@
               const referrerId = profile.referrerId;
               const recommendShareUrl =
                 getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
-              const recommendMessage =
-                "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
-                recommendShareUrl;
+              const recommendMessage = getRecommendShareTextWithLink(recommendShareUrl);
               trackCardEvent(slug, "recommend_share_sms");
               trackRecommendationEvent(
                 analyticsSlug,
@@ -4440,9 +4568,7 @@
               const referrerId = profile.referrerId;
               const recommendShareUrl =
                 getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
-              const recommendMessage =
-                "Je vous recommande ce professionnel. Vous pouvez consulter sa carte ici :\n" +
-                recommendShareUrl;
+              const recommendMessage = getRecommendShareTextWithLink(recommendShareUrl);
               trackCardEvent(slug, "recommend_share_email");
               trackRecommendationEvent(
                 analyticsSlug,
@@ -4452,7 +4578,7 @@
                 profile.firstName,
                 profile.lastName
               );
-              const subject = encodeURIComponent("Recommandation professionnelle");
+              const subject = encodeURIComponent(getRecommendEmailSubject());
               const body = encodeURIComponent(recommendMessage);
               window.location.href = "mailto:?subject=" + subject + "&body=" + body;
             };
