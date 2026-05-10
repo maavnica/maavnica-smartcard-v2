@@ -1428,46 +1428,57 @@
     body.public-card--compact .hero-professional-tagline {
       font-size: 12px;
       font-weight: 600;
-      margin: 4px 0 4px;
-      line-height: 1.35;
+      margin: 5px 0 6px;
+      line-height: 1.42;
       color: rgba(250, 250, 250, 0.96);
-      text-align: left;
-    }
-    body.public-card--compact .hero-reassurance,
-    body.public-card--compact .hero-social-proof {
-      font-size: 11px;
-      font-weight: 400;
-      line-height: 1.38;
-      color: rgba(203, 213, 225, 0.94);
-      margin: 0 0 5px;
       text-align: left;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 4;
       overflow: hidden;
     }
+    body.public-card--compact .hero-reassurance,
+    body.public-card--compact .hero-social-proof {
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.38;
+      color: rgba(203, 213, 225, 0.9);
+      margin: 0 0 5px;
+      text-align: left;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      opacity: 0.94;
+    }
     body.public-card--compact .hero-subtitle {
       font-size: 11px;
       font-weight: 600;
       line-height: 1.38;
       color: rgba(253, 186, 116, 0.98);
-      margin: 6px 0 2px;
+      margin: 6px 0 4px;
       text-align: left;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       overflow: hidden;
+      opacity: 0.97;
     }
     body.public-card--compact .hero-title {
       font-size: 16px;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
     }
     body.public-card--compact .hero-company {
-      font-size: 12px;
-      margin-bottom: 3px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: rgba(203, 213, 225, 0.88);
     }
     body.public-card--compact .hero-job-title {
       font-size: 11px;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+      color: rgba(226, 232, 240, 0.9);
     }
     body.public-card--compact .hero-subline {
       font-size: 10px;
@@ -1497,11 +1508,30 @@
       display: none !important;
     }
     body.public-card--compact .hero-meta {
-      margin-top: 2px;
-      gap: 2px;
+      margin-top: 6px;
+      padding-top: 8px;
+      gap: 3px;
+      font-size: 10px;
+      color: rgba(203, 213, 225, 0.82);
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
+      opacity: 0.92;
+    }
+    body.public-card--compact .hero-meta-label {
+      font-weight: 500;
+    }
+    body.public-card--compact .hero-meta-value {
+      color: rgba(148, 163, 184, 0.9);
     }
     body.public-card--compact .hero-contact-line {
-      margin-top: 4px;
+      margin-top: 8px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      font-size: 10px;
+      color: rgba(203, 213, 225, 0.8);
+    }
+    body.public-card--compact .hero-contact-item span:last-child {
+      font-size: 10px;
+      color: rgba(209, 213, 219, 0.88);
     }
 
     body.public-card--compact .hero-compact-contact-row {
@@ -1509,9 +1539,9 @@
       flex-direction: column;
       align-items: stretch;
       gap: 8px;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(148, 163, 184, 0.22);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
     }
     body.public-card--compact .hero-compact-tel-row {
       width: 100%;
@@ -1622,10 +1652,36 @@
 
     body.public-card--compact .compact-primary-cta-wrap {
       margin: 0 0 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     body.public-card--legacy .compact-primary-cta-wrap {
       display: none !important;
     }
+
+    /* P1.2 : micro-ligne d’orientation (ne remplace pas hero_title / hero_text admin) */
+    .p12-soft-hint {
+      display: none;
+      margin: 0 2px 2px;
+      padding: 0 4px;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+      text-align: center;
+      color: rgba(148, 163, 184, 0.78);
+    }
+    body.public-card--compact .p12-soft-hint {
+      display: block;
+    }
+    body.public-card--legacy .p12-soft-hint {
+      display: none !important;
+    }
+    body.is-loading .p12-soft-hint {
+      opacity: 0.5;
+    }
+
     body.public-card--compact .btn-primary-contact-hero {
       width: 100%;
       margin-top: 0;
@@ -1642,10 +1698,7 @@
 
     body.public-card--compact .compact-primary-cta-wrap > .btn-primary {
       width: 100%;
-      margin-top: 0;
-    }
-    body.public-card--compact .compact-primary-cta-wrap > .btn-primary + .btn-primary {
-      margin-top: 10px;
+      margin-top: 0 !important;
     }
     body.public-card--compact .btn-primary-stack-cta {
       padding: 9px 14px;
@@ -1668,7 +1721,7 @@
           0 1px 0 rgba(255, 255, 255, 0.2) inset,
           0 14px 30px -8px rgba(249, 115, 22, 0.56);
       }
-      body.public-card--compact .btn-primary-stack-cta:hover {
+      body.public-card--compact .btn-primary-stack-cta:not(.btn-primary--avis-secondary):hover {
         filter: brightness(1.02);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.16) inset,
@@ -1680,8 +1733,53 @@
       transform: scale(0.97);
     }
 
+    /* P1.2 : après .btn-primary-stack-cta — reco plus affirmée, avis visuellement secondaire */
+    body.public-card--compact .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]) {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-radius: 14px;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 14px 34px -10px rgba(249, 115, 22, 0.55);
+    }
+    @media (hover: hover) {
+      body.public-card--compact .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]):hover {
+        filter: brightness(1.05);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.22) inset,
+          0 16px 36px -10px rgba(249, 115, 22, 0.58);
+      }
+    }
+    body.public-card--compact .btn-primary-stack-cta.btn-primary--avis-secondary {
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border-radius: 12px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.07) 0%,
+        rgba(15, 23, 42, 0.55) 100%
+      );
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: rgba(241, 245, 249, 0.96);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      opacity: 1;
+    }
+    @media (hover: hover) {
+      body.public-card--compact .btn-primary-stack-cta.btn-primary--avis-secondary:hover {
+        filter: none;
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(15, 23, 42, 0.65);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+    }
+
     body.public-card--compact .compact-cta-reassurance {
-      margin: 10px 0 0;
+      margin: 2px 0 0;
       padding: 0 4px;
       text-align: center;
       font-size: 10px;
@@ -2410,26 +2508,30 @@
         </div>
       </div>
 
+      <p class="p12-soft-hint" aria-hidden="true">
+        Recommandation, contact ou avis — tout reste simple.
+      </p>
+
       <div class="compact-primary-cta-wrap" id="compact-primary-cta-wrap">
-        <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
-          Demande de contact
-        </button>
         <button
           type="button"
-          class="btn-primary btn-primary-stack-cta"
-          id="btn-cta-laisser-avis"
-          aria-label="Laisser un avis"
-        >
-          Laisser un avis
-        </button>
-        <button
-          type="button"
-          class="btn-primary btn-primary-stack-cta"
+          class="btn-primary btn-primary-stack-cta btn-primary--reco-first"
           id="btn-cta-recommander"
           hidden
           aria-label="Recommander ce professionnel"
         >
           Recommander ce professionnel
+        </button>
+        <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
+          Demande de contact
+        </button>
+        <button
+          type="button"
+          class="btn-primary btn-primary-stack-cta btn-primary--avis-secondary"
+          id="btn-cta-laisser-avis"
+          aria-label="Laisser un avis"
+        >
+          Laisser un avis
         </button>
         <p class="compact-cta-reassurance" id="compact-cta-reassurance">
           Réponse rapide • Sans engagement
