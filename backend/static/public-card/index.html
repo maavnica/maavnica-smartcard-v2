@@ -6,7 +6,6 @@
   <meta name="description" content="Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations." />
   <meta property="og:title" content="Maavnica SmartCard" />
   <meta property="og:description" content="Contact direct, avis clients et recommandation simplifiée." />
-  <meta property="og:image" id="seo-og-image" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <link rel="manifest" href="/static/manifest.webmanifest">
   <meta name="theme-color" content="#000000">
@@ -2805,6 +2804,28 @@
       return !!(slug && String(slug).trim().toLowerCase().startsWith("demo-latam-"));
     }
 
+    function upsertHeadMeta(attr, key, content) {
+      if (content === undefined || content === null) return;
+      const sel = 'meta[' + attr + '="' + key.replace(/"/g, '\\"') + '"]';
+      var el = document.head.querySelector(sel);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", String(content));
+    }
+
+    /** Aligné sur le SSR Python (_fr_public_card_seo_strings) pour éviter toute contradiction crawler/client. */
+    function absoluteUrlForOg(u) {
+      var s = (u || "").trim();
+      if (!s) return "";
+      if (/^https?:\/\//i.test(s)) return s;
+      if (s.indexOf("//") === 0) return (window.location.protocol || "https:") + s;
+      if (s.indexOf("/") === 0) return String(baseUrl).replace(/\/?$/, "") + s;
+      return String(baseUrl).replace(/\/?$/, "") + "/" + s;
+    }
+
     /**
      * Métadonnées SEO (title, meta, Open Graph) + H1 hors écran pour les cartes FR (index.html).
      * Données : champs API existants ; ville optionnelle si ajoutée plus tard (city / service_city).
@@ -2855,30 +2876,33 @@
       }
 
       let ogTitle = "";
-      if (job && city && name) ogTitle = job + " recommandé à " + city + " | " + name;
-      else if (job && name) ogTitle = job + " recommandé | " + name;
-      else if (name) ogTitle = name + " | Maavnica";
-      else ogTitle = "Maavnica SmartCard";
+      if (job && city && name) {
+        ogTitle = job + " à " + city + " recommandé par ses clients | " + name;
+      } else if (job && name) {
+        ogTitle = job + " recommandé par ses clients | " + name;
+      } else if (name && city) {
+        ogTitle = name + " | Maavnica";
+      } else if (name) {
+        ogTitle = name + " | Maavnica";
+      } else {
+        ogTitle = "Maavnica SmartCard";
+      }
 
       const ogDesc =
         name !== ""
           ? "Découvrez " + name + ". Contact direct, avis clients et recommandation simplifiée."
           : "Découvrez cette carte professionnelle. Contact direct, avis clients et recommandation simplifiée.";
 
-      function upsertMeta(attr, key, content) {
-        if (content === undefined || content === null) return;
-        const sel = 'meta[' + attr + '="' + key.replace(/"/g, '\\"') + '"]';
-        var el = document.head.querySelector(sel);
-        if (!el) {
-          el = document.createElement("meta");
-          el.setAttribute(attr, key);
-          document.head.appendChild(el);
-        }
-        el.setAttribute("content", String(content));
-      }
-      upsertMeta("name", "description", metaDesc);
-      upsertMeta("property", "og:title", ogTitle);
-      upsertMeta("property", "og:description", ogDesc);
+      upsertHeadMeta("name", "description", metaDesc);
+      upsertHeadMeta("property", "og:title", ogTitle);
+      upsertHeadMeta("property", "og:description", ogDesc);
+      upsertHeadMeta("property", "og:url", getPublicCardUrl(slug));
+      upsertHeadMeta("name", "twitter:card", "summary_large_image");
+      upsertHeadMeta("name", "twitter:title", ogTitle);
+      upsertHeadMeta("name", "twitter:description", ogDesc);
+
+      var canon = document.querySelector('link[rel="canonical"]');
+      if (canon) canon.setAttribute("href", getPublicCardUrl(slug));
 
       var h1 = document.getElementById("public-card-seo-h1");
       if (h1) {
@@ -2897,14 +2921,17 @@
       var el = document.getElementById("seo-og-image");
       if (!el) return;
       var defaultImage = `${baseUrl}/static/og-default.jpg?v=2`;
-      var raw = card && card.photo_url != null ? String(card.photo_url).trim() : "";
+      var raw = "";
+      if (card && card.avatar_url != null) raw = String(card.avatar_url).trim();
+      else if (card && card.photo_url != null) raw = String(card.photo_url).trim();
       var url;
       if (String(slug).trim().toLowerCase() === "arnaud-huard") {
         url = `${baseUrl}/static/og-arnaud-huard.jpg`;
       } else {
-        url = raw ? raw : defaultImage;
+        url = raw ? absoluteUrlForOg(raw) : defaultImage;
       }
       el.setAttribute("content", url);
+      upsertHeadMeta("name", "twitter:image", url);
     }
 
     /** Clé mode propriétaire : /c/{slug}?o=… (ne pas inclure dans les SMS / mails clients). */

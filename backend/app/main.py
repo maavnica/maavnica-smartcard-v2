@@ -1,13 +1,14 @@
 # backend/app/main.py
 
 import logging
+import os
 import re
 import unicodedata
 from html import escape
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -135,6 +136,78 @@ def _inject_fr_public_card_head(html: str, seo: Optional[Dict[str, Any]]) -> str
         html,
         count=1,
     )
+    return html
+
+
+def _public_card_base_url(request: Request) -> str:
+    """URL publique absolue (prod, staging, local) — priorité à PUBLIC_BASE_URL."""
+    explicit = (os.environ.get("PUBLIC_BASE_URL") or "").strip().rstrip("/")
+    if explicit:
+        return explicit
+    forwarded_proto = (request.headers.get("x-forwarded-proto") or "").split(",")[0].strip()
+    scheme = forwarded_proto or request.url.scheme or "http"
+    host = (request.headers.get("x-forwarded-host") or request.headers.get("host") or "").split(
+        ","
+    )[0].strip()
+    if not host:
+        return str(request.base_url).rstrip("/")
+    return f"{scheme}://{host}"
+
+
+def _absolute_public_url(base: str, path_or_url: str) -> str:
+    """Rend une URL d’asset absolue pour OG / Twitter (avatar relatif ou CDN)."""
+    raw = (path_or_url or "").strip()
+    if not raw:
+        return ""
+    lower = raw.lower()
+    if lower.startswith("http://") or lower.startswith("https://"):
+        return raw
+    if raw.startswith("//"):
+        return ("https:" if "https" in (base or "").lower() else "http:") + raw
+    path = raw if raw.startswith("/") else "/" + raw
+    return f"{base.rstrip('/')}{path}"
+
+
+def _fr_public_og_image_url(base_url: str, slug_norm: str, card: Optional[Any]) -> str:
+    """Image OG : spécifique arnaud-huard, sinon avatar absolu, sinon défaut."""
+    slug_l = (slug_norm or "").strip().lower()
+    if slug_l == "arnaud-huard":
+        return f"{base_url}/static/og-arnaud-huard.jpg"
+    avatar = ""
+    if card is not None:
+        avatar = (getattr(card, "avatar_url", None) or "").strip()
+    if avatar:
+        return _absolute_public_url(base_url, avatar)
+    return f"{base_url}/static/og-default.jpg?v=2"
+
+
+def _inject_fr_social_bundle(
+    html: str,
+    *,
+    page_url: str,
+    og_image_url: str,
+    og_title: str,
+    og_desc: str,
+) -> str:
+    """Une seule passe : canonical, OG image/url/type, Twitter — alignés sur og:title / og:description."""
+    og_title_e = escape(og_title, quote=True)
+    og_desc_e = escape(og_desc, quote=True)
+    img_e = escape(og_image_url, quote=True)
+    url_e = escape(page_url, quote=True)
+    block = (
+        f'  <link rel="canonical" href="{url_e}" />\n'
+        f'  <meta property="og:image" id="seo-og-image" content="{img_e}" />\n'
+        f'  <meta property="og:image:width" content="1200" />\n'
+        f'  <meta property="og:image:height" content="630" />\n'
+        f'  <meta property="og:type" content="website" />\n'
+        f'  <meta property="og:url" content="{url_e}" />\n'
+        f'  <meta name="twitter:card" content="summary_large_image" />\n'
+        f'  <meta name="twitter:title" content="{og_title_e}" />\n'
+        f'  <meta name="twitter:description" content="{og_desc_e}" />\n'
+        f'  <meta name="twitter:image" content="{img_e}" />\n'
+    )
+    if "</head>" in html:
+        return html.replace("</head>", block + "</head>", 1)
     return html
 
 
@@ -279,7 +352,7 @@ async def serve_admin():
 # Public card (QR)
 # ------------------------------------------------------------
 @app.api_route("/c/{slug}", methods=["GET", "HEAD"], include_in_schema=False)
-async def serve_public_card(slug: str):
+async def serve_public_card(request: Request, slug: str):
     """
     Affiche la carte publique pour un slug donné.
     Le template est statique ; le JS récupère le slug via l'URL et charge les données via l'API.
@@ -297,6 +370,7 @@ async def serve_public_card(slug: str):
     card_region_log = "n/a"
     template_log = "fr"
     seo_fr: Optional[Dict[str, Any]] = None
+    fr_db_card: Optional[Card] = None
 
     db = SessionLocal()
     try:
@@ -311,6 +385,7 @@ async def serve_public_card(slug: str):
                 file_path = path_latam
                 template_log = "latam"
             else:
+                fr_db_card = card
                 dn = (getattr(card, "display_name", None) or "").strip()
                 cn = (getattr(card, "company_name", None) or "").strip()
                 seo_fr = {
@@ -339,19 +414,17 @@ async def serve_public_card(slug: str):
     try:
         html = file_path.read_text(encoding="utf-8")
         html = _inject_fr_public_card_head(html, seo_fr)
-        og_image_url = "https://smartcard.maavnica.com/static/og-default.jpg?v=2"
-        if slug_norm.lower() == "arnaud-huard":
-            og_image_url = "https://smartcard.maavnica.com/static/og-arnaud-huard.jpg"
-        card_url = f"https://smartcard.maavnica.com/c/{slug_norm}"
-        meta_block = (
-            '\n  <meta property="og:image" content="' + og_image_url + '">\n'
-            '  <meta property="og:image:width" content="1200">\n'
-            '  <meta property="og:image:height" content="630">\n'
-            '  <meta property="og:type" content="website">\n'
-            '  <meta property="og:url" content="' + card_url + '">\n'
+        _, _, og_title, og_desc = _fr_public_card_seo_strings(seo_fr)
+        base_url = _public_card_base_url(request)
+        page_url = f"{base_url}/c/{slug_norm}"
+        og_image_url = _fr_public_og_image_url(base_url, slug_norm, fr_db_card)
+        html = _inject_fr_social_bundle(
+            html,
+            page_url=page_url,
+            og_image_url=og_image_url,
+            og_title=og_title,
+            og_desc=og_desc,
         )
-        if "</head>" in html:
-            html = html.replace("</head>", meta_block + "</head>", 1)
         return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
     except Exception:
         _public_card_log.exception("public_card og_injection_failed slug=%s", slug_norm)
