@@ -365,6 +365,9 @@ class CardPublic(BaseModel):
     # Preuve sociale : nombre d’actions « lien de recommandation créé » (événements traçables)
     recommendation_share_count: int = 0
 
+    # Si la requête inclut ?r=… : libellé humain connu pour ce jeton (sinon null — pas d’invention)
+    recommend_arrival_attribution: Optional[str] = None
+
     # Carte publique : true si ?o= correspond à owner_share_key (voir GET by-slug)
     owner_mode: bool = False
     # Rempli uniquement quand la requête est authentifiée admin (Bearer)

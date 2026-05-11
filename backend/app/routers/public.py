@@ -83,6 +83,38 @@ def _latest_recommender_row_for_token(
     return q.filter(has_human).order_by(RecommendationEvent.id.desc()).first()
 
 
+def _sanitize_public_referrer_token(raw: Optional[str]) -> Optional[str]:
+    """Aligné sur le client public-card (lettres, chiffres, tirets, underscores, max 64)."""
+    if raw is None:
+        return None
+    s = "".join(ch for ch in str(raw).strip().lower() if ch.isalnum() or ch in "-_")[:64]
+    return s or None
+
+
+def _recommend_arrival_attribution(
+    db: Session, token: Optional[str], card_slug: str
+) -> Optional[str]:
+    """
+    Libellé affichable pour une arrivée via ?r= (données déjà stockées lors du recommend_link_created).
+    Aucun nom inventé : null si jeton inconnu ou identité non humaine (ex. rec_* sans nom).
+    """
+    t = _sanitize_public_referrer_token(token)
+    slug = (card_slug or "").strip()
+    if not t or not slug:
+        return None
+    ev = _latest_recommender_row_for_token(db, t, slug)
+    if not ev:
+        return None
+    reco_first = ev.recommender_first_name
+    reco_last = ev.recommender_last_name
+    stored = (ev.recommender_display_name or "").strip()
+    reco_display = stored or build_recommender_display_name(reco_first, reco_last)
+    label = effective_recommender_label(reco_display, t)
+    if not label or label.strip() == "—":
+        return None
+    return label.strip()
+
+
 def _card_url(card: Card) -> str:
     return f"https://maavnica-smartcard-v2.onrender.com/c/{card.slug}"
 
@@ -280,6 +312,7 @@ def get_public_card(
     slug: str,
     request: Request,
     o: Optional[str] = Query(None),
+    r: Optional[str] = Query(None, description="Jeton ?r= pour libellé d’arrivée relationnelle (optionnel)"),
     db: Session = Depends(get_db),
 ):
     card = get_card_by_slug_or_404(slug, db)
@@ -289,12 +322,18 @@ def get_public_card(
             detail="Cette carte n’est actuellement plus active.",
         )
     _ensure_owner_share_key(db, card)
-    return _serialize_card_public(
+    base = _serialize_card_public(
         card,
         request,
         owner_query_key=o,
         recommendation_share_count=_count_recommend_link_created(db, card.slug),
     )
+    arrival = _recommend_arrival_attribution(db, r, card.slug)
+    if arrival is None:
+        return base
+    data = base.model_dump()
+    data["recommend_arrival_attribution"] = arrival
+    return CardPublic(**data)
 
 
 @router.get("/cards/{slug}/vcard")

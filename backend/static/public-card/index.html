@@ -291,7 +291,7 @@
       max-width: 100%;
     }
 
-    /* Social proof discret — uniquement si ?src=recommend (affichage géré en JS) */
+    /* Bandeau d’arrivée relationnelle — si ?src=recommend et/ou ?r=… (affichage géré en JS) */
     .hero-recommend-trust {
       display: none;
       align-items: center;
@@ -2443,7 +2443,7 @@
               id="hero-recommend-conversion"
               aria-hidden="true"
             >
-              Chaque partage renforce la confiance autour de ce professionnel.
+              Les recommandations personnelles nourrissent la confiance autour de ce professionnel.
             </div>
             <div class="hero-reassurance" id="hero-reassurance">
               ⭐ Plus d’avis Google. Plus de clients.
@@ -3283,6 +3283,46 @@
       }
     }
 
+    function hideRecommendTrustBanner() {
+      var trustBanner = document.getElementById("hero-recommend-trust");
+      if (!trustBanner) return;
+      trustBanner.setAttribute("hidden", "");
+      trustBanner.classList.remove("is-visible");
+      trustBanner.setAttribute("aria-hidden", "true");
+    }
+
+    /**
+     * Continuité relationnelle : même bandeau discret pour ?src=recommend et pour ?r=.
+     * @param {string|null|undefined} arrivalAttributionFromApi — prénom/nom connus (GET /cards/... ?r=), sinon affinage URL seule.
+     */
+    function syncRecommendTrustBanner(arrivalAttributionFromApi) {
+      var trustBanner = document.getElementById("hero-recommend-trust");
+      if (!trustBanner) return;
+      var fromSrc = isRecommendSourceParam();
+      var rid = getRecommendationReferrerIdFromUrl();
+      var fromR = !!(rid && String(rid).trim());
+      if (!fromSrc && !fromR) {
+        hideRecommendTrustBanner();
+        return;
+      }
+      trustBanner.removeAttribute("hidden");
+      trustBanner.classList.add("is-visible");
+      trustBanner.setAttribute("aria-hidden", "false");
+      var attr =
+        arrivalAttributionFromApi != null && arrivalAttributionFromApi !== undefined
+          ? String(arrivalAttributionFromApi).trim()
+          : "";
+      if (attr) {
+        var short = attr.length > 44 ? attr.slice(0, 41).trim() + "…" : attr;
+        trustBanner.textContent = "👍 " + short + " vous transmet cette carte.";
+      } else if (fromR) {
+        trustBanner.textContent =
+          "👍 Vous arrivez ici suite à une recommandation personnelle.";
+      } else {
+        trustBanner.textContent = "👍 Ce professionnel vous a été recommandé";
+      }
+    }
+
     function postAnalytics(url, body) {
       try {
         const json = JSON.stringify(body);
@@ -3746,14 +3786,21 @@
         document.body.classList.remove("owner-share-tools");
       }
 
+      const referrerIdFromUrl = getRecommendationReferrerIdFromUrl();
+      syncRecommendTrustBanner(null);
+
       try {
         var apiUrl = "/api/public/cards/" + encodeURIComponent(slug);
         var ownerKeyParam = getOwnerShareKeyFromUrl();
-        if (ownerKeyParam) {
-          apiUrl += "?o=" + encodeURIComponent(ownerKeyParam);
+        var queryParts = [];
+        if (ownerKeyParam) queryParts.push("o=" + encodeURIComponent(ownerKeyParam));
+        if (referrerIdFromUrl) queryParts.push("r=" + encodeURIComponent(referrerIdFromUrl));
+        if (queryParts.length) {
+          apiUrl += "?" + queryParts.join("&");
         }
         const res = await fetch(apiUrl);
         if (!res.ok) {
+          hideRecommendTrustBanner();
           let errorDetail = "Carte introuvable";
           try {
             const errorData = await res.json();
@@ -3786,23 +3833,15 @@
           btnShareMainEarly.textContent = "📲 Envoyer ma carte";
         }
         const cardId = card.id;
-        const referrerIdFromUrl = getRecommendationReferrerIdFromUrl();
         const recommendationVisitorId = referrerIdFromUrl
           ? getOrCreateRecommendationVisitorId()
           : null;
 
-        const trustBanner = document.getElementById("hero-recommend-trust");
-        if (trustBanner) {
-          if (isRecommendSourceParam()) {
-            trustBanner.removeAttribute("hidden");
-            trustBanner.classList.add("is-visible");
-            trustBanner.setAttribute("aria-hidden", "false");
-          } else {
-            trustBanner.setAttribute("hidden", "");
-            trustBanner.classList.remove("is-visible");
-            trustBanner.setAttribute("aria-hidden", "true");
-          }
-        }
+        syncRecommendTrustBanner(
+          card.recommend_arrival_attribution != null
+            ? card.recommend_arrival_attribution
+            : null
+        );
 
         trackCardVisit(slug);
 
@@ -4010,8 +4049,9 @@
           if (recommendShareCount >= 1) {
             heroRecommendCountEl.textContent =
               recommendShareCount === 1
-                ? "1 recommandation enregistrée 👍"
-                : recommendShareCount + " recommandations enregistrées 👍";
+                ? "Une recommandation personnelle a déjà été partagée 👍"
+                : recommendShareCount +
+                  " recommandations personnelles ont déjà été partagées 👍";
             heroRecommendCountEl.hidden = false;
             heroRecommendCountEl.setAttribute("aria-hidden", "false");
             if (heroRecommendConversionEl) {
@@ -4811,6 +4851,7 @@
 
         revealCardShell();
       } catch (e) {
+        hideRecommendTrustBanner();
         console.error(e);
         showToast("Erreur lors du chargement de la carte.", true);
         revealCardShell();
