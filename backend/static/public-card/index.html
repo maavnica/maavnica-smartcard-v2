@@ -4627,11 +4627,32 @@
 
         updateQrCode(slug);
 
-        async function copyPublicUrlToClipboard(url) {
+        /** Délai minimal avant navigation externe (SMS / mailto) pour laisser apparaître le toast. */
+        var EXTERNAL_HANDOFF_MS = 90;
+
+        function showToastThenHref(message, href) {
+          showToast(message);
+          window.setTimeout(function () {
+            window.location.href = href;
+          }, EXTERNAL_HANDOFF_MS);
+        }
+
+        /**
+         * @param {string} url
+         * @param {"card"|"recommend"} [linkKind] — « recommend » : micro-copy relationnelle post-reco.
+         */
+        async function copyPublicUrlToClipboard(url, linkKind) {
+          var kind = linkKind === "recommend" ? "recommend" : "card";
           try {
             if (navigator.clipboard && navigator.clipboard.writeText) {
               await navigator.clipboard.writeText(url);
-              showToast("Lien copié dans le presse-papier.");
+              if (kind === "recommend") {
+                showToast(
+                  "Merci — vous pouvez coller ce lien pour transmettre votre recommandation."
+                );
+              } else {
+                showToast("Lien de la carte copié.");
+              }
             } else {
               window.prompt("Copiez ce lien :", url);
             }
@@ -4667,13 +4688,14 @@
               try {
                 await navigator.share(sharePayload);
                 trackCardEvent(slug, "share_native_success");
+                showToast("Merci — votre carte accompagne ce partage.");
               } catch (err) {
                 if (err && err.name === "AbortError") return;
-                await copyPublicUrlToClipboard(cardPublicUrl);
+                await copyPublicUrlToClipboard(cardPublicUrl, "card");
                 trackCardEvent(slug, "share_copy_fallback");
               }
             } else {
-              await copyPublicUrlToClipboard(cardPublicUrl);
+              await copyPublicUrlToClipboard(cardPublicUrl, "card");
               trackCardEvent(slug, "share_copy_fallback");
             }
           };
@@ -4684,14 +4706,14 @@
             trackCardEvent(slug, "share_click");
             const body = encodeURIComponent(shareTextWithLink);
             const smsUrl = "sms:?&body=" + body;
-            window.location.href = smsUrl;
+            showToastThenHref("Merci — votre carte est prête dans le message.", smsUrl);
           };
         }
 
         if (btnShareCopy) {
           btnShareCopy.onclick = async () => {
             trackCardEvent(slug, "share_click");
-            await copyPublicUrlToClipboard(cardPublicUrl);
+            await copyPublicUrlToClipboard(cardPublicUrl, "card");
           };
         }
 
@@ -4701,7 +4723,7 @@
             const subject = encodeURIComponent(getOwnerEmailSubject());
             const body = encodeURIComponent(shareTextWithLink);
             const mailto = "mailto:?subject=" + subject + "&body=" + body;
-            window.location.href = mailto;
+            showToastThenHref("Merci — votre carte est prête dans l’e-mail.", mailto);
           };
         }
 
@@ -4743,9 +4765,10 @@
                     profile.firstName,
                     profile.lastName
                   );
+                  showToast("Merci — votre recommandation accompagne ce partage.");
                 } catch (err) {
                   if (err && err.name === "AbortError") return;
-                  await copyPublicUrlToClipboard(recommendShareUrl);
+                  await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
                   trackCardEvent(slug, "recommend_click");
                   trackRecommendationEvent(
                     analyticsSlug,
@@ -4757,7 +4780,7 @@
                   );
                 }
               } else {
-                await copyPublicUrlToClipboard(recommendShareUrl);
+                await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
                 trackCardEvent(slug, "recommend_click");
                 trackRecommendationEvent(
                   analyticsSlug,
@@ -4795,7 +4818,10 @@
                 profile.firstName,
                 profile.lastName
               );
-              window.location.href = "sms:?&body=" + encodeURIComponent(recommendMessage);
+              showToastThenHref(
+                "Merci — votre recommandation est prête dans le message.",
+                "sms:?&body=" + encodeURIComponent(recommendMessage)
+              );
             };
           }
 
@@ -4815,7 +4841,7 @@
                 profile.firstName,
                 profile.lastName
               );
-              await copyPublicUrlToClipboard(recommendShareUrl);
+              await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
             };
           }
 
@@ -4838,7 +4864,10 @@
               );
               const subject = encodeURIComponent(getRecommendEmailSubject());
               const body = encodeURIComponent(recommendMessage);
-              window.location.href = "mailto:?subject=" + subject + "&body=" + body;
+              showToastThenHref(
+                "Merci — votre recommandation est prête dans l’e-mail.",
+                "mailto:?subject=" + subject + "&body=" + body
+              );
             };
           }
         }
