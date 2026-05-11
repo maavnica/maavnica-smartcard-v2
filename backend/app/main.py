@@ -3,14 +3,13 @@
 import logging
 import os
 import re
-import unicodedata
 from html import escape
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -18,6 +17,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 # Routes API
 from app.routers import public, cards
+from app.utils.public_slug import sanitize_public_slug
 from app.routers import analytics as analytics_router
 from app.routers import site_analytics as site_analytics_router
 from app.routers import business as business_router
@@ -211,15 +211,6 @@ def _inject_fr_social_bundle(
     return html
 
 
-def _sanitize_public_slug(raw_slug: str) -> str:
-    """Nettoie un slug public pour éviter les caractères parasites de partage social."""
-    slug = (raw_slug or "").strip().strip("\"'")
-    slug = "".join(
-        ch for ch in slug if not ch.isspace() and not unicodedata.category(ch).startswith("C")
-    )
-    return re.sub(r"[^A-Za-z0-9-]+", "", slug)
-
-
 @app.on_event("startup")
 def _create_db_tables():
     """Crée les tables manquantes (ex. analytics) sans migration lourde."""
@@ -366,7 +357,7 @@ async def serve_public_card(request: Request, slug: str):
     path_fr = STATIC_DIR / "public-card" / "index.html"
     path_latam = STATIC_DIR / "public-card" / "index_latam.html"
     file_path = path_fr
-    slug_norm = _sanitize_public_slug(slug)
+    slug_norm = sanitize_public_slug(slug)
     card_region_log = "n/a"
     template_log = "fr"
     seo_fr: Optional[Dict[str, Any]] = None
@@ -379,6 +370,12 @@ async def serve_public_card(request: Request, slug: str):
             .filter(func.lower(Card.slug) == slug_norm.lower())
             .first()
         )
+        if slug_norm and card is not None and slug != slug_norm:
+            target = f"/c/{slug_norm}"
+            q = request.url.query
+            if q:
+                target = f"{target}?{q}"
+            return RedirectResponse(url=target, status_code=301)
         if card:
             card_region_log = (getattr(card, "region", None) or "fr").strip().lower()
             if card_region_log == "latam":

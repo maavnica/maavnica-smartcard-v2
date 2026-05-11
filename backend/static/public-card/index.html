@@ -3843,7 +3843,7 @@
             : null
         );
 
-        trackCardVisit(slug);
+        trackCardVisit(analyticsSlug);
 
         if (shouldTrackAnalytics() && referrerIdFromUrl) {
           trackRecommendationEvent(
@@ -3860,7 +3860,7 @@
           isRecommendSourceParam()
         ) {
           visitFromRecommendationEventDone = true;
-          trackCardEvent(slug, "visit_from_recommendation");
+          trackCardEvent(analyticsSlug, "visit_from_recommendation");
         }
 
         const rawProfile = (card.profile || "").toLowerCase();
@@ -3903,8 +3903,8 @@
         }
 
         applyPublicShellCopy(isDemoCard, companyName, primaryName);
-        updateFrenchCardSeo(card, slug, primaryName);
-        updateFrenchCardOgImage(card, slug);
+        updateFrenchCardSeo(card, analyticsSlug, primaryName);
+        updateFrenchCardOgImage(card, analyticsSlug);
 
         function runAvatarBlock(card) {
           const avatarImg = document.getElementById("hero-avatar-img");
@@ -4176,7 +4176,7 @@
           if (card.google_review_link) {
             btnGoogle.disabled = false;
             btnGoogle.onclick = () => {
-              trackCardEvent(slug, "google_review_click");
+              trackCardEvent(analyticsSlug, "google_review_click");
               window.open(card.google_review_link, "_blank", "noopener");
             };
           } else {
@@ -4211,7 +4211,7 @@
                 a.rel = "noopener";
                 a.textContent = text;
                 a.addEventListener("click", function () {
-                  trackCardEvent(slug, "google_review_click");
+                  trackCardEvent(analyticsSlug, "google_review_click");
                 });
                 googleBadgeEl.appendChild(a);
               } else {
@@ -4225,7 +4225,7 @@
           });
         })();
 
-        const cardPublicUrl = getPublicCardUrl(slug);
+        const cardPublicUrl = getPublicCardUrl(analyticsSlug);
         const cityShare = (
           (card.city != null && String(card.city).trim()) ||
           (card.service_city != null && String(card.service_city).trim()) ||
@@ -4354,7 +4354,7 @@
           if (waNumber) {
             btnWhats.disabled = false;
             btnWhats.onclick = () => {
-              trackCardEvent(slug, "whatsapp_click");
+              trackCardEvent(analyticsSlug, "whatsapp_click");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
                   analyticsSlug,
@@ -4396,7 +4396,7 @@
           if (card.phone) {
             btnCall.disabled = false;
             btnCall.onclick = () => {
-              trackCardEvent(slug, "phone_click");
+              trackCardEvent(analyticsSlug, "phone_click");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
                   analyticsSlug,
@@ -4426,7 +4426,7 @@
 
         const btnAddContact = document.getElementById("btn-add-contact");
         if (btnAddContact) {
-          btnAddContact.href = "/api/public/cards/" + encodeURIComponent(slug) + "/vcard";
+          btnAddContact.href = "/api/public/cards/" + encodeURIComponent(analyticsSlug) + "/vcard";
         }
 
         const btnFeedback = document.getElementById("btn-send-feedback");
@@ -4605,7 +4605,7 @@
               }
 
               showToast(CURRENT_PROFILE_CONFIG.quoteToast || "Demande envoyée !");
-              trackCardEvent(slug, "rdv_request");
+              trackCardEvent(analyticsSlug, "rdv_request");
               if (referrerIdFromUrl) {
                 trackRecommendationEvent(
                   analyticsSlug,
@@ -4625,7 +4625,7 @@
           };
         }
 
-        updateQrCode(slug);
+        updateQrCode(analyticsSlug);
 
         /** Délai minimal avant navigation externe (SMS / mailto) pour laisser apparaître le toast. */
         var EXTERNAL_HANDOFF_MS = 90;
@@ -4666,7 +4666,7 @@
         const btnShareCopy = document.getElementById("btn-share-copy");
         const btnShareEmail = document.getElementById("btn-share-email");
 
-        const referrerStorageKey = "smartcard_recommend_referrer_" + slug;
+        const referrerStorageKey = "smartcard_recommend_referrer_" + analyticsSlug;
         async function ensureReferrerProfileForCard() {
           return await ensureReferrerProfileForRecommendationLink(referrerStorageKey);
         }
@@ -4677,33 +4677,33 @@
 
         if (btnShareMain) {
           btnShareMain.onclick = async function () {
-            trackCardEvent(slug, "share_click");
+            trackCardEvent(analyticsSlug, "share_click");
             const sharePayload = {
               title: shareCardTitle,
               text: shareTextNative,
               url: cardPublicUrl
             };
             if (typeof navigator.share === "function") {
-              trackCardEvent(slug, "share_native_opened");
+              trackCardEvent(analyticsSlug, "share_native_opened");
               try {
                 await navigator.share(sharePayload);
-                trackCardEvent(slug, "share_native_success");
+                trackCardEvent(analyticsSlug, "share_native_success");
                 showToast("Merci — votre carte accompagne ce partage.");
               } catch (err) {
                 if (err && err.name === "AbortError") return;
                 await copyPublicUrlToClipboard(cardPublicUrl, "card");
-                trackCardEvent(slug, "share_copy_fallback");
+                trackCardEvent(analyticsSlug, "share_copy_fallback");
               }
             } else {
               await copyPublicUrlToClipboard(cardPublicUrl, "card");
-              trackCardEvent(slug, "share_copy_fallback");
+              trackCardEvent(analyticsSlug, "share_copy_fallback");
             }
           };
         }
 
         if (btnShareSms) {
           btnShareSms.onclick = () => {
-            trackCardEvent(slug, "share_click");
+            trackCardEvent(analyticsSlug, "share_click");
             const body = encodeURIComponent(shareTextWithLink);
             const smsUrl = "sms:?&body=" + body;
             showToastThenHref("Merci — votre carte est prête dans le message.", smsUrl);
@@ -4712,14 +4712,14 @@
 
         if (btnShareCopy) {
           btnShareCopy.onclick = async () => {
-            trackCardEvent(slug, "share_click");
+            trackCardEvent(analyticsSlug, "share_click");
             await copyPublicUrlToClipboard(cardPublicUrl, "card");
           };
         }
 
         if (btnShareEmail) {
           btnShareEmail.onclick = () => {
-            trackCardEvent(slug, "share_click");
+            trackCardEvent(analyticsSlug, "share_click");
             const subject = encodeURIComponent(getOwnerEmailSubject());
             const body = encodeURIComponent(shareTextWithLink);
             const mailto = "mailto:?subject=" + subject + "&body=" + body;
@@ -4747,7 +4747,7 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
               const sharePayload = {
                 title: getRecommendShareTitle(),
                 text: getRecommendShareTextNative(),
@@ -4756,7 +4756,7 @@
               if (typeof navigator.share === "function") {
                 try {
                   await navigator.share(sharePayload);
-                  trackCardEvent(slug, "recommend_click");
+                  trackCardEvent(analyticsSlug, "recommend_click");
                   trackRecommendationEvent(
                     analyticsSlug,
                     "recommend_link_created",
@@ -4769,7 +4769,7 @@
                 } catch (err) {
                   if (err && err.name === "AbortError") return;
                   await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
-                  trackCardEvent(slug, "recommend_click");
+                  trackCardEvent(analyticsSlug, "recommend_click");
                   trackRecommendationEvent(
                     analyticsSlug,
                     "recommend_link_created",
@@ -4781,7 +4781,7 @@
                 }
               } else {
                 await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
-                trackCardEvent(slug, "recommend_click");
+                trackCardEvent(analyticsSlug, "recommend_click");
                 trackRecommendationEvent(
                   analyticsSlug,
                   "recommend_link_created",
@@ -4807,9 +4807,9 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage = getRecommendShareTextWithLink(recommendShareUrl);
-              trackCardEvent(slug, "recommend_share_sms");
+              trackCardEvent(analyticsSlug, "recommend_share_sms");
               trackRecommendationEvent(
                 analyticsSlug,
                 "recommend_link_created",
@@ -4831,8 +4831,8 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
-              trackCardEvent(slug, "recommend_share_copy");
+                getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
+              trackCardEvent(analyticsSlug, "recommend_share_copy");
               trackRecommendationEvent(
                 analyticsSlug,
                 "recommend_link_created",
@@ -4851,9 +4851,9 @@
               if (!profile) return;
               const referrerId = profile.referrerId;
               const recommendShareUrl =
-                getPublicCardUrl(slug) + "?r=" + encodeURIComponent(referrerId);
+                getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
               const recommendMessage = getRecommendShareTextWithLink(recommendShareUrl);
-              trackCardEvent(slug, "recommend_share_email");
+              trackCardEvent(analyticsSlug, "recommend_share_email");
               trackRecommendationEvent(
                 analyticsSlug,
                 "recommend_link_created",

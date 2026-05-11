@@ -1,0 +1,51 @@
+warning: in the working copy of 'backend/static/public-card/index.html', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/backend/static/public-card/index.html b/backend/static/public-card/index.html[m
+[1mindex fc258a3..f4b31c6 100644[m
+[1m--- a/backend/static/public-card/index.html[m
+[1m+++ b/backend/static/public-card/index.html[m
+[36m@@ -1649,6 +1649,15 @@[m
+      * Le filtrage isInternalView s’applique à partir du déploiement du patch (aucune purge auto côté client).[m
+      */[m
+     const INTERNAL_CARDS_LS_KEY = "maavnica_internal_cards";[m
+[32m+[m[32m    const INTERNAL_MODE_LS_KEY = "maavnica_internal_mode";[m
+[32m+[m
+[32m+[m[32m    function deviceInternalModeActive() {[m
+[32m+[m[32m      try {[m
+[32m+[m[32m        return localStorage.getItem(INTERNAL_MODE_LS_KEY) === "1";[m
+[32m+[m[32m      } catch (e) {[m
+[32m+[m[32m        return false;[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+ [m
+     function getSlugFromPath() {[m
+       const parts = window.location.pathname.split("/").filter(Boolean);[m
+[36m@@ -1723,7 +1732,10 @@[m
+ [m
+     function refreshIsInternalView(slug) {[m
+       migrateLegacyAdminViewFlag(slug);[m
+[31m-      isInternalView = !!(slug && (urlHasAdminViewFlag() || isSlugMarkedInternal(slug)));[m
+[32m+[m[32m      isInternalView =[m
+[32m+[m[32m        deviceInternalModeActive() ||[m
+[32m+[m[32m        urlHasAdminViewFlag() ||[m
+[32m+[m[32m        !!(slug && isSlugMarkedInternal(slug));[m
+       const badge = document.getElementById("admin-preview-badge");[m
+       if (badge) {[m
+         badge.hidden = !isInternalView;[m
+[36m@@ -1737,11 +1749,13 @@[m
+     function syncInternalViewFromUrl(slug) {[m
+       try {[m
+         const p = new URLSearchParams(window.location.search || "");[m
+[31m-        if (p.get("admin_view") === "1" && slug) {[m
+[31m-          markSlugAsInternal(slug);[m
+[32m+[m[32m        if (p.get("admin_view") === "1") {[m
+[32m+[m[32m          if (slug) markSlugAsInternal(slug);[m
+[32m+[m[32m          localStorage.setItem(INTERNAL_MODE_LS_KEY, "1");[m
+         }[m
+[31m-        if (p.get("admin_view") === "0" && slug) {[m
+[31m-          unmarkSlugInternal(slug);[m
+[32m+[m[32m        if (p.get("admin_view") === "0") {[m
+[32m+[m[32m          if (slug) unmarkSlugInternal(slug);[m
+[32m+[m[32m          localStorage.removeItem(INTERNAL_MODE_LS_KEY);[m
+         }[m
+       } catch (e) {}[m
+     }[m

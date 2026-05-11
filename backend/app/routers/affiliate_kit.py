@@ -24,6 +24,7 @@ def _affiliate_links(ref: str) -> dict[str, str]:
     return {
         "demo": f"{BASE_URL}/c/demo?ref={ref}",
         "demo2": f"{BASE_URL}/c/demo2?ref={ref}",
+        "demo3": f"{BASE_URL}/c/demo3?ref={ref}",
         "main": f"{BASE_URL}/?ref={ref}",
         "solo": f"{BASE_URL}/static/contact-smartcard.html?offre=solo&ref={ref}",
         "business": f"{BASE_URL}/static/contact-smartcard.html?offre=business&ref={ref}",
@@ -35,31 +36,90 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
     lm = links["main"]
     ld = links["demo"]
     ld2 = links["demo2"]
-    activation_ready = (
-        "Je travaille avec une solution qui aide les professionnels à recevoir des demandes clients, "
-        "obtenir des avis Google et partager leurs coordonnées facilement.\n\n"
-        "Voici deux exemples :\n\n"
-        f"Artisan / professionnel local\n{ld}\n\n"
-        f"Bien-être / coach / thérapeute\n{ld2}\n\n"
-        "Dis-moi simplement lequel te parle le plus 🙂"
+    ld3 = links["demo3"]
+    msg_short = (
+        "Je teste un outil qui transforme les clients satisfaits en recommandations.\n\n"
+        "En clair, ca devient un generateur de business.\n\n"
+        "Regarde la demo :\n"
+        f"{ld}"
     )
-    wa = (
+    msg_raw = (
+        "je teste un truc\n\n"
+        "ca recupere les recommandations clients\n\n"
+        "regarde 30 sec :\n"
+        f"{ld}"
+    )
+    msg_raw_curiosity = (
+        "regarde juste ca\n\n"
+        "tu vas comprendre direct\n\n"
+        f"{ld}"
+    )
+    msg_long = (
+        "Salut,\n\n"
+        "Je te partage SmartCard, un outil simple pour les pros.\n\n"
+        "Solo sert a recevoir des contacts, des avis Google et des demandes entrantes.\n"
+        "Business ajoute la recommandation client visible et tracable.\n\n"
+        "La recommandation devient un generateur de business.\n\n"
+        "Regarde la demo qui te correspond :\n"
+        f"- Artisan / service local : {ld}\n"
+        f"- Bien-etre / accompagnement : {ld2}\n"
+        f"- Immobilier / mise en relation : {ld3}"
+    )
+    linkedin = (
+        "Je teste SmartCard avec des professionnels de terrain.\n\n"
+        "L'idee est simple : transformer les clients satisfaits en recommandations visibles et tracables.\n"
+        "La recommandation devient un generateur de business.\n\n"
+        "Demo :\n"
+        f"{ld3}"
+    )
+    facebook = (
+        "Nouveau : SmartCard pour les pros locaux.\n"
+        "Solo pour contact + avis + demandes.\n"
+        "Business pour recommander plus facilement autour de soi.\n\n"
+        "La recommandation devient un generateur de business.\n\n"
+        f"Demo : {ld}"
+    )
+    email = (
+        "Objet : Un outil simple pour generer plus de recommandations\n\n"
         "Bonjour,\n\n"
-        "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
-        "Elle permet notamment de :\n"
-        "- recevoir des demandes\n"
-        "- obtenir plus d’avis Google\n"
-        "- partager facilement ses coordonnées\n\n"
-        f"Voici la démo :\n{ld}"
+        "Je vous recommande SmartCard, un outil qui transforme les clients satisfaits en recommandations visibles et tracables.\n"
+        "En clair, la recommandation devient un generateur de business.\n\n"
+        "Solo : contact + avis Google + demandes entrantes.\n"
+        "Business : recommandation client + bouche-a-oreille digitalise.\n\n"
+        f"Demo : {ld}\n"
     )
-    sms = f"Regarde cet exemple de SmartCard pour professionnels :\n{ld}"
     lines = [
         f"Bonjour {display},",
         "",
         "Bienvenue dans le programme d’affiliation Maavnica SmartCard.",
         f"Votre référence affilié : {ref}",
         "",
-        "— Profils à qui proposer SmartCard —",
+        "💡 Tu connais des pros ?",
+        "Ils ont deja des clients satisfaits...",
+        "👉 mais ils ne les exploitent pas",
+        "👉 ils perdent du business sans le savoir",
+        "👉 montre-leur ca",
+        "",
+        "⚡ Mode rapide",
+        "1. prends une demo",
+        "2. copie un message",
+        "3. envoie a 3 personnes",
+        "👉 ca prend 2 minutes",
+        "",
+        "SmartCard aide les professionnels a transformer leurs clients satisfaits en recommandations visibles et tracables.",
+        "La recommandation devient un generateur de business.",
+        "",
+        "👉 Aujourd'hui, la plupart des recommandations se perdent.",
+        "SmartCard permet de les capter et de les transformer en contacts.",
+        "Aujourd'hui, des clients recommandent... sans que le professionnel le sache.",
+        "👉 des opportunites sont perdues sans etre visibles.",
+        "",
+        "— Resume simple —",
+        "SmartCard Solo = contact + avis Google + demandes entrantes.",
+        "SmartCard Business = recommandation client + bouche-a-oreille digitalise + recommandations tracables.",
+        "Multi-cartes / equipes / agences / plusieurs etablissements = uniquement sur devis.",
+        "",
+        "— Profils a qui proposer SmartCard —",
         "Profils qui utilisent le plus SmartCard :",
         "- artisans",
         "- restaurateurs",
@@ -70,62 +130,94 @@ def _build_kit_plain(first: str, last: str, ref: str, links: dict[str, str]) -> 
         "- coachs",
         "- consultants",
         "",
-        "— Pourquoi SmartCard est utile —",
-        "SmartCard permet aux professionnels de :",
-        "- obtenir plus d’avis Google",
-        "- gagner en crédibilité",
-        "- recevoir plus de demandes clients",
-        "- partager facilement leurs coordonnées via QR code",
+        "— Quelle demo envoyer ? —",
+        f"Demo 1 / Artisan / service local / intervention : {ld}",
+        "👉 regarde cette demo",
+        f"Demo 2 / Bien-etre / accompagnement / relation de confiance : {ld2}",
+        "👉 regarde cette demo",
+        f"Demo 3 / Agent immobilier / recommandation locale / mise en relation : {ld3}",
+        "👉 regarde cette demo",
+        "👉 En immobilier, une recommandation peut devenir un mandat.",
+        "👉 C'est un levier direct de business.",
         "",
-        "— Conseil —",
-        "Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.",
+        "— Premiere mission (5 minutes) —",
+        "🚀 Premiere mission (5 minutes)",
         "",
-        "— Exemples de SmartCard à montrer —",
-        f"Artisan / professionnel local : {ld}",
-        f"Bien-être / coach / thérapeute : {ld2}",
+        "1. Choisis 1 professionnel",
+        "2. Choisis la bonne demo",
+        "3. Copie un message",
+        "4. Envoie a 3 personnes",
         "",
-        "— Première mission (5 minutes) —",
-        "🎯 Première mission (5 minutes)",
+        "Objectif : montrer que ses clients peuvent devenir un generateur de business.",
+        "🎯 Resultat attendu :",
+        "au moins 1 personne interessee",
         "",
-        "Pour commencer simplement, partage SmartCard à 3 professionnels autour de toi :",
+        "— Mini scenario reel —",
+        "Tu connais un artisan ?",
+        "→ tu envoies la demo",
+        "→ il comprend en 30 sec",
+        "→ il teste",
+        "→ il peut devenir client",
+        "👉 c'est comme ca que tu declenches une vente",
         "",
-        "* un artisan",
-        "* un commerce local",
-        "* un professionnel du bien-être",
+        "— Permission d'envoi —",
+        "👉 tu n'as rien a vendre",
+        "👉 tu montres juste la demo",
+        "👉 meme si tu n'es pas commercial",
+        "👉 l'objectif est juste de faire decouvrir",
         "",
-        "Tu n’as pas besoin de vendre tout de suite :",
-        "le plus simple est de demander un avis sur les exemples.",
+        "— Commissions (regle claire) —",
+        "Une vente SmartCard Solo validee = 20 EUR",
+        "Une vente SmartCard Business validee = 35 EUR",
+        "Commission uniquement lors de la premiere souscription validee.",
+        "Aucun revenu automatique.",
         "",
-        "Message prêt à envoyer :",
-        "",
-        activation_ready,
-        "",
-        "— Motivation —",
-        "Une vente SmartCard Solo = 20€ pour vous",
-        "Une vente SmartCard Business = 35€ pour vous",
-        "",
-        "— Vos liens personnels (à utiliser tels quels) —",
+        "— Vos liens personnels (a utiliser tels quels) —",
         f"Lien principal (accueil + tracking) : {lm}",
         f"Lien offre Solo : {links['solo']}",
         f"Lien offre Business : {links['business']}",
         "",
-        "À retenir :",
-        "• Démos exemples (artisan ou bien-être) — pour présenter",
-        "• Lien Solo — pour commander l’offre Solo",
-        "• Lien Business — pour commander l’offre Business",
+        "A retenir :",
+        "• Utiliser la demo adaptee avant de parler commande",
+        "• Lien Solo pour l'offre Solo",
+        "• Lien Business pour l'offre Business",
         "",
-        "— Rémunération (rappel) —",
-        "20 € par SmartCard Solo vendue (39 € HT / an).",
-        "35 € par offre Business vendue (99 € HT / an, jusqu’à 5 cartes).",
-        "Les commissions s’appliquent sur les ventes validées, selon les modalités en vigueur.",
+        "— Messages prets a envoyer —",
+        "WhatsApp brut :",
+        msg_raw,
         "",
-        "— Message WhatsApp (à copier-coller) —",
-        wa,
+        "Variante curiosite :",
+        msg_raw_curiosity,
         "",
-        "— SMS court (à copier-coller) —",
-        sms,
+        "WhatsApp court :",
+        msg_short,
         "",
-        "Important : utilisez toujours vos liens ci-dessus (la démo en premier si possible) pour que vos recommandations soient rattachées à votre référence.",
+        "WhatsApp detaille :",
+        msg_long,
+        "",
+        "LinkedIn :",
+        linkedin,
+        "",
+        "Facebook :",
+        facebook,
+        "",
+        "Email :",
+        email,
+        "",
+        "— Regles importantes —",
+        "• Commission uniquement sur premiere souscription validee",
+        "• Aucun revenu automatique",
+        "• Presentation honnete et sans promesse exageree",
+        "• Multi-cartes = sur devis",
+        "• Ne pas promettre de resultats",
+        "",
+        "— A ne pas faire —",
+        "❌ ne pas survendre",
+        "❌ ne pas promettre des resultats",
+        "❌ ne pas parler technique",
+        "👉 montre juste la demo, c'est suffisant",
+        "",
+        "Important : utilisez toujours vos liens ci-dessus pour que vos recommandations soient rattachees a votre reference.",
         "",
         "Cordialement,",
         "L’équipe Maavnica",
@@ -139,24 +231,58 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     lm = links["main"]
     ld = links["demo"]
     ld2 = links["demo2"]
-    activation_ready = (
-        "Je travaille avec une solution qui aide les professionnels à recevoir des demandes clients, "
-        "obtenir des avis Google et partager leurs coordonnées facilement.\n\n"
-        "Voici deux exemples :\n\n"
-        f"Artisan / professionnel local\n{ld}\n\n"
-        f"Bien-être / coach / thérapeute\n{ld2}\n\n"
-        "Dis-moi simplement lequel te parle le plus 🙂"
+    ld3 = links["demo3"]
+    wa_short = (
+        "Je teste un outil qui transforme les clients satisfaits en recommandations.\n\n"
+        "En clair, ca devient un generateur de business.\n\n"
+        "Regarde la demo :\n"
+        f"{ld}"
     )
-    wa_plain = (
+    wa_raw = (
+        "je teste un truc\n\n"
+        "ca recupere les recommandations clients\n\n"
+        "regarde 30 sec :\n"
+        f"{ld}"
+    )
+    wa_raw_curiosity = (
+        "regarde juste ca\n\n"
+        "tu vas comprendre direct\n\n"
+        f"{ld}"
+    )
+    wa_long = (
+        "Salut,\n\n"
+        "Je te partage SmartCard, un outil simple pour les pros.\n\n"
+        "Solo sert a recevoir des contacts, des avis Google et des demandes entrantes.\n"
+        "Business ajoute la recommandation client visible et tracable.\n\n"
+        "La recommandation devient un generateur de business.\n\n"
+        "Regarde la demo qui te correspond :\n"
+        f"- Artisan / service local : {ld}\n"
+        f"- Bien-etre / accompagnement : {ld2}\n"
+        f"- Immobilier / mise en relation : {ld3}"
+    )
+    linkedin = (
+        "Je teste SmartCard avec des professionnels de terrain.\n\n"
+        "L'idee est simple : transformer les clients satisfaits en recommandations visibles et tracables.\n"
+        "La recommandation devient un generateur de business.\n\n"
+        "Demo :\n"
+        f"{ld3}"
+    )
+    facebook = (
+        "Nouveau : SmartCard pour les pros locaux.\n"
+        "Solo pour contact + avis + demandes.\n"
+        "Business pour recommander plus facilement autour de soi.\n\n"
+        "La recommandation devient un generateur de business.\n\n"
+        f"Demo : {ld}"
+    )
+    email = (
+        "Objet : Un outil simple pour generer plus de recommandations\n\n"
         "Bonjour,\n\n"
-        "je te partage un exemple concret de SmartCard Maavnica, une carte digitale pensée pour les professionnels.\n\n"
-        "Elle permet notamment de :\n"
-        "- recevoir des demandes\n"
-        "- obtenir plus d’avis Google\n"
-        "- partager facilement ses coordonnées\n\n"
-        f"Voici la démo :\n{ld}"
+        "Je vous recommande SmartCard, un outil qui transforme les clients satisfaits en recommandations visibles et tracables.\n"
+        "En clair, la recommandation devient un generateur de business.\n\n"
+        "Solo : contact + avis Google + demandes entrantes.\n"
+        "Business : recommandation client + bouche-a-oreille digitalise.\n\n"
+        f"Demo : {ld}\n"
     )
-    sms_plain = f"Regarde cet exemple de SmartCard pour professionnels :\n{ld}"
     return f"""\
 <!DOCTYPE html>
 <html lang="fr">
@@ -165,7 +291,26 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
   <p>Bonjour {display},</p>
   <p>Bienvenue dans le programme d’affiliation <strong>Maavnica SmartCard</strong>.</p>
   <p><strong>Référence affilié :</strong> <code>{ref_e}</code></p>
-  <h3 style="font-size:1rem;">Profils à qui proposer SmartCard</h3>
+  <p><strong>💡 Tu connais des pros ?</strong><br/>
+  Ils ont deja des clients satisfaits...<br/>
+  👉 mais ils ne les exploitent pas<br/>
+  👉 ils perdent du business sans le savoir<br/>
+  <strong>👉 montre-leur ca</strong></p>
+  <h3 style="font-size:1rem;">⚡ Mode rapide</h3>
+  <p style="margin:0 0 6px 0;">1. prends une demo<br/>2. copie un message<br/>3. envoie a 3 personnes<br/>👉 ca prend 2 minutes</p>
+  <p><strong>SmartCard aide les professionnels a transformer leurs clients satisfaits en recommandations visibles et tracables.</strong><br/>
+  <strong>La recommandation devient un generateur de business.</strong></p>
+  <p><strong>👉 Aujourd'hui, la plupart des recommandations se perdent.</strong><br/>
+  SmartCard permet de les capter et de les transformer en contacts.</p>
+  <p>Aujourd'hui, des clients recommandent... sans que le professionnel le sache.<br/>
+  <strong>👉 des opportunites sont perdues sans etre visibles.</strong></p>
+  <h3 style="font-size:1rem;">Resume simple</h3>
+  <ul>
+    <li>SmartCard Solo = contact + avis Google + demandes entrantes</li>
+    <li>SmartCard Business = recommandation client + bouche-a-oreille digitalise + recommandations tracables</li>
+    <li>Multi-cartes / equipes / agences / plusieurs etablissements = uniquement sur devis</li>
+  </ul>
+  <h3 style="font-size:1rem;">Profils a qui proposer SmartCard</h3>
   <p style="margin:0 0 6px 0;">Profils qui utilisent le plus SmartCard :</p>
   <ul>
     <li>artisans</li>
@@ -177,51 +322,65 @@ def _build_kit_html(first: str, last: str, ref: str, links: dict[str, str]) -> s
     <li>coachs</li>
     <li>consultants</li>
   </ul>
-  <h3 style="font-size:1rem;">Pourquoi SmartCard est utile</h3>
-  <p style="margin:0 0 6px 0;">SmartCard permet aux professionnels de :</p>
+  <h3 style="font-size:1rem;">Quelle demo envoyer ?</h3>
   <ul>
-    <li>obtenir plus d’avis Google</li>
-    <li>gagner en crédibilité</li>
-    <li>recevoir plus de demandes clients</li>
-    <li>partager facilement leurs coordonnées via QR code</li>
+    <li>Demo 1: Artisan / service local / intervention — <a href="{escape(ld)}">/c/demo</a><br/>👉 regarde cette demo</li>
+    <li>Demo 2: Bien-etre / accompagnement / relation de confiance — <a href="{escape(ld2)}">/c/demo2</a><br/>👉 regarde cette demo</li>
+    <li>Demo 3: Agent immobilier / recommandation locale / mise en relation — <a href="{escape(ld3)}">/c/demo3</a><br/>👉 regarde cette demo</li>
   </ul>
-  <h3 style="font-size:1rem;">Conseil</h3>
-  <p style="font-size:0.92rem;color:#444;margin:0 0 12px 0;">Commencez par partager la carte démo. Elle permet au prospect de voir immédiatement à quoi ressemble une SmartCard en situation réelle.</p>
-  <h3 style="font-size:1rem;">Exemples de SmartCard à montrer</h3>
-  <ul>
-    <li>Artisan / professionnel local — <a href="{escape(ld)}">démo</a></li>
-    <li>Bien-être / coach / thérapeute — <a href="{escape(ld2)}">démo</a></li>
-  </ul>
-  <h3 style="font-size:1rem;">🎯 Première mission (5 minutes)</h3>
-  <p style="font-size:0.92rem;color:#444;margin:0 0 8px 0;">Pour commencer simplement, partage SmartCard à 3 professionnels autour de toi :</p>
-  <ul>
-    <li>un artisan</li>
-    <li>un commerce local</li>
-    <li>un professionnel du bien-être</li>
-  </ul>
-  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;">Tu n’as pas besoin de vendre tout de suite : le plus simple est de demander un avis sur les exemples.</p>
-  <p style="font-size:0.92rem;margin:0 0 6px 0;"><strong>Message prêt à envoyer :</strong></p>
-  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(activation_ready)}</pre>
-  <p style="font-size:0.92rem;color:#444;margin:10px 0 0 0;"><strong>Une vente SmartCard Solo = 20€ pour vous</strong><br/>
-  <strong>Une vente SmartCard Business = 35€ pour vous</strong></p>
+  <p style="font-size:0.92rem;color:#444;margin:0 0 8px 0;"><strong>👉 En immobilier, une recommandation peut devenir un mandat.</strong><br/>
+  👉 C'est un levier direct de business.</p>
+  <h3 style="font-size:1rem;">🚀 Premiere mission (5 minutes)</h3>
+  <ol>
+    <li>Choisir 1 professionnel</li>
+    <li>Choisir la bonne demo</li>
+    <li>Copier un message</li>
+    <li>Envoyer a 3 personnes</li>
+  </ol>
+  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;">Objectif: montrer que ses clients peuvent devenir un generateur de business.</p>
+  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;"><strong>🎯 Resultat attendu :</strong><br/>au moins 1 personne interessee</p>
+  <h3 style="font-size:1rem;">Mini scenario reel</h3>
+  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;">Tu connais un artisan ? → tu envoies la demo → il comprend en 30 sec → il teste → il peut devenir client.<br/>
+  👉 c'est comme ca que tu declenches une vente.</p>
+  <h3 style="font-size:1rem;">Permission d'envoi</h3>
+  <p style="font-size:0.92rem;color:#444;margin:8px 0 8px 0;">👉 tu n'as rien a vendre<br/>
+  👉 tu montres juste la demo<br/>
+  👉 meme si tu n'es pas commercial<br/>
+  👉 l'objectif est juste de faire decouvrir</p>
+  <p style="font-size:0.92rem;color:#444;margin:10px 0 0 0;"><strong>Commission seulement a la premiere souscription validee (20 EUR Solo, 35 EUR Business)</strong><br/>
+  <strong>Aucun revenu automatique.</strong></p>
   <h3 style="font-size:1rem;">Vos liens personnels</h3>
   <ul>
     <li><a href="{escape(lm)}">Lien principal</a> (accueil + tracking)</li>
     <li><a href="{escape(links['solo'])}">Offre Solo</a> — pour commander l’offre Solo</li>
     <li><a href="{escape(links['business'])}">Offre Business</a> — pour commander l’offre Business</li>
   </ul>
-  <p style="font-size:0.88rem;color:#555;margin:8px 0 0 0;"><strong>À retenir :</strong> démos exemples pour présenter · liens Solo / Business lorsque le prospect est prêt à commander.</p>
-  <h3 style="font-size:1rem;">Rémunération</h3>
+  <h3 style="font-size:1rem;">Messages prets a envoyer</h3>
+  <p style="font-size:0.9rem;color:#444;"><strong>WhatsApp brut</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_raw)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>Variante curiosite</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_raw_curiosity)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>WhatsApp court</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_short)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>WhatsApp detaille</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_long)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>LinkedIn</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(linkedin)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>Facebook</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(facebook)}</pre>
+  <p style="font-size:0.9rem;color:#444;"><strong>Email</strong></p>
+  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(email)}</pre>
+  <h3 style="font-size:1rem;">Regles importantes</h3>
   <ul>
-    <li><strong>20 €</strong> par SmartCard Solo vendue (39 € HT / an)</li>
-    <li><strong>35 €</strong> par offre Business vendue (99 € HT / an)</li>
+    <li>Commission uniquement a la premiere souscription validee</li>
+    <li>Aucun revenu automatique</li>
+    <li>Presentation honnete, sans promesse exageree</li>
+    <li>Multi-cartes = sur devis</li>
+    <li>Ne pas promettre de resultats</li>
   </ul>
-  <p style="font-size:0.9rem;color:#444;">Les commissions s’appliquent sur les ventes validées, selon les modalités en vigueur.</p>
-  <h3 style="font-size:1rem;">Message WhatsApp (copier-coller)</h3>
-  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(wa_plain)}</pre>
-  <h3 style="font-size:1rem;">SMS court (copier-coller)</h3>
-  <pre style="background:#f4f4f5;padding:12px;border-radius:8px;white-space:pre-wrap;">{escape(sms_plain)}</pre>
-  <p><strong>Important :</strong> utilisez toujours <em>vos</em> liens ci-dessus (la démo en premier si possible) pour rattacher vos recommandations à votre référence.</p>
+  <h3 style="font-size:1rem;">A ne pas faire</h3>
+  <p style="font-size:0.92rem;color:#444;">❌ ne pas survendre<br/>❌ ne pas promettre des resultats<br/>❌ ne pas parler technique<br/>👉 montre juste la demo, c'est suffisant</p>
+  <p><strong>Important :</strong> utilisez toujours <em>vos</em> liens ci-dessus pour rattacher vos recommandations a votre reference.</p>
   <p>Cordialement,<br/>L’équipe Maavnica</p>
 </body>
 </html>

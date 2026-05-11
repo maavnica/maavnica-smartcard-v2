@@ -19,6 +19,7 @@ from app.routers.cards import (
 from app.utils.emailer import send_email
 from app.utils.rate_limit import rate_limit_by_ip
 from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
+from app.utils.public_slug import sanitize_public_slug
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
@@ -32,7 +33,7 @@ def get_card_by_id_or_404(card_id: int, db: Session) -> Card:
 
 
 def get_card_by_slug_or_404(slug: str, db: Session) -> Card:
-    s = (slug or "").strip()
+    s = sanitize_public_slug(slug)
     card = (
         db.query(Card)
         .filter(func.lower(Card.slug) == s.lower())

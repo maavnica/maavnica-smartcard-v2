@@ -586,7 +586,11 @@
       }
       var card = await res.json();
 
-      var publicUrl = getPublicCardUrl(slug);
+      var canonicalSlug =
+        card.slug != null && String(card.slug).trim()
+          ? String(card.slug).trim()
+          : slug;
+      var publicUrl = getPublicCardUrl(canonicalSlug);
       var fullName = (card.display_name || card.company_name || "SmartCard").trim();
       var job = (card.job_title || "").trim();
       var city = (card.business_name || "").trim();
@@ -681,13 +685,13 @@
       waBtn.onclick = function () {
         var waDigits = whatsAppMeDigits(card.whatsapp || card.phone || "");
         if (!waDigits) return;
-        trackCardEvent(slug, "whatsapp_click");
+        trackCardEvent(canonicalSlug, "whatsapp_click");
         window.location.href = "https://wa.me/" + waDigits;
       };
 
       reviewBtn.onclick = function () {
         if (!card.google_review_link) return;
-        trackCardEvent(slug, "google_review_click");
+        trackCardEvent(canonicalSlug, "google_review_click");
         window.open(card.google_review_link, "_blank", "noopener");
       };
       if (!card.google_review_link) {
@@ -706,13 +710,13 @@
         if (!profile || !profile.referrerId) return;
         var recommendUrl = publicUrl + "?r=" + encodeURIComponent(profile.referrerId);
         var msg = "Hola, te recomiendo este profesional 👍\n" + recommendUrl;
-        trackCardEvent(slug, "recommend_click");
-        trackCardEvent(slug, "recommend_share_whatsapp");
-        trackRecommendationEvent(slug, "recommend_link_created", profile.referrerId);
+        trackCardEvent(canonicalSlug, "recommend_click");
+        trackCardEvent(canonicalSlug, "recommend_share_whatsapp");
+        trackRecommendationEvent(canonicalSlug, "recommend_link_created", profile.referrerId);
         openRecommendationShareUrl("https://wa.me/?text=" + encodeURIComponent(msg));
       };
 
-      trackCardVisit(slug);
+      trackCardVisit(canonicalSlug);
     }
 
     loadCard();

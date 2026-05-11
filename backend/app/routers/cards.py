@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import get_db
 from app.utils.admin_auth import admin_bearer_matches, require_admin_api_key
+from app.utils.public_slug import sanitize_public_slug
 
 router = APIRouter()
 
@@ -314,7 +315,7 @@ def get_card_by_slug(
     db: Session = Depends(get_db),
 ) -> schemas.CardPublic:
 
-    s = (slug or "").strip()
+    s = sanitize_public_slug(slug)
     card = (
         db.query(models.Card)
         .filter(func.lower(models.Card.slug) == s.lower())

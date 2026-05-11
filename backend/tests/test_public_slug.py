@@ -1,0 +1,123 @@
+"""Tests slug public : sanitize, redirect /c/, API /api/public/cards/."""
+
+from __future__ import annotations
+
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+from urllib.parse import quote
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from app.models import Base, Card, User
+from app.utils.public_slug import sanitize_public_slug
+
+
+def _seed_demo2(engine):
+    SessionTest = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    s = SessionTest()
+    u = User(email="slugtest@example.invalid", password_hash="x")
+    s.add(u)
+    s.commit()
+    s.refresh(u)
+    s.add(
+        Card(
+            user_id=u.id,
+            company_name="Co",
+            slug="demo2",
+            plan_type="demo",
+            region="fr",
+        )
+    )
+    s.commit()
+    s.close()
+    return SessionTest
+
+
+def _engine_and_session_with_demo2(tmpdir: str):
+    path = Path(tmpdir) / "slug_test.db"
+    engine = create_engine(f"sqlite:///{path}")
+    Base.metadata.create_all(bind=engine)
+    SessionTest = _seed_demo2(engine)
+    return engine, SessionTest
+
+
+class SanitizePublicSlugTests(unittest.TestCase):
+    def test_demo2_unchanged(self):
+        self.assertEqual(sanitize_public_slug("demo2"), "demo2")
+
+    def test_demo2_trailing_quote_removed(self):
+        self.assertEqual(sanitize_public_slug('demo2"'), "demo2")
+
+    def test_demo2_invisible_unicode_removed(self):
+        self.assertEqual(sanitize_public_slug("demo2" + "\u2060" + "\ufffd"), "demo2")
+
+    def test_demo2_percent_encoded_string(self):
+        self.assertEqual(sanitize_public_slug("demo2%E2%81%A0%EF%BF%BD"), "demo2")
+
+    def test_latam_slug_kept(self):
+        self.assertEqual(sanitize_public_slug("demo-latam-plomero"), "demo-latam-plomero")
+
+    def test_arnaud_slug_kept(self):
+        self.assertEqual(sanitize_public_slug("arnaud-huard"), "arnaud-huard")
+
+    def test_demo_demo3(self):
+        self.assertEqual(sanitize_public_slug("demo"), "demo")
+        self.assertEqual(sanitize_public_slug("demo3"), "demo3")
+
+    def test_none_empty(self):
+        self.assertEqual(sanitize_public_slug(None), "")
+        self.assertEqual(sanitize_public_slug(""), "")
+
+
+class PublicSlugHttpTests(unittest.TestCase):
+    def setUp(self):
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self._engine, self.SessionTest = _engine_and_session_with_demo2(self._tmpdir.name)
+        self._patcher = patch("app.database.SessionLocal", self.SessionTest)
+        self._patcher.start()
+
+    def tearDown(self):
+        self._patcher.stop()
+        self._engine.dispose()
+        self._tmpdir.cleanup()
+
+    def test_redirect_dirty_slug_preserves_query(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        dirty_path = "/c/" + quote("demo2" + "\u2060" + "\ufffd", safe="")
+        client = TestClient(app)
+        r = client.get(dirty_path + "?fbclid=abc&r=rec_123", follow_redirects=False)
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/c/demo2?fbclid=abc&r=rec_123")
+
+    def test_clean_slug_no_redirect(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+
+    def test_api_public_cards_dirty_slug(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        seg = quote("demo2" + "\u2060" + "\ufffd", safe="")
+        client = TestClient(app)
+        r_clean = client.get("/api/public/cards/demo2")
+        r_dirty = client.get(f"/api/public/cards/{seg}")
+        self.assertEqual(r_clean.status_code, 200)
+        self.assertEqual(r_dirty.status_code, 200)
+        self.assertEqual(r_clean.json().get("slug"), "demo2")
+        self.assertEqual(r_dirty.json().get("slug"), "demo2")
+
+
+if __name__ == "__main__":
+    unittest.main()
