@@ -29,6 +29,7 @@ def _seed_demo2(engine):
             slug="demo2",
             plan_type="demo",
             region="fr",
+            avatar_url="https://res.cloudinary.com/test/demo2-avatar.png",
         )
     )
     s.commit()
@@ -72,6 +73,39 @@ class SanitizePublicSlugTests(unittest.TestCase):
         self.assertEqual(sanitize_public_slug(""), "")
 
 
+class FrPublicOgImageUrlTests(unittest.TestCase):
+    """Règles og:image serveur (_fr_public_og_image_url) — demo2 marketing, arnaud-huard dédié."""
+
+    base = "https://smartcard.maavnica.com"
+
+    def test_demo2_uses_og_default_not_avatar(self):
+        from app.main import _fr_public_og_image_url
+
+        class CardWithAvatar:
+            avatar_url = "https://res.cloudinary.com/x/image/upload/v1/demo.png"
+
+        url = _fr_public_og_image_url(self.base, "demo2", CardWithAvatar())
+        self.assertEqual(url, f"{self.base}/static/og-default.jpg?v=2")
+
+    def test_arnaud_huard_uses_dedicated_jpg(self):
+        from app.main import _fr_public_og_image_url
+
+        class CardWithAvatar:
+            avatar_url = "https://res.cloudinary.com/x/y.png"
+
+        url = _fr_public_og_image_url(self.base, "arnaud-huard", CardWithAvatar())
+        self.assertEqual(url, f"{self.base}/static/og-arnaud-huard.jpg")
+
+    def test_other_slug_still_uses_avatar_when_present(self):
+        from app.main import _fr_public_og_image_url
+
+        class CardWithAvatar:
+            avatar_url = "https://cdn.example/photo.jpg"
+
+        url = _fr_public_og_image_url(self.base, "autre-pro", CardWithAvatar())
+        self.assertEqual(url, "https://cdn.example/photo.jpg")
+
+
 class PublicSlugHttpTests(unittest.TestCase):
     def setUp(self):
         self._tmpdir = tempfile.TemporaryDirectory()
@@ -103,6 +137,17 @@ class PublicSlugHttpTests(unittest.TestCase):
         client = TestClient(app)
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
+
+    def test_c_demo2_html_og_image_is_default(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('property="og:image"', r.text)
+        self.assertIn("/static/og-default.jpg?v=2", r.text)
 
     def test_api_public_cards_dirty_slug(self):
         from fastapi.testclient import TestClient

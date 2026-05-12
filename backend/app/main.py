@@ -169,10 +169,12 @@ def _absolute_public_url(base: str, path_or_url: str) -> str:
 
 
 def _fr_public_og_image_url(base_url: str, slug_norm: str, card: Optional[Any]) -> str:
-    """Image OG : spécifique arnaud-huard, sinon avatar absolu, sinon défaut."""
+    """Image OG : arnaud-huard dédié, demo2 = visuel marketing (pas l’avatar), sinon avatar, sinon défaut."""
     slug_l = (slug_norm or "").strip().lower()
     if slug_l == "arnaud-huard":
         return f"{base_url}/static/og-arnaud-huard.jpg"
+    if slug_l == "demo2":
+        return f"{base_url}/static/og-default.jpg?v=2"
     avatar = ""
     if card is not None:
         avatar = (getattr(card, "avatar_url", None) or "").strip()
