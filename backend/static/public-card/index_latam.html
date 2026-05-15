@@ -93,7 +93,8 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(100% 100% at 30% 0%, var(--latam-sector-glow), transparent 60%);
+      background: radial-gradient(110% 95% at 32% 0%, var(--latam-sector-glow), transparent 62%);
+      opacity: 0.5;
       pointer-events: none;
     }
 
@@ -101,7 +102,12 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 40%);
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.03) 38%,
+        transparent 68%
+      );
       pointer-events: none;
     }
 
@@ -112,7 +118,9 @@
       padding: 26px 14px 12px;
       background: var(--latam-sheet);
       border-radius: var(--latam-radius-outer);
-      box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.6) inset;
+      box-shadow:
+        0 -1px 0 rgba(255, 255, 255, 0.65) inset,
+        0 -14px 28px -22px rgba(13, 148, 136, 0.12);
     }
 
     .top {
@@ -227,9 +235,14 @@
       gap: 6px;
       margin: 0 0 6px;
       min-height: 0;
+      font-size: 0;
     }
 
     .latam-trust-strip[hidden] {
+      display: none !important;
+    }
+
+    .latam-trust-strip > [hidden] {
       display: none !important;
     }
 
@@ -243,17 +256,17 @@
       line-height: 1.2;
       letter-spacing: 0.02em;
       color: #334155;
-      background: rgba(241, 245, 249, 0.95);
+      background: #f1f5f9;
     }
 
     .latam-pill--google {
       color: #334155;
-      background: rgba(226, 232, 240, 0.9);
+      background: #e2e8f0;
     }
 
     .latam-pill--reco {
       color: #1e40af;
-      background: rgba(219, 234, 254, 0.95);
+      background: #dbeafe;
     }
 
     #latam-wa-badge-title {
@@ -426,7 +439,7 @@
           <span id="latam-reco-pill" class="latam-pill latam-pill--reco" hidden></span>
         </div>
 
-        <p id="latam-wa-badge-title" role="status">WhatsApp</p>
+        <p id="latam-wa-badge-title" role="status">Disponible por WhatsApp</p>
         <p class="latam-wa-micro" id="latam-wa-micro"></p>
 
         <div id="latam-hero-block" class="latam-hero-block" hidden>
@@ -663,7 +676,7 @@
       ) {
         return {
           sector: "artisan",
-          waBadge: "WhatsApp",
+          waBadge: "Respuesta rápida por WhatsApp",
           lead: "Cerca de ti, con respuesta rápida.",
           desc: "Cuéntame qué necesitas y lo vemos por aquí.",
           waMicro: ""
@@ -675,7 +688,7 @@
       ) {
         return {
           sector: "bienestar",
-          waBadge: "WhatsApp",
+          waBadge: "Disponible por WhatsApp",
           lead: "Escucha y acompañamiento con calma.",
           desc: "Escríbeme cuando quieras dar el primer paso.",
           waMicro: ""
@@ -687,7 +700,7 @@
       ) {
         return {
           sector: "immo",
-          waBadge: "WhatsApp",
+          waBadge: "Contacto directo por WhatsApp",
           lead: "Asesoría seria para tu patrimonio.",
           desc: "Hablemos con tiempo y claridad por aquí.",
           waMicro: ""
@@ -700,7 +713,7 @@
       ) {
         return {
           sector: "estetica",
-          waBadge: "WhatsApp",
+          waBadge: "Disponible por WhatsApp",
           lead: "Cuidado, estilo y buena mano.",
           desc: "Pregunta por tu cita o idea: te respondo encantada/o.",
           waMicro: ""
@@ -708,7 +721,7 @@
       }
       return {
         sector: "default",
-        waBadge: "WhatsApp",
+        waBadge: "Disponible por WhatsApp",
         lead: "Profesional de confianza, a un mensaje.",
         desc: "Te respondo directo por aquí.",
         waMicro: ""
@@ -794,7 +807,7 @@
       var tone = latamProfileTone(card.profile, job);
       document.body.setAttribute("data-latam-sector", tone.sector || "default");
 
-      if (waBadge) waBadge.textContent = tone.waBadge || "WhatsApp";
+      if (waBadge) waBadge.textContent = tone.waBadge || "Disponible por WhatsApp";
       if (waMicro) waMicro.textContent = (tone.waMicro || "").trim();
 
       var rating = card.google_rating;
@@ -811,8 +824,14 @@
             var c = Number(count);
             parts.push(c === 1 ? "1 opinión" : c + " opiniones");
           }
-          gPill.textContent = parts.join(" · ");
-          gPill.hidden = false;
+          var gLine = parts.join(" · ").trim();
+          if (gLine) {
+            gPill.textContent = gLine;
+            gPill.hidden = false;
+          } else {
+            gPill.textContent = "";
+            gPill.hidden = true;
+          }
         } else {
           gPill.textContent = "";
           gPill.hidden = true;
@@ -829,7 +848,11 @@
           rPill.hidden = true;
         }
       }
-      if (strip) strip.hidden = !(hasG || hasR);
+      if (strip) {
+        var showG = gPill && !gPill.hidden;
+        var showR = rPill && !rPill.hidden;
+        strip.hidden = !(showG || showR);
+      }
 
       var ht = (card.hero_title || "").toString().trim();
       var hx = (card.hero_text || "").toString().trim();
