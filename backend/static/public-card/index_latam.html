@@ -5,68 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SmartCard LATAM</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #f7f8fb; color: #101828; }
-    .wrap { max-width: 520px; margin: 0 auto; padding: 20px 14px 28px; }
-    .card { background: #fff; border-radius: 16px; padding: 0; overflow: hidden; box-shadow: 0 8px 24px rgba(16,24,40,.08); }
-    .card-inner { padding: 18px; }
+    :root {
+      --latam-accent-deep: #0f766e;
+      --latam-accent: #0d9488;
+      --latam-accent-soft: #14b8a6;
+      --latam-page-bg-1: #e8f4f2;
+      --latam-page-bg-2: #f0fdfa;
+      --latam-page-bg-3: #ecfdf5;
+      --latam-text: #0f172a;
+      --latam-text-muted: #475467;
+      --latam-text-soft: #667085;
+      --latam-radius-card: 22px;
+      --latam-radius-btn: 14px;
+      --latam-shadow-card: 0 22px 50px -18px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 118, 110, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body.latam-premium-card {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--latam-text);
+      background:
+        radial-gradient(1200px 520px at 50% -14%, rgba(20, 184, 166, 0.24), transparent 58%),
+        linear-gradient(168deg, var(--latam-page-bg-1) 0%, var(--latam-page-bg-2) 42%, var(--latam-page-bg-3) 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 16px 14px 28px;
+    }
+
+    .admin-preview-badge {
+      max-width: 420px;
+      margin: 0 auto 12px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #344054;
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      text-align: center;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--latam-radius-card);
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(15, 118, 110, 0.14);
+      box-shadow: var(--latam-shadow-card);
+    }
+
     .compact-hero {
-      display: none;
-      height: 88px;
-      max-height: 95px;
-      background: linear-gradient(125deg, #0f766e 0%, #0d9488 42%, #14b8a6 100%);
+      height: 96px;
+      max-height: 104px;
+      background: linear-gradient(125deg, var(--latam-accent-deep) 0%, var(--latam-accent) 42%, var(--latam-accent-soft) 100%);
       position: relative;
     }
+
     .compact-hero::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, transparent 42%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, transparent 45%);
       pointer-events: none;
     }
-    .latam-premium-wa-badge {
-      display: none;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: #0f766e;
-      background: linear-gradient(180deg, rgba(20, 184, 166, 0.14), rgba(20, 184, 166, 0.08));
-      border: 1px solid rgba(13, 148, 136, 0.22);
-      margin: 0 0 10px;
-      line-height: 1.25;
+
+    .card-inner {
+      padding: 0 16px 18px;
+      position: relative;
     }
-    .latam-premium-wa-badge::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #25d366;
-      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.35);
-      flex-shrink: 0;
-    }
-    .lead--premium,
-    .desc--premium {
-      display: none;
-    }
+
     .top {
       display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 16px;
+      gap: 14px;
+      align-items: flex-end;
+      margin-top: -44px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
     }
+
     .avatar-shell {
       position: relative;
-      width: 72px;
-      height: 72px;
+      width: 96px;
+      height: 96px;
       flex-shrink: 0;
       border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      background: #e8eaef;
+      border: 3px solid #fff;
+      box-shadow:
+        0 12px 32px rgba(15, 23, 42, 0.16),
+        0 0 0 1px rgba(15, 118, 110, 0.12);
+      background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
     }
+
     #avatar {
       position: absolute;
       inset: 0;
@@ -77,11 +115,13 @@
       display: block;
       opacity: 0;
       z-index: 2;
-      transition: opacity 0.2s ease-out;
+      transition: opacity 0.22s ease-out;
     }
+
     #avatar.is-loaded {
       opacity: 1;
     }
+
     #avatar-placeholder {
       position: absolute;
       inset: 0;
@@ -91,13 +131,15 @@
       background: linear-gradient(
         145deg,
         rgba(255, 255, 255, 0.55) 0%,
-        rgba(208, 213, 221, 0.85) 50%,
-        rgba(189, 196, 208, 0.95) 100%
+        rgba(208, 213, 221, 0.88) 50%,
+        rgba(189, 196, 208, 0.96) 100%
       );
     }
+
     #avatar-placeholder.is-hidden {
       display: none;
     }
+
     #avatar-fallback {
       position: absolute;
       inset: 0;
@@ -105,214 +147,261 @@
       align-items: center;
       justify-content: center;
       z-index: 1;
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 700;
-      color: #344054;
-      background: linear-gradient(145deg, #f2f4f7 0%, #d0d5dd 100%);
+      letter-spacing: 0.02em;
+      color: #334155;
+      background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
     }
+
+    .identity-block {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 2px;
+    }
+
     #display-name {
       margin: 0;
-      font-size: 18px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+      color: var(--latam-text);
+      word-wrap: break-word;
+    }
+
+    #job-line {
+      margin-top: 5px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--latam-text-muted);
+      line-height: 1.35;
+      word-wrap: break-word;
+    }
+
+    #job-line:empty {
+      display: none;
+    }
+
+    #city-line {
+      margin-top: 3px;
+      font-size: 0.8125rem;
+      color: var(--latam-text-soft);
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    #city-line:empty {
+      display: none;
+    }
+
+    .latam-trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    .latam-trust-strip[hidden] {
+      display: none !important;
+    }
+
+    .latam-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: 600;
       line-height: 1.25;
-      color: #101828;
+      color: #0f172a;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
-    #job-line {
-      margin-top: 6px;
-      font-size: 14px;
-      color: #555;
-      line-height: 1.35;
+
+    .latam-pill--google {
+      color: #b45309;
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: rgba(180, 83, 9, 0.2);
     }
-    #city-line {
-      margin-top: 2px;
+
+    .latam-pill--reco {
+      color: #1e40af;
+      background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+      border-color: rgba(30, 64, 175, 0.18);
+    }
+
+    .latam-premium-wa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--latam-accent-deep);
+      background: linear-gradient(180deg, rgba(20, 184, 166, 0.16), rgba(20, 184, 166, 0.08));
+      border: 1px solid rgba(13, 148, 136, 0.22);
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .latam-premium-wa-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #25d366;
+      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.35);
+      flex-shrink: 0;
+    }
+
+    .latam-wa-micro {
+      margin: -4px 0 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--latam-text-muted);
+    }
+
+    .latam-wa-micro:empty {
+      display: none;
+    }
+
+    .latam-hero-block {
+      margin-bottom: 12px;
+    }
+
+    .latam-hero-block[hidden] {
+      display: none !important;
+    }
+
+    .latam-hero-block .lead {
+      margin: 0 0 8px;
+    }
+
+    .latam-hero-block .desc {
+      margin: 0 0 8px;
+    }
+
+    .latam-hero-cta {
+      margin: 0;
       font-size: 13px;
-      color: #888;
-      line-height: 1.35;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--latam-accent-deep);
     }
+
+    .latam-hero-cta:empty {
+      display: none;
+    }
+
     .lead {
-      margin: 0 0 12px;
-      font-size: 19px;
+      margin: 0 0 8px;
+      font-size: 1.0625rem;
       font-weight: 700;
-      line-height: 1.4;
-      color: #101828;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      color: var(--latam-text);
     }
+
     .desc {
-      margin: 0 0 12px;
-      color: #475467;
-      line-height: 1.4;
+      margin: 0 0 14px;
+      font-size: 0.875rem;
+      line-height: 1.45;
+      color: var(--latam-text-muted);
     }
+
+    #latam-lead[hidden],
+    #latam-desc[hidden] {
+      display: none !important;
+    }
+
     .btn {
       width: 100%;
       border: 0;
-      border-radius: 10px;
-      padding: 13px 14px;
-      font-weight: 500;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .btn + .btn { margin-top: 10px; }
-    .btn-wa { background: #1fa855; color: #fff; }
-    .btn-review { background: #f2f4f7; color: #101828; }
-    .btn-reco { background: #0b63f6; color: #fff; }
-    .hint { margin-top: 14px; text-align: center; font-size: 13px; color: #475467; }
-    .foot { margin-top: 12px; text-align: center; font-size: 12px; color: #667085; }
-    .admin-preview-badge {
-      max-width: 520px;
-      margin: 0 auto 10px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      font-size: 11px;
-      line-height: 1.35;
-      color: #344054;
-      background: #e0e7ff;
-      border: 1px solid #c7d2fe;
-      text-align: center;
-    }
-
-    /* Démos LATAM premium (slugs: demo-latam-*) — activé via JS sur body */
-    body.latam-premium-card {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background:
-        radial-gradient(1200px 480px at 50% -12%, rgba(20, 184, 166, 0.22), transparent 55%),
-        linear-gradient(165deg, #e8f4f2 0%, #f0fdfa 45%, #ecfdf5 100%);
-    }
-    body.latam-premium-card .wrap {
-      max-width: 420px;
-      padding: 14px 12px 20px;
-    }
-    body.latam-premium-card .admin-preview-badge {
-      max-width: 420px;
-      border-radius: 12px;
-    }
-    body.latam-premium-card .card {
-      border-radius: 22px;
-      border: 1px solid rgba(15, 118, 110, 0.14);
-      box-shadow:
-        0 22px 50px -18px rgba(15, 23, 42, 0.22),
-        0 0 0 1px rgba(15, 118, 110, 0.08);
-    }
-    body.latam-premium-card .compact-hero {
-      display: block;
-    }
-    body.latam-premium-card .card-inner {
-      padding: 0 16px 16px;
-      position: relative;
-    }
-    body.latam-premium-card .top {
-      align-items: flex-end;
-      margin-top: -38px;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 2;
-    }
-    body.latam-premium-card .avatar-shell {
-      border: 3px solid #fff;
-      box-shadow:
-        0 10px 28px rgba(15, 23, 42, 0.14),
-        0 0 0 1px rgba(15, 118, 110, 0.12);
-    }
-    body.latam-premium-card #display-name {
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    body.latam-premium-card #job-line {
-      margin-top: 4px;
-      font-size: 13px;
-      color: #475467;
-      font-weight: 500;
-    }
-    body.latam-premium-card #city-line {
-      font-size: 12px;
-      color: #667085;
-    }
-    body.latam-premium-card .latam-premium-wa-badge {
-      display: inline-flex;
-    }
-    body.latam-premium-card .lead--classic,
-    body.latam-premium-card .desc--classic {
-      display: none;
-    }
-    body.latam-premium-card .lead--premium {
-      display: block;
-      margin: 0 0 8px;
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.28;
-      letter-spacing: -0.02em;
-    }
-    body.latam-premium-card .desc--premium {
-      display: block;
-      margin: 0 0 12px;
-      font-size: 13.5px;
-      line-height: 1.38;
-      color: #475467;
-    }
-    body.latam-premium-card .btn {
-      border-radius: 13px;
-      padding: 12px 14px;
+      border-radius: var(--latam-radius-btn);
+      padding: 13px 16px;
       font-weight: 600;
-      font-size: 15px;
+      font-size: 0.9375rem;
+      cursor: pointer;
       transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) inset;
     }
-    body.latam-premium-card .btn:active:not(:disabled) {
+
+    .btn + .btn {
+      margin-top: 10px;
+    }
+
+    .btn:active:not(:disabled) {
       transform: scale(0.985);
     }
-    body.latam-premium-card .btn + .btn {
-      margin-top: 9px;
-    }
-    body.latam-premium-card .btn-wa {
+
+    .btn-wa {
       background: linear-gradient(180deg, #1fa855 0%, #128c3a 100%);
+      color: #fff;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.2) inset,
-        0 10px 22px -10px rgba(18, 140, 58, 0.65);
+        0 12px 28px -12px rgba(18, 140, 58, 0.55);
     }
-    body.latam-premium-card .btn-wa:hover:not(:disabled) {
+
+    .btn-wa:hover:not(:disabled) {
       filter: brightness(1.04);
     }
-    body.latam-premium-card .btn-review {
+
+    .btn-review {
       background: linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%);
+      color: var(--latam-text);
       border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.18);
+      box-shadow: 0 6px 18px -10px rgba(15, 23, 42, 0.2);
     }
-    body.latam-premium-card .btn-review:hover:not(:disabled) {
+
+    .btn-review:hover:not(:disabled) {
       filter: brightness(1.02);
     }
-    body.latam-premium-card .btn-reco {
+
+    .btn-reco {
       background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      color: #fff;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.18) inset,
-        0 10px 22px -10px rgba(29, 78, 216, 0.55);
+        0 12px 28px -12px rgba(29, 78, 216, 0.5);
     }
-    body.latam-premium-card .btn-reco:hover:not(:disabled) {
+
+    .btn-reco:hover:not(:disabled) {
       filter: brightness(1.04);
     }
-    body.latam-premium-card .hint {
-      margin-top: 12px;
+
+    .hint {
+      margin-top: 14px;
+      text-align: center;
       font-size: 12px;
+      line-height: 1.45;
+      color: var(--latam-text-muted);
     }
-    body.latam-premium-card .foot {
-      margin-top: 8px;
+
+    .hint[hidden] {
+      display: none !important;
+    }
+
+    .foot {
+      margin-top: 10px;
+      text-align: center;
       font-size: 11px;
+      color: var(--latam-text-soft);
+    }
+
+    @media (max-width: 360px) {
+      .wrap { padding: 12px 10px 24px; }
+      .avatar-shell { width: 88px; height: 88px; }
+      .top { margin-top: -40px; }
+      #display-name { font-size: 1.125rem; }
     }
   </style>
 </head>
-<body>
-  <script>
-    window.__MAAVNICA_LATAM_PREMIUM = {
-      "demo-latam-plomero": 1,
-      "demo-latam-estilista": 1,
-      "demo-latam-terapeuta": 1
-    };
-    (function (S) {
-      var parts = (location.pathname || "").split("/").filter(Boolean);
-      var slug =
-        parts.length >= 2 && parts[0] === "c"
-          ? decodeURIComponent(parts[1]).toLowerCase()
-          : "";
-      if (S[slug]) document.body.classList.add("latam-premium-card");
-    })(window.__MAAVNICA_LATAM_PREMIUM);
-  </script>
+<body class="latam-premium-card">
   <div id="admin-preview-badge" class="admin-preview-badge" hidden>
     Mode prévisualisation — statistiques non comptabilisées
   </div>
@@ -322,29 +411,39 @@
       <div class="card-inner">
         <div class="top">
           <div class="avatar-shell">
-            <img id="avatar" alt="Foto profesional" width="72" height="72" />
+            <img id="avatar" alt="Foto profesional" width="96" height="96" />
             <span id="avatar-placeholder" aria-hidden="true"></span>
             <span id="avatar-fallback"></span>
           </div>
-          <div>
+          <div class="identity-block">
             <h1 id="display-name">SmartCard</h1>
             <div class="meta" id="job-line"></div>
             <div class="meta" id="city-line"></div>
           </div>
         </div>
 
-        <p class="latam-premium-wa-badge" role="status">Atención rápida por WhatsApp</p>
+        <div id="latam-trust-strip" class="latam-trust-strip" hidden>
+          <span id="latam-google-pill" class="latam-pill latam-pill--google" hidden></span>
+          <span id="latam-reco-pill" class="latam-pill latam-pill--reco" hidden></span>
+        </div>
 
-        <p class="lead lead--classic">Tus clientes satisfechos pueden traerte nuevos clientes.</p>
-        <p class="lead lead--premium">Convierte cada cliente satisfecho en una nueva oportunidad.</p>
-        <p class="desc desc--classic">Una tarjeta simple para recibir mensajes, opiniones y recomendaciones por WhatsApp.</p>
-        <p class="desc desc--premium">Opiniones, mensajes y recomendaciones en una sola tarjeta.</p>
+        <p class="latam-premium-wa-badge" role="status">Atención rápida por WhatsApp</p>
+        <p class="latam-wa-micro" id="latam-wa-micro"></p>
+
+        <div id="latam-hero-block" class="latam-hero-block" hidden>
+          <p class="lead" id="latam-hero-title"></p>
+          <p class="desc" id="latam-hero-text"></p>
+          <p class="latam-hero-cta" id="latam-hero-cta"></p>
+        </div>
+
+        <p class="lead" id="latam-lead"></p>
+        <p class="desc" id="latam-desc"></p>
 
         <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
         <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
         <button class="btn btn-reco" id="btn-recommend" type="button">Recomendar a un amigo</button>
 
-        <div class="hint">Demo interactiva — sin compromiso.</div>
+        <div class="hint" id="latam-hint" hidden></div>
         <div class="foot">Propulsado por Maavnica</div>
       </div>
     </section>
@@ -370,12 +469,6 @@
       var parts = (window.location.pathname || "").split("/").filter(Boolean);
       if (parts.length >= 2 && parts[0] === "c") return decodeURIComponent(parts[1]);
       return null;
-    }
-
-    function isLatamDemoPremiumSlug(slug) {
-      var S = window.__MAAVNICA_LATAM_PREMIUM;
-      if (!slug || !S) return false;
-      return !!S[String(slug).trim().toLowerCase()];
     }
 
     function internalSlugStorageKey(slug) {
@@ -558,13 +651,219 @@
       return d || "";
     }
 
+    function latamSlugIsDemo(slug) {
+      return !!(slug && String(slug).trim().toLowerCase().startsWith("demo"));
+    }
+
+    function latamProfileTone(profile, job) {
+      var p = (profile || "").toString().trim().toLowerCase();
+      var j = (job || "").toString().toLowerCase();
+      if (
+        p === "artisan" ||
+        /plom|fontan|electric|albañ|albanil|cerraj|aire acond|manten|obr|herrer|jardiner|limpiez|fumig/i.test(j)
+      ) {
+        return {
+          lead: "Servicio claro, respuesta rápida y confianza de verdad.",
+          desc: "Cuéntame qué necesitas por WhatsApp y te oriento sin vueltas.",
+          waMicro: "Ideal para urgencias y trabajos bien hechos a la primera."
+        };
+      }
+      if (
+        p === "bien_etre" ||
+        /terap|psicolog|psico|masaje|yoga|bienestar|acomp|coach|mindful|holíst|salud mental/i.test(j)
+      ) {
+        return {
+          lead: "Un espacio de escucha y acompañamiento, con respeto y calma.",
+          desc: "Si te sientes abrumado o necesitas apoyo, escríbeme con confianza.",
+          waMicro: "Primera respuesta por WhatsApp: conectamos con cercanía y cuidado."
+        };
+      }
+      if (
+        p === "immo" ||
+        /inmobili|corredor|asesor.? inmob|propiedad|renta de|venta de casas|agencia de bienes/i.test(j)
+      ) {
+        return {
+          lead: "Asesoría seria para comprar, vender o rentar con tranquilidad.",
+          desc: "Te acompaño en cada paso: dudas, visitas y seguimiento directo por WhatsApp.",
+          waMicro: "Hablemos de tu proyecto inmobiliario con transparencia y seguimiento cercano."
+        };
+      }
+      return {
+        lead: "Profesional de confianza y contacto directo por WhatsApp.",
+        desc: "Pregunta lo que necesites: te respondo con claridad y sin complicaciones.",
+        waMicro: "Canal preferido por clientes en toda Latinoamérica: rápido y cercano."
+      };
+    }
+
+    function latamFormatRating(n) {
+      if (n == null || n === "" || isNaN(Number(n))) return "";
+      var x = Number(n);
+      var s = (Math.round(x * 10) / 10).toString().replace(".", ",");
+      return s;
+    }
+
+    function latamExpandHex3(h) {
+      if (h.length === 3) return h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+      return h;
+    }
+
+    function latamHexToRgb(hex) {
+      var x = (hex || "").replace("#", "").trim();
+      if (!x) return null;
+      if (x.length === 3) x = latamExpandHex3(x);
+      if (x.length !== 6) return null;
+      var r = parseInt(x.slice(0, 2), 16);
+      var g = parseInt(x.slice(2, 4), 16);
+      var b = parseInt(x.slice(4, 6), 16);
+      if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
+      return { r: r, g: g, b: b };
+    }
+
+    function latamRgbToHex(r, g, b) {
+      function h(n) {
+        var s = Math.max(0, Math.min(255, Math.round(n))).toString(16);
+        return s.length === 1 ? "0" + s : s;
+      }
+      return "#" + h(r) + h(g) + h(b);
+    }
+
+    function latamMixToward(rgb, target, t) {
+      return {
+        r: rgb.r + (target.r - rgb.r) * t,
+        g: rgb.g + (target.g - rgb.g) * t,
+        b: rgb.b + (target.b - rgb.b) * t
+      };
+    }
+
+    function latamApplyThemeColor(hex) {
+      var raw = (hex || "").toString().trim();
+      if (!raw) return;
+      if (!/^#?[0-9a-fA-F]{3,6}$/.test(raw)) return;
+      var h = raw[0] === "#" ? raw : "#" + raw;
+      if (h.length === 4 || h.length === 7) {
+        var rgb = latamHexToRgb(h);
+        if (!rgb) return;
+        var deep = latamMixToward(rgb, { r: 15, g: 23, b: 42 }, 0.32);
+        var soft = latamMixToward(rgb, { r: 255, g: 255, b: 255 }, 0.22);
+        var cDeep = latamRgbToHex(deep.r, deep.g, deep.b);
+        var cSoft = latamRgbToHex(soft.r, soft.g, soft.b);
+        document.documentElement.style.setProperty("--latam-accent", h);
+        document.documentElement.style.setProperty("--latam-accent-deep", cDeep);
+        document.documentElement.style.setProperty("--latam-accent-soft", cSoft);
+        var hero = document.querySelector(".compact-hero");
+        if (hero) {
+          hero.style.background =
+            "linear-gradient(125deg, " + cDeep + " 0%, " + h + " 44%, " + cSoft + " 100%)";
+        }
+      }
+    }
+
+    function latamSyncTrustAndCopy(card, slugNorm, job) {
+      var strip = document.getElementById("latam-trust-strip");
+      var gPill = document.getElementById("latam-google-pill");
+      var rPill = document.getElementById("latam-reco-pill");
+      var waMicro = document.getElementById("latam-wa-micro");
+      var heroBlock = document.getElementById("latam-hero-block");
+      var heroTitle = document.getElementById("latam-hero-title");
+      var heroText = document.getElementById("latam-hero-text");
+      var heroCta = document.getElementById("latam-hero-cta");
+      var leadEl = document.getElementById("latam-lead");
+      var descEl = document.getElementById("latam-desc");
+      var hintEl = document.getElementById("latam-hint");
+
+      var tone = latamProfileTone(card.profile, job);
+
+      if (waMicro) waMicro.textContent = tone.waMicro || "";
+
+      var rating = card.google_rating;
+      var count = card.google_review_count;
+      var recoN = card.recommendation_share_count;
+      var hasG = (rating != null && !isNaN(Number(rating))) || (count != null && Number(count) > 0);
+      var hasR = recoN != null && Number(recoN) > 0;
+
+      if (gPill) {
+        if (hasG) {
+          var parts = [];
+          if (rating != null && !isNaN(Number(rating))) parts.push("★ " + latamFormatRating(rating));
+          if (count != null && Number(count) > 0) {
+            var c = Number(count);
+            parts.push(c === 1 ? "1 opinión en Google" : c + " opiniones en Google");
+          }
+          gPill.textContent = parts.join(" · ");
+          gPill.hidden = false;
+        } else {
+          gPill.textContent = "";
+          gPill.hidden = true;
+        }
+      }
+      if (rPill) {
+        if (hasR) {
+          var n = Number(recoN);
+          rPill.textContent = n === 1 ? "1 recomendación compartida" : n + " recomendaciones compartidas";
+          rPill.hidden = false;
+        } else {
+          rPill.textContent = "";
+          rPill.hidden = true;
+        }
+      }
+      if (strip) strip.hidden = !(hasG || hasR);
+
+      var ht = (card.hero_title || "").toString().trim();
+      var hx = (card.hero_text || "").toString().trim();
+      var hc = (card.hero_cta_text || "").toString().trim();
+
+      if (ht && heroBlock && heroTitle && heroText && heroCta) {
+        heroTitle.textContent = ht;
+        heroText.textContent = hx || "";
+        heroCta.textContent = hc || "";
+        heroText.hidden = !hx;
+        heroCta.hidden = !hc;
+        heroBlock.hidden = false;
+        if (leadEl) {
+          leadEl.textContent = "";
+          leadEl.hidden = true;
+        }
+        if (descEl) {
+          descEl.textContent = "";
+          descEl.hidden = true;
+        }
+      } else {
+        if (heroBlock) heroBlock.hidden = true;
+        if (heroTitle) heroTitle.textContent = "";
+        if (heroText) {
+          heroText.textContent = "";
+          heroText.hidden = false;
+        }
+        if (heroCta) {
+          heroCta.textContent = "";
+          heroCta.hidden = false;
+        }
+        if (leadEl) {
+          leadEl.hidden = false;
+          leadEl.textContent = tone.lead;
+        }
+        if (descEl) {
+          descEl.hidden = false;
+          descEl.textContent = tone.desc;
+        }
+      }
+
+      latamApplyThemeColor(card.theme_color);
+
+      if (hintEl) {
+        if (latamSlugIsDemo(slugNorm)) {
+          hintEl.hidden = false;
+          hintEl.textContent = "Demostración interactiva — sin compromiso.";
+        } else {
+          hintEl.hidden = true;
+          hintEl.textContent = "";
+        }
+      }
+    }
+
     async function loadCard() {
       var slug = getSlugFromPath();
       if (!slug) return;
-
-      if (isLatamDemoPremiumSlug(slug)) {
-        document.body.classList.add("latam-premium-card");
-      }
 
       syncInternalViewFromUrl(slug);
       refreshIsInternalView(slug);
@@ -590,14 +889,22 @@
         card.slug != null && String(card.slug).trim()
           ? String(card.slug).trim()
           : slug;
+      var slugLower = String(canonicalSlug).trim().toLowerCase();
       var publicUrl = getPublicCardUrl(canonicalSlug);
       var fullName = (card.display_name || card.company_name || "SmartCard").trim();
       var job = (card.job_title || "").trim();
-      var city = (card.business_name || "").trim();
+      var biz = (card.business_name || "").trim();
+      var cityField = (card.city || "").trim();
+      var cityParts = [];
+      if (biz) cityParts.push(biz);
+      if (cityField) cityParts.push(cityField);
+      var cityLineText = cityParts.join(" · ");
 
       document.getElementById("display-name").textContent = fullName;
       document.getElementById("job-line").textContent = job;
-      document.getElementById("city-line").textContent = city;
+      document.getElementById("city-line").textContent = cityLineText;
+
+      latamSyncTrustAndCopy(card, slugLower, job);
 
       var avatarImg = document.getElementById("avatar");
       var avatarPh = document.getElementById("avatar-placeholder");
