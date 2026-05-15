@@ -9,20 +9,13 @@
       --latam-accent-deep: #0f766e;
       --latam-accent: #0d9488;
       --latam-accent-soft: #14b8a6;
-      --latam-sector-glow: rgba(20, 184, 166, 0.18);
-      --latam-sheet: #fcfcfd;
-      --latam-sheet-edge: rgba(15, 23, 42, 0.06);
+      --latam-sector-glow: rgba(45, 212, 191, 0.14);
+      --latam-sheet: #fafafa;
       --latam-text: #0f172a;
       --latam-text-muted: #475467;
       --latam-text-soft: #64748b;
-      --latam-radius-outer: 24px;
-      --latam-radius-btn: 15px;
-      --latam-shadow-sheet:
-        0 0 0 1px rgba(255, 255, 255, 0.75) inset,
-        0 1px 0 rgba(15, 23, 42, 0.04),
-        0 28px 56px -28px rgba(15, 23, 42, 0.28),
-        0 12px 24px -16px rgba(15, 118, 110, 0.12);
-      --latam-shadow-float: 0 20px 44px -22px rgba(15, 23, 42, 0.35);
+      --latam-radius-outer: 20px;
+      --latam-radius-btn: 12px;
     }
 
     * { box-sizing: border-box; }
@@ -32,83 +25,66 @@
       min-height: 100dvh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: var(--latam-text);
-      background-color: #0b1220;
+      background: #0c111d;
       background-image:
-        radial-gradient(100% 80% at 50% -5%, rgba(45, 212, 191, 0.12), transparent 55%),
-        radial-gradient(90% 55% at 100% 0%, rgba(99, 102, 241, 0.08), transparent 45%),
-        radial-gradient(70% 50% at 0% 100%, rgba(14, 165, 233, 0.06), transparent 50%),
-        linear-gradient(165deg, #0f172a 0%, #151f33 38%, #1a2744 100%);
+        radial-gradient(80% 50% at 50% -20%, rgba(45, 212, 191, 0.08), transparent 50%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
     body.latam-premium-card[data-latam-sector="bienestar"] {
-      --latam-sector-glow: rgba(167, 139, 250, 0.22);
+      --latam-sector-glow: rgba(167, 139, 250, 0.16);
       background-image:
-        radial-gradient(100% 75% at 50% -8%, rgba(167, 139, 250, 0.14), transparent 52%),
-        radial-gradient(85% 50% at 0% 20%, rgba(244, 114, 182, 0.08), transparent 48%),
-        linear-gradient(168deg, #0f172a 0%, #1a1533 45%, #221c3d 100%);
+        radial-gradient(80% 45% at 40% -15%, rgba(167, 139, 250, 0.1), transparent 48%),
+        linear-gradient(180deg, #0f172a 0%, #131022 100%);
     }
 
     body.latam-premium-card[data-latam-sector="artisan"] {
-      --latam-sector-glow: rgba(45, 212, 191, 0.2);
-      background-image:
-        radial-gradient(100% 70% at 50% -5%, rgba(34, 197, 94, 0.1), transparent 50%),
-        radial-gradient(80% 45% at 100% 90%, rgba(20, 184, 166, 0.08), transparent 48%),
-        linear-gradient(168deg, #0c1822 0%, #132032 42%, #152e32 100%);
+      --latam-sector-glow: rgba(52, 211, 153, 0.14);
     }
 
     body.latam-premium-card[data-latam-sector="immo"] {
-      --latam-sector-glow: rgba(251, 191, 36, 0.12);
-      background-image:
-        radial-gradient(90% 60% at 80% -10%, rgba(251, 191, 36, 0.1), transparent 50%),
-        radial-gradient(70% 50% at 0% 100%, rgba(148, 163, 184, 0.1), transparent 48%),
-        linear-gradient(168deg, #0b1220 0%, #152032 40%, #1e293b 100%);
+      --latam-sector-glow: rgba(251, 191, 36, 0.1);
     }
 
     body.latam-premium-card[data-latam-sector="estetica"] {
-      --latam-sector-glow: rgba(251, 113, 133, 0.16);
-      background-image:
-        radial-gradient(95% 70% at 50% -10%, rgba(251, 113, 133, 0.12), transparent 52%),
-        radial-gradient(75% 50% at 100% 80%, rgba(253, 186, 116, 0.08), transparent 48%),
-        linear-gradient(168deg, #101525 0%, #1a1528 45%, #251d35 100%);
+      --latam-sector-glow: rgba(251, 113, 133, 0.12);
     }
 
     .wrap {
-      max-width: 400px;
+      max-width: 380px;
       margin: 0 auto;
-      padding: max(16px, env(safe-area-inset-top)) 14px max(28px, env(safe-area-inset-bottom));
+      padding: max(10px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom));
     }
 
     .admin-preview-badge {
-      max-width: 400px;
-      margin: 0 auto 12px;
-      padding: 8px 12px;
-      border-radius: 14px;
+      max-width: 380px;
+      margin: 0 auto 8px;
+      padding: 6px 10px;
+      border-radius: 10px;
       font-size: 11px;
       line-height: 1.35;
       color: #c7d2fe;
-      background: rgba(30, 41, 59, 0.65);
-      border: 1px solid rgba(129, 140, 248, 0.35);
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid rgba(129, 140, 248, 0.28);
       text-align: center;
-      backdrop-filter: blur(10px);
     }
 
     .card {
       position: relative;
       border-radius: var(--latam-radius-outer);
       overflow: hidden;
-      box-shadow: var(--latam-shadow-float);
+      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.45);
     }
 
     .compact-hero {
       position: relative;
-      height: 104px;
+      height: 68px;
       background: linear-gradient(
-        128deg,
+        125deg,
         var(--latam-accent-deep) 0%,
-        var(--latam-accent) 38%,
-        var(--latam-accent-soft) 88%
+        var(--latam-accent) 50%,
+        var(--latam-accent-soft) 100%
       );
       border-radius: var(--latam-radius-outer) var(--latam-radius-outer) 0 0;
     }
@@ -117,8 +93,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(120% 90% at 20% 0%, var(--latam-sector-glow), transparent 55%);
-      opacity: 0.95;
+      background: radial-gradient(100% 100% at 30% 0%, var(--latam-sector-glow), transparent 60%);
       pointer-events: none;
     }
 
@@ -126,49 +101,39 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 42%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 40%);
       pointer-events: none;
-      animation: latamHeroGlow 14s ease-in-out infinite alternate;
-    }
-
-    @keyframes latamHeroGlow {
-      from { opacity: 0.85; }
-      to { opacity: 1; }
     }
 
     .card-inner {
       position: relative;
       z-index: 2;
-      margin-top: -40px;
-      padding: 44px 16px 20px;
+      margin-top: -30px;
+      padding: 26px 14px 12px;
       background: var(--latam-sheet);
       border-radius: var(--latam-radius-outer);
-      border: 1px solid var(--latam-sheet-edge);
-      box-shadow: var(--latam-shadow-sheet);
+      box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.6) inset;
     }
 
     .top {
       display: flex;
-      gap: 14px;
+      gap: 10px;
       align-items: flex-end;
-      margin-top: -8px;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
       position: relative;
       z-index: 2;
     }
 
     .avatar-shell {
       position: relative;
-      width: 100px;
-      height: 100px;
+      width: 72px;
+      height: 72px;
       flex-shrink: 0;
       border-radius: 50%;
       overflow: hidden;
-      border: 3px solid #fff;
-      box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 0.06),
-        0 16px 40px -12px rgba(15, 23, 42, 0.35);
-      background: linear-gradient(145deg, #f4f4f5 0%, #e4e4e7 100%);
+      border: 2px solid #fff;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+      background: #e4e4e7;
     }
 
     #avatar {
@@ -181,7 +146,7 @@
       display: block;
       opacity: 0;
       z-index: 2;
-      transition: opacity 0.28s ease-out;
+      transition: opacity 0.22s ease-out;
     }
 
     #avatar.is-loaded {
@@ -194,7 +159,7 @@
       border-radius: 50%;
       z-index: 1;
       pointer-events: none;
-      background: linear-gradient(145deg, #fafafa 0%, #e4e4e7 55%, #d4d4d8 100%);
+      background: linear-gradient(145deg, #f4f4f5 0%, #d4d4d8 100%);
     }
 
     #avatar-placeholder.is-hidden {
@@ -208,35 +173,34 @@
       align-items: center;
       justify-content: center;
       z-index: 1;
-      font-size: 19px;
+      font-size: 15px;
       font-weight: 700;
-      letter-spacing: 0.03em;
       color: #3f3f46;
-      background: linear-gradient(145deg, #fafafa 0%, #e7e7ea 100%);
+      background: #e4e4e7;
     }
 
     .identity-block {
       flex: 1;
       min-width: 0;
-      padding-bottom: 4px;
+      padding-bottom: 2px;
     }
 
     #display-name {
       margin: 0;
-      font-size: 1.3125rem;
+      font-size: 1.125rem;
       font-weight: 700;
       line-height: 1.2;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.02em;
       color: var(--latam-text);
       word-wrap: break-word;
     }
 
     #job-line {
-      margin-top: 6px;
-      font-size: 0.875rem;
+      margin-top: 3px;
+      font-size: 0.8125rem;
       font-weight: 600;
       color: var(--latam-text-muted);
-      line-height: 1.35;
+      line-height: 1.3;
       word-wrap: break-word;
     }
 
@@ -245,10 +209,10 @@
     }
 
     #city-line {
-      margin-top: 4px;
-      font-size: 0.8125rem;
+      margin-top: 2px;
+      font-size: 0.75rem;
       color: var(--latam-text-soft);
-      line-height: 1.45;
+      line-height: 1.35;
       word-wrap: break-word;
     }
 
@@ -259,8 +223,10 @@
     .latam-trust-strip {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin: 0 0 14px;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 6px;
+      min-height: 0;
     }
 
     .latam-trust-strip[hidden] {
@@ -270,66 +236,38 @@
     .latam-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 11px;
+      padding: 3px 8px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
+      line-height: 1.2;
       letter-spacing: 0.02em;
-      line-height: 1.25;
-      color: #0f172a;
-      background: linear-gradient(180deg, #fff 0%, #f4f4f5 100%);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      color: #334155;
+      background: rgba(241, 245, 249, 0.95);
     }
 
     .latam-pill--google {
-      color: #92400e;
-      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
-      border-color: rgba(245, 158, 11, 0.28);
+      color: #334155;
+      background: rgba(226, 232, 240, 0.9);
     }
 
     .latam-pill--reco {
-      color: #1e3a8a;
-      background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
-      border-color: rgba(37, 99, 235, 0.22);
-    }
-
-    .latam-pill--reco.latam-pill--pulse {
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      color: #1e40af;
+      background: rgba(219, 234, 254, 0.95);
     }
 
     #latam-wa-badge-title {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 13px;
-      border-radius: 999px;
+      margin: 0 0 4px;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      color: var(--latam-accent-deep);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.9) 100%);
-      border: 1px solid rgba(13, 148, 136, 0.2);
-      margin: 0 0 6px;
+      font-weight: 600;
+      color: var(--latam-text-soft);
       line-height: 1.3;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-    }
-
-    #latam-wa-badge-title::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
-      flex-shrink: 0;
     }
 
     .latam-wa-micro {
-      margin: 0 0 14px;
-      font-size: 13px;
-      line-height: 1.5;
+      margin: 0 0 8px;
+      font-size: 12px;
+      line-height: 1.4;
       color: var(--latam-text-muted);
     }
 
@@ -338,7 +276,7 @@
     }
 
     .latam-hero-block {
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
 
     .latam-hero-block[hidden] {
@@ -346,18 +284,18 @@
     }
 
     .latam-hero-block .lead {
-      margin: 0 0 8px;
+      margin: 0 0 4px;
     }
 
     .latam-hero-block .desc {
-      margin: 0 0 8px;
+      margin: 0 0 4px;
     }
 
     .latam-hero-cta {
       margin: 0;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      line-height: 1.45;
+      line-height: 1.35;
       color: var(--latam-accent-deep);
     }
 
@@ -366,18 +304,18 @@
     }
 
     .lead {
-      margin: 0 0 8px;
-      font-size: 1.0625rem;
+      margin: 0 0 4px;
+      font-size: 0.9375rem;
       font-weight: 700;
-      line-height: 1.32;
+      line-height: 1.28;
       letter-spacing: -0.02em;
       color: var(--latam-text);
     }
 
     .desc {
-      margin: 0 0 14px;
-      font-size: 0.9375rem;
-      line-height: 1.5;
+      margin: 0 0 10px;
+      font-size: 0.8125rem;
+      line-height: 1.4;
       color: var(--latam-text-muted);
     }
 
@@ -386,100 +324,60 @@
       display: none !important;
     }
 
-    .latam-reco-panel {
-      margin: 4px 0 18px;
-      padding: 14px 14px 13px;
-      border-radius: 16px;
-      background: linear-gradient(165deg, rgba(37, 99, 235, 0.06) 0%, rgba(99, 102, 241, 0.05) 100%);
-      border: 1px solid rgba(37, 99, 235, 0.14);
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
-    }
-
-    .latam-reco-panel__kicker {
-      margin: 0 0 6px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #1d4ed8;
-    }
-
-    #latam-reco-panel-copy {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.45;
-      color: #0f172a;
-    }
-
-    #latam-reco-panel-copy .latam-reco-num {
-      font-weight: 800;
-      color: #1d4ed8;
-      font-variant-numeric: tabular-nums;
-    }
-
     .btn {
       width: 100%;
       border: 0;
       border-radius: var(--latam-radius-btn);
-      padding: 14px 16px;
+      padding: 11px 14px;
       font-weight: 700;
-      font-size: 0.9375rem;
-      letter-spacing: 0.01em;
+      font-size: 0.875rem;
       cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) inset;
+      transition: transform 0.1s ease, filter 0.1s ease;
     }
 
     .btn + .btn {
-      margin-top: 11px;
+      margin-top: 8px;
     }
 
     .btn:active:not(:disabled) {
-      transform: scale(0.985);
+      transform: scale(0.987);
     }
 
     .btn-wa {
       background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
       color: #fff;
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.25) inset,
-        0 14px 32px -14px rgba(22, 163, 74, 0.55);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     }
 
     .btn-wa:hover:not(:disabled) {
-      filter: brightness(1.05);
+      filter: brightness(1.04);
     }
 
     .btn-review {
-      background: linear-gradient(180deg, #fff 0%, #f4f4f5 100%);
+      background: #fff;
       color: var(--latam-text);
       border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 8px 20px -12px rgba(15, 23, 42, 0.18);
     }
 
     .btn-review:hover:not(:disabled) {
-      filter: brightness(1.02);
+      filter: brightness(0.98);
     }
 
     .btn-reco {
-      position: relative;
-      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
       color: #fff;
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.22) inset,
-        0 14px 36px -14px rgba(29, 78, 216, 0.55);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset;
     }
 
     .btn-reco:hover:not(:disabled) {
-      filter: brightness(1.05);
+      filter: brightness(1.04);
     }
 
     .hint {
-      margin-top: 16px;
+      margin-top: 10px;
       text-align: center;
-      font-size: 12px;
-      line-height: 1.45;
+      font-size: 11px;
+      line-height: 1.4;
       color: var(--latam-text-soft);
     }
 
@@ -488,18 +386,17 @@
     }
 
     .foot {
-      margin-top: 12px;
+      margin-top: 8px;
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--latam-text-soft);
-      opacity: 0.85;
+      opacity: 0.75;
     }
 
     @media (max-width: 360px) {
-      .wrap { padding-left: 12px; padding-right: 12px; }
-      .avatar-shell { width: 92px; height: 92px; }
-      .card-inner { margin-top: -36px; padding-top: 40px; }
-      #display-name { font-size: 1.1875rem; }
+      .wrap { padding-left: 10px; padding-right: 10px; }
+      .avatar-shell { width: 68px; height: 68px; }
+      .card-inner { margin-top: -28px; padding-top: 24px; }
     }
   </style>
 </head>
@@ -513,7 +410,7 @@
       <div class="card-inner">
         <div class="top">
           <div class="avatar-shell">
-            <img id="avatar" alt="Foto profesional" width="100" height="100" />
+            <img id="avatar" alt="Foto profesional" width="72" height="72" />
             <span id="avatar-placeholder" aria-hidden="true"></span>
             <span id="avatar-fallback"></span>
           </div>
@@ -529,7 +426,7 @@
           <span id="latam-reco-pill" class="latam-pill latam-pill--reco" hidden></span>
         </div>
 
-        <p id="latam-wa-badge-title" role="status">WhatsApp directo</p>
+        <p id="latam-wa-badge-title" role="status">WhatsApp</p>
         <p class="latam-wa-micro" id="latam-wa-micro"></p>
 
         <div id="latam-hero-block" class="latam-hero-block" hidden>
@@ -540,11 +437,6 @@
 
         <p class="lead" id="latam-lead"></p>
         <p class="desc" id="latam-desc"></p>
-
-        <div class="latam-reco-panel" id="latam-reco-panel">
-          <p class="latam-reco-panel__kicker" id="latam-reco-panel-kicker">Recomendación</p>
-          <p id="latam-reco-panel-copy"></p>
-        </div>
 
         <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
         <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
@@ -771,12 +663,10 @@
       ) {
         return {
           sector: "artisan",
-          waBadge: "Respuesta ágil por WhatsApp",
-          lead: "Aquí resolvemos con manos expertas y palabra clara.",
-          desc: "Cuéntame qué pasa en tu casa o negocio: te oriento y vemos el siguiente paso juntos.",
-          waMicro: "Si es urgente, escribe ya: priorizo lo que no puede esperar.",
-          recoZero: "En oficios de confianza, el boca a boca vale más que mil anuncios. Si te atendí bien, comparte mi contacto.",
-          recoHas: "Ya van <span class=\"latam-reco-num\"></span> personas que pasaron el contacto: gracias por la confianza de verdad."
+          waBadge: "WhatsApp",
+          lead: "Cerca de ti, con respuesta rápida.",
+          desc: "Cuéntame qué necesitas y lo vemos por aquí.",
+          waMicro: ""
         };
       }
       if (
@@ -785,12 +675,10 @@
       ) {
         return {
           sector: "bienestar",
-          waBadge: "Primer contacto con calma",
-          lead: "Un espacio para hablar sin prisa, con respeto y escucha de verdad.",
-          desc: "Si necesitas apoyo o orientación, escríbeme: respondemos con cuidado y discreción.",
-          waMicro: "Puedes contar lo esencial por WhatsApp y coordinamos sin presión.",
-          recoZero: "Cuando alguien recomienda un acompañante de confianza, alivia el primer paso. Si te hizo bien, pasa el contacto.",
-          recoHas: "Llevamos <span class=\"latam-reco-num\"></span> veces que alguien compartió este perfil: gracias por ayudar a otras personas a encontrar apoyo."
+          waBadge: "WhatsApp",
+          lead: "Escucha y acompañamiento con calma.",
+          desc: "Escríbeme cuando quieras dar el primer paso.",
+          waMicro: ""
         };
       }
       if (
@@ -799,12 +687,10 @@
       ) {
         return {
           sector: "immo",
-          waBadge: "Asesoría directa",
-          lead: "Decisiones de patrimonio con claridad, rigor y acompañamiento cercano.",
-          desc: "Comprar, vender o rentar merece tiempo y respuestas serias. Hablemos por WhatsApp con tranquilidad.",
-          waMicro: "Te respondo con orden y seguimiento: cada mensaje cuenta.",
-          recoZero: "En bienes raíces, la referencia de un conocido abre puertas. Si valoraste la asesoría, compártela.",
-          recoHas: "<span class=\"latam-reco-num\"></span> recomendaciones compartidas: la confianza se nota en cada referido."
+          waBadge: "WhatsApp",
+          lead: "Asesoría seria para tu patrimonio.",
+          desc: "Hablemos con tiempo y claridad por aquí.",
+          waMicro: ""
         };
       }
       if (
@@ -814,30 +700,25 @@
       ) {
         return {
           sector: "estetica",
-          waBadge: "Reserva y consultas por WhatsApp",
-          lead: "Detalle, estilo y una mano cálida para que te sientas increíble.",
-          desc: "Pregunta por disponibilidad o ideas para tu look: te respondo con gusto y cercanía.",
-          waMicro: "Ideal para coordinar tu cita o resolver dudas sin filas ni complicaciones.",
-          recoZero: "Lo bonito se comparte: si te gustó el resultado, invita a alguien a conocer este espacio.",
-          recoHas: "Van <span class=\"latam-reco-num\"></span> veces que clientes compartieron este perfil: gracias por llevar la recomendación más allá."
+          waBadge: "WhatsApp",
+          lead: "Cuidado, estilo y buena mano.",
+          desc: "Pregunta por tu cita o idea: te respondo encantada/o.",
+          waMicro: ""
         };
       }
       return {
         sector: "default",
-        waBadge: "WhatsApp directo",
-        lead: "Una forma humana y simple de conectar contigo.",
-        desc: "Escríbeme con confianza: aclaramos dudas y seguimos al ritmo que necesites.",
-        waMicro: "Me importa que te sientas atendido, no solo “en línea”.",
-        recoZero: "La mejor publicidad es un cliente que te recomienda. Si te gustó la experiencia, compártela con alguien que lo necesite.",
-        recoHas: "Sumamos <span class=\"latam-reco-num\"></span> veces que alguien compartió este contacto: la comunidad lo nota."
+        waBadge: "WhatsApp",
+        lead: "Profesional de confianza, a un mensaje.",
+        desc: "Te respondo directo por aquí.",
+        waMicro: ""
       };
     }
 
     function latamFormatRating(n) {
       if (n == null || n === "" || isNaN(Number(n))) return "";
       var x = Number(n);
-      var s = (Math.round(x * 10) / 10).toString().replace(".", ",");
-      return s;
+      return (Math.round(x * 10) / 10).toString().replace(".", ",");
     }
 
     function latamExpandHex3(h) {
@@ -891,17 +772,9 @@
         var hero = document.querySelector(".compact-hero");
         if (hero) {
           hero.style.background =
-            "linear-gradient(125deg, " + cDeep + " 0%, " + h + " 44%, " + cSoft + " 100%)";
+            "linear-gradient(125deg, " + cDeep + " 0%, " + h + " 50%, " + cSoft + " 100%)";
         }
       }
-    }
-
-    function latamFillRecoPanel(htmlTemplate, n) {
-      var el = document.getElementById("latam-reco-panel-copy");
-      if (!el || !htmlTemplate) return;
-      el.innerHTML = htmlTemplate;
-      var span = el.querySelector(".latam-reco-num");
-      if (span && n != null) span.textContent = String(n);
     }
 
     function latamSyncTrustAndCopy(card, slugNorm, job) {
@@ -921,8 +794,8 @@
       var tone = latamProfileTone(card.profile, job);
       document.body.setAttribute("data-latam-sector", tone.sector || "default");
 
-      if (waBadge) waBadge.textContent = tone.waBadge || "WhatsApp directo";
-      if (waMicro) waMicro.textContent = tone.waMicro || "";
+      if (waBadge) waBadge.textContent = tone.waBadge || "WhatsApp";
+      if (waMicro) waMicro.textContent = (tone.waMicro || "").trim();
 
       var rating = card.google_rating;
       var count = card.google_review_count;
@@ -938,7 +811,7 @@
             var c = Number(count);
             parts.push(c === 1 ? "1 opinión" : c + " opiniones");
           }
-          gPill.textContent = parts.join(" · ") + " en Google";
+          gPill.textContent = parts.join(" · ");
           gPill.hidden = false;
         } else {
           gPill.textContent = "";
@@ -949,25 +822,14 @@
         if (hasR) {
           var n = Number(recoN);
           rPill.textContent =
-            n === 1 ? "1 contacto compartido por clientes" : n + " contactos compartidos · boca a boca real";
+            n === 1 ? "1 recomendación compartida" : n + " recomendaciones compartidas";
           rPill.hidden = false;
-          rPill.classList.add("latam-pill--pulse");
         } else {
           rPill.textContent = "";
           rPill.hidden = true;
-          rPill.classList.remove("latam-pill--pulse");
         }
       }
       if (strip) strip.hidden = !(hasG || hasR);
-
-      var recoPanelKicker = document.getElementById("latam-reco-panel-kicker");
-      if (recoPanelKicker) recoPanelKicker.textContent = hasR ? "Boca a boca activo" : "Tu recomendación importa";
-
-      if (hasR) {
-        latamFillRecoPanel(tone.recoHas, Number(recoN));
-      } else {
-        latamFillRecoPanel(tone.recoZero, null);
-      }
 
       var ht = (card.hero_title || "").toString().trim();
       var hx = (card.hero_text || "").toString().trim();
