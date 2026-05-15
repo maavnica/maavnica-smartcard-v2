@@ -2,22 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>SmartCard LATAM</title>
   <style>
     :root {
       --latam-accent-deep: #0f766e;
       --latam-accent: #0d9488;
       --latam-accent-soft: #14b8a6;
-      --latam-page-bg-1: #e8f4f2;
-      --latam-page-bg-2: #f0fdfa;
-      --latam-page-bg-3: #ecfdf5;
+      --latam-sector-glow: rgba(20, 184, 166, 0.18);
+      --latam-sheet: #fcfcfd;
+      --latam-sheet-edge: rgba(15, 23, 42, 0.06);
       --latam-text: #0f172a;
       --latam-text-muted: #475467;
-      --latam-text-soft: #667085;
-      --latam-radius-card: 22px;
-      --latam-radius-btn: 14px;
-      --latam-shadow-card: 0 22px 50px -18px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 118, 110, 0.08);
+      --latam-text-soft: #64748b;
+      --latam-radius-outer: 24px;
+      --latam-radius-btn: 15px;
+      --latam-shadow-sheet:
+        0 0 0 1px rgba(255, 255, 255, 0.75) inset,
+        0 1px 0 rgba(15, 23, 42, 0.04),
+        0 28px 56px -28px rgba(15, 23, 42, 0.28),
+        0 12px 24px -16px rgba(15, 118, 110, 0.12);
+      --latam-shadow-float: 0 20px 44px -22px rgba(15, 23, 42, 0.35);
     }
 
     * { box-sizing: border-box; }
@@ -27,82 +32,143 @@
       min-height: 100dvh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: var(--latam-text);
-      background:
-        radial-gradient(1200px 520px at 50% -14%, rgba(20, 184, 166, 0.24), transparent 58%),
-        linear-gradient(168deg, var(--latam-page-bg-1) 0%, var(--latam-page-bg-2) 42%, var(--latam-page-bg-3) 100%);
+      background-color: #0b1220;
+      background-image:
+        radial-gradient(100% 80% at 50% -5%, rgba(45, 212, 191, 0.12), transparent 55%),
+        radial-gradient(90% 55% at 100% 0%, rgba(99, 102, 241, 0.08), transparent 45%),
+        radial-gradient(70% 50% at 0% 100%, rgba(14, 165, 233, 0.06), transparent 50%),
+        linear-gradient(165deg, #0f172a 0%, #151f33 38%, #1a2744 100%);
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body.latam-premium-card[data-latam-sector="bienestar"] {
+      --latam-sector-glow: rgba(167, 139, 250, 0.22);
+      background-image:
+        radial-gradient(100% 75% at 50% -8%, rgba(167, 139, 250, 0.14), transparent 52%),
+        radial-gradient(85% 50% at 0% 20%, rgba(244, 114, 182, 0.08), transparent 48%),
+        linear-gradient(168deg, #0f172a 0%, #1a1533 45%, #221c3d 100%);
+    }
+
+    body.latam-premium-card[data-latam-sector="artisan"] {
+      --latam-sector-glow: rgba(45, 212, 191, 0.2);
+      background-image:
+        radial-gradient(100% 70% at 50% -5%, rgba(34, 197, 94, 0.1), transparent 50%),
+        radial-gradient(80% 45% at 100% 90%, rgba(20, 184, 166, 0.08), transparent 48%),
+        linear-gradient(168deg, #0c1822 0%, #132032 42%, #152e32 100%);
+    }
+
+    body.latam-premium-card[data-latam-sector="immo"] {
+      --latam-sector-glow: rgba(251, 191, 36, 0.12);
+      background-image:
+        radial-gradient(90% 60% at 80% -10%, rgba(251, 191, 36, 0.1), transparent 50%),
+        radial-gradient(70% 50% at 0% 100%, rgba(148, 163, 184, 0.1), transparent 48%),
+        linear-gradient(168deg, #0b1220 0%, #152032 40%, #1e293b 100%);
+    }
+
+    body.latam-premium-card[data-latam-sector="estetica"] {
+      --latam-sector-glow: rgba(251, 113, 133, 0.16);
+      background-image:
+        radial-gradient(95% 70% at 50% -10%, rgba(251, 113, 133, 0.12), transparent 52%),
+        radial-gradient(75% 50% at 100% 80%, rgba(253, 186, 116, 0.08), transparent 48%),
+        linear-gradient(168deg, #101525 0%, #1a1528 45%, #251d35 100%);
     }
 
     .wrap {
-      max-width: 420px;
+      max-width: 400px;
       margin: 0 auto;
-      padding: 16px 14px 28px;
+      padding: max(16px, env(safe-area-inset-top)) 14px max(28px, env(safe-area-inset-bottom));
     }
 
     .admin-preview-badge {
-      max-width: 420px;
+      max-width: 400px;
       margin: 0 auto 12px;
       padding: 8px 12px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 11px;
       line-height: 1.35;
-      color: #344054;
-      background: #e0e7ff;
-      border: 1px solid #c7d2fe;
+      color: #c7d2fe;
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(129, 140, 248, 0.35);
       text-align: center;
+      backdrop-filter: blur(10px);
     }
 
     .card {
-      background: #fff;
-      border-radius: var(--latam-radius-card);
-      padding: 0;
+      position: relative;
+      border-radius: var(--latam-radius-outer);
       overflow: hidden;
-      border: 1px solid rgba(15, 118, 110, 0.14);
-      box-shadow: var(--latam-shadow-card);
+      box-shadow: var(--latam-shadow-float);
     }
 
     .compact-hero {
-      height: 96px;
-      max-height: 104px;
-      background: linear-gradient(125deg, var(--latam-accent-deep) 0%, var(--latam-accent) 42%, var(--latam-accent-soft) 100%);
       position: relative;
+      height: 104px;
+      background: linear-gradient(
+        128deg,
+        var(--latam-accent-deep) 0%,
+        var(--latam-accent) 38%,
+        var(--latam-accent-soft) 88%
+      );
+      border-radius: var(--latam-radius-outer) var(--latam-radius-outer) 0 0;
+    }
+
+    .compact-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 90% at 20% 0%, var(--latam-sector-glow), transparent 55%);
+      opacity: 0.95;
+      pointer-events: none;
     }
 
     .compact-hero::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, transparent 45%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 42%);
       pointer-events: none;
+      animation: latamHeroGlow 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes latamHeroGlow {
+      from { opacity: 0.85; }
+      to { opacity: 1; }
     }
 
     .card-inner {
-      padding: 0 16px 18px;
       position: relative;
+      z-index: 2;
+      margin-top: -40px;
+      padding: 44px 16px 20px;
+      background: var(--latam-sheet);
+      border-radius: var(--latam-radius-outer);
+      border: 1px solid var(--latam-sheet-edge);
+      box-shadow: var(--latam-shadow-sheet);
     }
 
     .top {
       display: flex;
       gap: 14px;
       align-items: flex-end;
-      margin-top: -44px;
-      margin-bottom: 12px;
+      margin-top: -8px;
+      margin-bottom: 14px;
       position: relative;
       z-index: 2;
     }
 
     .avatar-shell {
       position: relative;
-      width: 96px;
-      height: 96px;
+      width: 100px;
+      height: 100px;
       flex-shrink: 0;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #fff;
       box-shadow:
-        0 12px 32px rgba(15, 23, 42, 0.16),
-        0 0 0 1px rgba(15, 118, 110, 0.12);
-      background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+        0 0 0 1px rgba(15, 23, 42, 0.06),
+        0 16px 40px -12px rgba(15, 23, 42, 0.35);
+      background: linear-gradient(145deg, #f4f4f5 0%, #e4e4e7 100%);
     }
 
     #avatar {
@@ -115,7 +181,7 @@
       display: block;
       opacity: 0;
       z-index: 2;
-      transition: opacity 0.22s ease-out;
+      transition: opacity 0.28s ease-out;
     }
 
     #avatar.is-loaded {
@@ -128,12 +194,7 @@
       border-radius: 50%;
       z-index: 1;
       pointer-events: none;
-      background: linear-gradient(
-        145deg,
-        rgba(255, 255, 255, 0.55) 0%,
-        rgba(208, 213, 221, 0.88) 50%,
-        rgba(189, 196, 208, 0.96) 100%
-      );
+      background: linear-gradient(145deg, #fafafa 0%, #e4e4e7 55%, #d4d4d8 100%);
     }
 
     #avatar-placeholder.is-hidden {
@@ -147,33 +208,33 @@
       align-items: center;
       justify-content: center;
       z-index: 1;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 700;
-      letter-spacing: 0.02em;
-      color: #334155;
-      background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+      letter-spacing: 0.03em;
+      color: #3f3f46;
+      background: linear-gradient(145deg, #fafafa 0%, #e7e7ea 100%);
     }
 
     .identity-block {
       flex: 1;
       min-width: 0;
-      padding-bottom: 2px;
+      padding-bottom: 4px;
     }
 
     #display-name {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.3125rem;
       font-weight: 700;
-      line-height: 1.22;
-      letter-spacing: -0.02em;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
       color: var(--latam-text);
       word-wrap: break-word;
     }
 
     #job-line {
-      margin-top: 5px;
+      margin-top: 6px;
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--latam-text-muted);
       line-height: 1.35;
       word-wrap: break-word;
@@ -184,10 +245,10 @@
     }
 
     #city-line {
-      margin-top: 3px;
+      margin-top: 4px;
       font-size: 0.8125rem;
       color: var(--latam-text-soft);
-      line-height: 1.4;
+      line-height: 1.45;
       word-wrap: break-word;
     }
 
@@ -199,7 +260,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 0 0 12px;
+      margin: 0 0 14px;
     }
 
     .latam-trust-strip[hidden] {
@@ -210,59 +271,65 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 10px;
+      padding: 7px 11px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       line-height: 1.25;
       color: #0f172a;
-      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(180deg, #fff 0%, #f4f4f5 100%);
       border: 1px solid rgba(15, 23, 42, 0.08);
       box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
 
     .latam-pill--google {
-      color: #b45309;
+      color: #92400e;
       background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
-      border-color: rgba(180, 83, 9, 0.2);
+      border-color: rgba(245, 158, 11, 0.28);
     }
 
     .latam-pill--reco {
-      color: #1e40af;
+      color: #1e3a8a;
       background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
-      border-color: rgba(30, 64, 175, 0.18);
+      border-color: rgba(37, 99, 235, 0.22);
     }
 
-    .latam-premium-wa-badge {
+    .latam-pill--reco.latam-pill--pulse {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    #latam-wa-badge-title {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 6px 12px;
+      padding: 7px 13px;
       border-radius: 999px;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.02em;
       color: var(--latam-accent-deep);
-      background: linear-gradient(180deg, rgba(20, 184, 166, 0.16), rgba(20, 184, 166, 0.08));
-      border: 1px solid rgba(13, 148, 136, 0.22);
-      margin: 0 0 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.9) 100%);
+      border: 1px solid rgba(13, 148, 136, 0.2);
+      margin: 0 0 6px;
       line-height: 1.3;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
     }
 
-    .latam-premium-wa-badge::before {
+    #latam-wa-badge-title::before {
       content: "";
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #25d366;
-      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.35);
+      background: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
       flex-shrink: 0;
     }
 
     .latam-wa-micro {
-      margin: -4px 0 12px;
-      font-size: 12px;
-      line-height: 1.45;
+      margin: 0 0 14px;
+      font-size: 13px;
+      line-height: 1.5;
       color: var(--latam-text-muted);
     }
 
@@ -271,7 +338,7 @@
     }
 
     .latam-hero-block {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .latam-hero-block[hidden] {
@@ -290,7 +357,7 @@
       margin: 0;
       font-size: 13px;
       font-weight: 600;
-      line-height: 1.4;
+      line-height: 1.45;
       color: var(--latam-accent-deep);
     }
 
@@ -302,15 +369,15 @@
       margin: 0 0 8px;
       font-size: 1.0625rem;
       font-weight: 700;
-      line-height: 1.3;
+      line-height: 1.32;
       letter-spacing: -0.02em;
       color: var(--latam-text);
     }
 
     .desc {
       margin: 0 0 14px;
-      font-size: 0.875rem;
-      line-height: 1.45;
+      font-size: 0.9375rem;
+      line-height: 1.5;
       color: var(--latam-text-muted);
     }
 
@@ -319,20 +386,53 @@
       display: none !important;
     }
 
+    .latam-reco-panel {
+      margin: 4px 0 18px;
+      padding: 14px 14px 13px;
+      border-radius: 16px;
+      background: linear-gradient(165deg, rgba(37, 99, 235, 0.06) 0%, rgba(99, 102, 241, 0.05) 100%);
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+    }
+
+    .latam-reco-panel__kicker {
+      margin: 0 0 6px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #1d4ed8;
+    }
+
+    #latam-reco-panel-copy {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+
+    #latam-reco-panel-copy .latam-reco-num {
+      font-weight: 800;
+      color: #1d4ed8;
+      font-variant-numeric: tabular-nums;
+    }
+
     .btn {
       width: 100%;
       border: 0;
       border-radius: var(--latam-radius-btn);
-      padding: 13px 16px;
-      font-weight: 600;
+      padding: 14px 16px;
+      font-weight: 700;
       font-size: 0.9375rem;
+      letter-spacing: 0.01em;
       cursor: pointer;
       transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) inset;
     }
 
     .btn + .btn {
-      margin-top: 10px;
+      margin-top: 11px;
     }
 
     .btn:active:not(:disabled) {
@@ -340,22 +440,22 @@
     }
 
     .btn-wa {
-      background: linear-gradient(180deg, #1fa855 0%, #128c3a 100%);
+      background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
       color: #fff;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.2) inset,
-        0 12px 28px -12px rgba(18, 140, 58, 0.55);
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 14px 32px -14px rgba(22, 163, 74, 0.55);
     }
 
     .btn-wa:hover:not(:disabled) {
-      filter: brightness(1.04);
+      filter: brightness(1.05);
     }
 
     .btn-review {
-      background: linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%);
+      background: linear-gradient(180deg, #fff 0%, #f4f4f5 100%);
       color: var(--latam-text);
       border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 6px 18px -10px rgba(15, 23, 42, 0.2);
+      box-shadow: 0 8px 20px -12px rgba(15, 23, 42, 0.18);
     }
 
     .btn-review:hover:not(:disabled) {
@@ -363,23 +463,24 @@
     }
 
     .btn-reco {
-      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      position: relative;
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
       color: #fff;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.18) inset,
-        0 12px 28px -12px rgba(29, 78, 216, 0.5);
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 14px 36px -14px rgba(29, 78, 216, 0.55);
     }
 
     .btn-reco:hover:not(:disabled) {
-      filter: brightness(1.04);
+      filter: brightness(1.05);
     }
 
     .hint {
-      margin-top: 14px;
+      margin-top: 16px;
       text-align: center;
       font-size: 12px;
       line-height: 1.45;
-      color: var(--latam-text-muted);
+      color: var(--latam-text-soft);
     }
 
     .hint[hidden] {
@@ -387,17 +488,18 @@
     }
 
     .foot {
-      margin-top: 10px;
+      margin-top: 12px;
       text-align: center;
       font-size: 11px;
       color: var(--latam-text-soft);
+      opacity: 0.85;
     }
 
     @media (max-width: 360px) {
-      .wrap { padding: 12px 10px 24px; }
-      .avatar-shell { width: 88px; height: 88px; }
-      .top { margin-top: -40px; }
-      #display-name { font-size: 1.125rem; }
+      .wrap { padding-left: 12px; padding-right: 12px; }
+      .avatar-shell { width: 92px; height: 92px; }
+      .card-inner { margin-top: -36px; padding-top: 40px; }
+      #display-name { font-size: 1.1875rem; }
     }
   </style>
 </head>
@@ -411,7 +513,7 @@
       <div class="card-inner">
         <div class="top">
           <div class="avatar-shell">
-            <img id="avatar" alt="Foto profesional" width="96" height="96" />
+            <img id="avatar" alt="Foto profesional" width="100" height="100" />
             <span id="avatar-placeholder" aria-hidden="true"></span>
             <span id="avatar-fallback"></span>
           </div>
@@ -427,7 +529,7 @@
           <span id="latam-reco-pill" class="latam-pill latam-pill--reco" hidden></span>
         </div>
 
-        <p class="latam-premium-wa-badge" role="status">Atención rápida por WhatsApp</p>
+        <p id="latam-wa-badge-title" role="status">WhatsApp directo</p>
         <p class="latam-wa-micro" id="latam-wa-micro"></p>
 
         <div id="latam-hero-block" class="latam-hero-block" hidden>
@@ -438,6 +540,11 @@
 
         <p class="lead" id="latam-lead"></p>
         <p class="desc" id="latam-desc"></p>
+
+        <div class="latam-reco-panel" id="latam-reco-panel">
+          <p class="latam-reco-panel__kicker" id="latam-reco-panel-kicker">Recomendación</p>
+          <p id="latam-reco-panel-copy"></p>
+        </div>
 
         <button class="btn btn-wa" id="btn-whatsapp" type="button">Contactar por WhatsApp</button>
         <button class="btn btn-review" id="btn-review" type="button">Dejar una opinión</button>
@@ -660,38 +767,69 @@
       var j = (job || "").toString().toLowerCase();
       if (
         p === "artisan" ||
-        /plom|fontan|electric|albañ|albanil|cerraj|aire acond|manten|obr|herrer|jardiner|limpiez|fumig/i.test(j)
+        /plom|fontan|electric|albañ|albanil|cerraj|aire acond|manten|obr|herrer|jardiner|limpiez|fumig|servic/i.test(j)
       ) {
         return {
-          lead: "Servicio claro, respuesta rápida y confianza de verdad.",
-          desc: "Cuéntame qué necesitas por WhatsApp y te oriento sin vueltas.",
-          waMicro: "Ideal para urgencias y trabajos bien hechos a la primera."
+          sector: "artisan",
+          waBadge: "Respuesta ágil por WhatsApp",
+          lead: "Aquí resolvemos con manos expertas y palabra clara.",
+          desc: "Cuéntame qué pasa en tu casa o negocio: te oriento y vemos el siguiente paso juntos.",
+          waMicro: "Si es urgente, escribe ya: priorizo lo que no puede esperar.",
+          recoZero: "En oficios de confianza, el boca a boca vale más que mil anuncios. Si te atendí bien, comparte mi contacto.",
+          recoHas: "Ya van <span class=\"latam-reco-num\"></span> personas que pasaron el contacto: gracias por la confianza de verdad."
         };
       }
       if (
         p === "bien_etre" ||
-        /terap|psicolog|psico|masaje|yoga|bienestar|acomp|coach|mindful|holíst|salud mental/i.test(j)
+        /terap|psicolog|psico|masaje|yoga|bienestar|acomp|coach|mindful|holíst|salud mental|counsel/i.test(j)
       ) {
         return {
-          lead: "Un espacio de escucha y acompañamiento, con respeto y calma.",
-          desc: "Si te sientes abrumado o necesitas apoyo, escríbeme con confianza.",
-          waMicro: "Primera respuesta por WhatsApp: conectamos con cercanía y cuidado."
+          sector: "bienestar",
+          waBadge: "Primer contacto con calma",
+          lead: "Un espacio para hablar sin prisa, con respeto y escucha de verdad.",
+          desc: "Si necesitas apoyo o orientación, escríbeme: respondemos con cuidado y discreción.",
+          waMicro: "Puedes contar lo esencial por WhatsApp y coordinamos sin presión.",
+          recoZero: "Cuando alguien recomienda un acompañante de confianza, alivia el primer paso. Si te hizo bien, pasa el contacto.",
+          recoHas: "Llevamos <span class=\"latam-reco-num\"></span> veces que alguien compartió este perfil: gracias por ayudar a otras personas a encontrar apoyo."
         };
       }
       if (
         p === "immo" ||
-        /inmobili|corredor|asesor.? inmob|propiedad|renta de|venta de casas|agencia de bienes/i.test(j)
+        /inmobili|corredor|asesor.? inmob|propiedad|renta de|venta de casas|agencia de bienes|aval[uú]o/i.test(j)
       ) {
         return {
-          lead: "Asesoría seria para comprar, vender o rentar con tranquilidad.",
-          desc: "Te acompaño en cada paso: dudas, visitas y seguimiento directo por WhatsApp.",
-          waMicro: "Hablemos de tu proyecto inmobiliario con transparencia y seguimiento cercano."
+          sector: "immo",
+          waBadge: "Asesoría directa",
+          lead: "Decisiones de patrimonio con claridad, rigor y acompañamiento cercano.",
+          desc: "Comprar, vender o rentar merece tiempo y respuestas serias. Hablemos por WhatsApp con tranquilidad.",
+          waMicro: "Te respondo con orden y seguimiento: cada mensaje cuenta.",
+          recoZero: "En bienes raíces, la referencia de un conocido abre puertas. Si valoraste la asesoría, compártela.",
+          recoHas: "<span class=\"latam-reco-num\"></span> recomendaciones compartidas: la confianza se nota en cada referido."
+        };
+      }
+      if (
+        /estil|peluqu|barber|uñas|manic|maquill|spa|facial|bellez|cosmet|pein|cejas|lash|cabell|coloraci|alisad/i.test(
+          j
+        )
+      ) {
+        return {
+          sector: "estetica",
+          waBadge: "Reserva y consultas por WhatsApp",
+          lead: "Detalle, estilo y una mano cálida para que te sientas increíble.",
+          desc: "Pregunta por disponibilidad o ideas para tu look: te respondo con gusto y cercanía.",
+          waMicro: "Ideal para coordinar tu cita o resolver dudas sin filas ni complicaciones.",
+          recoZero: "Lo bonito se comparte: si te gustó el resultado, invita a alguien a conocer este espacio.",
+          recoHas: "Van <span class=\"latam-reco-num\"></span> veces que clientes compartieron este perfil: gracias por llevar la recomendación más allá."
         };
       }
       return {
-        lead: "Profesional de confianza y contacto directo por WhatsApp.",
-        desc: "Pregunta lo que necesites: te respondo con claridad y sin complicaciones.",
-        waMicro: "Canal preferido por clientes en toda Latinoamérica: rápido y cercano."
+        sector: "default",
+        waBadge: "WhatsApp directo",
+        lead: "Una forma humana y simple de conectar contigo.",
+        desc: "Escríbeme con confianza: aclaramos dudas y seguimos al ritmo que necesites.",
+        waMicro: "Me importa que te sientas atendido, no solo “en línea”.",
+        recoZero: "La mejor publicidad es un cliente que te recomienda. Si te gustó la experiencia, compártela con alguien que lo necesite.",
+        recoHas: "Sumamos <span class=\"latam-reco-num\"></span> veces que alguien compartió este contacto: la comunidad lo nota."
       };
     }
 
@@ -758,11 +896,20 @@
       }
     }
 
+    function latamFillRecoPanel(htmlTemplate, n) {
+      var el = document.getElementById("latam-reco-panel-copy");
+      if (!el || !htmlTemplate) return;
+      el.innerHTML = htmlTemplate;
+      var span = el.querySelector(".latam-reco-num");
+      if (span && n != null) span.textContent = String(n);
+    }
+
     function latamSyncTrustAndCopy(card, slugNorm, job) {
       var strip = document.getElementById("latam-trust-strip");
       var gPill = document.getElementById("latam-google-pill");
       var rPill = document.getElementById("latam-reco-pill");
       var waMicro = document.getElementById("latam-wa-micro");
+      var waBadge = document.getElementById("latam-wa-badge-title");
       var heroBlock = document.getElementById("latam-hero-block");
       var heroTitle = document.getElementById("latam-hero-title");
       var heroText = document.getElementById("latam-hero-text");
@@ -772,7 +919,9 @@
       var hintEl = document.getElementById("latam-hint");
 
       var tone = latamProfileTone(card.profile, job);
+      document.body.setAttribute("data-latam-sector", tone.sector || "default");
 
+      if (waBadge) waBadge.textContent = tone.waBadge || "WhatsApp directo";
       if (waMicro) waMicro.textContent = tone.waMicro || "";
 
       var rating = card.google_rating;
@@ -787,9 +936,9 @@
           if (rating != null && !isNaN(Number(rating))) parts.push("★ " + latamFormatRating(rating));
           if (count != null && Number(count) > 0) {
             var c = Number(count);
-            parts.push(c === 1 ? "1 opinión en Google" : c + " opiniones en Google");
+            parts.push(c === 1 ? "1 opinión" : c + " opiniones");
           }
-          gPill.textContent = parts.join(" · ");
+          gPill.textContent = parts.join(" · ") + " en Google";
           gPill.hidden = false;
         } else {
           gPill.textContent = "";
@@ -799,14 +948,26 @@
       if (rPill) {
         if (hasR) {
           var n = Number(recoN);
-          rPill.textContent = n === 1 ? "1 recomendación compartida" : n + " recomendaciones compartidas";
+          rPill.textContent =
+            n === 1 ? "1 contacto compartido por clientes" : n + " contactos compartidos · boca a boca real";
           rPill.hidden = false;
+          rPill.classList.add("latam-pill--pulse");
         } else {
           rPill.textContent = "";
           rPill.hidden = true;
+          rPill.classList.remove("latam-pill--pulse");
         }
       }
       if (strip) strip.hidden = !(hasG || hasR);
+
+      var recoPanelKicker = document.getElementById("latam-reco-panel-kicker");
+      if (recoPanelKicker) recoPanelKicker.textContent = hasR ? "Boca a boca activo" : "Tu recomendación importa";
+
+      if (hasR) {
+        latamFillRecoPanel(tone.recoHas, Number(recoN));
+      } else {
+        latamFillRecoPanel(tone.recoZero, null);
+      }
 
       var ht = (card.hero_title || "").toString().trim();
       var hx = (card.hero_text || "").toString().trim();
@@ -1028,5 +1189,4 @@
 
     loadCard();
   </script>
-</body>
 </html>
