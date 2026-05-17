@@ -142,11 +142,12 @@
     }
 
     .status-bar {
-      font-size: 11px;
+      font-size: 10px;
+      font-weight: 500;
       text-align: center;
-      color: #6b7280;
-      margin-bottom: 10px;
-      letter-spacing: 0.03em;
+      color: rgba(203, 213, 225, 0.82);
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -163,12 +164,13 @@
       height: 14px;
       object-fit: contain;
       flex-shrink: 0;
-      opacity: 0.9;
+      opacity: 0.92;
     }
     .status-bar-label {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: rgba(226, 232, 240, 0.9);
     }
 
     /* Surcouche marketing — uniquement activée en JS si slug === "demo" */
@@ -400,12 +402,13 @@
 
     .hero-texts { flex: 1; min-width: 0; }
 
-    .hero-subline {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(148, 163, 184, 0.9);
-      margin-bottom: 2px;
+    /* Signature hero masquée : branding porté par #status-bar-label (JS conserve #hero-subline) */
+    #hero-subline {
+      display: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
     }
 
     .hero-title {
@@ -1415,7 +1418,7 @@
       padding-bottom: 14px;
     }
     body.public-card--compact .hero {
-      padding: 12px 12px 11px;
+      padding: 10px 12px 11px;
       margin-bottom: 11px;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.08) inset,
@@ -1466,7 +1469,8 @@
     }
     body.public-card--compact .hero-title {
       font-size: 16px;
-      margin-bottom: 4px;
+      margin-top: 0;
+      margin-bottom: 3px;
       letter-spacing: -0.01em;
     }
     body.public-card--compact .hero-company {
@@ -1479,10 +1483,6 @@
       font-size: 11px;
       margin-bottom: 4px;
       color: rgba(226, 232, 240, 0.9);
-    }
-    body.public-card--compact .hero-subline {
-      font-size: 10px;
-      margin-bottom: 1px;
     }
     body.public-card--compact .hero-recommend-count {
       margin: 3px 0 5px;
@@ -3180,8 +3180,8 @@
         return;
       }
 
-      if (sb) sb.textContent = "Carte de contact";
-      if (subline) subline.textContent = "CONTACT PROFESSIONNEL";
+      if (sb) sb.textContent = "Maavnica SmartCard";
+      if (subline) subline.textContent = "";
       if (foot) foot.textContent = "Carte de contact professionnelle";
       if (tagRow) tagRow.style.display = "none";
       const dn = ((fullName || "").trim() || (companyName || "").trim() || "Carte de contact");
