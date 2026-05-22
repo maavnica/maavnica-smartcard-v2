@@ -1289,6 +1289,12 @@
           </div>
           <p class="latam-form-err" id="latamFormErr" role="alert"></p>
           <button type="submit" class="latam-form-submit" id="latamFormSubmit">Solicitar mi SmartCard</button>
+          <p class="latam-form-legal" style="margin-top:10px;font-size:11px;color:#64748b;line-height:1.45;">
+            Al enviar, aceptas el tratamiento de tus datos (nombre, WhatsApp, ciudad, mensaje) para gestionar tu solicitud SmartCard.
+            <a href="/static/confidentialite.html">Privacidad</a>
+            · <a href="/static/mentions-legales.html">Aviso legal</a>
+            · <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
+          </p>
           <div class="latam-form-ok" id="latamFormOk" role="status">
             Solicitud enviada. Te contactaremos por WhatsApp.
           </div>
@@ -1357,6 +1363,7 @@
         <a href="/static/mentions-legales.html">Mentions légales</a>
         <a href="/static/cgv-smartcard.html">CGV</a>
         <a href="/static/confidentialite.html">Confidentialité</a>
+        <a href="/static/cookies.html">Cookies</a>
       </span>
     </div>
   </footer>
@@ -1895,12 +1902,15 @@
       } catch (e) {}
     })();
   </script>
+  <script src="/static/maavnica-consent.js"></script>
   <script src="/static/site-analytics.js"></script>
   <script>
     (function () {
+      if (window.maavnicaRunSiteAnalyticsInit) {
+        window.maavnicaRunSiteAnalyticsInit({ pageType: "landing" });
+      }
       var SA = window.maavnicaSiteAnalytics;
       if (!SA) return;
-      SA.init({ pageType: "landing" });
       function cta(t) {
         SA.track({ event_type: "cta_click", page_type: "landing", target: t });
       }

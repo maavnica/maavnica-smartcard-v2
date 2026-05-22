@@ -433,6 +433,15 @@
 
           <button class="btn" id="submitBtn" type="submit">Envoyer mon formulaire</button>
 
+          <p class="form-legal hint" style="margin-top:12px;margin-bottom:0;line-height:1.45;">
+            En envoyant ce formulaire, vous acceptez que Maavnica traite vos données (identité, coordonnées, message)
+            pour traiter votre demande de SmartCard et vous recontacter.
+            <a href="/static/confidentialite.html" target="_blank" rel="noopener">Confidentialité</a>
+            · <a href="/static/mentions-legales.html" target="_blank" rel="noopener">Mentions légales</a>
+            · <a href="mailto:contact@maavnica.com">contact@maavnica.com</a> (droits RGPD).
+            Aucune revente. Pas de prospection sans accord séparé.
+          </p>
+
           <p class="hint" style="margin-top:12px;margin-bottom:0;">🔒 Aucun paiement n’est débité à cette étape. Vous pourrez vérifier votre demande avant de payer.</p>
 
           <div class="okbox" id="okbox">
@@ -790,12 +799,15 @@
     setupContactSubmit();
   })();
 </script>
+  <script src="/static/maavnica-consent.js"></script>
   <script src="/static/site-analytics.js"></script>
   <script>
     (function () {
+      if (window.maavnicaRunSiteAnalyticsInit) {
+        window.maavnicaRunSiteAnalyticsInit({ pageType: "contact" });
+      }
       var SA = window.maavnicaSiteAnalytics;
       if (!SA) return;
-      SA.init({ pageType: "contact" });
       var back = document.querySelector("a.back-link");
       if (back) {
         back.addEventListener("click", function () {

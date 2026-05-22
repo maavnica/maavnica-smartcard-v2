@@ -414,6 +414,9 @@
             <div class="fine">
               Vos informations sont utilisées uniquement pour vous contacter au sujet du programme affilié.
               Aucune donnée n’est revendue ni partagée.
+              <a href="/static/confidentialite.html">Confidentialité</a>
+              · <a href="/static/mentions-legales.html">Mentions légales</a>
+              · <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
             </div>
           </form>
 
@@ -422,8 +425,11 @@
 
     </div>
 
-    <footer>
-      © Maavnica — SmartCard • Programme d’affiliation
+    <footer style="text-align:center;font-size:11px;color:var(--muted2);padding:16px;">
+      © Maavnica — SmartCard · Programme d’affiliation ·
+      <a href="/static/confidentialite.html">Confidentialité</a> ·
+      <a href="/static/mentions-legales.html">Mentions</a> ·
+      <a href="/static/cookies.html">Cookies</a>
     </footer>
 
   </div>
@@ -731,12 +737,15 @@
       });
     })();
   </script>
+  <script src="/static/maavnica-consent.js"></script>
   <script src="/static/site-analytics.js"></script>
   <script>
     (function () {
+      if (window.maavnicaRunSiteAnalyticsInit) {
+        window.maavnicaRunSiteAnalyticsInit({ pageType: "affiliate" });
+      }
       var SA = window.maavnicaSiteAnalytics;
       if (!SA) return;
-      SA.init({ pageType: "affiliate" });
       document.querySelectorAll('a[href*="smartcard.maavnica.com"], a[href="/"]').forEach(
         function (a) {
           var h = a.getAttribute("href") || "";

@@ -456,11 +456,16 @@
         <button class="btn btn-reco" id="btn-recommend" type="button">Recomendar a un amigo</button>
 
         <div class="hint" id="latam-hint" hidden></div>
-        <div class="foot">Propulsado por Maavnica</div>
+        <div class="foot">
+          Propulsado por Maavnica ·
+          <a href="/static/confidentialite.html">Privacidad</a> ·
+          <a href="/static/mentions-legales.html">Aviso legal</a>
+        </div>
       </div>
     </section>
   </main>
 
+  <script src="/static/maavnica-consent.js"></script>
   <script>
     /**
      * TODO(analytics): Datos históricos pueden seguir contaminados antes de este parche.
@@ -555,7 +560,13 @@
     }
 
     function shouldTrackAnalytics() {
-      return !isInternalView;
+      if (isInternalView) return false;
+      try {
+        if (localStorage.getItem("maavnica_consent") !== "all") return false;
+      } catch (e) {
+        return false;
+      }
+      return true;
     }
 
     function syncInternalViewFromUrl(slug) {

@@ -120,6 +120,11 @@
     </section>
 
     <p class="note">Ton lien affilié est suivi automatiquement quand il est partagé.</p>
+    <p class="legal-mini" style="margin-top:20px;font-size:11px;color:#94a3b8;text-align:center;">
+      <a href="/static/confidentialite.html">Confidentialité</a> ·
+      <a href="/static/mentions-legales.html">Mentions</a> ·
+      <a href="/static/cookies.html">Cookies</a>
+    </p>
   </div>
   <script>
     (function () {
@@ -259,12 +264,15 @@
       if (note) note.style.display = "none";
     })();
   </script>
+  <script src="/static/maavnica-consent.js"></script>
   <script src="/static/site-analytics.js"></script>
   <script>
     (function () {
+      if (window.maavnicaRunSiteAnalyticsInit) {
+        window.maavnicaRunSiteAnalyticsInit({ pageType: "affiliate" });
+      }
       var SA = window.maavnicaSiteAnalytics;
       if (!SA) return;
-      SA.init({ pageType: "affiliate" });
       document.addEventListener(
         "click",
         function (e) {

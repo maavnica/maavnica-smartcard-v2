@@ -57,36 +57,84 @@
       <div class="container">
         <h1>Confidentialité & données personnelles</h1>
 
+        <h2>1. Responsable du traitement</h2>
         <p>
-          Maavnica traite les données personnelles transmises via les formulaires SmartCard et affiliation
-          (nom, prénom, email, téléphone, activité, messages) uniquement pour :
+          Maavnica – Arnaud Petitjean-Huard (auto-entrepreneur)<br/>
+          SIREN : 999 089 675<br/>
+          Email : <a href="mailto:contact@maavnica.com">contact@maavnica.com</a><br/>
+          Site : <a href="https://smartcard.maavnica.com">smartcard.maavnica.com</a>
         </p>
+
+        <h2>2. Données collectées</h2>
+        <p>Selon votre utilisation de SmartCard, nous pouvons traiter :</p>
         <ul>
-          <li>répondre aux demandes ;</li>
-          <li>créer et livrer la SmartCard ;</li>
-          <li>assurer le suivi client et affilié.</li>
+          <li>identité et coordonnées (nom, prénom, email, téléphone, WhatsApp, activité, messages) ;</li>
+          <li>contenus de formulaires (demande de carte, recontact, affiliation, devis, avis) ;</li>
+          <li>données techniques de navigation (pages, clics, paramètres URL, user-agent tronqué) ;</li>
+          <li>identifiants pseudonymes en localStorage (voir <a href="/static/cookies.html">politique cookies</a>) ;</li>
+          <li>données de recommandation traçable (prénom/nom du recommandeur, jeton <code>?r=</code>).</li>
         </ul>
 
+        <h2>3. Finalités et bases légales</h2>
+        <ul>
+          <li><strong>Traiter votre demande / commande SmartCard</strong> — exécution de mesures précontractuelles et contrat (art. 6-1-b RGPD).</li>
+          <li><strong>Relation client et affiliation</strong> — intérêt légitime (art. 6-1-f), communication proportionnée.</li>
+          <li><strong>Devis et avis sur une carte professionnelle</strong> — intérêt légitime du professionnel titulaire et exécution de sa relation avec vous ; Maavnica agit en sous-traitant technique d’hébergement.</li>
+          <li><strong>Mesure d’audience interne first-party</strong> — votre consentement via la bannière (art. 6-1-a) ; refus possible sans bloquer le service.</li>
+          <li><strong>Recommandations traçables</strong> — intérêt légitime du professionnel pour mesurer l’efficacité du bouche-à-oreille (art. 6-1-f).</li>
+        </ul>
+        <p>Nous ne revendons pas vos données et n’envoyons pas de publicité ciblée tierce.</p>
+
+        <h2>4. Destinataires et hébergement</h2>
+        <ul>
+          <li><strong>Maavnica</strong> — traitement et support.</li>
+          <li><strong>Render Services, Inc.</strong> (États-Unis) — hébergement de l’application et base de données (cartes, devis, avis, statistiques). Transfert encadré par les garanties applicables (clauses contractuelles types ou équivalent).</li>
+          <li><strong>Google (Gmail)</strong> — réception des messages issus des formulaires site (contact, commande, affiliation).</li>
+          <li><strong>FormSubmit.co</strong> (États-Unis) — formulaire legacy de personnalisation : sous-traitant technique <strong>temporaire</strong> pour acheminer votre demande vers Maavnica (migration vers notre API en cours).</li>
+          <li><strong>Professionnel titulaire de la SmartCard</strong> — pour les devis, avis et contacts initiés depuis sa carte.</li>
+        </ul>
+
+        <h2 id="recommandations">5. Recommandations traçables (?r=)</h2>
         <p>
-          Les données sont stockées dans une messagerie professionnelle (Gmail) et ne sont ni revendues ni
-          utilisées à des fins publicitaires externes.
+          Lorsqu’un visiteur partage un lien contenant le paramètre <code>?r=</code>, le prénom et le nom indiqués
+          servent à créer un <strong>lien de recommandation identifiable</strong> par le professionnel (affichage
+          discret à l’arrivée, statistiques internes). Ces données ne sont pas revendues.
         </p>
 
+        <h2>6. Durées de conservation</h2>
+        <ul>
+          <li>Demandes via formulaires site (email) : jusqu’à <strong>3 ans</strong> après le dernier contact, sauf obligation légale contraire.</li>
+          <li>Devis et avis en base (cartes clients) : durée de la relation avec le professionnel, puis <strong>3 ans</strong> maximum en archivage proportionné.</li>
+          <li>Statistiques d’audience (site et cartes) : environ <strong>13 mois</strong>.</li>
+          <li>Référence affilié en navigateur : <strong>30 jours</strong> (voir cookies).</li>
+        </ul>
+
+        <h2>7. Vos droits</h2>
         <p>
-          Vous pouvez demander l’accès, la rectification ou la suppression de vos données en écrivant à
+          Vous disposez des droits d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité
+          lorsque applicable. Pour les exercer :
           <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
+          Réclamation possible auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
         </p>
 
+        <h2>8. Cookies et stockage local</h2>
         <p>
-          Pour plus de détails, vous pouvez consulter également les
-          <a href="/cgv.html">Conditions Générales de Vente</a> et les
-          <a href="/mentions-legales.html">Mentions légales</a>.
+          Détails des traceurs et de votre choix :
+          <a href="/static/cookies.html">page Cookies & stockage local</a>.
+        </p>
+
+        <p style="margin-top:20px;">
+          Voir aussi :
+          <a href="/static/cgv-smartcard.html">Conditions Générales de Vente</a> ·
+          <a href="/static/mentions-legales.html">Mentions légales</a>
         </p>
       </div>
     </main>
 
     <footer>
-      © 2026 Maavnica SmartCard – Confidentialité & données personnelles
+      © 2026 Maavnica SmartCard –
+      <a href="/static/mentions-legales.html">Mentions</a> ·
+      <a href="/static/cookies.html">Cookies</a>
     </footer>
   </div>
 </body>

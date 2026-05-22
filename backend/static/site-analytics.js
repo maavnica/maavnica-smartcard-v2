@@ -1,18 +1,24 @@
 /**
  * Analytics site / landing Maavnica — envoi non bloquant vers POST /api/site-analytics/event
  * Filtre interne : ?admin_view=1 ou localStorage maavnica_internal_view = "1"
+ * Consentement : localStorage maavnica_consent === "essential" ou absent → pas d’analytics
  */
 (function () {
   var ENDPOINT_PATH = "/api/site-analytics/event";
   var STORAGE_VISITOR = "maavnica_site_vid";
   var STORAGE_INTERNAL = "maavnica_internal_view";
+  var STORAGE_CONSENT = "maavnica_consent";
 
   function shouldSkip() {
     try {
+      var consent = localStorage.getItem(STORAGE_CONSENT);
+      if (consent !== "all") return true;
       var p = new URLSearchParams(window.location.search);
       if (p.get("admin_view") === "1") return true;
       if (localStorage.getItem(STORAGE_INTERNAL) === "1") return true;
-    } catch (e) {}
+    } catch (e) {
+      return true;
+    }
     return false;
   }
 

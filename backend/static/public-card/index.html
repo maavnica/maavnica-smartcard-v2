@@ -2834,7 +2834,10 @@
           </button>
 
           <div class="hint">
-            Vous ne serez contacté que par ce professionnel. Vos informations ne sont ni revendues ni partagées.
+            Vos informations sont transmises au professionnel titulaire de cette carte pour traiter votre demande.
+            Maavnica héberge la page et peut enregistrer des statistiques techniques si vous l’acceptez
+            (<a href="/static/confidentialite.html">confidentialité</a>).
+            Droits&nbsp;: <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
           </div>
           </div>
 
@@ -2859,9 +2862,10 @@
       </div>
 
       <div class="footer" id="public-card-footer">
-        SmartCard Maavnica
-        ·
-        <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">En savoir plus</a>
+        SmartCard Maavnica ·
+        <a href="/static/confidentialite.html">Confidentialité</a> ·
+        <a href="/static/mentions-legales.html">Mentions</a> ·
+        <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">Maavnica</a>
       </div>
     </div>
   </div>
@@ -2874,6 +2878,10 @@
       <p>
         Indiquez votre prénom et votre nom pour que le professionnel sache qui recommande. Un lien
         personnel et discret sera créé.
+      </p>
+      <p style="font-size:10px;color:#64748b;margin:0 0 10px;line-height:1.4;">
+        Votre prénom et nom servent à créer un lien de recommandation identifiable par le professionnel.
+        <a href="/static/confidentialite.html#recommandations">En savoir plus</a>.
       </p>
       <label class="visually-hidden" for="recommend-id-first">Prénom</label>
       <input
@@ -2898,6 +2906,7 @@
     </div>
   </div>
 
+  <script src="/static/maavnica-consent.js"></script>
   <script>
     /**
      * TODO(analytics): Les données déjà comptabilisées avant ce correctif peuvent rester polluées.
@@ -2999,7 +3008,13 @@
     }
 
     function shouldTrackAnalytics() {
-      return !isInternalView;
+      if (isInternalView) return false;
+      try {
+        if (localStorage.getItem("maavnica_consent") !== "all") return false;
+      } catch (e) {
+        return false;
+      }
+      return true;
     }
 
     function syncInternalViewFromUrl(slug) {
