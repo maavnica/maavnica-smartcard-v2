@@ -76,6 +76,11 @@ def _card_to_public_dict(card: models.Card) -> dict:
             continue
         if hasattr(card, name):
             d[name] = getattr(card, name)
+    theme = d.get("card_theme")
+    if not theme or not str(theme).strip():
+        d["card_theme"] = "classic"
+    else:
+        d["card_theme"] = str(theme).strip().lower()
     return d
 
 
@@ -228,6 +233,10 @@ def update_card(
     if "region" in card_in.model_fields_set:
         r = card_in.region
         update_data["region"] = r if r is not None else "fr"
+    # Même principe que region pour card_theme (rendu /c/{slug}).
+    if "card_theme" in card_in.model_fields_set:
+        t = (card_in.card_theme or "classic").strip().lower()
+        update_data["card_theme"] = t if t in ("classic", "experience") else "classic"
     # Même principe que region pour city (SEO local).
     if "city" in card_in.model_fields_set:
         update_data["city"] = card_in.city

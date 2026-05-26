@@ -58,6 +58,50 @@ app = FastAPI(title="Maavnica SmartCard API")
 
 _public_card_log = logging.getLogger(__name__)
 
+_PUBLIC_CARD_V3_FILES = (
+    "index_v3.html",
+    "v3.css",
+    "v3-layout.css",
+    "public-card-runtime.js",
+)
+
+
+def _read_card_theme_from_db(card, db) -> str:
+    """Lit card_theme (ORM + repli SQL si besoin)."""
+    if card is None:
+        return "classic"
+    raw = getattr(card, "card_theme", None)
+    if raw is not None and str(raw).strip():
+        theme = str(raw).strip().lower()
+        if theme in ("classic", "experience"):
+            return theme
+    try:
+        from sqlalchemy import text
+
+        row = db.execute(
+            text("SELECT card_theme FROM cards WHERE id = :cid"),
+            {"cid": card.id},
+        ).first()
+        if row and row[0] is not None and str(row[0]).strip():
+            theme = str(row[0]).strip().lower()
+            if theme in ("classic", "experience"):
+                return theme
+    except Exception:
+        _public_card_log.debug(
+            "card_theme_sql_fallback_failed slug=%s",
+            getattr(card, "slug", "?"),
+            exc_info=True,
+        )
+    return "classic"
+
+
+def _log_public_card_v3_assets() -> None:
+    pub = STATIC_DIR / "public-card"
+    for name in _PUBLIC_CARD_V3_FILES:
+        path = pub / name
+        if not path.is_file():
+            _public_card_log.warning("PUBLIC_CARD_V3_ASSET_MISSING file=%s", path)
+
 
 def _fr_public_card_seo_strings(seo: Optional[Dict[str, Any]]) -> tuple[str, str, str, str]:
     """Titres et descriptions FR pour le HTML initial (crawlers sans exécution JS)."""
@@ -245,6 +289,7 @@ def _create_db_tables():
     ensure_card_theme_column()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
+    _log_public_card_v3_assets()
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -358,14 +403,15 @@ async def serve_public_card(request: Request, slug: str):
     from app.database import SessionLocal
     from app.models import Card
 
-    path_fr = STATIC_DIR / "public-card" / "index.html"
-    path_fr_v3 = STATIC_DIR / "public-card" / "index_v3.html"
+    path_classic = STATIC_DIR / "public-card" / "index.html"
+    path_v3 = STATIC_DIR / "public-card" / "index_v3.html"
     path_latam = STATIC_DIR / "public-card" / "index_latam.html"
-    file_path = path_fr
+    file_path = path_classic
     slug_norm = sanitize_public_slug(slug)
     card_region_log = "n/a"
     card_theme_log = "classic"
-    template_log = "fr"
+    template_served = "classic"
+    v3_file_exists = path_v3.is_file()
     seo_fr: Optional[Dict[str, Any]] = None
     fr_db_card: Optional[Card] = None
 
@@ -383,44 +429,56 @@ async def serve_public_card(request: Request, slug: str):
                 target = f"{target}?{q}"
             return RedirectResponse(url=target, status_code=301)
         if card:
+            card_theme_log = _read_card_theme_from_db(card, db)
             card_region_log = (getattr(card, "region", None) or "fr").strip().lower()
-            if card_region_log == "latam":
+            fr_db_card = card
+
+            # Priorité unique : card_theme == experience (sans condition région FR).
+            if card_theme_log == "experience":
+                if v3_file_exists:
+                    file_path = path_v3
+                    template_served = "experience_v3"
+                else:
+                    _public_card_log.warning(
+                        "PUBLIC_CARD_V3_FILE_MISSING slug=%s card_theme=experience "
+                        "fallback=classic",
+                        slug_norm,
+                    )
+            elif card_region_log == "latam":
                 file_path = path_latam
-                template_log = "latam"
+                template_served = "latam"
             else:
-                fr_db_card = card
-                card_theme_log = (
-                    (getattr(card, "card_theme", None) or "classic").strip().lower()
-                )
-                if card_theme_log == "experience" and path_fr_v3.exists():
-                    file_path = path_fr_v3
-                    template_log = "experience_v3"
-                dn = (getattr(card, "display_name", None) or "").strip()
-                cn = (getattr(card, "company_name", None) or "").strip()
-                seo_fr = {
-                    "name": dn or cn,
-                    "job": (getattr(card, "job_title", None) or "").strip(),
-                    "city": (getattr(card, "city", None) or "").strip(),
-                }
+                template_served = "classic"
+
+            dn = (getattr(card, "display_name", None) or "").strip()
+            cn = (getattr(card, "company_name", None) or "").strip()
+            seo_fr = {
+                "name": dn or cn,
+                "job": (getattr(card, "job_title", None) or "").strip(),
+                "city": (getattr(card, "city", None) or "").strip(),
+            }
     finally:
         db.close()
 
-    _public_card_log.info(
-        "public_card slug=%s region=%s theme=%s template=%s",
+    # Log diagnostic temporaire (visible sur Render) : slug, thème DB, template servi.
+    _public_card_log.warning(
+        "PUBLIC_CARD_RENDER slug=%s card_theme=%s region=%s template_served=%s "
+        "v3_exists=%s file=%s",
         slug_norm,
-        card_region_log,
         card_theme_log,
-        template_log,
+        card_region_log,
+        template_served,
+        v3_file_exists,
+        file_path.name,
     )
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Public card template not found")
 
-    # Comportement historique inchangé pour LATAM.
-    if template_log != "fr":
+    if template_served == "latam":
         return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
-    # Injection SEO + OG robuste FR : en cas d'erreur, fallback obligatoire sur FileResponse.
+    # Injection SEO + OG (classic + experience_v3) : en cas d'erreur, FileResponse.
     try:
         html = file_path.read_text(encoding="utf-8")
         html = _inject_fr_public_card_head(html, seo_fr)

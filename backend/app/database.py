@@ -308,7 +308,11 @@ def ensure_card_city_column() -> None:
 
 def ensure_card_theme_column() -> None:
     """Ajoute card_theme sur cards si colonne manquante (default classic)."""
+    import logging
+
     from sqlalchemy import inspect, text
+
+    log = logging.getLogger(__name__)
 
     try:
         insp = inspect(engine)
@@ -321,9 +325,9 @@ def ensure_card_theme_column() -> None:
         return
 
     dialect = engine.dialect.name
-    if dialect == "sqlite":
+    if dialect == "postgresql":
         stmt = (
-            "ALTER TABLE cards ADD COLUMN card_theme VARCHAR(32) "
+            "ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_theme VARCHAR(32) "
             "NOT NULL DEFAULT 'classic'"
         )
     else:
@@ -333,5 +337,6 @@ def ensure_card_theme_column() -> None:
         )
     with engine.begin() as conn:
         conn.execute(text(stmt))
+    log.warning("DB_MIGRATION card_theme column added (dialect=%s)", dialect)
 
 

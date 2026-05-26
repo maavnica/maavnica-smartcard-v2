@@ -177,6 +177,7 @@ class PublicSlugHttpTests(unittest.TestCase):
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
         self.assertIn("smartcard-v3", r.text)
+        self.assertIn("SMARTCARD_V3_ACTIVE", r.text)
         self.assertIn("/static/public-card/v3.css", r.text)
         self.assertIn("/static/public-card/public-card-runtime.js", r.text)
 

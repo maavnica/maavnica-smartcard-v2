@@ -44,7 +44,8 @@ def main() -> None:
     (OUT_DIR / "v3-layout.css").write_text(css + "\n", encoding="utf-8")
     (OUT_DIR / "public-card-runtime.js").write_text(js + "\n", encoding="utf-8")
 
-    head = """<!DOCTYPE html>
+    head = """<!-- SMARTCARD_V3_ACTIVE -->
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
