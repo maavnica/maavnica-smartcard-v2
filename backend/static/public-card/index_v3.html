@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Maavnica SmartCard – Carte publique</title>
+  <meta name="description" content="Carte professionnelle Maavnica. Contact rapide, avis clients et recommandations." />
+  <meta property="og:title" content="Maavnica SmartCard" />
+  <meta property="og:description" content="Contact direct, avis clients et recommandation simplifiée." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <meta name="theme-color" content="#f5f0e8">
+  <link rel="stylesheet" href="/static/public-card/v3-layout.css" />
+  <link rel="stylesheet" href="/static/public-card/v3.css" />
+</head>
+
+<body class="theme-apple is-loading smartcard-v3 public-card--compact">
+  <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
+  <div id="inactive-card-message" class="inactive-card-message"></div>
+  <div id="admin-preview-badge" class="admin-preview-badge" hidden>
+    Mode prévisualisation — statistiques non comptabilisées
+  </div>
+  <div class="phone-shell">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="status-bar" id="status-bar">
+        <span class="status-bar-inner">
+          <img class="status-bar-mark" src="/static/logo-palmier.png" alt="" width="14" height="14" decoding="async" />
+          <span class="status-bar-label" id="status-bar-label">Maavnica SmartCard</span>
+        </span>
+      </div>
+
+      <div id="demo-banner-shell" class="demo-marketing" aria-hidden="true">
+        <div class="demo-banner">
+          <div class="demo-banner-title">⭐ Une carte pro telle qu’on la partage</div>
+          <div class="demo-banner-sub">Comme une carte reçue d’un professionnel — à garder sous la main et à faire suivre en confiance.</div>
+          <p class="demo-conv-lead">En un regard, on y retrouve :</p>
+          <ul class="demo-conv-list">
+            <li>un contact direct et des demandes claires</li>
+            <li>des avis clients pour se rassurer avant d’écrire</li>
+            <li>un partage simple pour recommander autour de soi</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero-loading-anchor">
+        <div
+          class="premium-load-layer"
+          id="premium-load-layer"
+          aria-busy="true"
+          aria-hidden="false"
+        >
+          <div class="premium-load-inner">
+            <div class="premium-load-hero-row">
+              <div class="skeleton-avatar skeleton-shimmer" aria-hidden="true"></div>
+              <div class="premium-load-text-col">
+                <div class="skeleton-line skeleton-line--xs skeleton-shimmer"></div>
+                <div class="skeleton-line skeleton-line--lg skeleton-shimmer"></div>
+                <div class="skeleton-line skeleton-line--md skeleton-shimmer"></div>
+                <div class="skeleton-line skeleton-line--sm skeleton-shimmer"></div>
+                <div class="skeleton-line skeleton-line--sm skeleton-shimmer"></div>
+              </div>
+            </div>
+            <div class="premium-load-cta-col">
+              <div class="skeleton-cta skeleton-shimmer"></div>
+              <div class="skeleton-cta skeleton-cta--short skeleton-shimmer"></div>
+              <div class="skeleton-line skeleton-line--cta-note skeleton-shimmer"></div>
+            </div>
+          </div>
+        </div>
+
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-badges">
+          <div class="hero-badge" id="hero-badge-left">
+            <span id="hero-badge-left-icon">⭐</span><span id="hero-badge-left-text">Entreprise recommandée</span>
+          </div>
+          <div class="hero-badge" id="hero-badge-right">
+            <span id="hero-badge-right-icon">📍</span><span id="hero-badge-right-text">Service de proximité</span>
+          </div>
+        </div>
+
+        <div
+          class="hero-recommend-trust"
+          id="hero-recommend-trust"
+          hidden
+          aria-hidden="true"
+        >
+          👍 Ce professionnel vous a été recommandé
+        </div>
+
+        <div class="hero-main-row">
+          <div class="hero-avatar" aria-label="Photo ou logo">
+            <img id="hero-avatar-img" alt="" width="84" height="84" />
+            <span id="hero-avatar-placeholder" aria-hidden="true"></span>
+            <span id="hero-avatar-fallback"></span>
+          </div>
+
+          <div class="hero-texts">
+            <div class="hero-subline" id="hero-subline">MAAVNICA SMARTCARD</div>
+            <div class="hero-title" id="person-name">Prénom Nom</div>
+            <div class="hero-company" id="company-name">Votre entreprise</div>
+            <div class="hero-job-title" id="hero-job-title" style="display: none;" aria-hidden="true"></div>
+            <div class="hero-professional-tagline" id="hero-professional-tagline">
+              Contact, avis et demande en 1 clic
+            </div>
+            <div
+              class="hero-recommend-count"
+              id="hero-recommend-count"
+              hidden
+              aria-hidden="true"
+            ></div>
+            <div
+              id="hero-google-badge-compact"
+              class="hero-google-badge hero-google-rating-inline"
+              style="display: none;"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="hero-recommend-conversion"
+              id="hero-recommend-conversion"
+              aria-hidden="true"
+            >
+              Les recommandations personnelles nourrissent la confiance autour de ce professionnel.
+            </div>
+            <div class="hero-reassurance" id="hero-reassurance">
+              ⭐ Plus d’avis Google. Plus de clients.
+            </div>
+            <div class="hero-social-proof" id="hero-social-proof">
+              Déjà utilisé par des artisans, thérapeutes et indépendants
+            </div>
+            <div class="hero-subtitle" id="hero-subtitle">
+              Contact, avis Google et demandes de devis en un seul lien.
+            </div>
+
+            <div class="hero-meta">
+              <div class="hero-line">
+                <span class="hero-meta-label">🟢 Disponible — réponse rapide</span>
+                <span class="hero-meta-value" id="hero-availability-note"></span>
+              </div>
+              <div class="hero-line" id="hero-tagline-row">
+                <span class="hero-meta-value" id="hero-tagline">via Maavnica SmartCard</span>
+              </div>
+            </div>
+
+            <div class="hero-contact-line">
+              <div class="hero-contact-item" id="hero-email-line">
+                <span>✉️</span>
+                <span id="hero-email">Email non renseigné</span>
+              </div>
+              <div class="hero-contact-item" id="hero-site-line">
+                <span>🌐</span>
+                <span id="hero-site">Site ou lien principal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-compact-contact-row" id="hero-compact-contact-row">
+          <div class="hero-compact-tel-row">
+            <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
+          </div>
+          <div id="slot-add-contact-hero" class="hero-slot-add-contact"></div>
+        </div>
+        <div id="hero-compact-social" class="hero-compact-social" hidden>
+          <a
+            id="hero-link-facebook"
+            class="hero-social-ic hero-social-ic--fb"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            aria-label="Facebook"
+            >f</a
+          >
+          <a
+            id="hero-link-instagram"
+            class="hero-social-ic hero-social-ic--ig"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            aria-label="Instagram"
+            >◎</a
+          >
+        </div>
+      </div>
+
+      <p class="p12-soft-hint" aria-hidden="true">
+        Recommandation, contact ou avis — tout reste simple.
+      </p>
+
+      <div class="compact-primary-cta-wrap" id="compact-primary-cta-wrap">
+        <button
+          type="button"
+          class="btn-primary btn-primary-stack-cta btn-primary--reco-first"
+          id="btn-cta-recommander"
+          hidden
+          aria-label="Recommander ce professionnel"
+        >
+          Recommander ce professionnel
+        </button>
+        <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
+          Demande de contact
+        </button>
+        <button
+          type="button"
+          class="btn-primary btn-primary-stack-cta btn-primary--avis-secondary"
+          id="btn-cta-laisser-avis"
+          aria-label="Laisser un avis"
+        >
+          Laisser un avis
+        </button>
+        <p class="compact-cta-reassurance" id="compact-cta-reassurance">
+          Réponse rapide • Sans engagement
+        </p>
+        <div class="compact-discrete-row" id="compact-discrete-row">
+          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-partager" hidden>
+            Envoyer ma carte
+          </button>
+          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-paiement" hidden>
+            Paiement en ligne
+          </button>
+        </div>
+      </div>
+      </div>
+
+      <!-- CONTENU PRINCIPAL -->
+      <div class="main-grid">
+        <!-- Colonne gauche -->
+        <div class="card-block">
+          <div id="left-col-head">
+            <div class="block-title" id="block-title-main">Avis & contacts simplifiés</div>
+            <div class="block-sub" id="left-block-sub">
+              Après chaque prestation, invitez vos clients à laisser un avis, demander un devis ou vous contacter.
+            </div>
+            <div class="hint" id="left-block-tags-hint">
+              Avis Google · Contact rapide · Demande de devis
+            </div>
+          </div>
+
+          <div id="compact-acc-triggers-host" class="compact-acc-triggers-host">
+            <button
+              type="button"
+              id="acc-trigger-feedback"
+              class="visually-hidden"
+              data-acc-trigger="feedback"
+              aria-expanded="false"
+            >
+              Laisser un avis
+            </button>
+            <button
+              type="button"
+              id="acc-trigger-share"
+              class="visually-hidden"
+              data-acc-trigger="share"
+              aria-expanded="false"
+              hidden
+            >
+              Partager
+            </button>
+            <button
+              type="button"
+              id="acc-trigger-recommend"
+              class="visually-hidden"
+              data-acc-trigger="recommend"
+              aria-expanded="false"
+              hidden
+            >
+              Recommander
+            </button>
+            <button
+              type="button"
+              id="acc-trigger-pay"
+              class="visually-hidden"
+              data-acc-trigger="pay"
+              aria-expanded="false"
+              hidden
+            >
+              Paiement
+            </button>
+          </div>
+
+          <div class="hero-google-badge-wrap">
+            <div id="hero-google-badge" class="hero-google-badge" style="display:none;"></div>
+          </div>
+
+          <div id="slot-call-legacy">
+            <button class="btn-link" id="btn-call" type="button" aria-label="Appeler">
+              📞 Appeler directement
+            </button>
+          </div>
+
+          <div class="acc-panel" id="panel-feedback" data-acc-panel="feedback">
+            <div class="section-label">Votre avis rapide</div>
+            <p class="contact-actions-guide" id="contact-actions-guide">
+              Choisissez l’action la plus simple pour vous
+            </p>
+            <div class="hint" id="pill-section-hint" style="margin-top: -2px; margin-bottom: 6px;">
+              Vos clients peuvent laisser un avis en quelques secondes.
+            </div>
+            <div class="pill-row">
+              <button class="pill" id="pill-yes">
+                <span class="emoji">😊</span>
+                <span>Je suis satisfait</span>
+              </button>
+              <button class="pill" id="pill-no">
+                <span class="emoji">😐</span>
+                <span>Je ne suis pas satisfait</span>
+              </button>
+            </div>
+
+            <div class="hint" id="feedback-helper-text">
+              Choisissez une option ci-dessus pour nous laisser un retour rapide.
+            </div>
+
+            <textarea
+              id="feedback-comment"
+              class="feedback-input"
+              placeholder="Un mot sur votre expérience (optionnel)"
+            ></textarea>
+
+            <button class="btn-primary" id="btn-send-feedback">
+              ✨ Envoyer mon avis
+            </button>
+
+            <div
+              class="feedback-recommend-nudge"
+              id="feedback-recommend-nudge"
+              hidden
+            >
+              <p class="feedback-recommend-nudge-thanks">Merci 🙏</p>
+              <p class="feedback-recommend-nudge-hint">
+                Connaissez-vous quelqu’un qui pourrait avoir besoin de ce professionnel ?
+              </p>
+              <button
+                class="btn-primary btn-share-card-main"
+                id="btn-feedback-recommend-nudge"
+                type="button"
+              >
+                Recommander ce professionnel
+              </button>
+            </div>
+
+            <div class="section-label section-label--autres-facons" style="margin-top:10px;">
+              Autres façons de vous contacter
+            </div>
+
+            <button class="btn-link" id="btn-google-review" type="button">
+              <span class="btn-link-leading" aria-hidden="true">⭐</span
+              ><span class="btn-link-text">Laisser un avis Google</span>
+            </button>
+          </div>
+
+          <div id="legacy-contact-row" class="legacy-contact-row">
+            <div id="slot-add-legacy">
+              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter à mes contacts"
+                ><span class="btn-link-leading" aria-hidden="true">➕</span
+                ><span class="btn-link-text">Ajouter à mes contacts</span></a
+              >
+            </div>
+            <div id="slot-wa-legacy">
+              <button class="btn-link" id="btn-whatsapp" type="button" aria-label="WhatsApp">
+                <span class="btn-link-leading" aria-hidden="true">💬</span
+                ><span class="btn-link-text">Écrire sur WhatsApp</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="acc-panel" id="panel-pay" data-acc-panel="pay">
+            <button class="btn-link" id="btn-pay" disabled>
+              💳 Payer en ligne (si disponible)
+            </button>
+          </div>
+
+          <div class="hint" id="hint-share-signature">
+            Partagez cette carte en signature d’email, sur vos réseaux sociaux ou via un QR code.
+          </div>
+
+          <div class="acc-panel" id="panel-share" data-acc-panel="share">
+          <div class="post-share-block" id="post-share-block">
+            <div class="post-share-kicker post-share-demo-only">
+              APRÈS CHAQUE INTERVENTION
+            </div>
+
+            <div class="post-share-title post-share-demo-only">
+              Envoyez votre carte en 1 clic
+            </div>
+            <div class="post-share-title post-share-client-only">
+              Partager cette carte
+            </div>
+
+            <button class="btn-primary btn-share-card-main" id="btn-share-card-main" type="button">
+              📲 Envoyer ma carte
+            </button>
+
+            <div class="post-share-hint post-share-demo-only">
+              Un geste simple en fin de prestation pour recevoir des avis et rester en contact avec votre client.
+            </div>
+            <div class="post-share-hint post-share-client-only">
+              Partagez facilement vos coordonnées, vos avis et votre contact.
+            </div>
+
+            <div class="post-share-benefits post-share-demo-only">
+              ✔ Avis Google • ✔ Contact rapide • ✔ Demande de devis
+            </div>
+
+            <div class="share-row share-row--secondary" id="share-card-options">
+              <button class="btn-link" id="btn-share-copy" type="button">Copier le lien</button>
+              <button class="btn-link" id="btn-share-sms" type="button">SMS</button>
+              <button class="btn-link" id="btn-share-email" type="button">Email</button>
+            </div>
+
+          </div>
+          </div>
+
+          <div class="acc-panel" id="panel-recommend" data-acc-panel="recommend">
+          <div class="post-share-block" id="recommend-block" style="display: none;">
+            <div class="post-share-title">Aidez quelqu’un autour de vous 👇</div>
+            <div class="post-share-hint" style="margin-bottom: 10px;">
+              Un simple partage peut faire la différence.
+            </div>
+            <button class="btn-primary btn-share-card-main" id="btn-recommend-main" type="button">
+              Recommander ce professionnel 👍
+            </button>
+            <div class="share-row share-row--secondary" id="recommend-share-options">
+              <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien 🔗</button>
+              <button class="btn-link" id="btn-recommend-sms" type="button">Partager par SMS 📱</button>
+              <button class="btn-link" id="btn-recommend-email" type="button">Envoyer par email ✉️</button>
+            </div>
+          </div>
+          </div>
+
+          <div class="hint" id="hint-post-prestation" style="margin-top:6px;">
+            Envoyez cette carte après chaque prestation pour développer vos avis et votre visibilité.
+          </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="card-block card-block--quote">
+          <button
+            type="button"
+            class="compact-acc-trigger compact-acc-trigger--quote"
+            id="acc-trigger-quote"
+            data-acc-trigger="quote"
+            aria-expanded="false"
+            aria-label="Demande de contact"
+          >
+            📝
+          </button>
+
+          <div class="acc-panel acc-panel--quote" id="panel-quote" data-acc-panel="quote">
+          <div class="section-label" id="quote-section-label">Demande de devis</div>
+
+          <div class="form-row">
+            <input id="quote-name" class="quote-input" placeholder="Votre nom *" />
+          </div>
+          <div style="margin-top:6px;">
+            <input id="quote-phone" class="quote-input" placeholder="Téléphone *" />
+          </div>
+          <div style="margin-top:6px;">
+            <input id="quote-email" class="quote-input" placeholder="Email (facultatif)" />
+          </div>
+          <div style="margin-top:6px;">
+            <textarea
+              id="quote-message"
+              class="quote-input"
+              placeholder="Votre besoin en quelques mots *"
+            ></textarea>
+          </div>
+
+          <button class="btn-primary" style="margin-top:6px;" id="btn-send-quote">
+            📝 Envoyer ma demande de devis
+          </button>
+
+          <div class="hint">
+            Vos informations sont transmises au professionnel titulaire de cette carte pour traiter votre demande.
+            Maavnica héberge la page et peut enregistrer des statistiques techniques si vous l’acceptez
+            (<a href="/static/confidentialite.html">confidentialité</a>).
+            Droits&nbsp;: <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
+          </div>
+          </div>
+
+          <div class="qr-wrap">
+            <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
+            <div class="qr-copy">
+              <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
+              <div class="qr-copy-main qr-copy-main--compact-fr" aria-hidden="true">
+                Scannez pour enregistrer le contact
+              </div>
+              <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
+            </div>
+          </div>
+          <div class="qr-powered-by" aria-label="Propulsé par Maavnica">
+            <span>Propulsé par Maavnica</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="demo-cta-shell" class="demo-marketing demo-cta-shell" aria-hidden="true">
+        <a class="btn-primary demo-cta-btn" href="https://smartcard.maavnica.com/static/contact-smartcard.html">Créer ma SmartCard</a>
+      </div>
+
+      <div class="footer" id="public-card-footer">
+        SmartCard Maavnica ·
+        <a href="/static/confidentialite.html">Confidentialité</a> ·
+        <a href="/static/mentions-legales.html">Mentions</a> ·
+        <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">Maavnica</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="recommend-identity-modal" class="recommend-id-modal" aria-hidden="true">
+    <div class="recommend-id-panel" role="dialog" aria-modal="true" aria-labelledby="recommend-id-title">
+      <h3 id="recommend-id-title">Votre recommandation</h3>
+      <p>
+        Indiquez votre prénom et votre nom pour que le professionnel sache qui recommande. Un lien
+        personnel et discret sera créé.
+      </p>
+      <p style="font-size:10px;color:#64748b;margin:0 0 10px;line-height:1.4;">
+        Votre prénom et nom servent à créer un lien de recommandation identifiable par le professionnel.
+        <a href="/static/confidentialite.html#recommandations">En savoir plus</a>.
+      </p>
+      <label class="visually-hidden" for="recommend-id-first">Prénom</label>
+      <input
+        id="recommend-id-first"
+        type="text"
+        maxlength="80"
+        autocomplete="given-name"
+        placeholder="Prénom *"
+      />
+      <label class="visually-hidden" for="recommend-id-last">Nom</label>
+      <input
+        id="recommend-id-last"
+        type="text"
+        maxlength="80"
+        autocomplete="family-name"
+        placeholder="Nom *"
+      />
+      <div class="recommend-id-actions">
+        <button type="button" id="recommend-id-cancel">Annuler</button>
+        <button type="button" class="recommend-id-confirm" id="recommend-id-confirm">Continuer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/maavnica-consent.js"></script>
+  <script src="/static/public-card/public-card-runtime.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});
+    }
+  </script>
+</html>

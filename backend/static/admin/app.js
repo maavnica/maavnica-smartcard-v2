@@ -58,6 +58,8 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("plan-type").value = card.plan_type || "demo";
   document.getElementById("region-version").value = card.region || "fr";
+  const cardThemeEl = document.getElementById("card-theme");
+  if (cardThemeEl) cardThemeEl.value = card.card_theme || "classic";
   document.getElementById("expires-at").value = toDatetimeLocalValue(card.expires_at);
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
@@ -115,6 +117,8 @@ document.getElementById("last-name").value = "";
   document.getElementById("slug").value = "";
   document.getElementById("plan-type").value = "demo";
   document.getElementById("region-version").value = "fr";
+  const cardThemeReset = document.getElementById("card-theme");
+  if (cardThemeReset) cardThemeReset.value = "classic";
   document.getElementById("expires-at").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
@@ -360,6 +364,11 @@ async function saveCard() {
       const el = document.getElementById("region-version");
       const v = el && el.value ? el.value.trim().toLowerCase() : "";
       return v === "latam" ? "latam" : "fr";
+    })(),
+    card_theme: (() => {
+      const el = document.getElementById("card-theme");
+      const v = el && el.value ? el.value.trim().toLowerCase() : "";
+      return v === "experience" ? "experience" : "classic";
     })(),
     expires_at: (() => {
       const v = document.getElementById("expires-at").value;

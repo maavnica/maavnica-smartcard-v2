@@ -1,0 +1,194 @@
+/**
+ * SmartCard V3 — thème Experience (premium, apaisant, mobile-first).
+ * Surcharge v3-layout.css ; mêmes IDs / structure DOM que la carte classique.
+ */
+body.smartcard-v3 {
+  --bg-page: #f5f0e8;
+  --card-bg: linear-gradient(165deg, #faf7f2 0%, #f0ebe3 48%, #e8e4dc 100%);
+  --hero-bg: linear-gradient(145deg, #eef2e8 0%, #f7f4ef 55%, #faf7f2 100%);
+  --primary: #6b7c5c;
+  --primary-soft: rgba(107, 124, 92, 0.18);
+  --text-main: #2c3328;
+  --text-soft: #5c6556;
+  --border-soft: rgba(107, 124, 92, 0.22);
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.smartcard-v3 .phone-shell {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  max-width: 480px;
+}
+
+body.smartcard-v3 .phone-inner {
+  background: var(--card-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(44, 51, 40, 0.08);
+}
+
+body.smartcard-v3 .notch,
+body.smartcard-v3 .status-bar {
+  background: rgba(250, 247, 242, 0.92);
+  color: var(--text-soft);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+body.smartcard-v3 .hero {
+  background: var(--hero-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+}
+
+body.smartcard-v3 .hero-badge {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-soft);
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+  font-weight: 500;
+}
+
+body.smartcard-v3 .hero-title {
+  color: var(--text-main);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+body.smartcard-v3 .hero-company,
+body.smartcard-v3 .hero-subline {
+  color: var(--text-soft);
+}
+
+body.smartcard-v3 .hero-professional-tagline,
+body.smartcard-v3 .hero-subtitle {
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+body.smartcard-v3 .btn-primary {
+  background: linear-gradient(145deg, #7a8b6a, #6b7c5c);
+  color: #faf7f2;
+  border: none;
+  box-shadow: 0 8px 22px var(--primary-soft);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+body.smartcard-v3 .btn-primary:hover,
+body.smartcard-v3 .btn-primary:focus-visible {
+  background: linear-gradient(145deg, #849575, #728264);
+  box-shadow: 0 10px 26px rgba(107, 124, 92, 0.28);
+}
+
+body.smartcard-v3 .btn-link {
+  color: var(--primary);
+  border-color: var(--border-soft);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+body.smartcard-v3 .card-block {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+body.smartcard-v3 .block-title,
+body.smartcard-v3 .section-label {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+body.smartcard-v3 .hint,
+body.smartcard-v3 .block-sub {
+  color: var(--text-soft);
+}
+
+body.smartcard-v3 .pill {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+}
+
+body.smartcard-v3 .pill:hover {
+  border-color: var(--primary);
+  background: rgba(107, 124, 92, 0.06);
+}
+
+body.smartcard-v3 .quote-input,
+body.smartcard-v3 .feedback-input {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+}
+
+body.smartcard-v3 .quote-input:focus,
+body.smartcard-v3 .feedback-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-soft);
+}
+
+body.smartcard-v3 .demo-marketing,
+body.smartcard-v3 #demo-banner-shell,
+body.smartcard-v3 #demo-cta-shell {
+  display: none !important;
+}
+
+body.smartcard-v3 .premium-load-layer {
+  background: var(--hero-bg);
+}
+
+body.smartcard-v3 .skeleton-shimmer {
+  opacity: 0.35;
+}
+
+body.smartcard-v3 .footer,
+body.smartcard-v3 #public-card-footer {
+  color: var(--text-soft);
+  border-top: 1px solid var(--border-soft);
+}
+
+body.smartcard-v3 .footer a {
+  color: var(--primary);
+}
+
+body.smartcard-v3 .toast {
+  background: var(--text-main);
+  color: #faf7f2;
+}
+
+body.smartcard-v3 .recommend-id-panel {
+  background: #faf7f2;
+  color: var(--text-main);
+  border: 1px solid var(--border-soft);
+}
+
+body.smartcard-v3 .admin-preview-badge {
+  background: #e8dfd0;
+  color: #4a5344;
+  border: 1px solid var(--border-soft);
+}
+
+body.smartcard-v3 .hero-recommend-trust {
+  background: rgba(107, 124, 92, 0.1);
+  color: var(--text-main);
+  border-radius: 10px;
+}
+
+body.smartcard-v3 .compact-cta-reassurance {
+  color: var(--text-soft);
+}
+
+body.smartcard-v3 .qr-wrap img {
+  border-radius: 8px;
+}
+
+body.smartcard-v3 .p12-soft-hint {
+  color: var(--text-soft);
+  opacity: 0.85;
+}

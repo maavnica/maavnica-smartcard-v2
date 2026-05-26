@@ -306,3 +306,32 @@ def ensure_card_city_column() -> None:
         conn.execute(text(stmt))
 
 
+def ensure_card_theme_column() -> None:
+    """Ajoute card_theme sur cards si colonne manquante (default classic)."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "card_theme" in existing:
+        return
+
+    dialect = engine.dialect.name
+    if dialect == "sqlite":
+        stmt = (
+            "ALTER TABLE cards ADD COLUMN card_theme VARCHAR(32) "
+            "NOT NULL DEFAULT 'classic'"
+        )
+    else:
+        stmt = (
+            "ALTER TABLE cards ADD COLUMN card_theme VARCHAR(32) "
+            "NOT NULL DEFAULT 'classic'"
+        )
+    with engine.begin() as conn:
+        conn.execute(text(stmt))
+
+

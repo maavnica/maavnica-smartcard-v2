@@ -230,6 +230,7 @@ def _create_db_tables():
         ensure_card_plan_columns,
         ensure_card_region_column,
         ensure_card_city_column,
+        ensure_card_theme_column,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -241,6 +242,7 @@ def _create_db_tables():
     ensure_card_plan_columns()
     ensure_card_region_column()
     ensure_card_city_column()
+    ensure_card_theme_column()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
 
@@ -357,10 +359,12 @@ async def serve_public_card(request: Request, slug: str):
     from app.models import Card
 
     path_fr = STATIC_DIR / "public-card" / "index.html"
+    path_fr_v3 = STATIC_DIR / "public-card" / "index_v3.html"
     path_latam = STATIC_DIR / "public-card" / "index_latam.html"
     file_path = path_fr
     slug_norm = sanitize_public_slug(slug)
     card_region_log = "n/a"
+    card_theme_log = "classic"
     template_log = "fr"
     seo_fr: Optional[Dict[str, Any]] = None
     fr_db_card: Optional[Card] = None
@@ -385,6 +389,12 @@ async def serve_public_card(request: Request, slug: str):
                 template_log = "latam"
             else:
                 fr_db_card = card
+                card_theme_log = (
+                    (getattr(card, "card_theme", None) or "classic").strip().lower()
+                )
+                if card_theme_log == "experience" and path_fr_v3.exists():
+                    file_path = path_fr_v3
+                    template_log = "experience_v3"
                 dn = (getattr(card, "display_name", None) or "").strip()
                 cn = (getattr(card, "company_name", None) or "").strip()
                 seo_fr = {
@@ -396,9 +406,10 @@ async def serve_public_card(request: Request, slug: str):
         db.close()
 
     _public_card_log.info(
-        "public_card slug=%s region=%s template=%s",
+        "public_card slug=%s region=%s theme=%s template=%s",
         slug_norm,
         card_region_log,
+        card_theme_log,
         template_log,
     )
 

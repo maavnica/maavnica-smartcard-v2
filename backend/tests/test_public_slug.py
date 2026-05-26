@@ -149,6 +149,37 @@ class PublicSlugHttpTests(unittest.TestCase):
         self.assertIn('property="og:image"', r.text)
         self.assertIn("/static/og-default.jpg?v=2", r.text)
 
+    def test_c_demo2_classic_template_by_default(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertNotIn("smartcard-v3", r.text)
+        self.assertNotIn("/static/public-card/v3.css", r.text)
+
+    def test_c_demo2_experience_serves_v3(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        db = self.SessionTest()
+        try:
+            card = db.query(Card).filter(Card.slug == "demo2").first()
+            card.card_theme = "experience"
+            db.commit()
+        finally:
+            db.close()
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("smartcard-v3", r.text)
+        self.assertIn("/static/public-card/v3.css", r.text)
+        self.assertIn("/static/public-card/public-card-runtime.js", r.text)
+
     def test_api_public_cards_dirty_slug(self):
         from fastapi.testclient import TestClient
 
