@@ -1,138 +1,341 @@
 /**
- * SmartCard V3 — thème Experience (premium, apaisant, mobile-first).
- * Surcharge v3-layout.css ; mêmes IDs / structure DOM que la carte classique.
+ * SmartCard V3 — thème premium compact (crème / sauge).
+ * Surcharge v3-layout.css · mêmes IDs / DOM · pas de landing.
  */
 body.smartcard-v3 {
-  --bg-page: #f5f0e8;
-  --card-bg: linear-gradient(165deg, #faf7f2 0%, #f0ebe3 48%, #e8e4dc 100%);
-  --hero-bg: linear-gradient(145deg, #eef2e8 0%, #f7f4ef 55%, #faf7f2 100%);
-  --primary: #6b7c5c;
-  --primary-soft: rgba(107, 124, 92, 0.18);
-  --text-main: #2c3328;
-  --text-soft: #5c6556;
-  --border-soft: rgba(107, 124, 92, 0.22);
+  --bg-page: #f3ede6;
+  --card-bg: #faf7f2;
+  --hero-bg: linear-gradient(155deg, #f7f4ef 0%, #eef2ea 52%, #faf7f2 100%);
+  --primary: #5c6b58;
+  --primary-hover: #4f5d4b;
+  --primary-soft: rgba(92, 107, 88, 0.14);
+  --accent-warm: #b8956b;
+  --text-main: #2f352c;
+  --text-soft: #6b7366;
+  --border-soft: rgba(92, 107, 88, 0.14);
+  --shadow-card: 0 16px 40px rgba(47, 53, 44, 0.07);
+  --shadow-soft: 0 4px 18px rgba(47, 53, 44, 0.05);
+  --radius-card: 22px;
+  --radius-btn: 14px;
   background: var(--bg-page);
   color: var(--text-main);
   font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-body.smartcard-v3 .phone-shell {
+/* Shell plat — plus de faux téléphone */
+body.smartcard-v3 .sc-v3-shell {
+  max-width: 420px;
   background: transparent;
   box-shadow: none;
   padding: 0;
-  max-width: 480px;
 }
 
-body.smartcard-v3 .phone-inner {
+body.smartcard-v3 .sc-v3-inner {
   background: var(--card-bg);
   border: 1px solid var(--border-soft);
-  border-radius: 20px;
-  box-shadow: 0 12px 40px rgba(44, 51, 40, 0.08);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 16px 16px 14px;
+  min-height: 0;
 }
 
-body.smartcard-v3 .notch,
-body.smartcard-v3 .status-bar {
-  background: rgba(250, 247, 242, 0.92);
-  color: var(--text-soft);
-  border-bottom: 1px solid var(--border-soft);
+body.smartcard-v3 .sc-v3-status {
+  margin: 0 0 12px;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
-body.smartcard-v3 .hero {
-  background: var(--hero-bg);
-  border-radius: 16px;
+body.smartcard-v3 .status-bar-inner {
+  padding: 4px 10px 5px;
+  background: rgba(255, 255, 255, 0.65);
   border: 1px solid var(--border-soft);
   box-shadow: none;
 }
 
+body.smartcard-v3 .status-bar-label {
+  color: var(--text-soft);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.smartcard-v3 .status-bar-mark {
+  filter: none;
+  opacity: 0.85;
+}
+
+/* Hero — hiérarchie premium */
+body.smartcard-v3 .hero {
+  background: var(--hero-bg);
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+  padding: 14px 14px 12px;
+  margin-bottom: 10px;
+}
+
+body.smartcard-v3 .hero-main-row {
+  gap: 14px;
+  align-items: flex-start;
+}
+
+body.smartcard-v3 .hero-avatar {
+  width: 76px;
+  height: 76px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 8px 24px rgba(47, 53, 44, 0.1),
+    0 0 0 1px var(--border-soft);
+  background: linear-gradient(145deg, #e8efe6, #f3ede4);
+}
+
+body.smartcard-v3 #hero-avatar-fallback {
+  background: linear-gradient(145deg, #7a8b6a, #5c6b58);
+  color: #faf7f2;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+body.smartcard-v3 .hero-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  white-space: normal;
+  line-height: 1.2;
+}
+
+body.smartcard-v3 .hero-company {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-bottom: 2px;
+}
+
+body.smartcard-v3 .hero-professional-tagline {
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--text-soft);
+  margin: 4px 0 0;
+  -webkit-line-clamp: 2;
+}
+
+body.smartcard-v3 .hero-reassurance,
+body.smartcard-v3 .hero-social-proof,
+body.smartcard-v3 .hero-subtitle,
+body.smartcard-v3 .hero-meta,
+body.smartcard-v3 .hero-contact-line,
+body.smartcard-v3 #hero-recommend-conversion {
+  display: none !important;
+}
+
 body.smartcard-v3 .hero-badge {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-soft);
+  border: 1px solid var(--border-soft);
+  font-size: 0.65rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+body.smartcard-v3 .hero-recommend-trust {
+  background: rgba(92, 107, 88, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-soft);
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+}
+
+body.smartcard-v3 .hero-google-rating-inline {
+  color: var(--text-soft) !important;
+  font-size: 0.72rem !important;
+}
+
+body.smartcard-v3 .hero-compact-contact-row {
+  border-top-color: var(--border-soft);
+  margin-top: 12px;
+  padding-top: 12px;
+  gap: 8px;
+}
+
+body.smartcard-v3 .sc-v3-emotion {
+  margin: 0 0 12px;
+  padding: 0 4px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+/* CTA — doux, pas startup */
+body.smartcard-v3 .btn-primary {
+  background: var(--primary);
+  color: #faf7f2;
+  border: none;
+  border-radius: var(--radius-btn);
+  box-shadow: 0 6px 16px var(--primary-soft);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 11px 14px;
+  transform: none;
+}
+
+body.smartcard-v3 .btn-primary:hover,
+body.smartcard-v3 .btn-primary:focus-visible {
+  background: var(--primary-hover);
+  box-shadow: 0 8px 20px rgba(92, 107, 88, 0.2);
+  transform: none;
+}
+
+body.smartcard-v3 .btn-primary:active {
+  transform: scale(0.99);
+  filter: none;
+}
+
+body.smartcard-v3.public-card--compact .btn-primary-contact-hero {
+  background: var(--primary);
+  color: #faf7f2;
+  box-shadow: 0 6px 16px var(--primary-soft);
+}
+
+body.smartcard-v3.public-card--compact .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]) {
+  background: #fff;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  box-shadow: var(--shadow-soft);
+}
+
+body.smartcard-v3.public-card--compact .btn-primary-stack-cta.btn-primary--avis-secondary {
+  background: transparent;
   color: var(--text-soft);
   border: 1px solid var(--border-soft);
   box-shadow: none;
   font-weight: 500;
 }
 
-body.smartcard-v3 .hero-title {
-  color: var(--text-main);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-body.smartcard-v3 .hero-company,
-body.smartcard-v3 .hero-subline {
-  color: var(--text-soft);
-}
-
-body.smartcard-v3 .hero-professional-tagline,
-body.smartcard-v3 .hero-subtitle {
-  color: var(--text-soft);
-  line-height: 1.45;
-}
-
-body.smartcard-v3 .btn-primary {
-  background: linear-gradient(145deg, #7a8b6a, #6b7c5c);
-  color: #faf7f2;
-  border: none;
-  box-shadow: 0 8px 22px var(--primary-soft);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-body.smartcard-v3 .btn-primary:hover,
-body.smartcard-v3 .btn-primary:focus-visible {
-  background: linear-gradient(145deg, #849575, #728264);
-  box-shadow: 0 10px 26px rgba(107, 124, 92, 0.28);
-}
-
 body.smartcard-v3 .btn-link {
-  color: var(--primary);
-  border-color: var(--border-soft);
-  background: rgba(255, 255, 255, 0.5);
+  background: #fff;
+  color: var(--text-main);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-btn);
+  font-weight: 500;
+  font-size: 0.8rem;
+  box-shadow: none;
 }
 
+body.smartcard-v3 .btn-link:hover,
+body.smartcard-v3 .btn-link:focus-visible {
+  border-color: rgba(92, 107, 88, 0.35);
+  color: var(--primary);
+  background: rgba(232, 239, 230, 0.5);
+  transform: none;
+}
+
+body.smartcard-v3.public-card--compact #btn-add-contact {
+  background: #fff !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--text-main) !important;
+  box-shadow: none !important;
+}
+
+body.smartcard-v3 .compact-cta-reassurance {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  opacity: 0.9;
+}
+
+body.smartcard-v3 .compact-discrete-link {
+  color: var(--text-soft);
+  font-size: 0.72rem;
+}
+
+/* Blocs secondaires — discrets */
 body.smartcard-v3 .card-block {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--border-soft);
-  border-radius: 14px;
-  box-shadow: none;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+body.smartcard-v3.public-card--compact #left-col-head,
+body.smartcard-v3 #hint-share-signature,
+body.smartcard-v3 #hint-post-prestation,
+body.smartcard-v3 .p12-soft-hint {
+  display: none !important;
 }
 
 body.smartcard-v3 .block-title,
 body.smartcard-v3 .section-label {
   color: var(--text-main);
   font-weight: 600;
+  font-size: 0.82rem;
 }
 
 body.smartcard-v3 .hint,
 body.smartcard-v3 .block-sub {
   color: var(--text-soft);
+  font-size: 0.75rem;
 }
 
 body.smartcard-v3 .pill {
   background: #fff;
   border: 1px solid var(--border-soft);
   color: var(--text-main);
-}
-
-body.smartcard-v3 .pill:hover {
-  border-color: var(--primary);
-  background: rgba(107, 124, 92, 0.06);
+  border-radius: 12px;
 }
 
 body.smartcard-v3 .quote-input,
 body.smartcard-v3 .feedback-input {
   background: #fff;
   border: 1px solid var(--border-soft);
+  border-radius: 12px;
   color: var(--text-main);
 }
 
-body.smartcard-v3 .quote-input:focus,
-body.smartcard-v3 .feedback-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-soft);
+/* QR élégant */
+body.smartcard-v3 .qr-wrap {
+  margin-top: 8px;
+  padding: 12px;
+  background: linear-gradient(145deg, #fff 0%, #f7f4ef 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  gap: 12px;
 }
 
+body.smartcard-v3 .qr-wrap img {
+  width: 72px;
+  height: 72px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(47, 53, 44, 0.06);
+}
+
+body.smartcard-v3 .qr-copy-main {
+  color: var(--text-main);
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+body.smartcard-v3 .qr-copy-hint {
+  color: var(--text-soft);
+  font-size: 0.68rem;
+}
+
+body.smartcard-v3 .qr-powered-by {
+  color: var(--text-soft);
+  opacity: 0.75;
+  font-size: 0.65rem;
+}
+
+/* Marketing / démo masqués */
 body.smartcard-v3 .demo-marketing,
 body.smartcard-v3 #demo-banner-shell,
 body.smartcard-v3 #demo-cta-shell {
@@ -141,16 +344,20 @@ body.smartcard-v3 #demo-cta-shell {
 
 body.smartcard-v3 .premium-load-layer {
   background: var(--hero-bg);
+  border-radius: 18px;
 }
 
 body.smartcard-v3 .skeleton-shimmer {
-  opacity: 0.35;
+  opacity: 0.28;
 }
 
 body.smartcard-v3 .footer,
 body.smartcard-v3 #public-card-footer {
   color: var(--text-soft);
   border-top: 1px solid var(--border-soft);
+  font-size: 0.68rem;
+  padding-top: 10px;
+  margin-top: 8px;
 }
 
 body.smartcard-v3 .footer a {
@@ -160,35 +367,31 @@ body.smartcard-v3 .footer a {
 body.smartcard-v3 .toast {
   background: var(--text-main);
   color: #faf7f2;
+  border-radius: 12px;
 }
 
 body.smartcard-v3 .recommend-id-panel {
   background: #faf7f2;
   color: var(--text-main);
   border: 1px solid var(--border-soft);
+  border-radius: 16px;
 }
 
 body.smartcard-v3 .admin-preview-badge {
-  background: #e8dfd0;
+  background: #ebe4d8;
   color: #4a5344;
   border: 1px solid var(--border-soft);
 }
 
-body.smartcard-v3 .hero-recommend-trust {
-  background: rgba(107, 124, 92, 0.1);
-  color: var(--text-main);
-  border-radius: 10px;
-}
-
-body.smartcard-v3 .compact-cta-reassurance {
+body.smartcard-v3 .hero-social-ic {
+  background: #fff;
+  border-color: var(--border-soft);
   color: var(--text-soft);
 }
 
-body.smartcard-v3 .qr-wrap img {
-  border-radius: 8px;
-}
-
-body.smartcard-v3 .p12-soft-hint {
-  color: var(--text-soft);
-  opacity: 0.85;
+@media (prefers-reduced-motion: reduce) {
+  body.smartcard-v3 .btn-primary,
+  body.smartcard-v3 .btn-link {
+    transition: none;
+  }
 }

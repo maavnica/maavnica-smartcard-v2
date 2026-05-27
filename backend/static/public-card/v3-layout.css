@@ -2358,3 +2358,119 @@
         gap: 14px;
       }
     }
+
+    /* ===================================================================
+       SmartCard V3 premium compact — layout (pas de landing, pas de gadget)
+       =================================================================== */
+    body.smartcard-v3 {
+      align-items: flex-start;
+      padding: 12px;
+      padding-top: max(12px, env(safe-area-inset-top, 0px));
+      padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    }
+
+    body.smartcard-v3 .notch {
+      display: none !important;
+      height: 0;
+      margin: 0;
+    }
+
+    body.smartcard-v3 .phone-shell,
+    body.smartcard-v3.sc-v3-premium .phone-shell {
+      max-width: 420px;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    body.smartcard-v3 .phone-inner,
+    body.smartcard-v3 .sc-v3-inner {
+      border-radius: 22px;
+      min-height: 0;
+      overflow: visible;
+    }
+
+    body.smartcard-v3.public-card--compact .hero {
+      padding: 14px 14px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 18px rgba(47, 53, 44, 0.05);
+    }
+
+    body.smartcard-v3.public-card--compact .hero-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    }
+
+    body.smartcard-v3.public-card--compact .hero-professional-tagline {
+      color: var(--text-soft, #6b7366);
+      font-weight: 400;
+      -webkit-line-clamp: 2;
+    }
+
+    body.smartcard-v3.public-card--compact .hero-compact-contact-row {
+      border-top-color: rgba(92, 107, 88, 0.12);
+    }
+
+    body.smartcard-v3.public-card--compact #btn-call,
+    body.smartcard-v3.public-card--compact #btn-whatsapp {
+      background: #fff;
+      border: 1px solid rgba(92, 107, 88, 0.14);
+      color: #2f352c;
+      border-radius: 14px;
+      padding: 9px 10px;
+      font-weight: 500;
+    }
+
+    body.smartcard-v3.public-card--compact .compact-primary-cta-wrap {
+      margin: 0 0 10px;
+      gap: 8px;
+    }
+
+    body.smartcard-v3.public-card--compact .main-grid {
+      gap: 8px;
+    }
+
+    body.smartcard-v3.public-card--compact .card-block {
+      padding: 12px;
+    }
+
+    body.smartcard-v3.public-card--compact .card-block--quote .qr-wrap {
+      margin-top: 0;
+      padding: 10px 12px;
+    }
+
+    body.smartcard-v3.public-card--compact .qr-wrap img {
+      width: 68px;
+      height: 68px;
+    }
+
+    body.smartcard-v3.public-card--compact .compact-acc-trigger--quote {
+      background: #fff;
+      border: 1px solid rgba(92, 107, 88, 0.14);
+      color: #5c6b58;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 480px) {
+      body.smartcard-v3 {
+        padding-left: max(10px, env(safe-area-inset-left, 0px));
+        padding-right: max(10px, env(safe-area-inset-right, 0px));
+      }
+
+      body.smartcard-v3 .phone-shell {
+        max-width: 100%;
+      }
+
+      body.smartcard-v3 .phone-inner {
+        border-radius: 20px;
+      }
+    }
+
+    @media (min-width: 481px) {
+      body.smartcard-v3 {
+        align-items: center;
+        min-height: 100vh;
+      }
+    }
