@@ -282,6 +282,7 @@ body.is-loading .premium-load-layer {
 }
 
 body.is-loading .hero-loading-anchor > .hero,
+body.is-loading .hero-loading-anchor > .sc-v3-hero,
 body.is-loading .sc-v3-after-hero {
   opacity: 0.2;
   pointer-events: none;
@@ -293,6 +294,7 @@ body.is-loading .main-grid {
 }
 
 body:not(.is-loading) .hero-loading-anchor > .hero,
+body:not(.is-loading) .hero-loading-anchor > .sc-v3-hero,
 body:not(.is-loading) .sc-v3-after-hero,
 body:not(.is-loading) .main-grid {
   opacity: 1;

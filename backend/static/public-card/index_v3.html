@@ -65,8 +65,12 @@
           </div>
         </div>
 
-      <!-- HERO -->
-      <div class="hero">
+      <!-- HERO — scène émotionnelle compacte -->
+      <div class="hero sc-v3-hero">
+        <div class="sc-v3-hero-atmo" aria-hidden="true">
+          <span class="sc-v3-hero-glow"></span>
+          <span class="sc-v3-hero-mist"></span>
+        </div>
         <div class="hero-badges">
           <div class="hero-badge" id="hero-badge-left">
             <span id="hero-badge-left-icon">⭐</span><span id="hero-badge-left-text">Entreprise recommandée</span>
@@ -86,10 +90,13 @@
         </div>
 
         <div class="hero-main-row">
-          <div class="hero-avatar" aria-label="Photo ou logo">
-            <img id="hero-avatar-img" alt="" width="84" height="84" />
-            <span id="hero-avatar-placeholder" aria-hidden="true"></span>
-            <span id="hero-avatar-fallback"></span>
+          <div class="sc-v3-portrait">
+            <span class="sc-v3-portrait-halo" aria-hidden="true"></span>
+            <div class="hero-avatar" aria-label="Photo du professionnel">
+              <img id="hero-avatar-img" alt="" width="84" height="84" />
+              <span id="hero-avatar-placeholder" aria-hidden="true"></span>
+              <span id="hero-avatar-fallback"></span>
+            </div>
           </div>
 
           <div class="hero-texts">
@@ -199,7 +206,8 @@
         </div>
 
         <div class="sc-v3-qr-strip card-block--quote">
-          <div class="qr-wrap">
+          <div class="qr-wrap sc-v3-qr-pass">
+            <div class="sc-v3-qr-frame" aria-hidden="true"></div>
             <img id="qr-image" alt="QR code — accès à cette carte" data-alt-demo="QR Code" data-alt-client="QR code — accès à cette carte" />
             <div class="qr-copy">
               <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
