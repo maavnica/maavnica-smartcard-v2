@@ -22,11 +22,8 @@
   </div>
   <div class="phone-shell sc-v3-shell">
     <div class="phone-inner sc-v3-inner">
-      <div class="status-bar sc-v3-status" id="status-bar">
-        <span class="status-bar-inner">
-          <img class="status-bar-mark" src="/static/logo-palmier.png" alt="" width="14" height="14" decoding="async" />
-          <span class="status-bar-label" id="status-bar-label">Maavnica SmartCard</span>
-        </span>
+      <div class="status-bar sc-v3-status visually-hidden" id="status-bar" aria-hidden="true">
+        <span class="status-bar-label" id="status-bar-label">SmartCard</span>
       </div>
 
       <div id="demo-banner-shell" class="demo-marketing" aria-hidden="true">
@@ -155,73 +152,62 @@
           </div>
         </div>
 
+        <div id="hero-compact-social" class="hero-compact-social" hidden>
+          <a id="hero-link-facebook" class="hero-social-ic" href="#" target="_blank" rel="noopener noreferrer" hidden aria-label="Facebook">f</a>
+          <a id="hero-link-instagram" class="hero-social-ic" href="#" target="_blank" rel="noopener noreferrer" hidden aria-label="Instagram">◎</a>
+        </div>
+      </div>
+      </div>
+
+      <div class="sc-v3-after-hero">
+        <p class="sc-v3-emotion" id="sc-v3-emotion">
+          Une carte simple pour garder le contact et recommander ce professionnel.
+        </p>
+
         <div class="hero-compact-contact-row" id="hero-compact-contact-row">
           <div class="hero-compact-tel-row">
             <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
           </div>
           <div id="slot-add-contact-hero" class="hero-slot-add-contact"></div>
         </div>
-        <div id="hero-compact-social" class="hero-compact-social" hidden>
-          <a
-            id="hero-link-facebook"
-            class="hero-social-ic hero-social-ic--fb"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            hidden
-            aria-label="Facebook"
-            >f</a
-          >
-          <a
-            id="hero-link-instagram"
-            class="hero-social-ic hero-social-ic--ig"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            hidden
-            aria-label="Instagram"
-            >◎</a
-          >
-        </div>
-      </div>
 
-      <p class="sc-v3-emotion" id="sc-v3-emotion">
-        Une carte simple pour garder le contact et recommander ce professionnel.
-      </p>
-
-      <div class="compact-primary-cta-wrap" id="compact-primary-cta-wrap">
-        <button
-          type="button"
-          class="btn-primary btn-primary-stack-cta btn-primary--reco-first"
-          id="btn-cta-recommander"
-          hidden
-          aria-label="Recommander ce professionnel"
-        >
-          Recommander ce professionnel
-        </button>
-        <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
-          Demande de contact
-        </button>
-        <button
-          type="button"
-          class="btn-primary btn-primary-stack-cta btn-primary--avis-secondary"
-          id="btn-cta-laisser-avis"
-          aria-label="Laisser un avis"
-        >
-          Laisser un avis
-        </button>
-        <p class="compact-cta-reassurance" id="compact-cta-reassurance">
-          Réponse rapide • Sans engagement
-        </p>
-        <div class="compact-discrete-row" id="compact-discrete-row">
-          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-partager" hidden>
-            Envoyer ma carte
+        <div class="compact-primary-cta-wrap" id="compact-primary-cta-wrap">
+          <button
+            type="button"
+            class="btn-primary btn-primary-stack-cta btn-primary--reco-first"
+            id="btn-cta-recommander"
+            hidden
+            aria-label="Recommander ce professionnel"
+          >
+            Recommander ce professionnel
           </button>
-          <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-paiement" hidden>
-            Paiement en ligne
+          <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
+            Prendre contact
           </button>
+          <button
+            type="button"
+            class="btn-primary btn-primary-stack-cta btn-primary--avis-secondary"
+            id="btn-cta-laisser-avis"
+            aria-label="Voir les avis"
+          >
+            Voir les avis
+          </button>
+          <div class="compact-discrete-row" id="compact-discrete-row">
+            <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-partager" hidden>Partager</button>
+            <button type="button" class="btn-link compact-discrete-link" id="btn-discrete-paiement" hidden>Paiement</button>
+          </div>
         </div>
-      </div>
+
+        <div class="sc-v3-qr-strip card-block--quote">
+          <div class="qr-wrap">
+            <img id="qr-image" alt="QR code — accès à cette carte" data-alt-demo="QR Code" data-alt-client="QR code — accès à cette carte" />
+            <div class="qr-copy">
+              <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
+              <div class="qr-copy-main qr-copy-main--compact-fr">Scannez pour garder cette carte</div>
+              <div class="qr-copy-hint"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- CONTENU PRINCIPAL -->
@@ -278,6 +264,15 @@
             >
               Paiement
             </button>
+            <button
+              type="button"
+              id="acc-trigger-quote"
+              class="visually-hidden"
+              data-acc-trigger="quote"
+              aria-expanded="false"
+            >
+              Contact
+            </button>
           </div>
 
           <div class="hero-google-badge-wrap">
@@ -286,7 +281,7 @@
 
           <div id="slot-call-legacy">
             <button class="btn-link" id="btn-call" type="button" aria-label="Appeler">
-              📞 Appeler directement
+              <span class="btn-link-text">Appeler</span>
             </button>
           </div>
 
@@ -353,15 +348,13 @@
 
           <div id="legacy-contact-row" class="legacy-contact-row">
             <div id="slot-add-legacy">
-              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter à mes contacts"
-                ><span class="btn-link-leading" aria-hidden="true">➕</span
-                ><span class="btn-link-text">Ajouter à mes contacts</span></a
+              <a class="btn-link" id="btn-add-contact" href="#" aria-label="Ajouter le contact"
+                ><span class="btn-link-text">Ajouter le contact</span></a
               >
             </div>
             <div id="slot-wa-legacy">
               <button class="btn-link" id="btn-whatsapp" type="button" aria-label="WhatsApp">
-                <span class="btn-link-leading" aria-hidden="true">💬</span
-                ><span class="btn-link-text">Écrire sur WhatsApp</span>
+                <span class="btn-link-text">WhatsApp</span>
               </button>
             </div>
           </div>
@@ -435,19 +428,7 @@
           </div>
         </div>
 
-        <!-- Colonne droite -->
-        <div class="card-block card-block--quote">
-          <button
-            type="button"
-            class="compact-acc-trigger compact-acc-trigger--quote"
-            id="acc-trigger-quote"
-            data-acc-trigger="quote"
-            aria-expanded="false"
-            aria-label="Demande de contact"
-          >
-            📝
-          </button>
-
+        <div class="card-block sc-v3-quote-host card-block--quote">
           <div class="acc-panel acc-panel--quote" id="panel-quote" data-acc-panel="quote">
           <div class="section-label" id="quote-section-label">Demande de devis</div>
 
@@ -479,20 +460,6 @@
             Droits&nbsp;: <a href="mailto:contact@maavnica.com">contact@maavnica.com</a>.
           </div>
           </div>
-
-          <div class="qr-wrap">
-            <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
-            <div class="qr-copy">
-              <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
-              <div class="qr-copy-main qr-copy-main--compact-fr" aria-hidden="true">
-                Scannez pour enregistrer le contact
-              </div>
-              <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
-            </div>
-          </div>
-          <div class="qr-powered-by" aria-label="Propulsé par Maavnica">
-            <span>Propulsé par Maavnica</span>
-          </div>
         </div>
       </div>
 
@@ -500,11 +467,9 @@
         <a class="btn-primary demo-cta-btn" href="https://smartcard.maavnica.com/static/contact-smartcard.html">Créer ma SmartCard</a>
       </div>
 
-      <div class="footer" id="public-card-footer">
-        SmartCard Maavnica ·
+      <div class="footer sc-v3-footer" id="public-card-footer">
         <a href="/static/confidentialite.html">Confidentialité</a> ·
-        <a href="/static/mentions-legales.html">Mentions</a> ·
-        <a href="https://maavnica.com" target="_blank" rel="noopener noreferrer">Maavnica</a>
+        <a href="/static/mentions-legales.html">Mentions</a>
       </div>
     </div>
   </div>
