@@ -722,6 +722,115 @@ body.smartcard-v3[class*="theme-"] {
   --sc-olive: var(--sc-olive-mid);
 }
 
+/* Theme — Wellness Soft (applique seulement avec data-theme) */
+body.smartcard-v3[data-theme="wellness-soft"] {
+  --card-bg: #f3efe6;
+  --card-surface: #fcf9f3;
+  --card-primary: #2f5a45;
+  --card-text: #2f342f;
+  --card-muted: #7b746a;
+  --card-border: #d9d1c4;
+  --card-shadow: 0 10px 26px rgba(54, 49, 41, 0.11);
+
+  background-color: var(--card-bg);
+  background-image:
+    radial-gradient(120% 75% at 50% -10%, rgba(255, 255, 255, 0.72), transparent 56%),
+    radial-gradient(80% 65% at 0% 100%, rgba(217, 209, 196, 0.42), transparent 58%),
+    repeating-radial-gradient(
+      ellipse at 15% 20%,
+      rgba(94, 130, 105, 0.04) 0 2px,
+      rgba(94, 130, 105, 0) 2px 24px
+    ),
+    linear-gradient(168deg, #f4f0e8 0%, #eee8dc 56%, #e8dfd1 100%);
+  color: var(--card-text);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-inner::before {
+  background:
+    radial-gradient(130% 95% at 92% -8%, rgba(101, 136, 111, 0.08), transparent 50%),
+    radial-gradient(145% 95% at -8% 115%, rgba(112, 146, 115, 0.06), transparent 54%),
+    linear-gradient(166deg, #fffcf7 0%, var(--card-surface) 42%, #f5efe3 100%);
+  border-color: var(--card-border);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-inner::after {
+  background:
+    radial-gradient(ellipse 78% 42% at 50% 0%, rgba(255, 255, 255, 0.58), transparent 58%),
+    linear-gradient(180deg, transparent 0%, rgba(106, 99, 85, 0.04) 100%);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-hero {
+  background: #fffdf9;
+  border-color: var(--card-border);
+  box-shadow:
+    0 2px 6px rgba(54, 49, 41, 0.05),
+    0 16px 28px -24px rgba(54, 49, 41, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .hero-badge,
+body.smartcard-v3[data-theme="wellness-soft"] .btn-link,
+body.smartcard-v3[data-theme="wellness-soft"] #btn-call,
+body.smartcard-v3[data-theme="wellness-soft"] #btn-whatsapp,
+body.smartcard-v3[data-theme="wellness-soft"] .btn-primary--reco-first:not([hidden]),
+body.smartcard-v3[data-theme="wellness-soft"] .btn-primary--avis-secondary {
+  background: #fdfaf4 !important;
+  border-color: var(--card-border) !important;
+  color: var(--card-text) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 4px 10px rgba(54, 49, 41, 0.07) !important;
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .compact-primary-cta-wrap .btn-primary,
+body.smartcard-v3[data-theme="wellness-soft"] #btn-send-feedback,
+body.smartcard-v3[data-theme="wellness-soft"] #btn-send-quote,
+body.smartcard-v3[data-theme="wellness-soft"] .btn-share-card-main,
+body.smartcard-v3[data-theme="wellness-soft"] .recommend-id-confirm {
+  background: linear-gradient(165deg, #3b6a52 0%, var(--card-primary) 100%);
+  color: #f8f5ef !important;
+  border-color: rgba(38, 72, 56, 0.45) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 8px 18px rgba(34, 68, 53, 0.18) !important;
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .compact-primary-cta-wrap .btn-primary--avis-secondary,
+body.smartcard-v3[data-theme="wellness-soft"] .compact-primary-cta-wrap .btn-primary--reco-first:not([hidden]) {
+  background: #fdfaf4 !important;
+  color: var(--card-text) !important;
+  border-color: var(--card-border) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 4px 10px rgba(54, 49, 41, 0.07) !important;
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-qr-pass,
+body.smartcard-v3[data-theme="wellness-soft"] .recommend-id-panel,
+body.smartcard-v3[data-theme="wellness-soft"] .acc-panel {
+  border-color: var(--card-border);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .quote-input,
+body.smartcard-v3[data-theme="wellness-soft"] .feedback-input,
+body.smartcard-v3[data-theme="wellness-soft"] .pill {
+  background: #fffdf9;
+  border-color: var(--card-border);
+  color: var(--card-text);
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-emotion,
+body.smartcard-v3[data-theme="wellness-soft"] .hint,
+body.smartcard-v3[data-theme="wellness-soft"] .hero-company,
+body.smartcard-v3[data-theme="wellness-soft"] .hero-google-badge,
+body.smartcard-v3[data-theme="wellness-soft"] .hero-google-rating-inline {
+  color: var(--card-muted) !important;
+}
+
+body.smartcard-v3[data-theme="wellness-soft"] .sc-v3-shell {
+  filter: drop-shadow(var(--card-shadow));
+}
+
 @media (prefers-reduced-motion: reduce) {
   body.smartcard-v3 .sc-v3-portrait-halo {
     animation: none;
