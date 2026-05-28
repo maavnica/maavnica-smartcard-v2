@@ -1,6 +1,7 @@
 /**
  * SmartCard V3 — couche émotionnelle premium (compact, désirable, humain).
  * Structure inchangée · perception spa / carte de visite luxe.
+ * ARCHIVED - do not use for new SmartCard FR evolutions
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap");
@@ -829,11 +830,6 @@ body[data-theme="wellness-soft"] .hero-google-rating-inline {
 
 body[data-theme="wellness-soft"] .sc-v3-shell {
   filter: drop-shadow(var(--card-shadow));
-}
-
-/* Diagnostic temporaire — vérifier que le thème est bien chargé */
-body[data-theme="wellness-soft"] {
-  outline: 8px solid red;
 }
 
 @media (prefers-reduced-motion: reduce) {
