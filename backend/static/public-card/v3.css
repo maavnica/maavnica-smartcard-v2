@@ -831,6 +831,11 @@ body[data-theme="wellness-soft"] .sc-v3-shell {
   filter: drop-shadow(var(--card-shadow));
 }
 
+/* Diagnostic temporaire — vérifier que le thème est bien chargé */
+body[data-theme="wellness-soft"] {
+  outline: 8px solid red;
+}
+
 @media (prefers-reduced-motion: reduce) {
   body.smartcard-v3 .sc-v3-portrait-halo {
     animation: none;
