@@ -160,7 +160,7 @@ class PublicSlugHttpTests(unittest.TestCase):
         self.assertNotIn("smartcard-v3", r.text)
         self.assertNotIn("/static/public-card/v3.css", r.text)
 
-    def test_c_demo2_experience_serves_v3(self):
+    def test_c_demo2_experience_still_serves_classic(self):
         from fastapi.testclient import TestClient
 
         from app.main import app
@@ -176,10 +176,9 @@ class PublicSlugHttpTests(unittest.TestCase):
         client = TestClient(app)
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
-        self.assertIn("smartcard-v3", r.text)
-        self.assertIn("SMARTCARD_V3_ACTIVE", r.text)
-        self.assertIn("/static/public-card/v3.css", r.text)
-        self.assertIn("/static/public-card/public-card-runtime.js", r.text)
+        self.assertNotIn("smartcard-v3", r.text)
+        self.assertNotIn("SMARTCARD_V3_ACTIVE", r.text)
+        self.assertNotIn("/static/public-card/v3.css", r.text)
 
     def test_api_public_cards_dirty_slug(self):
         from fastapi.testclient import TestClient

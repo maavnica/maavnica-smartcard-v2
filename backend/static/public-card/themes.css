@@ -1,0 +1,1403 @@
+/* SmartCard FR — thèmes visuels (data-theme)
+ * Actifs : wellness-soft, artisan
+ * Prévu : immobilier, corporate, maavnica
+ *
+ * Contrat tokens (par thème sur body[data-theme="…"]) :
+ * --card-bg, --card-surface, --card-primary, --card-text, --card-muted,
+ * --card-border, --card-shadow, --font-display, --font-body
+ */
+
+/* body[data-theme="immobilier"] { } */
+/* body[data-theme="corporate"] { } */
+/* body[data-theme="maavnica"] { } */
+
+/* —— Thème bien-être premium (wellness-soft) —— */
+    body[data-theme="wellness-soft"] {
+      --card-bg: #f3efe6;
+      --card-surface: #fcf9f3;
+      --card-primary: #2f5a45;
+      --card-text: #2f342f;
+      --card-muted: #7b746a;
+      --card-border: #d9d1c4;
+      --card-shadow: 0 10px 26px rgba(54, 49, 41, 0.11);
+      --bg-page: #f3efe6;
+      --hero-bg: #fffdf9;
+      --primary: #2f5a45;
+      --primary-soft: rgba(47, 90, 69, 0.14);
+      --text-main: #2f342f;
+      --text-soft: #7b746a;
+      --border-soft: rgba(123, 116, 106, 0.28);
+      --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+
+      font-family: var(--font-body);
+      color: var(--card-text);
+      background-color: var(--card-bg);
+      background-image:
+        radial-gradient(120% 75% at 50% -10%, rgba(255, 255, 255, 0.72), transparent 56%),
+        radial-gradient(80% 65% at 0% 100%, rgba(217, 209, 196, 0.42), transparent 58%),
+        repeating-radial-gradient(
+          ellipse at 15% 20%,
+          rgba(94, 130, 105, 0.04) 0 2px,
+          rgba(94, 130, 105, 0) 2px 24px
+        ),
+        linear-gradient(168deg, #f4f0e8 0%, #eee8dc 56%, #e8dfd1 100%);
+    }
+
+    body[data-theme="wellness-soft"] .phone-shell {
+      filter: drop-shadow(var(--card-shadow));
+    }
+
+    body[data-theme="wellness-soft"] .phone-inner {
+      min-height: 0;
+      background: linear-gradient(166deg, #fffcf7 0%, var(--card-surface) 42%, #f5efe3 100%);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        var(--card-shadow);
+    }
+
+    body[data-theme="wellness-soft"] .notch,
+    body[data-theme="wellness-soft"] .status-bar {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] .admin-preview-badge {
+      color: var(--card-muted);
+      background: rgba(255, 255, 255, 0.85);
+      border-color: var(--card-border);
+    }
+
+    body[data-theme="wellness-soft"] .hero {
+      background: #fffdf9;
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 2px 6px rgba(54, 49, 41, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    }
+
+    body[data-theme="wellness-soft"] .hero-badges {
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    body[data-theme="wellness-soft"] .hero-badge {
+      padding: 4px 11px;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--card-muted);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 1px 3px rgba(54, 49, 41, 0.06);
+    }
+
+    body[data-theme="wellness-soft"] #hero-badge-right {
+      display: none;
+    }
+
+    body[data-theme="wellness-soft"] .hero-recommend-trust {
+      color: var(--card-primary);
+      background: rgba(237, 242, 232, 0.95);
+      border-color: rgba(47, 90, 69, 0.28);
+      box-shadow: 0 2px 8px rgba(54, 49, 41, 0.06);
+    }
+
+    body[data-theme="wellness-soft"] .hero-main-row {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    body[data-theme="wellness-soft"] .hero-avatar {
+      width: 76px;
+      height: 76px;
+      margin: 4px auto 2px;
+      border: none;
+      padding: 3px;
+      background: linear-gradient(145deg, #fff 0%, #e5ddd0 100%);
+      box-shadow:
+        0 6px 18px rgba(54, 49, 41, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.95) inset;
+    }
+
+    body[data-theme="wellness-soft"] #hero-avatar-fallback {
+      background: linear-gradient(155deg, #a8b89a 0%, #6d7d62 48%, #5a6652 100%);
+      color: #fffdf9;
+      font-family: var(--font-display);
+      font-weight: 500;
+    }
+
+    body[data-theme="wellness-soft"] .hero-texts {
+      width: 100%;
+    }
+
+    body[data-theme="wellness-soft"] #hero-subline {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] #person-name.hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 5.2vw, 1.82rem);
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      color: var(--card-text);
+      margin: 0 0 4px;
+    }
+
+    body[data-theme="wellness-soft"] #company-name.hero-company {
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #5a6652;
+      margin-bottom: 4px;
+    }
+
+    body[data-theme="wellness-soft"] #hero-job-title {
+      display: block !important;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--card-muted);
+      margin: 0 0 6px;
+    }
+
+    body[data-theme="wellness-soft"] #hero-professional-tagline {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.38;
+      color: var(--card-muted);
+      margin: 0 auto;
+      max-width: 18rem;
+      text-align: center;
+    }
+
+    body[data-theme="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin: 8px auto 0;
+      padding: 5px 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--card-muted) !important;
+      background: #fff !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(54, 49, 41, 0.06) !important;
+      max-width: 100%;
+      white-space: normal;
+    }
+
+    body[data-theme="wellness-soft"] .hero-google-rating-inline a {
+      color: var(--card-primary) !important;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    body[data-theme="wellness-soft"] .hero-google-rating-inline a:hover {
+      text-decoration: underline;
+      color: #3b6a52 !important;
+    }
+
+    body[data-theme="wellness-soft"] #hero-recommend-count {
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #5a6652;
+      background: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin: 6px auto 0;
+    }
+
+    body[data-theme="wellness-soft"] .hero-reassurance,
+    body[data-theme="wellness-soft"] .hero-social-proof,
+    body[data-theme="wellness-soft"] .hero-subtitle,
+    body[data-theme="wellness-soft"] .hero-meta,
+    body[data-theme="wellness-soft"] .hero-contact-line,
+    body[data-theme="wellness-soft"] #hero-recommend-conversion,
+    body[data-theme="wellness-soft"] .p12-soft-hint,
+    body[data-theme="wellness-soft"] #left-col-head,
+    body[data-theme="wellness-soft"] #hint-share-signature,
+    body[data-theme="wellness-soft"] #hint-post-prestation,
+    body[data-theme="wellness-soft"] .hero-google-badge-wrap,
+    body[data-theme="wellness-soft"] #contact-actions-guide,
+    body[data-theme="wellness-soft"] #pill-section-hint,
+    body[data-theme="wellness-soft"] .compact-cta-reassurance {
+      display: none !important;
+    }
+
+    /* Grille d’actions secondaires (4 colonnes) sous la capsule Google */
+    body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero {
+      width: calc(100% - 4px);
+      margin: 12px 2px 0;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 13px;
+    }
+
+    body[data-theme="wellness-soft"] .hero-compact-contact-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-top: 12px;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    body[data-theme="wellness-soft"] .hero-compact-tel-row,
+    body[data-theme="wellness-soft"] .hero-slot-call-wa {
+      display: contents;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    body[data-theme="wellness-soft"] #btn-whatsapp {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    body[data-theme="wellness-soft"] #btn-discrete-partager:not([hidden]) {
+      grid-column: 4;
+      grid-row: 1;
+    }
+
+    body[data-theme="wellness-soft"] #btn-discrete-partager[hidden] {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] .hero-slot-add-contact {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: block;
+      width: 100%;
+      min-width: 0;
+      margin-top: 2px;
+    }
+
+    body[data-theme="wellness-soft"] .compact-primary-cta-wrap {
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    body[data-theme="wellness-soft"] .compact-discrete-row:empty,
+    body[data-theme="wellness-soft"] .compact-discrete-row:not(:has(button:not([hidden]))) {
+      display: none;
+    }
+
+    /* Boutons secondaires : icône ronde + libellé */
+    body[data-theme="wellness-soft"] #btn-call,
+    body[data-theme="wellness-soft"] #btn-whatsapp,
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+    body[data-theme="wellness-soft"] #btn-discrete-partager {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      height: auto;
+      min-height: 0;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #22352d !important;
+      text-decoration: none;
+      overflow: visible;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call .btn-link-leading,
+    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-leading {
+      display: none;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call::before,
+    body[data-theme="wellness-soft"] #btn-whatsapp::before,
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before,
+    body[data-theme="wellness-soft"] #btn-discrete-partager::before {
+      content: "";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 999px;
+      background: #fffaf1;
+      border: 1px solid rgba(58, 73, 57, 0.14);
+      box-shadow: 0 4px 12px rgba(54, 49, 41, 0.08);
+      font-size: 1.25rem;
+      line-height: 1;
+      color: var(--card-primary);
+    }
+
+    body[data-theme="wellness-soft"] #btn-call::before {
+      content: "📞";
+    }
+
+    body[data-theme="wellness-soft"] #btn-whatsapp::before {
+      content: "💬";
+    }
+
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before {
+      content: "⭐";
+    }
+
+    body[data-theme="wellness-soft"] #btn-discrete-partager::before {
+      content: "↗";
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call .btn-link-text,
+    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text,
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+    body[data-theme="wellness-soft"] #btn-discrete-partager {
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 500;
+      text-align: center;
+      color: #22352d;
+      letter-spacing: 0;
+      text-transform: none;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    /* Ajouter le contact — bouton large sous la ligne d’icônes */
+    body[data-theme="wellness-soft"] #btn-add-contact {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+      padding: 11px 14px !important;
+      margin: 0 !important;
+      border-radius: 13px;
+      background: #fdfaf4 !important;
+      border: 1px solid var(--card-border) !important;
+      color: #22352d !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 10px rgba(54, 49, 41, 0.07) !important;
+    }
+
+    body[data-theme="wellness-soft"] #btn-add-contact::before {
+      content: none;
+      display: none;
+    }
+
+    body[data-theme="wellness-soft"] #btn-add-contact .btn-link-text {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+      text-align: center;
+      color: #22352d;
+    }
+
+    body[data-theme="wellness-soft"] #btn-add-contact .btn-link-leading {
+      display: inline-flex;
+      flex-shrink: 0;
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      clip: auto;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 380px) {
+      body[data-theme="wellness-soft"] .hero-loading-anchor {
+        column-gap: 10px;
+        row-gap: 10px;
+      }
+
+      body[data-theme="wellness-soft"] #btn-call,
+      body[data-theme="wellness-soft"] #btn-whatsapp,
+      body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+      body[data-theme="wellness-soft"] #btn-discrete-partager:not([hidden]) {
+        grid-row: auto;
+      }
+
+      body[data-theme="wellness-soft"] #btn-call {
+        grid-column: 1;
+      }
+
+      body[data-theme="wellness-soft"] #btn-whatsapp {
+        grid-column: 2;
+      }
+
+      body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
+        grid-column: 3;
+      }
+
+      body[data-theme="wellness-soft"] #btn-discrete-partager:not([hidden]) {
+        grid-column: 4;
+      }
+
+      body[data-theme="wellness-soft"] #btn-call::before,
+      body[data-theme="wellness-soft"] #btn-whatsapp::before,
+      body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before,
+      body[data-theme="wellness-soft"] #btn-discrete-partager::before {
+        width: 46px;
+        height: 46px;
+        font-size: 1.1rem;
+      }
+
+      body[data-theme="wellness-soft"] #btn-call .btn-link-text,
+      body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text,
+      body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+      body[data-theme="wellness-soft"] #btn-discrete-partager {
+        font-size: 11px;
+      }
+    }
+
+    body[data-theme="wellness-soft"] .btn-primary-contact-hero,
+    body[data-theme="wellness-soft"] #btn-send-feedback,
+    body[data-theme="wellness-soft"] #btn-send-quote,
+    body[data-theme="wellness-soft"] .btn-share-card-main,
+    body[data-theme="wellness-soft"] .recommend-id-confirm,
+    body[data-theme="wellness-soft"] .demo-cta-btn {
+      background: linear-gradient(165deg, #3b6a52 0%, var(--card-primary) 100%) !important;
+      color: #f8f5ef !important;
+      border: 1px solid rgba(38, 72, 56, 0.4) !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 8px 18px rgba(34, 68, 53, 0.18) !important;
+    }
+
+    body[data-theme="wellness-soft"] .btn-primary--reco-first:not([hidden]) {
+      background: #fdfaf4 !important;
+      color: var(--card-text) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 10px rgba(54, 49, 41, 0.07) !important;
+      opacity: 1;
+    }
+
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      opacity: 1;
+    }
+
+    body[data-theme="wellness-soft"] .btn-link {
+      background: #fdfaf4;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+      box-shadow: 0 2px 8px rgba(54, 49, 41, 0.06);
+    }
+
+    body[data-theme="wellness-soft"] .card-block {
+      background: rgba(255, 253, 249, 0.72);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 2px 10px rgba(54, 49, 41, 0.05);
+    }
+
+    body[data-theme="wellness-soft"] .card-block::before {
+      display: none;
+    }
+
+    body[data-theme="wellness-soft"] .section-label,
+    body[data-theme="wellness-soft"] .block-title {
+      color: var(--card-text);
+    }
+
+    body[data-theme="wellness-soft"] .hint,
+    body[data-theme="wellness-soft"] .block-sub {
+      color: var(--card-muted);
+    }
+
+    body[data-theme="wellness-soft"] .hint a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="wellness-soft"] .quote-input,
+    body[data-theme="wellness-soft"] .feedback-input,
+    body[data-theme="wellness-soft"] .pill {
+      background: #fffdf9;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+    }
+
+    body[data-theme="wellness-soft"] .quote-input::placeholder,
+    body[data-theme="wellness-soft"] .feedback-input::placeholder {
+      color: #a39a8f;
+    }
+
+    body[data-theme="wellness-soft"] .pill.selected-yes,
+    body[data-theme="wellness-soft"] .pill.selected-no {
+      border-color: var(--card-primary);
+      background: rgba(237, 242, 232, 0.95);
+    }
+
+    body[data-theme="wellness-soft"] .post-share-block,
+    body[data-theme="wellness-soft"] .feedback-recommend-nudge {
+      background: #fffdf9;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(54, 49, 41, 0.06);
+    }
+
+    body[data-theme="wellness-soft"] .qr-wrap {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 15px;
+      background: linear-gradient(125deg, #ffffff 0%, #f5f0e8 100%);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 1) inset,
+        0 4px 14px rgba(54, 49, 41, 0.08);
+      color: var(--card-muted);
+    }
+
+    body[data-theme="wellness-soft"] .qr-wrap img {
+      border-color: var(--card-border);
+      box-shadow: 0 2px 8px rgba(54, 49, 41, 0.08);
+    }
+
+    body[data-theme="wellness-soft"] .qr-copy-main {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--card-text);
+    }
+
+    body[data-theme="wellness-soft"] .qr-powered-by {
+      color: var(--card-muted);
+      opacity: 0.85;
+    }
+
+    body[data-theme="wellness-soft"] .footer {
+      color: var(--card-muted);
+      border-top: 1px solid var(--card-border);
+    }
+
+    body[data-theme="wellness-soft"] .footer a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="wellness-soft"] .toast {
+      background: rgba(47, 52, 47, 0.9);
+      color: #f8f5ef;
+      border-radius: 999px;
+    }
+
+    body[data-theme="wellness-soft"] .recommend-id-modal {
+      background: rgba(47, 52, 47, 0.35);
+    }
+
+    body[data-theme="wellness-soft"] .recommend-id-panel {
+      background: #fffdf9;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+      box-shadow: 0 20px 40px rgba(54, 49, 41, 0.14);
+    }
+
+    body[data-theme="wellness-soft"] .recommend-id-panel input {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+    }
+
+    body[data-theme="wellness-soft"] .recommend-id-panel a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="wellness-soft"] .premium-load-layer {
+      background: linear-gradient(165deg, rgba(253, 251, 247, 0.97), rgba(240, 234, 224, 0.98));
+    }
+
+    body[data-theme="wellness-soft"] .skeleton-shimmer {
+      background: rgba(154, 171, 140, 0.14);
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .hero-badges {
+      display: flex !important;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .hero-professional-tagline,
+    body[data-theme="wellness-soft"].public-card--compact .hero-title,
+    body[data-theme="wellness-soft"].public-card--compact .hero-company,
+    body[data-theme="wellness-soft"].public-card--compact .hero-job-title {
+      text-align: center;
+      color: var(--card-text);
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .hero-professional-tagline {
+      color: var(--card-muted);
+      -webkit-line-clamp: 2;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .hero-google-rating-inline {
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .btn-primary-contact-hero {
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 8px 18px rgba(34, 68, 53, 0.18) !important;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .acc-panel {
+      border-bottom-color: var(--card-border);
+    }
+
+    body[data-theme="wellness-soft"] .compact-acc-trigger--quote {
+      background: #fdfaf4;
+      border-color: var(--card-border);
+      color: var(--card-text);
+    }
+
+
+/* —— Thème artisan premium —— */
+    body[data-theme="artisan"] {
+      --card-bg: #ebe4d6;
+      --card-surface: #f7f2e8;
+      --card-primary: #4a4f4c;
+      --card-accent-wood: #6b5344;
+      --card-text: #2c2926;
+      --card-muted: #7a7268;
+      --card-border: #cfc4b4;
+      --card-shadow: 0 10px 26px rgba(44, 40, 36, 0.11);
+      --bg-page: #ebe4d6;
+      --hero-bg: #faf7ef;
+      --primary: #4a4f4c;
+      --primary-soft: rgba(107, 83, 68, 0.12);
+      --text-main: #2c2926;
+      --text-soft: #7a7268;
+      --border-soft: rgba(122, 114, 104, 0.3);
+      --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+
+      font-family: var(--font-body);
+      color: var(--card-text);
+      background-color: var(--card-bg);
+      background-image:
+        radial-gradient(115% 70% at 50% -8%, rgba(255, 252, 245, 0.78), transparent 55%),
+        radial-gradient(85% 60% at 100% 100%, rgba(201, 184, 154, 0.35), transparent 58%),
+        radial-gradient(70% 55% at 0% 92%, rgba(180, 168, 148, 0.28), transparent 52%),
+        repeating-linear-gradient(
+          92deg,
+          rgba(107, 83, 68, 0.028) 0 1px,
+          rgba(107, 83, 68, 0) 1px 18px
+        ),
+        linear-gradient(168deg, #ebe3d2 0%, #e0d5c4 52%, #d4c8b6 100%);
+    }
+
+    body[data-theme="artisan"] .phone-shell {
+      filter: drop-shadow(var(--card-shadow));
+    }
+
+    body[data-theme="artisan"] .phone-inner {
+      min-height: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0, transparent 12%),
+        linear-gradient(166deg, #faf6ec 0%, var(--card-surface) 42%, #e8dece 100%);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.88) inset,
+        0 -1px 0 rgba(107, 83, 68, 0.06) inset,
+        var(--card-shadow);
+    }
+
+    body[data-theme="artisan"] .notch,
+    body[data-theme="artisan"] .status-bar {
+      display: none !important;
+    }
+
+    body[data-theme="artisan"] .admin-preview-badge {
+      color: var(--card-muted);
+      background: rgba(255, 255, 255, 0.85);
+      border-color: var(--card-border);
+    }
+
+    body[data-theme="artisan"] .hero {
+      background: linear-gradient(180deg, #fcf8f0 0%, #f5efe4 100%);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 2px 6px rgba(44, 40, 36, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 0 rgba(107, 83, 68, 0.05);
+    }
+
+    body[data-theme="artisan"] .hero-badges {
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    body[data-theme="artisan"] .hero-badge {
+      padding: 4px 11px;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--card-muted);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 1px 3px rgba(44, 40, 36, 0.06);
+    }
+
+    body[data-theme="artisan"] #hero-badge-right {
+      display: none;
+    }
+
+    body[data-theme="artisan"] .hero-recommend-trust {
+      color: var(--card-accent-wood);
+      background: rgba(245, 238, 226, 0.96);
+      border-color: rgba(107, 83, 68, 0.22);
+      box-shadow: 0 2px 8px rgba(44, 40, 36, 0.06);
+    }
+
+    body[data-theme="artisan"] .hero-main-row {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    body[data-theme="artisan"] .hero-avatar {
+      width: 76px;
+      height: 76px;
+      margin: 4px auto 2px;
+      border: none;
+      padding: 3px;
+      background: linear-gradient(145deg, #faf6ec 0%, #c9b89a 55%, #a89278 100%);
+      box-shadow:
+        0 6px 18px rgba(44, 40, 36, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    }
+
+    body[data-theme="artisan"] #hero-avatar-fallback {
+      background: linear-gradient(155deg, #d4c0a6 0%, #9a7d62 48%, #6b5344 100%);
+      color: #faf7ef;
+      font-family: var(--font-display);
+      font-weight: 500;
+    }
+
+    body[data-theme="artisan"] .hero-texts {
+      width: 100%;
+    }
+
+    body[data-theme="artisan"] #hero-subline {
+      display: none !important;
+    }
+
+    body[data-theme="artisan"] #person-name.hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 5.2vw, 1.82rem);
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      color: var(--card-text);
+      margin: 0 0 4px;
+    }
+
+    body[data-theme="artisan"] #company-name.hero-company {
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--card-accent-wood);
+      margin-bottom: 4px;
+    }
+
+    body[data-theme="artisan"] #hero-job-title {
+      display: block !important;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--card-muted);
+      margin: 0 0 6px;
+    }
+
+    body[data-theme="artisan"] #hero-professional-tagline {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.38;
+      color: var(--card-muted);
+      margin: 0 auto;
+      max-width: 18rem;
+      text-align: center;
+    }
+
+    body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin: 8px auto 0;
+      padding: 5px 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--card-muted) !important;
+      background: #fff !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(44, 40, 36, 0.06) !important;
+      max-width: 100%;
+      white-space: normal;
+    }
+
+    body[data-theme="artisan"] .hero-google-rating-inline a {
+      color: var(--card-primary) !important;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    body[data-theme="artisan"] .hero-google-rating-inline a:hover {
+      text-decoration: underline;
+      color: #5a5f5c !important;
+    }
+
+    body[data-theme="artisan"] #hero-recommend-count {
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--card-accent-wood);
+      background: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin: 6px auto 0;
+    }
+
+    body[data-theme="artisan"] .hero-reassurance,
+    body[data-theme="artisan"] .hero-social-proof,
+    body[data-theme="artisan"] .hero-subtitle,
+    body[data-theme="artisan"] .hero-meta,
+    body[data-theme="artisan"] .hero-contact-line,
+    body[data-theme="artisan"] #hero-recommend-conversion,
+    body[data-theme="artisan"] .p12-soft-hint,
+    body[data-theme="artisan"] #left-col-head,
+    body[data-theme="artisan"] #hint-share-signature,
+    body[data-theme="artisan"] #hint-post-prestation,
+    body[data-theme="artisan"] .hero-google-badge-wrap,
+    body[data-theme="artisan"] #contact-actions-guide,
+    body[data-theme="artisan"] #pill-section-hint,
+    body[data-theme="artisan"] .compact-cta-reassurance {
+      display: none !important;
+    }
+
+    /* Grille d’actions secondaires (4 colonnes) sous la capsule Google */
+    body[data-theme="artisan"] .hero .btn-primary-contact-hero {
+      width: calc(100% - 4px);
+      margin: 12px 2px 0;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 13px;
+    }
+
+    body[data-theme="artisan"] .hero-compact-contact-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-top: 12px;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    body[data-theme="artisan"] .hero-compact-tel-row,
+    body[data-theme="artisan"] .hero-slot-call-wa {
+      display: contents;
+    }
+
+    body[data-theme="artisan"] #btn-call {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    body[data-theme="artisan"] #btn-whatsapp {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    body[data-theme="artisan"] #btn-cta-laisser-avis {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    body[data-theme="artisan"] #btn-discrete-partager:not([hidden]) {
+      grid-column: 4;
+      grid-row: 1;
+    }
+
+    body[data-theme="artisan"] #btn-discrete-partager[hidden] {
+      display: none !important;
+    }
+
+    body[data-theme="artisan"] .hero-slot-add-contact {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: block;
+      width: 100%;
+      min-width: 0;
+      margin-top: 2px;
+    }
+
+    body[data-theme="artisan"] .compact-primary-cta-wrap {
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    body[data-theme="artisan"] .compact-discrete-row:empty,
+    body[data-theme="artisan"] .compact-discrete-row:not(:has(button:not([hidden]))) {
+      display: none;
+    }
+
+    /* Boutons secondaires : icône ronde + libellé */
+    body[data-theme="artisan"] #btn-call,
+    body[data-theme="artisan"] #btn-whatsapp,
+    body[data-theme="artisan"] #btn-cta-laisser-avis,
+    body[data-theme="artisan"] #btn-discrete-partager {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      height: auto;
+      min-height: 0;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #2c2926 !important;
+      text-decoration: none;
+      overflow: visible;
+    }
+
+    body[data-theme="artisan"] #btn-call .btn-link-leading,
+    body[data-theme="artisan"] #btn-whatsapp .btn-link-leading {
+      display: none;
+    }
+
+    body[data-theme="artisan"] #btn-call::before,
+    body[data-theme="artisan"] #btn-whatsapp::before,
+    body[data-theme="artisan"] #btn-cta-laisser-avis::before,
+    body[data-theme="artisan"] #btn-discrete-partager::before {
+      content: "";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 999px;
+      background: linear-gradient(165deg, #faf6ec 0%, #ede4d4 100%);
+      border: 1px solid rgba(92, 82, 68, 0.16);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.85) inset,
+        0 4px 12px rgba(44, 40, 36, 0.08);
+      font-size: 1.25rem;
+      line-height: 1;
+      color: var(--card-primary);
+    }
+
+    body[data-theme="artisan"] #btn-call::before {
+      content: "📞";
+    }
+
+    body[data-theme="artisan"] #btn-whatsapp::before {
+      content: "💬";
+    }
+
+    body[data-theme="artisan"] #btn-cta-laisser-avis::before {
+      content: "⭐";
+    }
+
+    body[data-theme="artisan"] #btn-discrete-partager::before {
+      content: "↗";
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    body[data-theme="artisan"] #btn-call .btn-link-text,
+    body[data-theme="artisan"] #btn-whatsapp .btn-link-text,
+    body[data-theme="artisan"] #btn-cta-laisser-avis,
+    body[data-theme="artisan"] #btn-discrete-partager {
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 500;
+      text-align: center;
+      color: #2c2926;
+      letter-spacing: 0;
+      text-transform: none;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    body[data-theme="artisan"] #btn-cta-laisser-avis {
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    /* Ajouter le contact — bouton large sous la ligne d’icônes */
+    body[data-theme="artisan"] #btn-add-contact {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+      padding: 11px 14px !important;
+      margin: 0 !important;
+      border-radius: 13px;
+      background: #f5efe4 !important;
+      border: 1px solid var(--card-border) !important;
+      color: #2c2926 !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 10px rgba(44, 40, 36, 0.07) !important;
+    }
+
+    body[data-theme="artisan"] #btn-add-contact::before {
+      content: none;
+      display: none;
+    }
+
+    body[data-theme="artisan"] #btn-add-contact .btn-link-text {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+      text-align: center;
+      color: #2c2926;
+    }
+
+    body[data-theme="artisan"] #btn-add-contact .btn-link-leading {
+      display: inline-flex;
+      flex-shrink: 0;
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      clip: auto;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 380px) {
+      body[data-theme="artisan"] .hero-loading-anchor {
+        column-gap: 10px;
+        row-gap: 10px;
+      }
+
+      body[data-theme="artisan"] #btn-call,
+      body[data-theme="artisan"] #btn-whatsapp,
+      body[data-theme="artisan"] #btn-cta-laisser-avis,
+      body[data-theme="artisan"] #btn-discrete-partager:not([hidden]) {
+        grid-row: auto;
+      }
+
+      body[data-theme="artisan"] #btn-call {
+        grid-column: 1;
+      }
+
+      body[data-theme="artisan"] #btn-whatsapp {
+        grid-column: 2;
+      }
+
+      body[data-theme="artisan"] #btn-cta-laisser-avis {
+        grid-column: 3;
+      }
+
+      body[data-theme="artisan"] #btn-discrete-partager:not([hidden]) {
+        grid-column: 4;
+      }
+
+      body[data-theme="artisan"] #btn-call::before,
+      body[data-theme="artisan"] #btn-whatsapp::before,
+      body[data-theme="artisan"] #btn-cta-laisser-avis::before,
+      body[data-theme="artisan"] #btn-discrete-partager::before {
+        width: 46px;
+        height: 46px;
+        font-size: 1.1rem;
+      }
+
+      body[data-theme="artisan"] #btn-call .btn-link-text,
+      body[data-theme="artisan"] #btn-whatsapp .btn-link-text,
+      body[data-theme="artisan"] #btn-cta-laisser-avis,
+      body[data-theme="artisan"] #btn-discrete-partager {
+        font-size: 11px;
+      }
+    }
+
+    body[data-theme="artisan"] .btn-primary-contact-hero,
+    body[data-theme="artisan"] #btn-send-feedback,
+    body[data-theme="artisan"] #btn-send-quote,
+    body[data-theme="artisan"] .btn-share-card-main,
+    body[data-theme="artisan"] .recommend-id-confirm,
+    body[data-theme="artisan"] .demo-cta-btn {
+      background: linear-gradient(
+        165deg,
+        #8a8f94 0%,
+        #6d7176 28%,
+        #4a4f4c 72%,
+        #3f4441 100%
+      ) !important;
+      color: #f5f1ea !important;
+      border: 1px solid rgba(58, 54, 48, 0.45) !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 8px 18px rgba(48, 44, 38, 0.2) !important;
+    }
+
+    body[data-theme="artisan"] .btn-primary--reco-first:not([hidden]) {
+      background: #f5efe4 !important;
+      color: var(--card-text) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 10px rgba(44, 40, 36, 0.07) !important;
+      opacity: 1;
+    }
+
+    body[data-theme="artisan"] #btn-cta-laisser-avis.btn-primary--avis-secondary {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      opacity: 1;
+    }
+
+    body[data-theme="artisan"] .btn-link {
+      background: #f5efe4;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+      box-shadow: 0 2px 8px rgba(44, 40, 36, 0.06);
+    }
+
+    body[data-theme="artisan"] .card-block {
+      background: rgba(255, 253, 249, 0.72);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 2px 10px rgba(44, 40, 36, 0.05);
+    }
+
+    body[data-theme="artisan"] .card-block::before {
+      display: none;
+    }
+
+    body[data-theme="artisan"] .section-label,
+    body[data-theme="artisan"] .block-title {
+      color: var(--card-text);
+    }
+
+    body[data-theme="artisan"] .hint,
+    body[data-theme="artisan"] .block-sub {
+      color: var(--card-muted);
+    }
+
+    body[data-theme="artisan"] .hint a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="artisan"] .quote-input,
+    body[data-theme="artisan"] .feedback-input,
+    body[data-theme="artisan"] .pill {
+      background: #faf7ef;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+    }
+
+    body[data-theme="artisan"] .quote-input::placeholder,
+    body[data-theme="artisan"] .feedback-input::placeholder {
+      color: #9a9084;
+    }
+
+    body[data-theme="artisan"] .pill.selected-yes,
+    body[data-theme="artisan"] .pill.selected-no {
+      border-color: var(--card-primary);
+      background: rgba(240, 234, 220, 0.95);
+    }
+
+    body[data-theme="artisan"] .post-share-block,
+    body[data-theme="artisan"] .feedback-recommend-nudge {
+      background: #faf7ef;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(44, 40, 36, 0.06);
+    }
+
+    body[data-theme="artisan"] .qr-wrap {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 15px;
+      background: linear-gradient(125deg, #faf7ef 0%, #e8dece 100%);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 1) inset,
+        0 4px 14px rgba(44, 40, 36, 0.08);
+      color: var(--card-muted);
+    }
+
+    body[data-theme="artisan"] .qr-wrap img {
+      border-color: var(--card-border);
+      box-shadow: 0 2px 8px rgba(44, 40, 36, 0.08);
+    }
+
+    body[data-theme="artisan"] .qr-copy-main {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--card-text);
+    }
+
+    body[data-theme="artisan"] .qr-powered-by {
+      color: var(--card-muted);
+      opacity: 0.85;
+    }
+
+    body[data-theme="artisan"] .footer {
+      color: var(--card-muted);
+      border-top: 1px solid var(--card-border);
+    }
+
+    body[data-theme="artisan"] .footer a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="artisan"] .toast {
+      background: rgba(47, 52, 47, 0.9);
+      color: #f5f1ea;
+      border-radius: 999px;
+    }
+
+    body[data-theme="artisan"] .recommend-id-modal {
+      background: rgba(47, 52, 47, 0.35);
+    }
+
+    body[data-theme="artisan"] .recommend-id-panel {
+      background: #faf7ef;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+      box-shadow: 0 20px 40px rgba(44, 40, 36, 0.14);
+    }
+
+    body[data-theme="artisan"] .recommend-id-panel input {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      color: var(--card-text);
+    }
+
+    body[data-theme="artisan"] .recommend-id-panel a {
+      color: var(--card-primary);
+    }
+
+    body[data-theme="artisan"] .premium-load-layer {
+      background: linear-gradient(165deg, rgba(250, 246, 238, 0.97), rgba(232, 224, 208, 0.98));
+    }
+
+    body[data-theme="artisan"] .skeleton-shimmer {
+      background: rgba(168, 148, 120, 0.14);
+    }
+
+    body[data-theme="artisan"].public-card--compact .hero-badges {
+      display: flex !important;
+    }
+
+    body[data-theme="artisan"].public-card--compact .hero-professional-tagline,
+    body[data-theme="artisan"].public-card--compact .hero-title,
+    body[data-theme="artisan"].public-card--compact .hero-company,
+    body[data-theme="artisan"].public-card--compact .hero-job-title {
+      text-align: center;
+      color: var(--card-text);
+    }
+
+    body[data-theme="artisan"].public-card--compact .hero-professional-tagline {
+      color: var(--card-muted);
+      -webkit-line-clamp: 2;
+    }
+
+    body[data-theme="artisan"].public-card--compact .hero-google-rating-inline {
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    body[data-theme="artisan"].public-card--compact .btn-primary-contact-hero {
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 8px 18px rgba(48, 44, 38, 0.18) !important;
+    }
+
+    body[data-theme="artisan"].public-card--compact .acc-panel {
+      border-bottom-color: var(--card-border);
+    }
+
+    body[data-theme="artisan"] .compact-acc-trigger--quote {
+      background: #f5efe4;
+      border-color: var(--card-border);
+      color: var(--card-text);
+    }
