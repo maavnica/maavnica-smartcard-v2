@@ -16,6 +16,13 @@ _RECOMMENDATION_CODE_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,64}$")
 _ALLOWED_PLAN_TYPES = {"demo", "lifetime", "trial", "solo", "business"}
 _ALLOWED_REGIONS = {"fr", "latam"}
 _ALLOWED_CARD_THEMES = {"classic", "experience"}
+_ALLOWED_VISUAL_THEMES = {
+    "wellness-soft",
+    "artisan",
+    "real-estate",
+    "corporate",
+    "maavnica",
+}
 
 
 def _reject_urls_and_angle_brackets(v: str) -> str:
@@ -47,6 +54,7 @@ class CardBase(BaseModel):
     plan_type: str = "demo"
     region: str = "fr"
     card_theme: str = "classic"
+    visual_theme: str = "wellness-soft"
     expires_at: Optional[datetime] = None
 
     # 🔹 NOUVEAUX CHAMPS — PROFIL & INFOS MÉTIER
@@ -170,6 +178,24 @@ class CardBase(BaseModel):
             raise ValueError("card_theme invalide (classic ou experience).")
         return v
 
+    @field_validator("visual_theme", mode="before")
+    @classmethod
+    def _visual_theme_normalize(cls, v):
+        if v is None:
+            return "wellness-soft"
+        if isinstance(v, str):
+            return v.strip().lower() or "wellness-soft"
+        return v
+
+    @field_validator("visual_theme")
+    @classmethod
+    def _visual_theme_validate(cls, v: str) -> str:
+        if v not in _ALLOWED_VISUAL_THEMES:
+            raise ValueError(
+                "visual_theme invalide (wellness-soft, artisan, real-estate, corporate, maavnica)."
+            )
+        return v
+
     @field_validator("city", mode="before")
     @classmethod
     def _city_strip(cls, v):
@@ -210,6 +236,7 @@ class CardUpdate(BaseModel):
     plan_type: Optional[str] = None
     region: Optional[str] = None
     card_theme: Optional[str] = None
+    visual_theme: Optional[str] = None
     expires_at: Optional[datetime] = None
 
     # 🔹 Nouveaux champs
@@ -347,6 +374,27 @@ class CardUpdate(BaseModel):
             raise ValueError("card_theme invalide (classic ou experience).")
         return v
 
+    @field_validator("visual_theme", mode="before")
+    @classmethod
+    def _visual_theme_update_normalize(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            return s if s else None
+        return v
+
+    @field_validator("visual_theme")
+    @classmethod
+    def _visual_theme_update_validate(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if v not in _ALLOWED_VISUAL_THEMES:
+            raise ValueError(
+                "visual_theme invalide (wellness-soft, artisan, real-estate, corporate, maavnica)."
+            )
+        return v
+
 
 # =============================================================
 #  SMARTCARD — RÉPONSE API (PUBLIC + ADMIN)
@@ -364,6 +412,7 @@ class CardPublic(BaseModel):
     plan_type: str = "demo"
     region: str = "fr"
     card_theme: str = "classic"
+    visual_theme: str = "wellness-soft"
     expires_at: Optional[datetime] = None
     computed_status: str = "active"
     days_remaining: Optional[int] = None

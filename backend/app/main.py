@@ -17,6 +17,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 # Routes API
 from app.routers import public, cards
+from app.schemas import _ALLOWED_VISUAL_THEMES
 from app.utils.public_slug import sanitize_public_slug
 from app.routers import analytics as analytics_router
 from app.routers import site_analytics as site_analytics_router
@@ -93,6 +94,37 @@ def _read_card_theme_from_db(card, db) -> str:
             exc_info=True,
         )
     return "classic"
+
+
+def _resolve_visual_theme(card) -> str:
+    """Univers visuel FR (body data-theme). Défaut : wellness-soft."""
+    default = "wellness-soft"
+    if card is None:
+        return default
+    raw = getattr(card, "visual_theme", None)
+    if raw is not None and str(raw).strip():
+        theme = str(raw).strip().lower()
+        if theme in _ALLOWED_VISUAL_THEMES:
+            return theme
+    return default
+
+
+_BODY_DATA_THEME_RE = re.compile(
+    r'(<body\b[^>]*\s)data-theme="[^"]*"',
+    re.IGNORECASE,
+)
+
+
+def _inject_public_card_visual_theme(html: str, visual_theme: str) -> str:
+    """Injecte data-theme sur <body> (valeur validée)."""
+    safe = visual_theme if visual_theme in _ALLOWED_VISUAL_THEMES else "wellness-soft"
+    if not _BODY_DATA_THEME_RE.search(html):
+        return html
+    return _BODY_DATA_THEME_RE.sub(
+        rf'\1data-theme="{safe}"',
+        html,
+        count=1,
+    )
 
 
 def _log_public_card_v3_assets() -> None:
@@ -275,6 +307,7 @@ def _create_db_tables():
         ensure_card_region_column,
         ensure_card_city_column,
         ensure_card_theme_column,
+        ensure_visual_theme_column,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -287,6 +320,7 @@ def _create_db_tables():
     ensure_card_region_column()
     ensure_card_city_column()
     ensure_card_theme_column()
+    ensure_visual_theme_column()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
     _log_public_card_v3_assets()
@@ -464,6 +498,9 @@ async def serve_public_card(request: Request, slug: str):
     # Injection SEO + OG (FR classique) : en cas d'erreur, FileResponse.
     try:
         html = file_path.read_text(encoding="utf-8")
+        html = _inject_public_card_visual_theme(
+            html, _resolve_visual_theme(fr_db_card)
+        )
         html = _inject_fr_public_card_head(html, seo_fr)
         _, _, og_title, og_desc = _fr_public_card_seo_strings(seo_fr)
         base_url = _public_card_base_url(request)

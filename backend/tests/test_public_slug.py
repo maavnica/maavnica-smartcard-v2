@@ -160,6 +160,35 @@ class PublicSlugHttpTests(unittest.TestCase):
         self.assertNotIn("smartcard-v3", r.text)
         self.assertNotIn("/static/public-card/v3.css", r.text)
 
+    def test_c_demo2_default_visual_theme_wellness_soft(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('data-theme="wellness-soft"', r.text)
+
+    def test_c_demo2_visual_theme_artisan_injected(self):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        db = self.SessionTest()
+        try:
+            card = db.query(Card).filter(Card.slug == "demo2").first()
+            card.visual_theme = "artisan"
+            db.commit()
+        finally:
+            db.close()
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('data-theme="artisan"', r.text)
+        self.assertNotIn('data-theme="wellness-soft"', r.text)
+
     def test_c_demo2_experience_still_serves_classic(self):
         from fastapi.testclient import TestClient
 

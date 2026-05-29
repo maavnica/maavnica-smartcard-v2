@@ -52,6 +52,8 @@ class Card(Base):
     region = Column(String(16), nullable=False, default="fr")
     # Rendu public : classic (index.html) | experience (index_v3.html)
     card_theme = Column(String(32), nullable=False, default="classic")
+    # Univers visuel FR (attribut body data-theme : wellness-soft, artisan, …)
+    visual_theme = Column(String(32), nullable=False, default="wellness-soft")
     expires_at = Column(DateTime, nullable=True)
 
     # 🔹 NOUVEAUX CHAMPS – PROFIL & INFOS DIGITALES
