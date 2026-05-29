@@ -639,6 +639,11 @@
     }
 
     function applyTheme(themeName, card) {
+      const visualTheme = document.body.getAttribute("data-theme");
+      if (visualTheme) {
+        return;
+      }
+
       let raw = (themeName || "").toLowerCase().trim();
 
       const classes = document.body.className
