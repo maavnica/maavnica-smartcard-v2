@@ -116,22 +116,45 @@ def _resolve_visual_theme(card, db=None) -> str:
     return default
 
 
-_BODY_DATA_THEME_RE = re.compile(
-    r'(<body\b[^>]*\s)data-theme="[^"]*"',
+_BODY_TAG_RE = re.compile(r"<body\b([^>]*)>", re.IGNORECASE)
+_BODY_DATA_THEME_ATTR_RE = re.compile(
+    r'data-theme\s*=\s*["\'][^"\']*["\']',
     re.IGNORECASE,
 )
+_THEMES_CSS_LINK_RE = re.compile(
+    r'(/static/public-card/themes\.css)\?v=[^"\']+',
+    re.IGNORECASE,
+)
+_PUBLIC_THEMES_CSS_VERSION = "visual-theme-2"
 
 
 def _inject_public_card_visual_theme(html: str, visual_theme: str) -> str:
-    """Injecte data-theme sur <body> (valeur validée)."""
+    """Injecte ou remplace data-theme sur <body> (valeur validée)."""
     safe = visual_theme if visual_theme in _ALLOWED_VISUAL_THEMES else "wellness-soft"
-    if not _BODY_DATA_THEME_RE.search(html):
+    match = _BODY_TAG_RE.search(html)
+    if not match:
         return html
-    return _BODY_DATA_THEME_RE.sub(
-        rf'\1data-theme="{safe}"',
-        html,
-        count=1,
-    )
+    attrs = match.group(1)
+    if _BODY_DATA_THEME_ATTR_RE.search(attrs):
+        new_attrs = _BODY_DATA_THEME_ATTR_RE.sub(
+            f'data-theme="{safe}"',
+            attrs,
+            count=1,
+        )
+    else:
+        new_attrs = f'{attrs.rstrip()} data-theme="{safe}"'
+    return html[: match.start()] + f"<body{new_attrs}>" + html[match.end() :]
+
+
+def _inject_themes_css_cache_version(html: str) -> str:
+    """Force le rechargement de themes.css (évite un CDN/navigateur bloqué sur sc-arch-1)."""
+    if _THEMES_CSS_LINK_RE.search(html):
+        return _THEMES_CSS_LINK_RE.sub(
+            rf"\1?v={_PUBLIC_THEMES_CSS_VERSION}",
+            html,
+            count=1,
+        )
+    return html
 
 
 def _log_public_card_v3_assets() -> None:
@@ -491,11 +514,12 @@ async def serve_public_card(request: Request, slug: str):
 
     # Log diagnostic temporaire (visible sur Render) : slug, thème DB, template servi.
     _public_card_log.warning(
-        "PUBLIC_CARD_RENDER slug=%s region=%s template_served=%s file=%s",
+        "PUBLIC_CARD_RENDER slug=%s region=%s template_served=%s file=%s visual_theme=%s",
         slug_norm,
         card_region_log,
         template_served,
         file_path.name,
+        resolved_visual_theme,
     )
 
     if not file_path.exists():
@@ -504,10 +528,11 @@ async def serve_public_card(request: Request, slug: str):
     if template_served == "latam":
         return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
 
-    # Injection SEO + OG (FR classique) : en cas d'erreur, FileResponse.
+    # Thème visuel toujours injecté ; SEO/OG en best-effort (ne pas renvoyer le HTML brut).
+    html = file_path.read_text(encoding="utf-8")
+    html = _inject_public_card_visual_theme(html, resolved_visual_theme)
+    html = _inject_themes_css_cache_version(html)
     try:
-        html = file_path.read_text(encoding="utf-8")
-        html = _inject_public_card_visual_theme(html, resolved_visual_theme)
         html = _inject_fr_public_card_head(html, seo_fr)
         _, _, og_title, og_desc = _fr_public_card_seo_strings(seo_fr)
         base_url = _public_card_base_url(request)
@@ -520,10 +545,9 @@ async def serve_public_card(request: Request, slug: str):
             og_title=og_title,
             og_desc=og_desc,
         )
-        return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
     except Exception:
         _public_card_log.exception("public_card og_injection_failed slug=%s", slug_norm)
-        return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
+    return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
 
 
 
