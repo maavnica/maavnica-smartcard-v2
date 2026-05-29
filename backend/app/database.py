@@ -374,3 +374,30 @@ def ensure_visual_theme_column() -> None:
     log.warning("DB_MIGRATION visual_theme column added (dialect=%s)", dialect)
 
 
+def read_card_visual_theme(db, card_id: int):
+    """Lit visual_theme en SQL (repli si l’ORM n’expose pas la colonne)."""
+    from sqlalchemy import text
+
+    try:
+        row = db.execute(
+            text("SELECT visual_theme FROM cards WHERE id = :cid"),
+            {"cid": card_id},
+        ).first()
+    except Exception:
+        return None
+    if not row or row[0] is None:
+        return None
+    s = str(row[0]).strip().lower()
+    return s if s else None
+
+
+def write_card_visual_theme(db, card_id: int, theme: str) -> None:
+    """Persiste visual_theme en SQL (garantit l’écriture même si setattr ORM est ignoré)."""
+    from sqlalchemy import text
+
+    db.execute(
+        text("UPDATE cards SET visual_theme = :t WHERE id = :cid"),
+        {"t": theme, "cid": card_id},
+    )
+
+

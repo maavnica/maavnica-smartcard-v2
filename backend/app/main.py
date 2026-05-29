@@ -96,16 +96,23 @@ def _read_card_theme_from_db(card, db) -> str:
     return "classic"
 
 
-def _resolve_visual_theme(card) -> str:
+def _resolve_visual_theme(card, db=None) -> str:
     """Univers visuel FR (body data-theme). Défaut : wellness-soft."""
+    from app.database import read_card_visual_theme
+
     default = "wellness-soft"
     if card is None:
         return default
-    raw = getattr(card, "visual_theme", None)
+    raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
     if raw is not None and str(raw).strip():
         theme = str(raw).strip().lower()
         if theme in _ALLOWED_VISUAL_THEMES:
             return theme
+    cid = getattr(card, "id", None)
+    if db is not None and cid is not None:
+        sql_val = read_card_visual_theme(db, cid)
+        if sql_val and sql_val in _ALLOWED_VISUAL_THEMES:
+            return sql_val
     return default
 
 
@@ -445,6 +452,7 @@ async def serve_public_card(request: Request, slug: str):
     template_served = "classic"
     seo_fr: Optional[Dict[str, Any]] = None
     fr_db_card: Optional[Card] = None
+    resolved_visual_theme = "wellness-soft"
 
     db = SessionLocal()
     try:
@@ -477,6 +485,7 @@ async def serve_public_card(request: Request, slug: str):
                 "job": (getattr(card, "job_title", None) or "").strip(),
                 "city": (getattr(card, "city", None) or "").strip(),
             }
+            resolved_visual_theme = _resolve_visual_theme(card, db)
     finally:
         db.close()
 
@@ -498,9 +507,7 @@ async def serve_public_card(request: Request, slug: str):
     # Injection SEO + OG (FR classique) : en cas d'erreur, FileResponse.
     try:
         html = file_path.read_text(encoding="utf-8")
-        html = _inject_public_card_visual_theme(
-            html, _resolve_visual_theme(fr_db_card)
-        )
+        html = _inject_public_card_visual_theme(html, resolved_visual_theme)
         html = _inject_fr_public_card_head(html, seo_fr)
         _, _, og_title, og_desc = _fr_public_card_seo_strings(seo_fr)
         base_url = _public_card_base_url(request)

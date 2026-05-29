@@ -9,7 +9,8 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..database import get_db
+from app.schemas import _ALLOWED_VISUAL_THEMES
+from ..database import get_db, read_card_visual_theme, write_card_visual_theme
 from app.utils.admin_auth import admin_bearer_matches, require_admin_api_key
 from app.utils.public_slug import sanitize_public_slug
 
@@ -28,6 +29,34 @@ ALLOWED_PROFILES = {
     "generic",
 }
 ALLOWED_PLAN_TYPES = {"demo", "lifetime", "trial", "solo", "business"}
+
+
+def _normalize_visual_theme(value) -> str:
+    if value is None:
+        return "wellness-soft"
+    s = str(value).strip().lower()
+    if s in _ALLOWED_VISUAL_THEMES:
+        return s
+    return "wellness-soft"
+
+
+def _read_visual_theme(card: models.Card, db: Session) -> str:
+    raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
+    if raw is not None and str(raw).strip():
+        return _normalize_visual_theme(raw)
+    cid = getattr(card, "id", None)
+    if cid is not None:
+        sql_val = read_card_visual_theme(db, cid)
+        if sql_val:
+            return _normalize_visual_theme(sql_val)
+    return "wellness-soft"
+
+
+def _persist_visual_theme(db: Session, card: models.Card, theme: str) -> None:
+    safe = _normalize_visual_theme(theme)
+    if hasattr(card, "visual_theme"):
+        card.visual_theme = safe
+    write_card_visual_theme(db, card.id, safe)
 
 
 def _card_payload(card: schemas.CardCreate) -> dict:
@@ -68,7 +97,7 @@ def _days_remaining(card: models.Card) -> Optional[int]:
     return max(1, math.ceil(remaining_seconds / 86400))
 
 
-def _card_to_public_dict(card: models.Card) -> dict:
+def _card_to_public_dict(card: models.Card, db: Session) -> dict:
     """Construit le dict CardPublic sans lire owner_share_key depuis l’ORM (évite toute fuite)."""
     d = {}
     for name in schemas.CardPublic.model_fields:
@@ -81,6 +110,7 @@ def _card_to_public_dict(card: models.Card) -> dict:
         d["card_theme"] = "classic"
     else:
         d["card_theme"] = str(theme).strip().lower()
+    d["visual_theme"] = _read_visual_theme(card, db)
     return d
 
 
@@ -111,6 +141,7 @@ def _count_recommend_link_created(db: Session, card_slug: str) -> int:
 def _serialize_card_public(
     card: models.Card,
     request: Request,
+    db: Session,
     *,
     owner_query_key: Optional[str] = None,
     recommendation_share_count: int = 0,
@@ -121,7 +152,7 @@ def _serialize_card_public(
         o_stripped = owner_query_key.strip()
         if stored and o_stripped:
             owner_mode = secrets.compare_digest(stored, o_stripped)
-    d = _card_to_public_dict(card)
+    d = _card_to_public_dict(card, db)
     if not d.get("plan_type"):
         d["plan_type"] = "demo"
     r = d.get("region")
@@ -198,6 +229,7 @@ def create_card(
     return _serialize_card_public(
         db_card,
         request,
+        db,
         recommendation_share_count=_count_recommend_link_created(db, db_card.slug),
     )
 
@@ -237,6 +269,13 @@ def update_card(
     if "card_theme" in card_in.model_fields_set:
         t = (card_in.card_theme or "classic").strip().lower()
         update_data["card_theme"] = t if t in ("classic", "experience") else "classic"
+    visual_theme_to_persist: Optional[str] = None
+    if "visual_theme" in card_in.model_fields_set:
+        visual_theme_to_persist = _normalize_visual_theme(card_in.visual_theme)
+        update_data["visual_theme"] = visual_theme_to_persist
+    elif "visual_theme" in update_data:
+        visual_theme_to_persist = _normalize_visual_theme(update_data.get("visual_theme"))
+        update_data["visual_theme"] = visual_theme_to_persist
     # Même principe que region pour city (SEO local).
     if "city" in card_in.model_fields_set:
         update_data["city"] = card_in.city
@@ -293,9 +332,14 @@ def update_card(
 
     # Mise à jour champ par champ
     for field, value in update_data.items():
+        if field == "visual_theme":
+            continue
         # Sécurité : éviter d'injecter un champ inexistant
         if hasattr(db_card, field):
             setattr(db_card, field, value)
+
+    if visual_theme_to_persist is not None:
+        _persist_visual_theme(db, db_card, visual_theme_to_persist)
 
     db.commit()
     db.refresh(db_card)
@@ -303,6 +347,7 @@ def update_card(
     return _serialize_card_public(
         db_card,
         request,
+        db,
         recommendation_share_count=_count_recommend_link_created(db, db_card.slug),
     )
 
@@ -339,6 +384,7 @@ def get_card_by_slug(
     return _serialize_card_public(
         card,
         request,
+        db,
         owner_query_key=o,
         recommendation_share_count=_count_recommend_link_created(db, card.slug),
     )
@@ -355,6 +401,7 @@ def list_cards(
         _serialize_card_public(
             c,
             request,
+            db,
             recommendation_share_count=_count_recommend_link_created(db, c.slug),
         )
         for c in cards

@@ -326,6 +326,7 @@ def get_public_card(
     base = _serialize_card_public(
         card,
         request,
+        db,
         owner_query_key=o,
         recommendation_share_count=_count_recommend_link_created(db, card.slug),
     )
