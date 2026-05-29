@@ -85,6 +85,21 @@ class VisualThemePersistTests(unittest.TestCase):
         finally:
             db.close()
 
+    def test_resolve_visual_theme_prefers_sql_over_stale_orm(self):
+        from app.database import write_card_visual_theme
+        from app.main import _resolve_visual_theme
+
+        db = self.SessionTest()
+        try:
+            card = db.query(Card).filter(Card.id == self.card_id).first()
+            write_card_visual_theme(db, card.id, "artisan")
+            db.commit()
+            card.visual_theme = "wellness-soft"
+            resolved = _resolve_visual_theme(card, db, slug="demo-vt")
+            self.assertEqual(resolved, "artisan")
+        finally:
+            db.close()
+
     def test_get_public_card_injects_artisan(self):
         from app.main import app
 
@@ -100,6 +115,22 @@ class VisualThemePersistTests(unittest.TestCase):
         r = client.get("/c/demo-vt", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
         self.assertIn('data-theme="artisan"', r.text)
+
+
+    def test_themes_css_contains_artisan_rules(self):
+        from pathlib import Path
+
+        css = (
+            Path(__file__).resolve().parents[1]
+            / "static"
+            / "public-card"
+            / "themes.css"
+        ).read_text(encoding="utf-8")
+        self.assertIn('body[data-theme="artisan"]', css)
+        self.assertIn('body[data-theme="artisan"] .phone-inner', css)
+        wellness_part, artisan_part = css.split('body[data-theme="artisan"]', 1)
+        self.assertIn("#3b6a52", wellness_part)
+        self.assertIn("#8a8f94", artisan_part)
 
 
 if __name__ == "__main__":

@@ -96,23 +96,35 @@ def _read_card_theme_from_db(card, db) -> str:
     return "classic"
 
 
-def _resolve_visual_theme(card, db=None) -> str:
-    """Univers visuel FR (body data-theme). Défaut : wellness-soft."""
-    from app.database import read_card_visual_theme
+def _resolve_visual_theme(
+    card,
+    db=None,
+    *,
+    slug: Optional[str] = None,
+) -> str:
+    """
+    Univers visuel FR (body data-theme). Défaut : wellness-soft.
+    La base SQL fait foi (write_card_visual_theme) — pas l’ORM potentiellement périmé.
+    """
+    from app.database import read_card_visual_theme, read_card_visual_theme_by_slug
 
     default = "wellness-soft"
-    if card is None:
-        return default
-    raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
-    if raw is not None and str(raw).strip():
-        theme = str(raw).strip().lower()
-        if theme in _ALLOWED_VISUAL_THEMES:
-            return theme
-    cid = getattr(card, "id", None)
-    if db is not None and cid is not None:
-        sql_val = read_card_visual_theme(db, cid)
-        if sql_val and sql_val in _ALLOWED_VISUAL_THEMES:
-            return sql_val
+    if db is not None and slug:
+        sql_slug = read_card_visual_theme_by_slug(db, slug)
+        if sql_slug and sql_slug in _ALLOWED_VISUAL_THEMES:
+            return sql_slug
+    if db is not None and card is not None:
+        cid = getattr(card, "id", None)
+        if cid is not None:
+            sql_id = read_card_visual_theme(db, cid)
+            if sql_id and sql_id in _ALLOWED_VISUAL_THEMES:
+                return sql_id
+    if card is not None:
+        raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
+        if raw is not None and str(raw).strip():
+            theme = str(raw).strip().lower()
+            if theme in _ALLOWED_VISUAL_THEMES:
+                return theme
     return default
 
 
@@ -476,6 +488,10 @@ async def serve_public_card(request: Request, slug: str):
     seo_fr: Optional[Dict[str, Any]] = None
     fr_db_card: Optional[Card] = None
     resolved_visual_theme = "wellness-soft"
+    visual_theme_orm: Optional[str] = None
+    visual_theme_sql_slug: Optional[str] = None
+    visual_theme_sql_id: Optional[str] = None
+    card_id_log: Optional[int] = None
 
     db = SessionLocal()
     try:
@@ -508,18 +524,45 @@ async def serve_public_card(request: Request, slug: str):
                 "job": (getattr(card, "job_title", None) or "").strip(),
                 "city": (getattr(card, "city", None) or "").strip(),
             }
-            resolved_visual_theme = _resolve_visual_theme(card, db)
+            card_id_log = card.id
+            raw_orm = (
+                getattr(card, "visual_theme", None)
+                if hasattr(card, "visual_theme")
+                else None
+            )
+            visual_theme_orm = (
+                str(raw_orm).strip().lower() if raw_orm is not None else None
+            )
+            from app.database import read_card_visual_theme, read_card_visual_theme_by_slug
+
+            visual_theme_sql_slug = read_card_visual_theme_by_slug(db, slug_norm)
+            visual_theme_sql_id = read_card_visual_theme(db, card.id)
+            resolved_visual_theme = _resolve_visual_theme(
+                card, db, slug=slug_norm
+            )
     finally:
         db.close()
 
-    # Log diagnostic temporaire (visible sur Render) : slug, thème DB, template servi.
+    injected_visual_theme = (
+        resolved_visual_theme
+        if resolved_visual_theme in _ALLOWED_VISUAL_THEMES
+        else "wellness-soft"
+    )
+
+    # Log diagnostic (Render) : valeurs ORM vs SQL vs injection finale.
     _public_card_log.warning(
-        "PUBLIC_CARD_RENDER slug=%s region=%s template_served=%s file=%s visual_theme=%s",
+        "PUBLIC_CARD_RENDER slug=%s card_id=%s region=%s template=%s "
+        "visual_theme_orm=%s visual_theme_sql_slug=%s visual_theme_sql_id=%s "
+        "visual_theme_resolved=%s visual_theme_injected=%s",
         slug_norm,
+        card_id_log,
         card_region_log,
-        template_served,
         file_path.name,
+        visual_theme_orm,
+        visual_theme_sql_slug,
+        visual_theme_sql_id,
         resolved_visual_theme,
+        injected_visual_theme,
     )
 
     if not file_path.exists():
@@ -530,7 +573,7 @@ async def serve_public_card(request: Request, slug: str):
 
     # Thème visuel toujours injecté ; SEO/OG en best-effort (ne pas renvoyer le HTML brut).
     html = file_path.read_text(encoding="utf-8")
-    html = _inject_public_card_visual_theme(html, resolved_visual_theme)
+    html = _inject_public_card_visual_theme(html, injected_visual_theme)
     html = _inject_themes_css_cache_version(html)
     try:
         html = _inject_fr_public_card_head(html, seo_fr)
