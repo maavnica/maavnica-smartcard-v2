@@ -340,3 +340,37 @@ def ensure_card_theme_column() -> None:
     log.warning("DB_MIGRATION card_theme column added (dialect=%s)", dialect)
 
 
+def ensure_visual_theme_column() -> None:
+    """Ajoute visual_theme sur cards si colonne manquante (default wellness-soft)."""
+    import logging
+
+    from sqlalchemy import inspect, text
+
+    log = logging.getLogger(__name__)
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "visual_theme" in existing:
+        return
+
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
+        stmt = (
+            "ALTER TABLE cards ADD COLUMN IF NOT EXISTS visual_theme VARCHAR(32) "
+            "NOT NULL DEFAULT 'wellness-soft'"
+        )
+    else:
+        stmt = (
+            "ALTER TABLE cards ADD COLUMN visual_theme VARCHAR(32) "
+            "NOT NULL DEFAULT 'wellness-soft'"
+        )
+    with engine.begin() as conn:
+        conn.execute(text(stmt))
+    log.warning("DB_MIGRATION visual_theme column added (dialect=%s)", dialect)
+
+
