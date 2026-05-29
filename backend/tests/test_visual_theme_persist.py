@@ -29,6 +29,8 @@ def _seed(engine):
         plan_type="demo",
         region="fr",
         visual_theme="wellness-soft",
+        theme="sante-wow",
+        card_theme="experience",
     )
     s.add(card)
     s.commit()
@@ -97,6 +99,38 @@ class VisualThemePersistTests(unittest.TestCase):
             card.visual_theme = "wellness-soft"
             resolved = _resolve_visual_theme(card, db, slug="demo-vt")
             self.assertEqual(resolved, "artisan")
+        finally:
+            db.close()
+
+    def test_put_admin_payload_without_legacy_theme_fields(self):
+        """Payload admin simplifié : visual_theme + profile sans theme/card_theme."""
+        from app.main import app
+
+        client = TestClient(app)
+        payload = {
+            "company_name": "Co",
+            "slug": "demo-vt",
+            "plan_type": "demo",
+            "region": "fr",
+            "visual_theme": "artisan",
+            "profile": "bien_etre",
+        }
+        r = client.put(
+            f"/api/cards/{self.card_id}",
+            json=payload,
+            headers={"Authorization": "Bearer test-admin-key"},
+        )
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertEqual(r.json().get("visual_theme"), "artisan")
+        self.assertEqual(r.json().get("profile"), "bien_etre")
+
+        db = self.SessionTest()
+        try:
+            card = db.query(Card).filter(Card.id == self.card_id).first()
+            self.assertEqual(card.visual_theme, "artisan")
+            self.assertEqual(card.profile, "bien_etre")
+            self.assertEqual(card.theme, "sante-wow")
+            self.assertEqual(card.card_theme, "experience")
         finally:
             db.close()
 

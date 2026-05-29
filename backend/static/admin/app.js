@@ -5,6 +5,40 @@ let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
 const NON_EXPIRING_PLANS = new Set(["demo", "lifetime"]);
 
+/** Valeurs techniques visual_theme (seul champ qui pilote data-theme CSS). */
+const ALLOWED_VISUAL_THEMES = new Set([
+  "wellness-soft",
+  "artisan",
+  "real-estate",
+  "corporate",
+  "maavnica",
+]);
+
+function getVisualThemeSelect() {
+  return document.getElementById("visual-theme");
+}
+
+function normalizeVisualThemeValue(value) {
+  const v = (value == null ? "" : String(value)).trim().toLowerCase();
+  return ALLOWED_VISUAL_THEMES.has(v) ? v : "wellness-soft";
+}
+
+function setVisualThemeSelect(value) {
+  const el = getVisualThemeSelect();
+  if (!el) return;
+  const safe = normalizeVisualThemeValue(value);
+  el.value = safe;
+  if (el.value !== safe) {
+    console.warn("LOAD visual_theme: valeur non reconnue, repli wellness-soft", value);
+    el.value = "wellness-soft";
+  }
+}
+
+function readVisualThemeFromSelect() {
+  const el = getVisualThemeSelect();
+  return normalizeVisualThemeValue(el && el.value ? el.value : "wellness-soft");
+}
+
 function ensureAdminApiKey() {
   if (ADMIN_API_KEY && ADMIN_API_KEY.trim()) return ADMIN_API_KEY.trim();
   const entered = window.prompt("Clé admin requise pour accéder à l’interface SmartCard :");
@@ -58,8 +92,7 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("slug").value = card.slug || "";
   document.getElementById("plan-type").value = card.plan_type || "demo";
   document.getElementById("region-version").value = card.region || "fr";
-  const cardThemeEl = document.getElementById("card-theme");
-  if (cardThemeEl) cardThemeEl.value = card.card_theme || "classic";
+  setVisualThemeSelect(card.visual_theme || "wellness-soft");
   document.getElementById("expires-at").value = toDatetimeLocalValue(card.expires_at);
   document.getElementById("existing-slug").value = card.slug || "";
   document.getElementById("google-link").value = card.google_review_link || "";
@@ -71,8 +104,6 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("instagram").value = card.instagram || "";
   document.getElementById("facebook").value = card.facebook || "";
   document.getElementById("tiktok").value = card.tiktok || "";
-  document.getElementById("theme-color").value = card.theme_color || "#2563EB";
-  document.getElementById("theme").value = card.theme || "apple";
 
   // 🔹 NOUVEAUX CHAMPS
   document.getElementById("profile").value = card.profile || "artisan";
@@ -117,8 +148,7 @@ document.getElementById("last-name").value = "";
   document.getElementById("slug").value = "";
   document.getElementById("plan-type").value = "demo";
   document.getElementById("region-version").value = "fr";
-  const cardThemeReset = document.getElementById("card-theme");
-  if (cardThemeReset) cardThemeReset.value = "classic";
+  setVisualThemeSelect("wellness-soft");
   document.getElementById("expires-at").value = "";
   document.getElementById("existing-slug").value = "";
   document.getElementById("google-link").value = "";
@@ -130,8 +160,6 @@ document.getElementById("last-name").value = "";
   document.getElementById("instagram").value = "";
   document.getElementById("facebook").value = "";
   document.getElementById("tiktok").value = "";
-  document.getElementById("theme-color").value = "#2563EB";
-  document.getElementById("theme").value = "apple";
 
   // 🔹 nouveaux champs
   document.getElementById("profile").value = "artisan";
@@ -365,11 +393,7 @@ async function saveCard() {
       const v = el && el.value ? el.value.trim().toLowerCase() : "";
       return v === "latam" ? "latam" : "fr";
     })(),
-    card_theme: (() => {
-      const el = document.getElementById("card-theme");
-      const v = el && el.value ? el.value.trim().toLowerCase() : "";
-      return v === "experience" ? "experience" : "classic";
-    })(),
+    visual_theme: readVisualThemeFromSelect(),
     expires_at: (() => {
       const v = document.getElementById("expires-at").value;
       return v ? new Date(v).toISOString() : null;
@@ -395,8 +419,6 @@ async function saveCard() {
     instagram: document.getElementById("instagram").value.trim() || null,
     facebook: document.getElementById("facebook").value.trim() || null,
     tiktok: document.getElementById("tiktok").value.trim() || null,
-    theme: document.getElementById("theme").value || "apple",
-    theme_color: document.getElementById("theme-color").value.trim() || "#2563EB",
 
     // 🔹 NOUVEAUX CHAMPS
     profile: document.getElementById("profile").value || "artisan",
@@ -423,6 +445,8 @@ async function saveCard() {
 
   // on met aussi à jour currentProfile si on change dans le formulaire
   currentProfile = payload.profile || "artisan";
+
+  console.log("SAVE visual_theme", payload.visual_theme, "| profile", payload.profile);
 
   const btn = document.getElementById("btn-save");
   btn.disabled = true;

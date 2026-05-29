@@ -1380,7 +1380,7 @@
       color: #052e16;
     }
 
-    /* Thèmes dynamiques */
+    /* Thèmes dynamiques legacy (body.theme-*) — ignorés si data-theme est défini (carte FR index.html) */
     body.theme-apple {
       --card-bg: radial-gradient(circle at top, #1d4ed8 0%, #020617 70%);
       --hero-bg: linear-gradient(135deg, #1d4ed8, #020617);

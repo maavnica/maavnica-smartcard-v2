@@ -10,7 +10,12 @@ from sqlalchemy.orm import Session
 
 from .. import models, schemas
 from app.schemas import _ALLOWED_VISUAL_THEMES
-from ..database import get_db, read_card_visual_theme, write_card_visual_theme
+from ..database import (
+    get_db,
+    read_card_visual_theme,
+    read_card_visual_theme_by_slug,
+    write_card_visual_theme,
+)
 from app.utils.admin_auth import admin_bearer_matches, require_admin_api_key
 from app.utils.public_slug import sanitize_public_slug
 
@@ -41,14 +46,19 @@ def _normalize_visual_theme(value) -> str:
 
 
 def _read_visual_theme(card: models.Card, db: Session) -> str:
-    raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
-    if raw is not None and str(raw).strip():
-        return _normalize_visual_theme(raw)
+    slug = getattr(card, "slug", None)
+    if slug:
+        sql_slug = read_card_visual_theme_by_slug(db, slug)
+        if sql_slug:
+            return _normalize_visual_theme(sql_slug)
     cid = getattr(card, "id", None)
     if cid is not None:
         sql_val = read_card_visual_theme(db, cid)
         if sql_val:
             return _normalize_visual_theme(sql_val)
+    raw = getattr(card, "visual_theme", None) if hasattr(card, "visual_theme") else None
+    if raw is not None and str(raw).strip():
+        return _normalize_visual_theme(raw)
     return "wellness-soft"
 
 

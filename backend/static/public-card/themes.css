@@ -1,4 +1,5 @@
-/* SmartCard FR — thèmes visuels (data-theme)
+/* SmartCard FR — thèmes visuels officiels (body[data-theme="…"] uniquement)
+ * Piloté par visual_theme (admin + SSR). Les classes body.theme-* legacy ne s’appliquent pas si data-theme est défini.
  * Actifs : wellness-soft, artisan
  * Prévu : immobilier, corporate, maavnica
  *

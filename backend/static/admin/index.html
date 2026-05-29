@@ -94,16 +94,10 @@
           <option value="fr">France / standard</option>
           <option value="latam">LATAM / WhatsApp-first</option>
         </select>
-        <label for="card-theme">Thème carte</label>
-        <select id="card-theme">
-          <option value="classic">Classique</option>
-          <option value="experience">Experience V3</option>
-        </select>
-        <div class="hint">
-          Experience V3 : rendu premium apaisé (France uniquement). Classique : carte actuelle inchangée.
-        </div>
+        <div class="card-title" style="margin-top:4px;">Apparence &amp; profil métier</div>
+
         <label for="visual-theme">Univers visuel</label>
-        <select id="visual-theme">
+        <select id="visual-theme" data-field="visual_theme" name="visual_theme">
           <option value="wellness-soft">Bien-être</option>
           <option value="artisan">Artisan</option>
           <option value="real-estate">Immobilier</option>
@@ -111,7 +105,8 @@
           <option value="maavnica">Maavnica</option>
         </select>
         <div class="hint">
-          Habillage CSS de la carte publique FR (<code>data-theme</code>). N’affecte pas les fonctionnalités métier.
+          Habillage de la carte publique FR (<code>visual_theme</code> → <code>data-theme</code>).
+          Ne modifie pas les blocs métier.
         </div>
         <div class="hint" id="plan-expiration-hint">
           Demo et lifetime restent sans expiration.
@@ -122,8 +117,8 @@
 
         <div class="card-title">Profil métier & informations digitales</div>
 
-        <label for="profile">Type de SmartCard (profil métier) *</label>
-        <select id="profile">
+        <label for="profile">Type de SmartCard</label>
+        <select id="profile" data-field="profile">
           <option value="artisan">Artisan / Services de proximité</option>
           <option value="bien_etre">Bien-être / Santé douce</option>
           <option value="digital">Digital / SaaS / Consultant</option>
@@ -134,7 +129,8 @@
         </select>
 
         <div class="hint">
-          Ce champ détermine les blocs visibles sur la SmartCard (avis, devis, CTA digitaux, RDV…).
+          Profil métier (<code>profile</code>) : blocs et libellés (avis, devis, RDV…).
+          N’affecte pas l’habillage visuel.
         </div>
 
         <label for="email-pro">Email professionnel</label>
@@ -227,35 +223,6 @@
           </div>
         </div>
 
-        <div class="section-label">Style de la carte</div>
-        <div class="columns-small">
-          <div>
-            <label for="theme">Thème</label>
-            <select id="theme">
-              <optgroup label="Thèmes classiques">
-                <option value="apple">Apple</option>
-                <option value="material">Material</option>
-                <option value="black-gold">Black &amp; Gold</option>
-                <option value="artisan">Artisan</option>
-              </optgroup>
-              <optgroup label="Thèmes Effet WOW (démos)">
-                <option value="artisan-wow">Artisan – Effet WOW</option>
-                <option value="black-gold-wow">Black &amp; Gold premium – Effet WOW</option>
-                <option value="sante-wow">Santé &amp; Bien-être – Effet WOW</option>
-                <option value="saas-wow">SaaS / Digital – Effet WOW</option>
-              </optgroup>
-            </select>
-          </div>
-          <div>
-            <label for="theme-color">Couleur principale</label>
-            <input id="theme-color" type="color" value="#2563EB" />
-          </div>
-        </div>
-
-        <div class="hint">
-          Le thème contrôle le style global de la carte, la couleur principale te permet de l’adapter à la charte de ton client.
-        </div>
-
         <div class="section-label">Rendu public</div>
         <div class="hint">
           La SmartCard sera rendue depuis l’URL publique de la carte.
@@ -332,7 +299,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=visual-theme-1"></script>
+  <script src="/static/admin/app.js?v=visual-theme-admin-3"></script>
 </body>
 </html>
 

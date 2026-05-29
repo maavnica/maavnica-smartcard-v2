@@ -170,6 +170,26 @@ class PublicSlugHttpTests(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn('data-theme="wellness-soft"', r.text)
 
+    def test_c_demo2_empty_data_theme_template_gets_artisan(self):
+        """index.html a data-theme=\"\" : l'injection SSR doit le remplir."""
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        db = self.SessionTest()
+        try:
+            card = db.query(Card).filter(Card.slug == "demo2").first()
+            card.visual_theme = "artisan"
+            db.commit()
+        finally:
+            db.close()
+
+        client = TestClient(app)
+        r = client.get("/c/demo2", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('data-theme="artisan"', r.text)
+        self.assertIn("themes.css?v=visual-theme-3", r.text)
+
     def test_c_demo2_visual_theme_artisan_injected(self):
         from fastapi.testclient import TestClient
 

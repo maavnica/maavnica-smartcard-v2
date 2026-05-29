@@ -638,18 +638,23 @@
       return "🏷️";
     }
 
+    function stripLegacyThemeClasses() {
+      const kept = document.body.className
+        .split(/\s+/)
+        .filter((c) => c && !c.startsWith("theme-"));
+      document.body.className = kept.join(" ");
+    }
+
     function applyTheme(themeName, card) {
-      const visualTheme = document.body.getAttribute("data-theme");
+      const visualTheme = (document.body.getAttribute("data-theme") || "").trim();
       if (visualTheme) {
+        stripLegacyThemeClasses();
         return;
       }
 
       let raw = (themeName || "").toLowerCase().trim();
 
-      const classes = document.body.className
-        .split(" ")
-        .filter(c => c && !c.startsWith("theme-"));
-      document.body.className = classes.join(" ");
+      stripLegacyThemeClasses();
 
       if (!raw) {
         document.body.classList.add("theme-apple");
