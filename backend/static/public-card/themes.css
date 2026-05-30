@@ -80,21 +80,21 @@
         0 8px 20px rgba(94, 130, 105, 0.04);
     }
 
+    /* Motif végétal bien-être — branche/feuilles (SVG), visible mais discret */
     body[data-theme="wellness-soft"] .phone-inner::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 200px;
+      top: 28px;
+      left: 18px;
+      width: 210px;
+      height: 210px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.5;
-      border-radius: 32px 0 0 0;
-      background:
-        radial-gradient(ellipse 58% 48% at 32% 38%, rgba(118, 162, 128, 0.2) 0%, transparent 68%),
-        radial-gradient(ellipse 42% 36% at 58% 52%, rgba(94, 130, 105, 0.12) 0%, transparent 65%),
-        radial-gradient(ellipse 32% 28% at 22% 68%, rgba(160, 190, 150, 0.14) 0%, transparent 72%);
+      opacity: 0.24;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220' fill='none'%3E%3Cpath d='M34 188c18-46 40-88 68-122 16-20 36-40 60-54' stroke='%239B9E8E' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M74 124c26-8 48-28 66-52-20 42-54 64-88 70 14-12 24-14 20-16z' fill='%23A8AE9C' fill-opacity='.75'/%3E%3Cpath d='M90 86c22-16 48-30 76-34-12 32-38 52-72 58 10-18 18-22-4-24z' fill='%23B5BAA8' fill-opacity='.62'/%3E%3Cpath d='M106 60c20-14 44-24 68-20-14 28-42 44-74 48 8-16 14-22-6-28z' fill='%239EA892' fill-opacity='.68'/%3E%3Cellipse cx='164' cy='44' rx='17' ry='27' transform='rotate(-30 164 44)' fill='%23B8BDB0' fill-opacity='.55'/%3E%3Cellipse cx='50' cy='132' rx='19' ry='29' transform='rotate(32 50 132)' fill='%23AEB4A4' fill-opacity='.5'/%3E%3Cpath d='M120 50c8-10 18-18 30-22-2 14-12 24-26 28 4-8 6-10-4-6z' fill='%23C4C9BC' fill-opacity='.48'/%3E%3Cpath d='M142 72c6-12 16-22 28-28-4 16-16 28-32 32 2-8 6-10 4-4z' fill='%23B0B8A6' fill-opacity='.42'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left top;
+      background-size: contain;
     }
 
     body[data-theme="wellness-soft"] .phone-inner > * {
@@ -126,18 +126,8 @@
     }
 
     body[data-theme="wellness-soft"] .hero::before {
-      content: "";
-      position: absolute;
-      top: -8px;
-      left: -18px;
-      width: 140px;
-      height: 140px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.45;
-      background:
-        radial-gradient(ellipse 55% 45% at 35% 40%, rgba(120, 165, 130, 0.2) 0%, transparent 68%),
-        radial-gradient(ellipse 40% 35% at 60% 55%, rgba(94, 130, 105, 0.1) 0%, transparent 65%);
+      content: none;
+      display: none;
     }
 
     body[data-theme="wellness-soft"] .hero > * {
