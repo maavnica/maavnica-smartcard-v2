@@ -701,24 +701,24 @@
     }
 
 
-/* —— Thème artisan premium (pierre / sable / bois / métal) —— */
+/* —— Thème artisan premium (pierre / sable / bois — fonds matières nobles) —— */
     body[data-theme="artisan"] {
-      --card-bg: #d8cfc0;
-      --card-surface: #f7edd6;
+      --card-bg: #e9e5dc;
+      --card-surface: #faf9f6;
       --card-primary: #5a615e;
       --card-accent-wood: #8b5e3c;
       --card-accent-metal: #9aa09d;
       --card-text: #2a2622;
       --card-muted: #6f665c;
-      --card-border: #c9b89a;
-      --card-shadow: 0 12px 30px rgba(58, 48, 38, 0.16);
-      --bg-page: #d8cfc0;
-      --hero-bg: #f2e8d4;
+      --card-border: #d5cdc0;
+      --card-shadow: 0 14px 32px rgba(58, 48, 38, 0.1);
+      --bg-page: #e9e5dc;
+      --hero-bg: #f5f1ea;
       --primary: #5a615e;
-      --primary-soft: rgba(139, 94, 60, 0.2);
+      --primary-soft: rgba(122, 99, 72, 0.14);
       --text-main: #2a2622;
       --text-soft: #6f665c;
-      --border-soft: rgba(139, 94, 60, 0.22);
+      --border-soft: rgba(122, 99, 72, 0.18);
       --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --font-body: "DM Sans", system-ui, sans-serif;
 
@@ -726,15 +726,11 @@
       color: var(--card-text);
       background-color: var(--card-bg);
       background-image:
-        radial-gradient(120% 80% at 50% -12%, rgba(255, 250, 240, 0.85), transparent 58%),
-        radial-gradient(90% 70% at 100% 100%, rgba(210, 175, 130, 0.45), transparent 55%),
-        radial-gradient(75% 60% at 0% 88%, rgba(196, 186, 168, 0.35), transparent 50%),
-        repeating-linear-gradient(
-          -12deg,
-          rgba(90, 97, 94, 0.04) 0 1px,
-          rgba(90, 97, 94, 0) 1px 14px
-        ),
-        linear-gradient(165deg, #ddd4c4 0%, #d0c4b0 45%, #c4b69e 100%);
+        radial-gradient(ellipse 125% 85% at 50% -18%, rgba(255, 253, 248, 0.92), transparent 56%),
+        radial-gradient(ellipse 75% 55% at 100% 92%, rgba(218, 206, 188, 0.22), transparent 52%),
+        radial-gradient(ellipse 65% 50% at 0% 88%, rgba(210, 202, 188, 0.18), transparent 48%),
+        radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px),
+        linear-gradient(172deg, #ece8e0 0%, #e6e1d8 48%, #ded8ce 100%);
     }
 
     body[data-theme="artisan"] .phone-shell {
@@ -744,13 +740,13 @@
     body[data-theme="artisan"] .phone-inner {
       min-height: 0;
       background:
-        linear-gradient(180deg, rgba(255, 252, 245, 0.5) 0, transparent 14%),
-        linear-gradient(168deg, #faf0dc 0%, var(--card-surface) 38%, #e2cfa8 100%);
-      border: 1px solid var(--card-border);
+        radial-gradient(ellipse 130% 70% at 50% 0%, rgba(255, 255, 255, 0.72), transparent 58%),
+        radial-gradient(ellipse 90% 45% at 50% 100%, rgba(235, 228, 216, 0.5), transparent 55%),
+        linear-gradient(180deg, #fcfaf7 0%, #f7f4ee 42%, #f0ebe3 100%);
+      border: 1px solid rgba(181, 168, 148, 0.42);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.92) inset,
-        0 -2px 0 rgba(139, 94, 60, 0.12) inset,
-        inset 3px 0 0 var(--card-accent-wood),
+        0 1px 0 rgba(255, 255, 255, 0.96) inset,
+        0 0 0 1px rgba(122, 99, 72, 0.06),
         var(--card-shadow);
     }
 
@@ -767,14 +763,13 @@
 
     body[data-theme="artisan"] .hero {
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0, transparent 28%),
-        linear-gradient(180deg, #f5ebe0 0%, #ebe0cf 100%);
-      border: 1px solid var(--card-border);
-      border-left: 3px solid var(--card-accent-wood);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, transparent 24%),
+        radial-gradient(ellipse 100% 80% at 50% 0%, rgba(255, 255, 255, 0.35), transparent 62%),
+        linear-gradient(168deg, #f8f6f1 0%, #f2efe8 52%, #ebe6dd 100%);
+      border: 1px solid rgba(181, 168, 148, 0.32);
       box-shadow:
-        0 3px 10px rgba(58, 48, 38, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95),
-        inset 0 -1px 0 rgba(139, 94, 60, 0.08);
+        0 2px 8px rgba(58, 48, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.88);
     }
 
     body[data-theme="artisan"] .hero-badges {
