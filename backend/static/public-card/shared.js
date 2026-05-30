@@ -1021,7 +1021,12 @@
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
         CURRENT_PROFILE_CONFIG = PROFILE_CONFIG[profileKey];
 
-        applyTheme(card.theme, card);
+        /* FR /c/{slug} : habillage = data-theme (visual_theme SSR). Pas de classes theme-* legacy. */
+        if (/^\/c\/[^/]+/i.test(window.location.pathname || "")) {
+          stripLegacyThemeClasses();
+        } else {
+          applyTheme(card.theme, card);
+        }
 
         const companyName = (card.company_name || "Votre entreprise").toString().trim();
 

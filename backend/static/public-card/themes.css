@@ -701,23 +701,24 @@
     }
 
 
-/* —— Thème artisan premium —— */
+/* —— Thème artisan premium (pierre / sable / bois / métal) —— */
     body[data-theme="artisan"] {
-      --card-bg: #ebe4d6;
-      --card-surface: #f7f2e8;
-      --card-primary: #4a4f4c;
-      --card-accent-wood: #6b5344;
-      --card-text: #2c2926;
-      --card-muted: #7a7268;
-      --card-border: #cfc4b4;
-      --card-shadow: 0 10px 26px rgba(44, 40, 36, 0.11);
-      --bg-page: #ebe4d6;
-      --hero-bg: #faf7ef;
-      --primary: #4a4f4c;
-      --primary-soft: rgba(107, 83, 68, 0.12);
-      --text-main: #2c2926;
-      --text-soft: #7a7268;
-      --border-soft: rgba(122, 114, 104, 0.3);
+      --card-bg: #d8cfc0;
+      --card-surface: #f7edd6;
+      --card-primary: #5a615e;
+      --card-accent-wood: #8b5e3c;
+      --card-accent-metal: #9aa09d;
+      --card-text: #2a2622;
+      --card-muted: #6f665c;
+      --card-border: #c9b89a;
+      --card-shadow: 0 12px 30px rgba(58, 48, 38, 0.16);
+      --bg-page: #d8cfc0;
+      --hero-bg: #f2e8d4;
+      --primary: #5a615e;
+      --primary-soft: rgba(139, 94, 60, 0.2);
+      --text-main: #2a2622;
+      --text-soft: #6f665c;
+      --border-soft: rgba(139, 94, 60, 0.22);
       --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --font-body: "DM Sans", system-ui, sans-serif;
 
@@ -725,15 +726,15 @@
       color: var(--card-text);
       background-color: var(--card-bg);
       background-image:
-        radial-gradient(115% 70% at 50% -8%, rgba(255, 252, 245, 0.78), transparent 55%),
-        radial-gradient(85% 60% at 100% 100%, rgba(201, 184, 154, 0.35), transparent 58%),
-        radial-gradient(70% 55% at 0% 92%, rgba(180, 168, 148, 0.28), transparent 52%),
+        radial-gradient(120% 80% at 50% -12%, rgba(255, 250, 240, 0.85), transparent 58%),
+        radial-gradient(90% 70% at 100% 100%, rgba(210, 175, 130, 0.45), transparent 55%),
+        radial-gradient(75% 60% at 0% 88%, rgba(196, 186, 168, 0.35), transparent 50%),
         repeating-linear-gradient(
-          92deg,
-          rgba(107, 83, 68, 0.028) 0 1px,
-          rgba(107, 83, 68, 0) 1px 18px
+          -12deg,
+          rgba(90, 97, 94, 0.04) 0 1px,
+          rgba(90, 97, 94, 0) 1px 14px
         ),
-        linear-gradient(168deg, #ebe3d2 0%, #e0d5c4 52%, #d4c8b6 100%);
+        linear-gradient(165deg, #ddd4c4 0%, #d0c4b0 45%, #c4b69e 100%);
     }
 
     body[data-theme="artisan"] .phone-shell {
@@ -743,12 +744,13 @@
     body[data-theme="artisan"] .phone-inner {
       min-height: 0;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0, transparent 12%),
-        linear-gradient(166deg, #faf6ec 0%, var(--card-surface) 42%, #e8dece 100%);
+        linear-gradient(180deg, rgba(255, 252, 245, 0.5) 0, transparent 14%),
+        linear-gradient(168deg, #faf0dc 0%, var(--card-surface) 38%, #e2cfa8 100%);
       border: 1px solid var(--card-border);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.88) inset,
-        0 -1px 0 rgba(107, 83, 68, 0.06) inset,
+        0 1px 0 rgba(255, 255, 255, 0.92) inset,
+        0 -2px 0 rgba(139, 94, 60, 0.12) inset,
+        inset 3px 0 0 var(--card-accent-wood),
         var(--card-shadow);
     }
 
@@ -764,12 +766,15 @@
     }
 
     body[data-theme="artisan"] .hero {
-      background: linear-gradient(180deg, #fcf8f0 0%, #f5efe4 100%);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0, transparent 28%),
+        linear-gradient(180deg, #f5ebe0 0%, #ebe0cf 100%);
       border: 1px solid var(--card-border);
+      border-left: 3px solid var(--card-accent-wood);
       box-shadow:
-        0 2px 6px rgba(44, 40, 36, 0.05),
+        0 3px 10px rgba(58, 48, 38, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.95),
-        inset 0 -1px 0 rgba(107, 83, 68, 0.05);
+        inset 0 -1px 0 rgba(139, 94, 60, 0.08);
     }
 
     body[data-theme="artisan"] .hero-badges {
@@ -796,9 +801,10 @@
 
     body[data-theme="artisan"] .hero-recommend-trust {
       color: var(--card-accent-wood);
-      background: rgba(245, 238, 226, 0.96);
-      border-color: rgba(107, 83, 68, 0.22);
-      box-shadow: 0 2px 8px rgba(44, 40, 36, 0.06);
+      background: linear-gradient(135deg, #faf2e4 0%, #efe2cc 100%);
+      border: 1px solid rgba(139, 94, 60, 0.28);
+      border-left: 3px solid var(--card-accent-wood);
+      box-shadow: 0 3px 10px rgba(58, 48, 38, 0.08);
     }
 
     body[data-theme="artisan"] .hero-main-row {
@@ -814,9 +820,9 @@
       margin: 4px auto 2px;
       border: none;
       padding: 3px;
-      background: linear-gradient(145deg, #faf6ec 0%, #c9b89a 55%, #a89278 100%);
+      background: linear-gradient(145deg, #faf0dc 0%, #b8895c 48%, #8b5e3c 100%);
       box-shadow:
-        0 6px 18px rgba(44, 40, 36, 0.12),
+        0 6px 18px rgba(58, 48, 38, 0.16),
         0 0 0 1px rgba(255, 255, 255, 0.9) inset;
     }
 
@@ -1046,14 +1052,20 @@
       height: 52px;
       flex-shrink: 0;
       border-radius: 999px;
-      background: linear-gradient(165deg, #faf6ec 0%, #ede4d4 100%);
-      border: 1px solid rgba(92, 82, 68, 0.16);
+      background:
+        repeating-linear-gradient(
+          -28deg,
+          rgba(255, 255, 255, 0.12) 0 2px,
+          rgba(255, 255, 255, 0) 2px 6px
+        ),
+        linear-gradient(165deg, #ece8e4 0%, #a8aea9 42%, #6f7572 100%);
+      border: 1px solid rgba(74, 79, 76, 0.35);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.85) inset,
-        0 4px 12px rgba(44, 40, 36, 0.08);
+        0 1px 0 rgba(255, 255, 255, 0.5) inset,
+        0 4px 12px rgba(58, 48, 38, 0.14);
       font-size: 1.25rem;
       line-height: 1;
-      color: var(--card-primary);
+      color: #f5f1ea;
     }
 
     body[data-theme="artisan"] #btn-call::before {
@@ -1202,27 +1214,33 @@
     body[data-theme="artisan"] .btn-share-card-main,
     body[data-theme="artisan"] .recommend-id-confirm,
     body[data-theme="artisan"] .demo-cta-btn {
-      background: linear-gradient(
-        165deg,
-        #8a8f94 0%,
-        #6d7176 28%,
-        #4a4f4c 72%,
-        #3f4441 100%
-      ) !important;
-      color: #f5f1ea !important;
-      border: 1px solid rgba(58, 54, 48, 0.45) !important;
+      background:
+        repeating-linear-gradient(
+          -24deg,
+          rgba(255, 255, 255, 0.14) 0 2px,
+          rgba(255, 255, 255, 0) 2px 7px
+        ),
+        linear-gradient(
+          168deg,
+          #b8bdba 0%,
+          #8f9692 22%,
+          #5a615e 55%,
+          #454b48 100%
+        ) !important;
+      color: #faf6f0 !important;
+      border: 1px solid rgba(58, 54, 48, 0.5) !important;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.22) inset,
-        0 8px 18px rgba(48, 44, 38, 0.2) !important;
+        0 1px 0 rgba(255, 255, 255, 0.28) inset,
+        0 10px 22px rgba(58, 48, 38, 0.22) !important;
     }
 
     body[data-theme="artisan"] .btn-primary--reco-first:not([hidden]) {
-      background: #f5efe4 !important;
-      color: var(--card-text) !important;
-      border: 1px solid var(--card-border) !important;
+      background: linear-gradient(180deg, #faf2e4 0%, #ead9be 100%) !important;
+      color: var(--card-accent-wood) !important;
+      border: 1px solid rgba(139, 94, 60, 0.35) !important;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 4px 10px rgba(44, 40, 36, 0.07) !important;
+        0 4px 12px rgba(139, 94, 60, 0.12) !important;
       opacity: 1;
     }
 
@@ -1241,9 +1259,10 @@
     }
 
     body[data-theme="artisan"] .card-block {
-      background: rgba(255, 253, 249, 0.72);
+      background: linear-gradient(180deg, rgba(250, 244, 232, 0.95) 0%, rgba(235, 222, 200, 0.9) 100%);
       border: 1px solid var(--card-border);
-      box-shadow: 0 2px 10px rgba(44, 40, 36, 0.05);
+      border-top: 2px solid var(--card-accent-metal);
+      box-shadow: 0 3px 12px rgba(58, 48, 38, 0.08);
     }
 
     body[data-theme="artisan"] .card-block::before {
@@ -1285,21 +1304,24 @@
 
     body[data-theme="artisan"] .post-share-block,
     body[data-theme="artisan"] .feedback-recommend-nudge {
-      background: #faf7ef;
-      border: 1px solid var(--card-border);
+      background: linear-gradient(135deg, #f8f0e2 0%, #ebe0cc 100%);
+      border: 1px solid rgba(139, 94, 60, 0.25);
+      border-left: 3px solid var(--card-accent-wood);
       border-radius: 14px;
-      box-shadow: 0 4px 12px rgba(44, 40, 36, 0.06);
+      box-shadow: 0 4px 14px rgba(58, 48, 38, 0.1);
     }
 
     body[data-theme="artisan"] .qr-wrap {
       margin-top: 10px;
       padding: 12px 14px;
       border-radius: 15px;
-      background: linear-gradient(125deg, #faf7ef 0%, #e8dece 100%);
-      border: 1px solid var(--card-border);
+      background:
+        linear-gradient(145deg, #f5ebe0 0%, #e0d0b4 55%, #d4c4a8 100%);
+      border: 1px solid var(--card-accent-metal);
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 1) inset,
-        0 4px 14px rgba(44, 40, 36, 0.08);
+        0 0 0 1px rgba(139, 94, 60, 0.15),
+        0 6px 16px rgba(58, 48, 38, 0.12);
       color: var(--card-muted);
     }
 
@@ -1398,7 +1420,18 @@
     }
 
     body[data-theme="artisan"] .compact-acc-trigger--quote {
-      background: #f5efe4;
+      background: linear-gradient(180deg, #f6ead8 0%, #e8d9bf 100%);
+      border-color: rgba(139, 94, 60, 0.3);
+      color: var(--card-accent-wood);
+    }
+
+    body[data-theme="artisan"] .compact-acc-trigger {
       border-color: var(--card-border);
       color: var(--card-text);
+      background: rgba(250, 244, 232, 0.9);
+    }
+
+    body[data-theme="artisan"] .acc-panel {
+      background: rgba(252, 246, 236, 0.98);
+      border-color: var(--card-border);
     }

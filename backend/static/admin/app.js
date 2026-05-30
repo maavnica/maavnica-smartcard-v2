@@ -380,7 +380,8 @@ async function saveCard() {
   document.getElementById("slug").value = slug;
   document.getElementById("existing-slug").value = slug;
 
-  // Payload envoyé au backend
+  // Payload admin : visual_theme (CSS) + profile (métier) uniquement.
+  // theme / card_theme / theme_color : colonnes BDD conservées, non envoyées depuis l’admin.
   const payload = {
  first_name: document.getElementById("first-name")?.value.trim() || null,
   last_name: document.getElementById("last-name")?.value.trim() || null,

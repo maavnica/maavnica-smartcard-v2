@@ -164,7 +164,8 @@ class VisualThemePersistTests(unittest.TestCase):
         self.assertIn('body[data-theme="artisan"] .phone-inner', css)
         wellness_part, artisan_part = css.split('body[data-theme="artisan"]', 1)
         self.assertIn("#3b6a52", wellness_part)
-        self.assertIn("#8a8f94", artisan_part)
+        self.assertIn("#8b5e3c", artisan_part)
+        self.assertIn("#5a615e", artisan_part)
 
 
 if __name__ == "__main__":
