@@ -77,21 +77,22 @@
         0 8px 20px rgba(107, 122, 111, 0.04);
     }
 
-    /* Motif végétal — haut gauche, visible, déborde derrière la photo */
+    /* Motif végétal — haut gauche, visible dès le 1er regard */
     body[data-theme="wellness-soft"] .phone-inner::before {
       content: "";
       position: absolute;
-      top: 52px;
-      left: 8px;
-      width: 240px;
-      height: 240px;
+      top: 8px;
+      left: -34px;
+      width: 330px;
+      height: 330px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.22;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240' fill='none'%3E%3Cpath d='M28 200c22-52 48-98 78-136 18-22 40-44 68-58' stroke='%23A39E8E' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M72 130c30-10 54-32 74-58-22 48-58 72-94 78 16-14 28-16 22-18z' fill='%23B5AE9E' fill-opacity='.72'/%3E%3Cpath d='M92 88c26-18 54-34 84-38-14 36-44 58-82 64 12-20 20-24-2-26z' fill='%23C4BCAC' fill-opacity='.65'/%3E%3Cpath d='M110 58c24-16 50-28 78-24-16 32-48 50-86 54 10-18 16-24-4-30z' fill='%23A8A090' fill-opacity='.7'/%3E%3Cellipse cx='172' cy='46' rx='20' ry='32' transform='rotate(-28 172 46)' fill='%23BEB6A6' fill-opacity='.58'/%3E%3Cellipse cx='46' cy='140' rx='22' ry='34' transform='rotate(30 46 140)' fill='%23B0A898' fill-opacity='.52'/%3E%3Cpath d='M128 52c10-12 22-20 36-24-2 16-14 28-30 32 4-10 6-12-6-8z' fill='%23C8C0B0' fill-opacity='.5'/%3E%3Cpath d='M152 76c8-14 20-26 34-32-6 18-20 32-38 36 2-10 6-12 4-4z' fill='%23B8B0A0' fill-opacity='.45'/%3E%3C/svg%3E");
+      opacity: 0.38;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260' fill='none'%3E%3Cpath d='M24 228c26-58 56-110 90-152 20-24 46-48 78-64' stroke='%23A39E8E' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M70 148c34-10 60-36 84-66-26 54-68 82-108 90 18-16 32-20 24-24z' fill='%23B5AE9E' fill-opacity='.72'/%3E%3Cpath d='M92 102c30-22 64-40 100-44-18 40-54 66-98 74 14-24 24-28-2-30z' fill='%23C4BCAC' fill-opacity='.65'/%3E%3Cpath d='M114 70c28-18 58-32 90-28-18 36-54 56-100 62 12-20 18-26-6-34z' fill='%23A8A090' fill-opacity='.7'/%3E%3Cellipse cx='194' cy='52' rx='22' ry='36' transform='rotate(-28 194 52)' fill='%23BEB6A6' fill-opacity='.58'/%3E%3Cellipse cx='54' cy='162' rx='24' ry='38' transform='rotate(30 54 162)' fill='%23B0A898' fill-opacity='.52'/%3E%3Cellipse cx='132' cy='120' rx='16' ry='26' transform='rotate(-22 132 120)' fill='%23C8C0B0' fill-opacity='.44'/%3E%3Cellipse cx='108' cy='170' rx='14' ry='22' transform='rotate(18 108 170)' fill='%23B8B0A0' fill-opacity='.42'/%3E%3Cpath d='M138 64c10-14 24-24 40-28-4 18-18 32-36 36 6-12 8-14-4-8z' fill='%23C8C0B0' fill-opacity='.5'/%3E%3Cpath d='M166 94c10-18 24-32 40-40-8 22-24 38-46 42 4-12 8-14 6-2z' fill='%23B8B0A0' fill-opacity='.45'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: left top;
       background-size: contain;
+      transform: rotate(-8deg);
     }
 
     body[data-theme="wellness-soft"] .phone-inner > * {
@@ -108,6 +109,11 @@
       color: var(--card-muted);
       background: rgba(255, 255, 255, 0.85);
       border-color: var(--card-border);
+    }
+
+    /* Mode prévisualisation : masqué en rendu public Wellness (démo commerciale). */
+    body[data-theme="wellness-soft"] #admin-preview-badge {
+      display: none !important;
     }
 
     body[data-theme="wellness-soft"] .demo-marketing {
@@ -495,23 +501,23 @@
       box-shadow: 0 4px 14px rgba(53, 95, 74, 0.07);
       background-repeat: no-repeat;
       background-position: center;
-      background-size: 22px 22px;
+      background-size: 24px 24px;
     }
 
     body[data-theme="wellness-soft"] #btn-call::before {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%23355F4A' stroke-width='1.7' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-whatsapp::before {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M9.2 9.5c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .5.4l.8 1.9c.1.2.1.4 0 .6l-.5.6c-.1.2-.1.3 0 .5.4.8 1.4 1.8 2.2 2.2.2.1.3.1.5 0l.6-.5c.2-.1.4-.1.6 0l1.9.8c.4.1.4.3.4.5v.6c0 .3 0 .5-.5.7-1 .4-2.2.2-3.8-.9-1.8-1.2-3.2-3.2-3.7-4.2-.6-1.2-.8-2.2-.4-3.2Z' fill='%23355F4A'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%23355F4A' stroke-width='1.7' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpath d='M9.2 9.5c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .5.4l.8 1.9c.1.2.1.4 0 .6l-.5.6c-.1.2-.1.3 0 .5.4.8 1.4 1.8 2.2 2.2.2.1.3.1.5 0l.6-.5c.2-.1.4-.1.6 0l1.9.8c.4.1.4.3.4.5v.6c0 .3 0 .5-.5.7-1 .4-2.2.2-3.8-.9-1.8-1.2-3.2-3.2-3.7-4.2-.6-1.2-.8-2.2-.4-3.2Z' stroke='%23355F4A' stroke-width='1.7' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%23355F4A' stroke-width='1.7' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-discrete-partager::before {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13' stroke='%23355F4A' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath d='M3 12h11m-3-3.5L11 12l-3 3.5' stroke='%23355F4A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13' stroke='%23355F4A' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M3 12h11m-3-3.5L11 12l-3 3.5' stroke='%23355F4A' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-call .btn-link-text,
