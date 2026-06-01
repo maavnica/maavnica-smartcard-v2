@@ -1049,6 +1049,17 @@
 
         if (personEl) personEl.textContent = primaryName;
 
+        if (document.body.getAttribute("data-theme") === "wellness-soft") {
+          const recoTitleEl = document.getElementById("wellness-reco-title-text");
+          if (recoTitleEl) {
+            const firstName = (primaryName || "").trim().split(/\s+/)[0];
+            recoTitleEl.textContent =
+              firstName && !/^prénom$/i.test(firstName)
+                ? "Recommander " + firstName
+                : "Recommander ce professionnel";
+          }
+        }
+
         if (companyEl) {
           if (
             businessNameRaw &&
@@ -1279,6 +1290,10 @@
           badgeLeftText.textContent = CURRENT_PROFILE_CONFIG.badgeLeftText || badgeLeftText.textContent;
           badgeRightIcon.textContent = CURRENT_PROFILE_CONFIG.badgeRightIcon || "📍";
           badgeRightText.textContent = CURRENT_PROFILE_CONFIG.badgeRightText || badgeRightText.textContent;
+          if (document.body.getAttribute("data-theme") === "wellness-soft" && rawJobTitle) {
+            badgeRightIcon.textContent = "";
+            badgeRightText.textContent = rawJobTitle.toUpperCase();
+          }
         }
 
         const mainBlockTitle = document.getElementById("block-title-main");
@@ -1303,6 +1318,7 @@
         }
 
         const btnPrimaryContact = document.getElementById("btn-primary-demande-contact");
+        const wellnessCtaLabel = document.getElementById("wellness-cta-label");
         if (
           btnPrimaryContact &&
           document.body.getAttribute("data-theme") === "wellness-soft"
@@ -1315,7 +1331,11 @@
               wellnessCta = "Demande de contact";
             }
           }
-          btnPrimaryContact.textContent = wellnessCta.toUpperCase();
+          if (wellnessCtaLabel) {
+            wellnessCtaLabel.textContent = wellnessCta.toUpperCase();
+          } else {
+            btnPrimaryContact.textContent = wellnessCta.toUpperCase();
+          }
         }
 
         const quoteBtn = document.getElementById("btn-send-quote");
@@ -1385,26 +1405,57 @@
                 isWellnessTheme
               );
               if (isWellnessTheme) {
+                const inner = document.createElement("div");
+                inner.className = "wellness-google-inner";
+
+                const left = document.createElement("div");
+                left.className = "wellness-google-left";
+
+                const starEl = document.createElement("span");
+                starEl.className = "wellness-google-star-icon";
+                starEl.textContent = "★";
+
                 const scoreEl = document.createElement("span");
                 scoreEl.className = "wellness-google-score";
-                scoreEl.textContent = "⭐ " + ratingStr + " sur Google";
+                scoreEl.textContent = ratingStr;
+
+                const labelEl = document.createElement("span");
+                labelEl.className = "wellness-google-label";
+                labelEl.textContent = "sur Google";
+
+                left.appendChild(starEl);
+                left.appendChild(scoreEl);
+                left.appendChild(labelEl);
+
                 const countEl = document.createElement("span");
                 countEl.className = "wellness-google-count";
                 countEl.textContent = count + " avis";
+
+                const avatarsEl = document.createElement("div");
+                avatarsEl.className = "wellness-google-avatars";
+                avatarsEl.setAttribute("aria-hidden", "true");
+                for (var avi = 0; avi < 3; avi++) {
+                  var av = document.createElement("span");
+                  av.className = "wellness-google-avatar";
+                  avatarsEl.appendChild(av);
+                }
+
+                inner.appendChild(left);
+                inner.appendChild(countEl);
+                inner.appendChild(avatarsEl);
+
                 if (reviewLink) {
                   const a = document.createElement("a");
                   a.href = reviewLink;
                   a.target = "_blank";
                   a.rel = "noopener";
-                  a.appendChild(scoreEl);
-                  a.appendChild(countEl);
+                  a.appendChild(inner);
                   a.addEventListener("click", function () {
                     trackCardEvent(analyticsSlug, "google_review_click");
                   });
                   googleBadgeEl.appendChild(a);
                 } else {
-                  googleBadgeEl.appendChild(scoreEl);
-                  googleBadgeEl.appendChild(countEl);
+                  googleBadgeEl.appendChild(inner);
                 }
               } else if (reviewLink) {
                 const text = "⭐ " + ratingStr + " sur Google • " + count + " avis";
@@ -1942,49 +1993,37 @@
 
         if (showRecommendBlock) {
           const btnRecommendMain = document.getElementById("btn-recommend-main");
+          const btnRecommendWellnessRow = document.getElementById("btn-recommend-wellness-row");
           const btnRecommendSms = document.getElementById("btn-recommend-sms");
           const btnRecommendCopy = document.getElementById("btn-recommend-copy");
           const btnRecommendEmail = document.getElementById("btn-recommend-email");
 
-          if (btnRecommendMain) {
-            btnRecommendMain.onclick = async function () {
-              const profile = await ensureReferrerProfileForCard();
-              if (!profile) return;
-              const referrerId = profile.referrerId;
-              const recommendShareUrl =
-                getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
-              const sharePayload = {
-                title: getRecommendShareTitle(),
-                text: getRecommendShareTextNative(),
-                url: recommendShareUrl
-              };
-              if (typeof navigator.share === "function") {
-                try {
-                  await navigator.share(sharePayload);
-                  trackCardEvent(analyticsSlug, "recommend_click");
-                  trackRecommendationEvent(
-                    analyticsSlug,
-                    "recommend_link_created",
-                    referrerId,
-                    null,
-                    profile.firstName,
-                    profile.lastName
-                  );
-                  showToast("Merci — votre recommandation accompagne ce partage.");
-                } catch (err) {
-                  if (err && err.name === "AbortError") return;
-                  await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
-                  trackCardEvent(analyticsSlug, "recommend_click");
-                  trackRecommendationEvent(
-                    analyticsSlug,
-                    "recommend_link_created",
-                    referrerId,
-                    null,
-                    profile.firstName,
-                    profile.lastName
-                  );
-                }
-              } else {
+          async function handleRecommendMainClick() {
+            const profile = await ensureReferrerProfileForCard();
+            if (!profile) return;
+            const referrerId = profile.referrerId;
+            const recommendShareUrl =
+              getPublicCardUrl(analyticsSlug) + "?r=" + encodeURIComponent(referrerId);
+            const sharePayload = {
+              title: getRecommendShareTitle(),
+              text: getRecommendShareTextNative(),
+              url: recommendShareUrl
+            };
+            if (typeof navigator.share === "function") {
+              try {
+                await navigator.share(sharePayload);
+                trackCardEvent(analyticsSlug, "recommend_click");
+                trackRecommendationEvent(
+                  analyticsSlug,
+                  "recommend_link_created",
+                  referrerId,
+                  null,
+                  profile.firstName,
+                  profile.lastName
+                );
+                showToast("Merci — votre recommandation accompagne ce partage.");
+              } catch (err) {
+                if (err && err.name === "AbortError") return;
                 await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
                 trackCardEvent(analyticsSlug, "recommend_click");
                 trackRecommendationEvent(
@@ -1996,13 +2035,35 @@
                   profile.lastName
                 );
               }
-            };
+            } else {
+              await copyPublicUrlToClipboard(recommendShareUrl, "recommend");
+              trackCardEvent(analyticsSlug, "recommend_click");
+              trackRecommendationEvent(
+                analyticsSlug,
+                "recommend_link_created",
+                referrerId,
+                null,
+                profile.firstName,
+                profile.lastName
+              );
+            }
+          }
+
+          if (btnRecommendMain) {
+            btnRecommendMain.onclick = handleRecommendMainClick;
+          }
+          if (btnRecommendWellnessRow) {
+            btnRecommendWellnessRow.onclick = handleRecommendMainClick;
           }
 
           const btnFeedbackRecommendNudge = document.getElementById("btn-feedback-recommend-nudge");
-          if (btnFeedbackRecommendNudge && btnRecommendMain) {
+          if (btnFeedbackRecommendNudge && (btnRecommendMain || btnRecommendWellnessRow)) {
             btnFeedbackRecommendNudge.onclick = function () {
-              btnRecommendMain.click();
+              if (btnRecommendWellnessRow && document.body.getAttribute("data-theme") === "wellness-soft") {
+                btnRecommendWellnessRow.click();
+              } else if (btnRecommendMain) {
+                btnRecommendMain.click();
+              }
             };
           }
 

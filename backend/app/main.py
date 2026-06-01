@@ -137,7 +137,7 @@ _THEMES_CSS_LINK_RE = re.compile(
     r'(/static/public-card/themes\.css)\?v=[^"\']+',
     re.IGNORECASE,
 )
-_PUBLIC_THEMES_CSS_VERSION = "wellness-premium-2"
+_PUBLIC_THEMES_CSS_VERSION = "wellness-premium-3"
 
 
 def _inject_public_card_visual_theme(html: str, visual_theme: str) -> str:

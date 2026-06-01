@@ -14,7 +14,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="/static/public-card/components.css?v=sc-arch-1" />
-  <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-1" />
+  <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-3" />
+  <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=wellness-premium-3" />
 </head>
 <body class="is-loading" data-theme="">
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
@@ -24,6 +25,15 @@
   </div>
   <div class="phone-shell">
     <div class="phone-inner">
+      <img
+        class="wellness-deco-branch"
+        src="/static/public-card/wellness-branch.svg"
+        alt=""
+        width="220"
+        height="220"
+        decoding="async"
+        aria-hidden="true"
+      />
       <div class="notch"></div>
       <div class="status-bar" id="status-bar">
         <span class="status-bar-inner">
@@ -159,10 +169,11 @@
         </div>
 
         <button type="button" class="btn-primary btn-primary-contact-hero" id="btn-primary-demande-contact">
-          Demande de contact
+          <span class="wellness-cta-leaf" aria-hidden="true"></span>
+          <span class="wellness-cta-label" id="wellness-cta-label">Demande de contact</span>
         </button>
 
-        <div class="hero-compact-contact-row" id="hero-compact-contact-row">
+        <div class="hero-compact-contact-row wellness-quick-actions" id="hero-compact-contact-row">
           <div class="hero-compact-tel-row">
             <div id="slot-call-wa-hero" class="hero-slot-call-wa"></div>
           </div>
@@ -419,20 +430,34 @@
 
           <div class="acc-panel" id="panel-recommend" data-acc-panel="recommend">
           <div class="post-share-block wellness-premium-reco-card" id="recommend-block" style="display: none;">
-            <div class="wellness-reco-header">
-              <div class="wellness-reco-icon" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button type="button" class="wellness-premium-row wellness-reco-row wellness-reco-wellness-only" id="btn-recommend-wellness-row" aria-label="Recommander ce professionnel">
+              <span class="wellness-row-icon wellness-reco-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M14 24s-8-5.2-8-12a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 22 12c0 6.8-8 12-8 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
-              </div>
-              <div class="wellness-reco-texts">
-                <div class="post-share-title wellness-reco-title">Recommander ce professionnel</div>
-                <div class="post-share-hint wellness-reco-sub">Vos recommandations comptent</div>
-              </div>
-            </div>
-            <button class="btn-primary btn-share-card-main wellness-reco-action" id="btn-recommend-main" type="button">
-              Recommander
+              </span>
+              <span class="wellness-row-body wellness-reco-texts">
+                <span class="wellness-reco-title" id="wellness-reco-title-text">Recommander ce professionnel</span>
+                <span class="wellness-reco-sub" id="wellness-reco-sub-text">Partagez cette carte en toute confiance</span>
+              </span>
+              <span class="wellness-row-chevron" aria-hidden="true"></span>
             </button>
+            <div class="wellness-reco-default">
+              <div class="wellness-reco-header">
+                <div class="wellness-reco-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 24s-8-5.2-8-12a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 22 12c0 6.8-8 12-8 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="wellness-reco-texts">
+                  <div class="post-share-title wellness-reco-title">Recommander ce professionnel</div>
+                  <div class="post-share-hint wellness-reco-sub">Vos recommandations comptent</div>
+                </div>
+              </div>
+              <button class="btn-primary btn-share-card-main wellness-reco-action" id="btn-recommend-main" type="button">
+                Recommander
+              </button>
+            </div>
             <div class="share-row share-row--secondary" id="recommend-share-options">
               <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien 🔗</button>
               <button class="btn-link" id="btn-recommend-sms" type="button">Partager par SMS 📱</button>
@@ -491,7 +516,7 @@
           </div>
           </div>
 
-          <div class="qr-wrap">
+          <div class="qr-wrap wellness-qr-card">
             <img id="qr-image" alt="QR Code SmartCard" data-alt-demo="QR Code SmartCard" data-alt-client="QR code — accès à cette carte" />
             <div class="qr-copy">
               <div class="qr-copy-main qr-copy-main--default">Scannez pour accéder à la carte</div>
@@ -502,6 +527,7 @@
               <div class="qr-copy-hint qr-copy-hint--default">À afficher sur vos devis, factures ou en point de vente.</div>
               <div class="qr-copy-hint qr-copy-hint--wellness">Scannez le QR code</div>
             </div>
+            <span class="wellness-qr-chevron" aria-hidden="true"></span>
           </div>
           <div class="qr-powered-by" aria-label="Propulsé par Maavnica">
             <span>Propulsé par Maavnica</span>
@@ -559,7 +585,7 @@
   </div>
 
   <script src="/static/maavnica-consent.js"></script>
-  <script src="/static/public-card/shared.js?v=wellness-premium-2"></script>
+  <script src="/static/public-card/shared.js?v=wellness-premium-3"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});

@@ -1,0 +1,854 @@
+/* Éléments wellness — masqués hors thème wellness-soft */
+.wellness-deco-branch,
+.wellness-cta-leaf,
+.wellness-qr-chevron,
+.wellness-reco-wellness-only {
+  display: none;
+}
+
+body:not([data-theme="wellness-soft"]) .wellness-reco-default {
+  display: block;
+}
+
+body[data-theme="wellness-soft"] .wellness-deco-branch {
+  display: block;
+}
+
+body[data-theme="wellness-soft"] .wellness-cta-leaf,
+body[data-theme="wellness-soft"] .wellness-qr-chevron {
+  display: inline-flex;
+}
+
+body[data-theme="wellness-soft"] .wellness-reco-wellness-only {
+  display: flex;
+}
+
+body[data-theme="wellness-soft"] .wellness-reco-default {
+  display: none !important;
+}
+
+/* Wellness Premium — layout dédié (reconstruction fidèle maquette)
+ * Actif uniquement via body[data-theme="wellness-soft"]
+ */
+
+body[data-theme="wellness-soft"] {
+  --card-bg: #efe7de;
+  --card-surface: #faf7f0;
+  --card-primary: #2d5a45;
+  --card-text: #24352e;
+  --card-muted: #6d7d72;
+  --card-border: #ddd2c4;
+  --card-shadow: 0 24px 56px rgba(45, 90, 69, 0.08);
+  --bg-page: #f3ede4;
+  --hero-bg: transparent;
+  --primary: #2d5a45;
+  --primary-soft: rgba(45, 90, 69, 0.1);
+  --text-main: #24352e;
+  --text-soft: #6d7d72;
+  --border-soft: rgba(109, 125, 114, 0.25);
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --wellness-cream: #faf7f0;
+  --wellness-radius-card: 36px;
+  --wellness-radius-inner: 22px;
+
+  font-family: var(--font-body);
+  color: var(--card-text);
+  padding: 24px 16px 32px;
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.9), transparent 65%),
+    linear-gradient(180deg, #f5efe6 0%, #ebe3d8 100%);
+}
+
+@media (min-width: 480px) {
+  body[data-theme="wellness-soft"] {
+    padding: 36px 24px 48px;
+  }
+}
+
+body[data-theme="wellness-soft"] .phone-shell {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 8px;
+  filter: drop-shadow(0 32px 64px rgba(36, 53, 46, 0.1));
+}
+
+body[data-theme="wellness-soft"] .phone-inner {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  padding: 40px 26px 22px;
+  border-radius: var(--wellness-radius-card);
+  background: var(--wellness-cream);
+  border: 1px solid rgba(221, 210, 196, 0.9);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    var(--card-shadow);
+}
+
+/* Texture papier premium */
+body[data-theme="wellness-soft"] .phone-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+body[data-theme="wellness-soft"] .phone-inner::before {
+  content: none;
+  display: none;
+}
+
+body[data-theme="wellness-soft"] .wellness-deco-branch {
+  position: absolute;
+  top: -12px;
+  left: -18px;
+  width: min(58%, 220px);
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.42;
+  transform: rotate(-4deg);
+}
+
+body[data-theme="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) {
+  position: relative;
+  z-index: 2;
+}
+
+body[data-theme="wellness-soft"] .notch,
+body[data-theme="wellness-soft"] .status-bar,
+body[data-theme="wellness-soft"] .demo-marketing,
+body[data-theme="wellness-soft"] #admin-preview-badge {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] .admin-preview-badge {
+  color: var(--card-muted);
+}
+
+/* —— Hero —— */
+body[data-theme="wellness-soft"] .hero {
+  padding: 44px 0 0;
+  margin: 0;
+  text-align: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body[data-theme="wellness-soft"] .hero::before {
+  display: none;
+}
+
+body[data-theme="wellness-soft"] .hero-badges {
+  display: flex !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+body[data-theme="wellness-soft"] .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(45, 90, 69, 0.06);
+  pointer-events: auto;
+}
+
+body[data-theme="wellness-soft"] #hero-badge-left {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] .hero-main-row {
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding-top: 8px;
+}
+
+body[data-theme="wellness-soft"] .hero-avatar {
+  width: clamp(128px, 32vw, 148px);
+  height: clamp(128px, 32vw, 148px);
+  margin: 8px auto 24px;
+  padding: 5px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow:
+    0 0 0 1px rgba(221, 210, 196, 0.6),
+    0 16px 40px rgba(45, 90, 69, 0.12);
+}
+
+body[data-theme="wellness-soft"] .hero-avatar img,
+body[data-theme="wellness-soft"] #hero-avatar-fallback,
+body[data-theme="wellness-soft"] #hero-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body[data-theme="wellness-soft"] #hero-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #c5d4b8 0%, #7a9470 55%, #4d6b52 100%);
+  color: #fffdf8;
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 500;
+}
+
+body[data-theme="wellness-soft"] #hero-subline {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] #person-name.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 9vw, 3.35rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--card-text);
+  margin: 0 0 14px;
+}
+
+body[data-theme="wellness-soft"] #company-name.hero-company {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] #hero-job-title {
+  display: block !important;
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 2.4vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  margin: 0 0 16px;
+}
+
+body[data-theme="wellness-soft"] #hero-professional-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3.6vw, 1.35rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--card-muted);
+  margin: 0 auto 6px;
+  max-width: 20rem;
+  text-wrap: balance;
+}
+
+body[data-theme="wellness-soft"] .hero-reassurance,
+body[data-theme="wellness-soft"] .hero-social-proof,
+body[data-theme="wellness-soft"] .hero-subtitle,
+body[data-theme="wellness-soft"] .hero-meta,
+body[data-theme="wellness-soft"] .hero-contact-line,
+body[data-theme="wellness-soft"] #hero-recommend-conversion,
+body[data-theme="wellness-soft"] .p12-soft-hint,
+body[data-theme="wellness-soft"] #left-col-head,
+body[data-theme="wellness-soft"] #hint-share-signature,
+body[data-theme="wellness-soft"] #hint-post-prestation,
+body[data-theme="wellness-soft"] .hero-google-badge-wrap,
+body[data-theme="wellness-soft"] #contact-actions-guide,
+body[data-theme="wellness-soft"] #pill-section-hint,
+body[data-theme="wellness-soft"] .compact-cta-reassurance,
+body[data-theme="wellness-soft"] .compact-primary-cta-wrap {
+  display: none !important;
+}
+
+/* Carte Google */
+body[data-theme="wellness-soft"] #hero-google-badge-compact.wellness-google-rating-card,
+body[data-theme="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline {
+  display: flex !important;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  margin: 22px 0 26px;
+  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-rating-card a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+}
+
+body[data-theme="wellness-soft"] .wellness-google-left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-star-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #e8a317;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-score {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--card-text);
+  letter-spacing: -0.02em;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--card-muted);
+}
+
+body[data-theme="wellness-soft"] .wellness-google-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  white-space: nowrap;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatars {
+  display: flex;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatar {
+  width: 28px;
+  height: 28px;
+  margin-left: -8px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: linear-gradient(135deg, #d4cfc6 0%, #a89f94 100%);
+  box-shadow: 0 2px 6px rgba(36, 53, 46, 0.1);
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatar:first-child {
+  margin-left: 0;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatar:nth-child(2) {
+  background: linear-gradient(135deg, #c8d4c0 0%, #8fa386 100%);
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatar:nth-child(3) {
+  background: linear-gradient(135deg, #d8cfc0 0%, #b5a696 100%);
+}
+
+/* CTA principal */
+body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  margin: 0 0 28px;
+  padding: 16px 24px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none !important;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    0 12px 32px rgba(45, 90, 69, 0.28),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset !important;
+}
+
+body[data-theme="wellness-soft"] .wellness-cta-leaf {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 21c-4-3.5-7-7.5-7-12a5 5 0 0 1 9.5-2.2A5 5 0 0 1 19 9c0 4.5-3 8.5-7 12Z' stroke='%23ffffff' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M12 21V9' stroke='%23ffffff' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+@media (hover: hover) {
+  body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero:hover {
+    background: linear-gradient(180deg, #3d7a5e 0%, #346552 100%) !important;
+    box-shadow: 0 14px 36px rgba(45, 90, 69, 0.32) !important;
+  }
+}
+
+/* Actions rapides + séparateurs */
+body[data-theme="wellness-soft"] .wellness-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 24px;
+  padding: 4px 0;
+}
+
+body[data-theme="wellness-soft"] .hero-compact-tel-row,
+body[data-theme="wellness-soft"] .hero-slot-call-wa {
+  display: contents;
+}
+
+body[data-theme="wellness-soft"] .hero-slot-add-contact {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] .wellness-quick-actions > #btn-cta-laisser-avis {
+  grid-column: 3;
+}
+
+body[data-theme="wellness-soft"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) {
+  grid-column: 4;
+}
+
+body[data-theme="wellness-soft"] #btn-discrete-partager[hidden] {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] #btn-call,
+body[data-theme="wellness-soft"] #btn-whatsapp,
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+body[data-theme="wellness-soft"] #btn-discrete-partager {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--card-text) !important;
+}
+
+body[data-theme="wellness-soft"] #btn-call,
+body[data-theme="wellness-soft"] #btn-whatsapp,
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
+  border-right: 1px solid rgba(109, 125, 114, 0.22);
+}
+
+body[data-theme="wellness-soft"] #btn-call::after,
+body[data-theme="wellness-soft"] #btn-whatsapp::after {
+  content: none;
+  display: none;
+}
+
+body[data-theme="wellness-soft"] #btn-call .btn-link-leading,
+body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-leading {
+  display: none;
+}
+
+body[data-theme="wellness-soft"] #btn-call::before,
+body[data-theme="wellness-soft"] #btn-whatsapp::before,
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before,
+body[data-theme="wellness-soft"] #btn-discrete-partager::before {
+  content: "";
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 14px rgba(45, 90, 69, 0.07);
+}
+
+body[data-theme="wellness-soft"] #btn-call::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="wellness-soft"] #btn-whatsapp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="wellness-soft"] #btn-discrete-partager::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="wellness-soft"] #btn-call .btn-link-text,
+body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text {
+  font-size: 0;
+  line-height: 0;
+}
+
+body[data-theme="wellness-soft"] #btn-call .btn-link-text::after {
+  content: "Appeler";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+}
+
+body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text::after {
+  content: "WhatsApp";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+}
+
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+body[data-theme="wellness-soft"] #btn-discrete-partager {
+  font-size: 0;
+}
+
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis::after {
+  content: "Avis";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+}
+
+body[data-theme="wellness-soft"] #btn-discrete-partager::after {
+  content: "Partager";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+}
+
+/* Grille principale */
+body[data-theme="wellness-soft"] .main-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 0;
+}
+
+body[data-theme="wellness-soft"] .card-block,
+body[data-theme="wellness-soft"] .card-block--quote {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body[data-theme="wellness-soft"] .card-block::before {
+  display: none;
+}
+
+body[data-theme="wellness-soft"] #slot-call-legacy,
+body[data-theme="wellness-soft"] #legacy-contact-row,
+body[data-theme="wellness-soft"] .compact-acc-trigger--quote,
+body[data-theme="wellness-soft"] #panel-feedback:not(.is-open),
+body[data-theme="wellness-soft"] #panel-share:not(.is-open),
+body[data-theme="wellness-soft"] #panel-pay:not(.is-open) {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"].public-card--compact #panel-recommend {
+  display: block !important;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+body[data-theme="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) {
+  display: none !important;
+}
+
+/* Carte recommandation — ligne cliquable */
+body[data-theme="wellness-soft"] .wellness-premium-reco-card {
+  margin: 0 0 14px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body[data-theme="wellness-soft"] .wellness-premium-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 18px 18px 18px 16px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  body[data-theme="wellness-soft"] .wellness-premium-row:hover {
+    border-color: rgba(45, 90, 69, 0.25);
+    box-shadow: 0 10px 28px rgba(45, 90, 69, 0.1);
+  }
+}
+
+body[data-theme="wellness-soft"] .wellness-row-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(45, 90, 69, 0.08);
+  color: var(--card-primary);
+}
+
+body[data-theme="wellness-soft"] .wellness-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+body[data-theme="wellness-soft"] .wellness-reco-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--card-text);
+  margin: 0 0 3px;
+}
+
+body[data-theme="wellness-soft"] .wellness-reco-sub {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--card-muted);
+  margin: 0;
+}
+
+body[data-theme="wellness-soft"] .wellness-row-chevron {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-right: 2px solid var(--card-muted);
+  border-bottom: 2px solid var(--card-muted);
+  transform: rotate(-45deg);
+  opacity: 0.55;
+}
+
+body[data-theme="wellness-soft"] .wellness-reco-action,
+body[data-theme="wellness-soft"] #recommend-share-options {
+  display: none !important;
+}
+
+/* Carte QR */
+body[data-theme="wellness-soft"] .qr-wrap.wellness-qr-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 18px 18px 18px 16px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+  text-align: left;
+}
+
+body[data-theme="wellness-soft"] .qr-wrap img {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(45, 90, 69, 0.06);
+}
+
+body[data-theme="wellness-soft"] .qr-wrap .qr-copy {
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--default,
+body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--compact-fr,
+body[data-theme="wellness-soft"] .qr-copy-hint--default {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--wellness {
+  display: block !important;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--card-text);
+}
+
+body[data-theme="wellness-soft"] .qr-copy-hint--wellness {
+  display: block !important;
+  font-size: 0.8rem;
+  color: var(--card-muted);
+}
+
+body[data-theme="wellness-soft"] .wellness-qr-chevron {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-right: 2px solid var(--card-muted);
+  border-bottom: 2px solid var(--card-muted);
+  transform: rotate(-45deg);
+  opacity: 0.55;
+}
+
+body[data-theme="wellness-soft"] .qr-powered-by {
+  margin: 8px 0 4px;
+  text-align: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: #b5aa9e;
+  opacity: 0.75;
+}
+
+body[data-theme="wellness-soft"] .footer {
+  margin-top: 14px;
+  padding-top: 14px;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #b5aa9e;
+  border-top: 1px solid rgba(221, 210, 196, 0.65);
+  background: transparent;
+  opacity: 0.85;
+}
+
+body[data-theme="wellness-soft"] .footer a {
+  color: var(--card-primary);
+}
+
+/* Boutons & panels */
+body[data-theme="wellness-soft"] .btn-primary-contact-hero,
+body[data-theme="wellness-soft"] #btn-send-feedback,
+body[data-theme="wellness-soft"] #btn-send-quote,
+body[data-theme="wellness-soft"] .recommend-id-confirm {
+  background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+body[data-theme="wellness-soft"] .acc-panel {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+
+body[data-theme="wellness-soft"] .quote-input,
+body[data-theme="wellness-soft"] .feedback-input,
+body[data-theme="wellness-soft"] .pill {
+  background: #fff;
+  border: 1px solid var(--card-border);
+}
+
+body[data-theme="wellness-soft"] .premium-load-layer {
+  background: var(--wellness-cream);
+  border-radius: var(--wellness-radius-card);
+}
+
+body[data-theme="wellness-soft"] .skeleton-shimmer {
+  background: rgba(45, 90, 69, 0.1);
+}
+
+body[data-theme="wellness-soft"] .toast {
+  background: rgba(36, 53, 46, 0.92);
+  color: #faf7f0;
+  border-radius: 999px;
+}
+
+body[data-theme="wellness-soft"] .recommend-id-modal {
+  background: rgba(36, 53, 46, 0.35);
+}
+
+body[data-theme="wellness-soft"] .recommend-id-panel {
+  background: var(--wellness-cream);
+  border: 1px solid var(--card-border);
+  color: var(--card-text);
+}
+
+/* Overrides compact générique */
+body[data-theme="wellness-soft"].public-card--compact .phone-inner {
+  padding: 40px 26px 22px;
+  border-radius: var(--wellness-radius-card);
+  background: var(--wellness-cream);
+}
+
+body[data-theme="wellness-soft"].public-card--compact .main-grid > .card-block:first-child {
+  order: 1;
+}
+
+body[data-theme="wellness-soft"].public-card--compact .main-grid > .card-block--quote {
+  order: 2;
+  gap: 14px;
+}
+
+body[data-theme="wellness-soft"].public-card--compact .card-block--quote .qr-wrap {
+  order: 0;
+  margin-top: 0;
+}
+
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
