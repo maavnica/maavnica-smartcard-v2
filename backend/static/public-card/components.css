@@ -1933,6 +1933,10 @@
     .qr-copy-main--compact-fr {
       display: none;
     }
+    .qr-copy-main--wellness,
+    .qr-copy-hint--wellness {
+      display: none;
+    }
     body.public-card--compact .qr-wrap .qr-copy-main--default {
       display: none !important;
     }

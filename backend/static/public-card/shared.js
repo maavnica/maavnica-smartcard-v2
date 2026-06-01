@@ -1302,6 +1302,22 @@
           }
         }
 
+        const btnPrimaryContact = document.getElementById("btn-primary-demande-contact");
+        if (
+          btnPrimaryContact &&
+          document.body.getAttribute("data-theme") === "wellness-soft"
+        ) {
+          var wellnessCta = rawFormTitle;
+          if (!wellnessCta) {
+            if (profileKey === "bien_etre" || profileKey === "medical") {
+              wellnessCta = "Prendre rendez-vous";
+            } else {
+              wellnessCta = "Demande de contact";
+            }
+          }
+          btnPrimaryContact.textContent = wellnessCta.toUpperCase();
+        }
+
         const quoteBtn = document.getElementById("btn-send-quote");
         if (quoteBtn && CURRENT_PROFILE_CONFIG.quoteButtonLabel) {
           quoteBtn.textContent = "📝 " + CURRENT_PROFILE_CONFIG.quoteButtonLabel;
@@ -1356,14 +1372,42 @@
           const hasRating = typeof rating === "number" && !isNaN(rating);
           const hasCount = typeof count === "number" && !isNaN(count) && count >= 0;
           const reviewLink = (card.google_review_link || "").toString().trim();
+          const isWellnessTheme =
+            document.body.getAttribute("data-theme") === "wellness-soft";
           ["hero-google-badge", "hero-google-badge-compact"].forEach(function (id) {
             const googleBadgeEl = document.getElementById(id);
             if (!googleBadgeEl) return;
             if (hasRating && hasCount) {
               const ratingStr = rating.toFixed(1).replace(".", ",");
-              const text = "⭐ " + ratingStr + " sur Google • " + count + " avis";
               googleBadgeEl.textContent = "";
-              if (reviewLink) {
+              googleBadgeEl.classList.toggle(
+                "wellness-google-rating-card",
+                isWellnessTheme
+              );
+              if (isWellnessTheme) {
+                const scoreEl = document.createElement("span");
+                scoreEl.className = "wellness-google-score";
+                scoreEl.textContent = "⭐ " + ratingStr + " sur Google";
+                const countEl = document.createElement("span");
+                countEl.className = "wellness-google-count";
+                countEl.textContent = count + " avis";
+                if (reviewLink) {
+                  const a = document.createElement("a");
+                  a.href = reviewLink;
+                  a.target = "_blank";
+                  a.rel = "noopener";
+                  a.appendChild(scoreEl);
+                  a.appendChild(countEl);
+                  a.addEventListener("click", function () {
+                    trackCardEvent(analyticsSlug, "google_review_click");
+                  });
+                  googleBadgeEl.appendChild(a);
+                } else {
+                  googleBadgeEl.appendChild(scoreEl);
+                  googleBadgeEl.appendChild(countEl);
+                }
+              } else if (reviewLink) {
+                const text = "⭐ " + ratingStr + " sur Google • " + count + " avis";
                 const a = document.createElement("a");
                 a.href = reviewLink;
                 a.target = "_blank";
@@ -1374,11 +1418,13 @@
                 });
                 googleBadgeEl.appendChild(a);
               } else {
-                googleBadgeEl.textContent = text;
+                googleBadgeEl.textContent =
+                  "⭐ " + ratingStr + " sur Google • " + count + " avis";
               }
               googleBadgeEl.style.display = "flex";
             } else {
               googleBadgeEl.textContent = "";
+              googleBadgeEl.classList.remove("wellness-google-rating-card");
               googleBadgeEl.style.display = "none";
             }
           });

@@ -12,35 +12,32 @@
 /* body[data-theme="corporate"] { } */
 /* body[data-theme="maavnica"] { } */
 
-/* —— Thème bien-être premium (wellness-soft) — maquette référence —— */
+/* —— Thème bien-être premium (wellness-soft) — carte praticien haut de gamme —— */
     body[data-theme="wellness-soft"] {
-      --card-bg: #efe8dc;
-      --card-surface: #fffdf8;
-      --card-primary: #2f5a45;
-      --card-text: #18382d;
-      --card-muted: #8a7b6a;
-      --card-border: #e4d9c8;
-      --card-shadow: 0 24px 56px rgba(54, 49, 41, 0.08);
-      --bg-page: #efe8dc;
+      --card-bg: #efe7de;
+      --card-surface: #ffffff;
+      --card-primary: #355f4a;
+      --card-text: #2a3d34;
+      --card-muted: #6b7a6f;
+      --card-border: #d9cec2;
+      --card-shadow: 0 20px 48px rgba(53, 95, 74, 0.07);
+      --bg-page: #f7f3ee;
       --hero-bg: transparent;
-      --primary: #2f5a45;
-      --primary-soft: rgba(47, 90, 69, 0.1);
-      --text-main: #18382d;
-      --text-soft: #8a7b6a;
-      --border-soft: rgba(138, 123, 106, 0.28);
+      --primary: #355f4a;
+      --primary-soft: rgba(53, 95, 74, 0.1);
+      --text-main: #2a3d34;
+      --text-soft: #6b7a6f;
+      --border-soft: rgba(107, 122, 111, 0.22);
       --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --font-body: "DM Sans", system-ui, sans-serif;
 
       font-family: var(--font-body);
       color: var(--card-text);
       padding: 20px 14px 28px;
-      background-color: var(--card-bg);
+      background-color: var(--bg-page);
       background-image:
-        radial-gradient(ellipse 52% 44% at 4% 8%, rgba(130, 168, 138, 0.16) 0%, transparent 70%),
-        radial-gradient(ellipse 38% 32% at 12% 4%, rgba(160, 190, 155, 0.11) 0%, transparent 66%),
-        radial-gradient(ellipse 120% 80% at 50% -8%, rgba(255, 255, 255, 0.9), transparent 55%),
-        radial-gradient(ellipse 65% 50% at 100% 100%, rgba(228, 218, 202, 0.35), transparent 50%),
-        linear-gradient(175deg, #f5f0e8 0%, #efe8dc 45%, #e9e2d6 100%);
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 255, 255, 0.85), transparent 70%),
+        linear-gradient(175deg, #f7f3ee 0%, #efe7de 55%, #e8dfd4 100%);
     }
 
     @media (min-width: 480px) {
@@ -69,29 +66,29 @@
     body[data-theme="wellness-soft"] .phone-inner {
       position: relative;
       min-height: 0;
-      padding: 32px 30px 28px;
+      padding: 36px 28px 24px;
       border-radius: 32px;
       overflow: visible;
-      background: linear-gradient(180deg, #fffdf8 0%, #fbf8f1 52%, #f7f3eb 100%);
-      border: 1px solid #e4d9c8;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f3ee 48%, #efe7de 100%);
+      border: 1px solid #d9cec2;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.95) inset,
-        0 24px 56px rgba(54, 49, 41, 0.07),
-        0 8px 20px rgba(94, 130, 105, 0.04);
+        0 1px 0 rgba(255, 255, 255, 0.98) inset,
+        0 24px 56px rgba(53, 95, 74, 0.06),
+        0 8px 20px rgba(107, 122, 111, 0.04);
     }
 
-    /* Motif végétal bien-être — branche/feuilles (SVG), visible mais discret */
+    /* Motif végétal — haut gauche, visible, déborde derrière la photo */
     body[data-theme="wellness-soft"] .phone-inner::before {
       content: "";
       position: absolute;
-      top: 28px;
-      left: 18px;
-      width: 210px;
-      height: 210px;
+      top: 52px;
+      left: 8px;
+      width: 240px;
+      height: 240px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.24;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220' fill='none'%3E%3Cpath d='M34 188c18-46 40-88 68-122 16-20 36-40 60-54' stroke='%239B9E8E' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M74 124c26-8 48-28 66-52-20 42-54 64-88 70 14-12 24-14 20-16z' fill='%23A8AE9C' fill-opacity='.75'/%3E%3Cpath d='M90 86c22-16 48-30 76-34-12 32-38 52-72 58 10-18 18-22-4-24z' fill='%23B5BAA8' fill-opacity='.62'/%3E%3Cpath d='M106 60c20-14 44-24 68-20-14 28-42 44-74 48 8-16 14-22-6-28z' fill='%239EA892' fill-opacity='.68'/%3E%3Cellipse cx='164' cy='44' rx='17' ry='27' transform='rotate(-30 164 44)' fill='%23B8BDB0' fill-opacity='.55'/%3E%3Cellipse cx='50' cy='132' rx='19' ry='29' transform='rotate(32 50 132)' fill='%23AEB4A4' fill-opacity='.5'/%3E%3Cpath d='M120 50c8-10 18-18 30-22-2 14-12 24-26 28 4-8 6-10-4-6z' fill='%23C4C9BC' fill-opacity='.48'/%3E%3Cpath d='M142 72c6-12 16-22 28-28-4 16-16 28-32 32 2-8 6-10 4-4z' fill='%23B0B8A6' fill-opacity='.42'/%3E%3C/svg%3E");
+      opacity: 0.22;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240' fill='none'%3E%3Cpath d='M28 200c22-52 48-98 78-136 18-22 40-44 68-58' stroke='%23A39E8E' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M72 130c30-10 54-32 74-58-22 48-58 72-94 78 16-14 28-16 22-18z' fill='%23B5AE9E' fill-opacity='.72'/%3E%3Cpath d='M92 88c26-18 54-34 84-38-14 36-44 58-82 64 12-20 20-24-2-26z' fill='%23C4BCAC' fill-opacity='.65'/%3E%3Cpath d='M110 58c24-16 50-28 78-24-16 32-48 50-86 54 10-18 16-24-4-30z' fill='%23A8A090' fill-opacity='.7'/%3E%3Cellipse cx='172' cy='46' rx='20' ry='32' transform='rotate(-28 172 46)' fill='%23BEB6A6' fill-opacity='.58'/%3E%3Cellipse cx='46' cy='140' rx='22' ry='34' transform='rotate(30 46 140)' fill='%23B0A898' fill-opacity='.52'/%3E%3Cpath d='M128 52c10-12 22-20 36-24-2 16-14 28-30 32 4-10 6-12-6-8z' fill='%23C8C0B0' fill-opacity='.5'/%3E%3Cpath d='M152 76c8-14 20-26 34-32-6 18-20 32-38 36 2-10 6-12 4-4z' fill='%23B8B0A0' fill-opacity='.45'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: left top;
       background-size: contain;
@@ -113,10 +110,14 @@
       border-color: var(--card-border);
     }
 
+    body[data-theme="wellness-soft"] .demo-marketing {
+      display: none !important;
+    }
+
     body[data-theme="wellness-soft"] .hero {
       position: relative;
       overflow: visible;
-      padding: 12px 0 4px;
+      padding: 44px 0 8px;
       margin-bottom: 0;
       border-radius: 0;
       text-align: center;
@@ -139,24 +140,39 @@
       margin-bottom: 0;
     }
 
+    /* Badge métier — coin supérieur droit */
     body[data-theme="wellness-soft"] .hero-badges {
-      display: none !important;
+      display: flex !important;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      justify-content: flex-end;
+      margin: 0;
+      padding: 0;
+      z-index: 3;
+      pointer-events: none;
     }
 
     body[data-theme="wellness-soft"] .hero-badge {
-      padding: 4px 11px;
-      font-size: 0.58rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      font-size: 0.625rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--card-muted);
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid var(--card-border);
-      box-shadow: 0 1px 3px rgba(54, 49, 41, 0.06);
+      background: #ffffff;
+      border: 1px solid rgba(217, 206, 194, 0.85);
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(53, 95, 74, 0.07);
+      pointer-events: auto;
     }
 
     body[data-theme="wellness-soft"] #hero-badge-right {
-      display: none;
+      display: none !important;
     }
 
     body[data-theme="wellness-soft"] .hero-recommend-trust {
@@ -172,20 +188,25 @@
       align-items: center;
       text-align: center;
       gap: 0;
-      padding-top: 8px;
+      padding-top: 4px;
+      position: relative;
+      z-index: 2;
     }
 
     body[data-theme="wellness-soft"] .hero-avatar {
-      width: clamp(118px, 28vw, 132px);
-      height: clamp(118px, 28vw, 132px);
-      margin: 0 auto 20px;
+      width: clamp(120px, 30vw, 136px);
+      height: clamp(120px, 30vw, 136px);
+      margin: 0 auto 28px;
       border: none;
-      padding: 5px;
+      padding: 4px;
       border-radius: 50%;
       background: #ffffff;
       box-shadow:
-        0 10px 28px rgba(54, 49, 41, 0.1),
-        0 0 0 4px #ffffff;
+        0 12px 32px rgba(53, 95, 74, 0.1),
+        0 4px 12px rgba(107, 122, 111, 0.08),
+        0 0 0 5px #ffffff;
+      position: relative;
+      z-index: 2;
     }
 
     body[data-theme="wellness-soft"] .hero-avatar img,
@@ -219,79 +240,100 @@
 
     body[data-theme="wellness-soft"] #person-name.hero-title {
       font-family: var(--font-display);
-      font-size: clamp(2.625rem, 8vw, 3.25rem);
+      font-size: clamp(2.5rem, 8vw, 3.125rem);
       font-weight: 600;
-      line-height: 1;
+      line-height: 1.05;
       letter-spacing: -0.02em;
-      color: #18382d;
-      margin: 0 0 14px;
+      color: #2a3d34;
+      margin: 0 0 18px;
     }
 
     body[data-theme="wellness-soft"] #company-name.hero-company {
       font-family: var(--font-body);
-      font-size: clamp(0.9375rem, 2.8vw, 1.0625rem);
+      font-size: clamp(0.875rem, 2.6vw, 1rem);
       font-weight: 600;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #8a7b6a;
-      margin: 0 0 16px;
-      line-height: 1.35;
+      color: #6b7a6f;
+      margin: 0 0 20px;
+      line-height: 1.4;
     }
 
     body[data-theme="wellness-soft"] #hero-job-title {
       display: block !important;
       font-family: var(--font-body);
-      font-size: clamp(0.9375rem, 2.8vw, 1.0625rem);
+      font-size: clamp(0.875rem, 2.6vw, 1rem);
       font-weight: 600;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #8a7b6a;
-      margin: 0 0 16px;
-      line-height: 1.35;
+      color: #6b7a6f;
+      margin: 0 0 20px;
+      line-height: 1.4;
     }
 
     body[data-theme="wellness-soft"] #hero-professional-tagline {
       font-family: var(--font-display);
-      font-size: clamp(1.1875rem, 3.6vw, 1.375rem);
+      font-size: clamp(1.125rem, 3.4vw, 1.3125rem);
       font-weight: 500;
       font-style: italic;
-      line-height: 1.45;
-      color: #8a7b6a;
-      margin: 0 auto 4px;
-      max-width: 320px;
+      line-height: 1.5;
+      color: #6b7a6f;
+      margin: 0 auto 8px;
+      max-width: 300px;
       text-align: center;
     }
 
+    /* Carte premium — note Google */
+    body[data-theme="wellness-soft"] #hero-google-badge-compact.wellness-google-rating-card,
     body[data-theme="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline {
-      display: inline-flex !important;
+      display: flex !important;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 78%;
-      max-width: 300px;
-      min-height: 48px;
-      margin: 24px auto 28px;
-      padding: 12px 18px;
-      font-size: 0.8125rem;
+      gap: 4px;
+      width: auto;
+      min-width: 200px;
+      max-width: 280px;
+      min-height: 0;
+      margin: 28px auto 32px;
+      padding: 16px 24px;
+      font-size: 0.875rem;
       font-weight: 600;
-      line-height: 1.4;
-      color: var(--card-muted) !important;
-      background: #fffdf8 !important;
-      border: 1px solid #eadfce !important;
-      border-radius: 22px;
-      box-shadow: 0 6px 18px rgba(54, 49, 41, 0.06) !important;
+      line-height: 1.35;
+      color: var(--card-text) !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(217, 206, 194, 0.75) !important;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(53, 95, 74, 0.06) !important;
       white-space: normal;
     }
 
-    body[data-theme="wellness-soft"] .hero-google-rating-inline a {
-      color: var(--card-primary) !important;
+    body[data-theme="wellness-soft"] .wellness-google-score {
+      display: block;
+      font-size: 0.9375rem;
       font-weight: 600;
-      text-decoration: none;
+      color: #2a3d34;
+      letter-spacing: 0.01em;
     }
 
-    body[data-theme="wellness-soft"] .hero-google-rating-inline a:hover {
-      text-decoration: underline;
-      color: #3b6a52 !important;
+    body[data-theme="wellness-soft"] .wellness-google-count {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #6b7a6f;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-google-rating-card a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    body[data-theme="wellness-soft"] .hero-google-rating-inline a:hover .wellness-google-score {
+      color: var(--card-primary);
     }
 
     body[data-theme="wellness-soft"] #hero-recommend-count {
@@ -324,40 +366,46 @@
       display: none !important;
     }
 
-    /* CTA principal — vert profond premium, sans métal */
+    /* CTA principal — vert profond, large, premium */
     body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
       max-width: 100%;
-      min-height: 64px;
-      height: 64px;
-      margin: 0 0 28px;
-      padding: 0 20px;
+      min-height: 60px;
+      height: auto;
+      margin: 0 0 32px;
+      padding: 16px 24px;
       font-size: 0.8125rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      border-radius: 18px;
-      background: #2f5a45 !important;
+      border-radius: 16px;
+      background: #355f4a !important;
       color: #ffffff !important;
       border: none !important;
-      box-shadow: 0 8px 22px rgba(47, 90, 69, 0.18) !important;
+      box-shadow: 0 10px 28px rgba(53, 95, 74, 0.22) !important;
     }
 
     @media (hover: hover) {
       body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero:hover {
-        background: #3b6a52 !important;
+        background: #3f6d56 !important;
+        box-shadow: 0 12px 32px rgba(53, 95, 74, 0.28) !important;
       }
+    }
+
+    /* Masquer le bouton recommander isolé — remplacé par la carte premium */
+    body[data-theme="wellness-soft"] .compact-primary-cta-wrap {
+      display: none !important;
     }
 
     body[data-theme="wellness-soft"] .hero-compact-contact-row {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px 14px;
+      gap: 16px 12px;
       align-items: start;
-      margin: 0 0 26px;
+      margin: 0 0 28px;
       padding-top: 0;
       border-top: none;
     }
@@ -399,34 +447,7 @@
       display: none;
     }
 
-    body[data-theme="wellness-soft"] .compact-primary-cta-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin: 0 0 18px;
-      padding: 18px 20px;
-      background: #fffaf2;
-      border: 1px solid #eadfce;
-      border-radius: 20px;
-      box-shadow: 0 6px 18px rgba(54, 49, 41, 0.05);
-    }
-
-    body[data-theme="wellness-soft"] .compact-primary-cta-wrap > .btn-primary {
-      width: 100%;
-      min-height: 52px;
-      margin: 0;
-      border-radius: 16px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-
-    body[data-theme="wellness-soft"] .compact-discrete-row:empty,
-    body[data-theme="wellness-soft"] .compact-discrete-row:not(:has(button:not([hidden]))) {
-      display: none;
-    }
-
-    /* Boutons secondaires : icône ronde + libellé */
+    /* Actions rapides — 4 icônes uniformes */
     body[data-theme="wellness-soft"] #btn-call,
     body[data-theme="wellness-soft"] #btn-whatsapp,
     body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
@@ -436,7 +457,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
       min-width: 0;
       max-width: none;
@@ -447,7 +468,7 @@
       background: transparent !important;
       border: none !important;
       box-shadow: none !important;
-      color: #22352d !important;
+      color: #2a3d34 !important;
       text-decoration: none;
       overflow: visible;
     }
@@ -465,57 +486,68 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       flex-shrink: 0;
       border-radius: 999px;
       background: #ffffff;
-      border: 1px solid rgba(47, 90, 69, 0.12);
-      box-shadow: 0 5px 16px rgba(54, 49, 41, 0.07);
-      font-size: 1.32rem;
-      line-height: 1;
-      color: var(--card-primary);
+      border: 1px solid rgba(217, 206, 194, 0.8);
+      box-shadow: 0 4px 14px rgba(53, 95, 74, 0.07);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 22px 22px;
     }
 
     body[data-theme="wellness-soft"] #btn-call::before {
-      content: "📞";
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-whatsapp::before {
-      content: "💬";
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M9.2 9.5c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .5.4l.8 1.9c.1.2.1.4 0 .6l-.5.6c-.1.2-.1.3 0 .5.4.8 1.4 1.8 2.2 2.2.2.1.3.1.5 0l.6-.5c.2-.1.4-.1.6 0l1.9.8c.4.1.4.3.4.5v.6c0 .3 0 .5-.5.7-1 .4-2.2.2-3.8-.9-1.8-1.2-3.2-3.2-3.7-4.2-.6-1.2-.8-2.2-.4-3.2Z' fill='%23355F4A'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before {
-      content: "⭐";
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%23355F4A' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-discrete-partager::before {
-      content: "↗";
-      font-size: 1.1rem;
-      font-weight: 600;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13' stroke='%23355F4A' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath d='M3 12h11m-3-3.5L11 12l-3 3.5' stroke='%23355F4A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
 
     body[data-theme="wellness-soft"] #btn-call .btn-link-text,
-    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text,
-    body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
-    body[data-theme="wellness-soft"] #btn-discrete-partager {
-      font-size: 13px;
-      line-height: 1.2;
+    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text {
+      font-size: 12px;
+      line-height: 1.25;
       font-weight: 500;
       text-align: center;
-      color: #22352d;
+      color: #2a3d34;
       letter-spacing: 0;
       text-transform: none;
       white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-      max-width: 100%;
     }
 
-    body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
-      font-size: 13px;
-      line-height: 1.2;
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis,
+    body[data-theme="wellness-soft"] #btn-discrete-partager {
+      font-size: 0;
+      line-height: 0;
+    }
+
+    body[data-theme="wellness-soft"] #btn-cta-laisser-avis::after {
+      content: "Avis";
+      font-size: 12px;
+      line-height: 1.25;
       font-weight: 500;
+      text-align: center;
+      color: #2a3d34;
+    }
+
+    body[data-theme="wellness-soft"] #btn-discrete-partager::after {
+      content: "Partager";
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 500;
+      text-align: center;
+      color: #2a3d34;
     }
 
     /* Ajouter le contact — bouton large sous la ligne d’icônes */
@@ -623,21 +655,17 @@
     body[data-theme="wellness-soft"] .btn-share-card-main,
     body[data-theme="wellness-soft"] .recommend-id-confirm,
     body[data-theme="wellness-soft"] .demo-cta-btn {
-      background: linear-gradient(180deg, #3d6d54 0%, #2f5a45 100%) !important;
-      color: #faf9f6 !important;
-      border: 1px solid rgba(38, 72, 56, 0.28) !important;
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.18) inset,
-        0 6px 16px rgba(34, 68, 53, 0.14) !important;
+      background: #355f4a !important;
+      color: #ffffff !important;
+      border: none !important;
+      box-shadow: 0 8px 22px rgba(53, 95, 74, 0.18) !important;
     }
 
     body[data-theme="wellness-soft"] .btn-primary--reco-first:not([hidden]) {
-      background: #fdfaf4 !important;
+      background: #ffffff !important;
       color: var(--card-text) !important;
       border: 1px solid var(--card-border) !important;
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 4px 10px rgba(54, 49, 41, 0.07) !important;
+      box-shadow: 0 4px 14px rgba(53, 95, 74, 0.06) !important;
       opacity: 1;
     }
 
@@ -716,18 +744,99 @@
     body[data-theme="wellness-soft"] .feedback-recommend-nudge,
     body[data-theme="wellness-soft"] #recommend-block {
       margin-top: 0;
-      padding: 18px 20px;
-      background: #fffaf2;
-      border: 1px solid #eadfce;
+      padding: 20px 22px;
+      background: #ffffff;
+      border: 1px solid rgba(217, 206, 194, 0.75);
       border-radius: 20px;
-      box-shadow: 0 6px 18px rgba(54, 49, 41, 0.05);
+      box-shadow: 0 6px 20px rgba(53, 95, 74, 0.06);
+    }
+
+    /* Carte premium — recommandation */
+    body[data-theme="wellness-soft"] .wellness-premium-reco-card {
+      margin-bottom: 20px;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(53, 95, 74, 0.08);
+      color: #355f4a;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-texts {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-title {
+      font-family: var(--font-display);
+      font-size: 1.1875rem;
+      font-weight: 600;
+      color: #2a3d34;
+      margin: 0 0 4px;
+      line-height: 1.25;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-sub {
+      font-size: 0.875rem;
+      color: #6b7a6f;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    body[data-theme="wellness-soft"] .wellness-reco-action {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    body[data-theme="wellness-soft"] #recommend-share-options {
+      display: none;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact #panel-recommend {
+      display: block !important;
+      border: none;
+      padding: 0;
+      margin: 0 0 20px;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact #panel-recommend:not(.is-open) {
+      display: block !important;
+    }
+
+    body[data-theme="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) {
+      display: none !important;
+      margin: 0 !important;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact #recommend-block .post-share-title,
+    body[data-theme="wellness-soft"].public-card--compact #recommend-block .post-share-hint {
+      display: block !important;
     }
 
     body[data-theme="wellness-soft"] .post-share-title {
       font-family: var(--font-display);
       font-size: 1.125rem;
       font-weight: 600;
-      color: #18382d;
+      color: #2a3d34;
     }
 
     body[data-theme="wellness-soft"] .post-share-hint {
@@ -736,22 +845,37 @@
       line-height: 1.45;
     }
 
+    /* Carte QR premium */
     body[data-theme="wellness-soft"] .qr-wrap {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
-      gap: 16px;
+      gap: 18px;
       width: 100%;
       margin-top: 0;
-      margin-bottom: 12px;
-      padding: 20px;
-      border-radius: 22px;
-      background: #fffaf2;
-      border: 1px solid #eadfce;
-      box-shadow: 0 6px 18px rgba(54, 49, 41, 0.05);
+      margin-bottom: 16px;
+      padding: 20px 22px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid rgba(217, 206, 194, 0.75);
+      box-shadow: 0 6px 20px rgba(53, 95, 74, 0.06);
       color: var(--card-muted);
       text-align: left;
+    }
+
+    body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--default,
+    body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--compact-fr,
+    body[data-theme="wellness-soft"] .qr-copy-hint--default {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--wellness {
+      display: block !important;
+    }
+
+    body[data-theme="wellness-soft"] .qr-copy-hint--wellness {
+      display: block;
     }
 
     body[data-theme="wellness-soft"] .compact-acc-trigger {
@@ -773,14 +897,14 @@
     }
 
     body[data-theme="wellness-soft"] .qr-wrap img {
-      width: 72px;
-      height: 72px;
+      width: 76px;
+      height: 76px;
       flex-shrink: 0;
       border-radius: 12px;
-      border: 1px solid #e4d9c8;
+      border: 1px solid #d9cec2;
       background: #ffffff;
-      padding: 5px;
-      box-shadow: 0 3px 10px rgba(54, 49, 41, 0.06);
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(53, 95, 74, 0.06);
     }
 
     body[data-theme="wellness-soft"] .qr-copy {
@@ -789,37 +913,40 @@
       gap: 6px;
     }
 
-    body[data-theme="wellness-soft"] .qr-copy-main {
+    body[data-theme="wellness-soft"] .qr-copy-main--wellness {
       font-family: var(--font-display);
       font-size: 1.0625rem;
       font-weight: 600;
       line-height: 1.35;
-      color: #18382d;
+      color: #2a3d34;
     }
 
-    body[data-theme="wellness-soft"] .qr-copy-hint {
-      display: block;
+    body[data-theme="wellness-soft"] .qr-copy-hint--wellness {
       font-size: 0.8125rem;
       line-height: 1.4;
-      color: var(--card-muted);
+      color: #6b7a6f;
     }
 
     body[data-theme="wellness-soft"] .qr-powered-by {
-      margin-top: 4px;
+      margin-top: 2px;
+      margin-bottom: 8px;
       text-align: center;
-      font-size: 0.75rem;
-      color: #a39a8f;
-      opacity: 1;
+      font-size: 0.625rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: #b8afa4;
+      opacity: 0.65;
     }
 
     body[data-theme="wellness-soft"] .footer {
-      margin-top: 20px;
-      padding-top: 16px;
+      margin-top: 16px;
+      padding-top: 14px;
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       line-height: 1.5;
-      color: #a39a8f;
-      border-top: 1px solid #eadfce;
+      color: #b8afa4;
+      opacity: 0.7;
+      border-top: 1px solid rgba(217, 206, 194, 0.5);
       background: transparent;
     }
 
@@ -854,28 +981,24 @@
       color: var(--card-primary);
     }
 
-    body[data-theme="wellness-soft"] .premium-load-layer {
-      background: linear-gradient(165deg, rgba(253, 251, 247, 0.97), rgba(240, 234, 224, 0.98));
-    }
-
     body[data-theme="wellness-soft"] .skeleton-shimmer {
       background: rgba(154, 171, 140, 0.14);
     }
 
-    /* Surcharges mode compact FR — garder la respiration maquette bien-être */
+    /* Surcharges mode compact FR — layout premium bien-être */
     body[data-theme="wellness-soft"].public-card--compact .phone-inner {
       min-height: 0;
-      padding: 32px 30px 28px;
-      background: linear-gradient(180deg, #fffdf8 0%, #fbf8f1 52%, #f7f3eb 100%);
-      border: 1px solid #e4d9c8;
+      padding: 36px 28px 24px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f3ee 48%, #efe7de 100%);
+      border: 1px solid #d9cec2;
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.95) inset,
-        0 24px 56px rgba(54, 49, 41, 0.07),
-        0 8px 20px rgba(94, 130, 105, 0.04);
+        0 1px 0 rgba(255, 255, 255, 0.98) inset,
+        0 24px 56px rgba(53, 95, 74, 0.06),
+        0 8px 20px rgba(107, 122, 111, 0.04);
     }
 
     body[data-theme="wellness-soft"].public-card--compact .hero {
-      padding: 12px 0 4px;
+      padding: 44px 0 8px;
       margin-bottom: 0;
       background: transparent;
       border: none;
@@ -883,47 +1006,43 @@
     }
 
     body[data-theme="wellness-soft"].public-card--compact #person-name.hero-title {
-      font-size: clamp(2.625rem, 8vw, 3.25rem);
-      line-height: 1;
-      color: #18382d;
+      font-size: clamp(2.5rem, 8vw, 3.125rem);
+      line-height: 1.05;
+      color: #2a3d34;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .hero-professional-tagline {
       display: block !important;
       -webkit-line-clamp: unset;
-      max-width: 320px;
-      font-size: clamp(1.1875rem, 3.6vw, 1.375rem);
-      color: #8a7b6a;
+      max-width: 300px;
+      font-size: clamp(1.125rem, 3.4vw, 1.3125rem);
+      color: #6b7a6f;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .hero-company,
     body[data-theme="wellness-soft"].public-card--compact .hero-job-title {
-      font-size: clamp(0.9375rem, 2.8vw, 1.0625rem);
-      color: #8a7b6a;
+      font-size: clamp(0.875rem, 2.6vw, 1rem);
+      color: #6b7a6f;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .hero-google-rating-inline {
-      width: 78%;
-      max-width: 300px;
-      margin: 24px auto 28px;
-      border-radius: 22px;
+      width: auto;
+      min-width: 200px;
+      max-width: 280px;
+      margin: 28px auto 32px;
+      border-radius: 18px;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .btn-primary-contact-hero {
-      min-height: 64px;
-      height: 64px;
-      margin-bottom: 28px;
-      background: #2f5a45 !important;
-      box-shadow: 0 8px 22px rgba(47, 90, 69, 0.18) !important;
+      min-height: 60px;
+      margin-bottom: 32px;
+      background: #355f4a !important;
+      box-shadow: 0 10px 28px rgba(53, 95, 74, 0.22) !important;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .hero-compact-contact-row {
-      gap: 18px 14px;
-      margin-bottom: 26px;
-    }
-
-    body[data-theme="wellness-soft"].public-card--compact .compact-primary-cta-wrap {
-      margin-bottom: 18px;
+      gap: 16px 12px;
+      margin-bottom: 28px;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .main-grid {
@@ -954,21 +1073,26 @@
       margin-bottom: 18px;
     }
 
-    body[data-theme="wellness-soft"].public-card--compact .qr-wrap .qr-copy-main--default {
-      display: block !important;
-    }
-
+    body[data-theme="wellness-soft"].public-card--compact .qr-wrap .qr-copy-main--default,
     body[data-theme="wellness-soft"].public-card--compact .qr-wrap .qr-copy-main--compact-fr {
       display: none !important;
     }
 
-    body[data-theme="wellness-soft"].public-card--compact .qr-copy-hint {
-      display: block;
+    body[data-theme="wellness-soft"].public-card--compact .qr-wrap .qr-copy-main--wellness {
+      display: block !important;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .qr-copy-hint--default {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact .qr-copy-hint--wellness {
+      display: block !important;
     }
 
     body[data-theme="wellness-soft"].public-card--compact .btn-primary-stack-cta {
-      min-height: 52px;
-      border-radius: 16px;
+      min-height: 48px;
+      border-radius: 14px;
     }
 
     body[data-theme="wellness-soft"] .compact-acc-trigger--quote {
@@ -977,6 +1101,41 @@
 
     body[data-theme="wellness-soft"] .p12-soft-hint {
       display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call .btn-link-text,
+    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text {
+      font-size: 0;
+      line-height: 0;
+    }
+
+    body[data-theme="wellness-soft"] #btn-call .btn-link-text::after {
+      content: "Appeler";
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 500;
+      color: #2a3d34;
+    }
+
+    body[data-theme="wellness-soft"] #btn-whatsapp .btn-link-text::after {
+      content: "WhatsApp";
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 500;
+      color: #2a3d34;
+    }
+
+    body[data-theme="wellness-soft"].public-card--compact #panel-feedback:not(.is-open),
+    body[data-theme="wellness-soft"].public-card--compact #panel-share:not(.is-open),
+    body[data-theme="wellness-soft"].public-card--compact #panel-pay:not(.is-open),
+    body[data-theme="wellness-soft"] #slot-call-legacy,
+    body[data-theme="wellness-soft"] #legacy-contact-row {
+      display: none !important;
+    }
+
+    body[data-theme="wellness-soft"] .premium-load-layer {
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.98), rgba(247, 243, 238, 0.99));
+      border-radius: 0;
     }
 
 

@@ -8,13 +8,13 @@
   <meta property="og:description" content="Contact direct, avis clients et recommandation simplifiée." />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <link rel="manifest" href="/static/manifest.webmanifest">
-  <meta name="theme-color" content="#e8dfd1">
+  <meta name="theme-color" content="#f7f3ee">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="/static/public-card/components.css?v=sc-arch-1" />
-  <link rel="stylesheet" href="/static/public-card/themes.css?v=visual-theme-4-artisan" />
+  <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-1" />
 </head>
 <body class="is-loading" data-theme="">
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
@@ -418,13 +418,20 @@
           </div>
 
           <div class="acc-panel" id="panel-recommend" data-acc-panel="recommend">
-          <div class="post-share-block" id="recommend-block" style="display: none;">
-            <div class="post-share-title">Aidez quelqu’un autour de vous 👇</div>
-            <div class="post-share-hint" style="margin-bottom: 10px;">
-              Un simple partage peut faire la différence.
+          <div class="post-share-block wellness-premium-reco-card" id="recommend-block" style="display: none;">
+            <div class="wellness-reco-header">
+              <div class="wellness-reco-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 24s-8-5.2-8-12a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 22 12c0 6.8-8 12-8 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="wellness-reco-texts">
+                <div class="post-share-title wellness-reco-title">Recommander ce professionnel</div>
+                <div class="post-share-hint wellness-reco-sub">Vos recommandations comptent</div>
+              </div>
             </div>
-            <button class="btn-primary btn-share-card-main" id="btn-recommend-main" type="button">
-              Recommander ce professionnel 👍
+            <button class="btn-primary btn-share-card-main wellness-reco-action" id="btn-recommend-main" type="button">
+              Recommander
             </button>
             <div class="share-row share-row--secondary" id="recommend-share-options">
               <button class="btn-link" id="btn-recommend-copy" type="button">Copier le lien 🔗</button>
@@ -491,7 +498,9 @@
               <div class="qr-copy-main qr-copy-main--compact-fr" aria-hidden="true">
                 Scannez pour enregistrer le contact
               </div>
-              <div class="qr-copy-hint">À afficher sur vos devis, factures ou en point de vente.</div>
+              <div class="qr-copy-main qr-copy-main--wellness">Ajoutez cette carte à votre téléphone</div>
+              <div class="qr-copy-hint qr-copy-hint--default">À afficher sur vos devis, factures ou en point de vente.</div>
+              <div class="qr-copy-hint qr-copy-hint--wellness">Scannez le QR code</div>
             </div>
           </div>
           <div class="qr-powered-by" aria-label="Propulsé par Maavnica">
@@ -550,7 +559,7 @@
   </div>
 
   <script src="/static/maavnica-consent.js"></script>
-  <script src="/static/public-card/shared.js?v=visual-theme-final-1"></script>
+  <script src="/static/public-card/shared.js?v=wellness-premium-1"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});
