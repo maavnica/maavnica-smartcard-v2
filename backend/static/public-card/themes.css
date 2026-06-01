@@ -77,22 +77,22 @@
         0 8px 20px rgba(107, 122, 111, 0.04);
     }
 
-    /* Motif végétal — haut gauche, visible dès le 1er regard */
+    /* Motif végétal — line-art botanique fin (bien-être premium) */
     body[data-theme="wellness-soft"] .phone-inner::before {
       content: "";
       position: absolute;
-      top: 8px;
-      left: -34px;
-      width: 330px;
-      height: 330px;
+      top: 18px;
+      left: -18px;
+      width: 215px;
+      height: 215px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.38;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260' fill='none'%3E%3Cpath d='M24 228c26-58 56-110 90-152 20-24 46-48 78-64' stroke='%23A39E8E' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M70 148c34-10 60-36 84-66-26 54-68 82-108 90 18-16 32-20 24-24z' fill='%23B5AE9E' fill-opacity='.72'/%3E%3Cpath d='M92 102c30-22 64-40 100-44-18 40-54 66-98 74 14-24 24-28-2-30z' fill='%23C4BCAC' fill-opacity='.65'/%3E%3Cpath d='M114 70c28-18 58-32 90-28-18 36-54 56-100 62 12-20 18-26-6-34z' fill='%23A8A090' fill-opacity='.7'/%3E%3Cellipse cx='194' cy='52' rx='22' ry='36' transform='rotate(-28 194 52)' fill='%23BEB6A6' fill-opacity='.58'/%3E%3Cellipse cx='54' cy='162' rx='24' ry='38' transform='rotate(30 54 162)' fill='%23B0A898' fill-opacity='.52'/%3E%3Cellipse cx='132' cy='120' rx='16' ry='26' transform='rotate(-22 132 120)' fill='%23C8C0B0' fill-opacity='.44'/%3E%3Cellipse cx='108' cy='170' rx='14' ry='22' transform='rotate(18 108 170)' fill='%23B8B0A0' fill-opacity='.42'/%3E%3Cpath d='M138 64c10-14 24-24 40-28-4 18-18 32-36 36 6-12 8-14-4-8z' fill='%23C8C0B0' fill-opacity='.5'/%3E%3Cpath d='M166 94c10-18 24-32 40-40-8 22-24 38-46 42 4-12 8-14 6-2z' fill='%23B8B0A0' fill-opacity='.45'/%3E%3C/svg%3E");
+      opacity: 0.22;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none'%3E%3Cpath d='M32 178 C 48 150 58 126 70 98 C 82 70 102 46 134 30' stroke='%23D9CEC2' stroke-width='1.35' stroke-linecap='round'/%3E%3Cpath d='M70 98 C 88 104 105 116 122 136' stroke='%23D9CEC2' stroke-width='1.15' stroke-linecap='round' opacity='0.95'/%3E%3Cpath d='M92 84 C 104 76 112 77 116 90' stroke='%23D9CEC2' stroke-width='1.05' stroke-linecap='round' opacity='0.9'/%3E%3Cpath d='M104 122 C 116 116 126 118 130 130' stroke='%23D9CEC2' stroke-width='1.0' stroke-linecap='round' opacity='0.88'/%3E%3Cpath d='M116 62 C 126 66 138 66 148 54' stroke='%23D9CEC2' stroke-width='1.05' stroke-linecap='round' opacity='0.9'/%3E%3Cpath d='M118 66 C 112 72 112 80 122 82 C 130 79 131 72 118 66' stroke='%23D9CEC2' stroke-width='0.95' stroke-linecap='round' opacity='0.85'/%3E%3Cpath d='M50 150 C 62 146 70 138 76 128' stroke='%23D9CEC2' stroke-width='0.95' stroke-linecap='round' opacity='0.9'/%3E%3Cpath d='M65 130 C 72 126 78 127 82 133' stroke='%23D9CEC2' stroke-width='0.9' stroke-linecap='round' opacity='0.85'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: left top;
       background-size: contain;
-      transform: rotate(-8deg);
+      transform: rotate(-6deg);
     }
 
     body[data-theme="wellness-soft"] .phone-inner > * {
