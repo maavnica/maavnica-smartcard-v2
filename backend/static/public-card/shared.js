@@ -867,6 +867,33 @@
       document.body.classList.toggle("public-card--compact", !legacy);
     }
 
+    /** Recalcule thème + mode compact + slots DOM (fix affichage initial mobile). */
+    function refreshLayout(card) {
+      if (card) {
+        applyVisualThemeFromCard(card);
+        applyPublicCardUiMode(card);
+        initWellnessMinimalQuoteModal();
+      } else {
+        applyPublicCardUiMode(null);
+      }
+      syncCompactContactSlots();
+      void document.documentElement.offsetHeight;
+      try {
+        window.dispatchEvent(new Event("resize"));
+      } catch (e) {
+        var ev = document.createEvent("Event");
+        ev.initEvent("resize", true, true);
+        window.dispatchEvent(ev);
+      }
+    }
+
+    function scheduleLayoutRefresh(card) {
+      refreshLayout(card);
+      requestAnimationFrame(function () {
+        refreshLayout(card);
+      });
+    }
+
     function syncCompactContactSlots() {
       var compact = document.body.classList.contains("public-card--compact");
       var heroTel = document.getElementById("slot-call-wa-hero");
@@ -2238,6 +2265,7 @@
         syncCompactActionTriggers(showRecommendBlock);
         initPublicCardAccordion();
 
+        scheduleLayoutRefresh(card);
         revealCardShell();
       } catch (e) {
         hideRecommendTrustBanner();
@@ -2248,6 +2276,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+      scheduleLayoutRefresh(null);
       var q = document.getElementById("acc-trigger-quote");
       var b = document.getElementById("btn-primary-demande-contact");
       if (b) {
@@ -2272,4 +2301,8 @@
       var tp = document.getElementById("acc-trigger-pay");
       if (pd && tp) pd.addEventListener("click", function () { tp.click(); });
       loadCard();
+    });
+
+    window.addEventListener("load", function () {
+      scheduleLayoutRefresh(null);
     });

@@ -134,7 +134,7 @@ _BODY_DATA_THEME_ATTR_RE = re.compile(
     re.IGNORECASE,
 )
 # Pendant la phase de développement SmartCard, on privilégie la fraîcheur des assets au cache navigateur.
-PUBLIC_ASSET_VERSION = "2026-06-02-wellness-final"
+PUBLIC_ASSET_VERSION = "2026-06-02-mobile-layout-fix"
 
 _PUBLIC_CARD_STATIC_ASSET_RE = re.compile(
     r"(/static/(?:public-card/[\w.\-]+|maavnica-consent\.js|service-worker\.js))"

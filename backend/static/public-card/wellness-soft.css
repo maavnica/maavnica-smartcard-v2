@@ -70,6 +70,7 @@ body[data-theme|="wellness-soft"] {
   body[data-theme|="wellness-soft"] {
     padding: 28px 20px 36px;
   }
+}
 
 body[data-theme|="wellness-soft"] .phone-shell {
   width: 100%;
@@ -528,6 +529,7 @@ body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero:hover {
     background: linear-gradient(180deg, #3d7a5e 0%, #346552 100%) !important;
     box-shadow: 0 14px 36px rgba(45, 90, 69, 0.32) !important;
   }
+}
 
 /* Actions rapides — premium, aéré */
 body[data-theme|="wellness-soft"] .wellness-quick-actions ,
@@ -791,6 +793,7 @@ body[data-theme|="wellness-soft"] .wellness-premium-row:hover {
     border-color: rgba(45, 90, 69, 0.25);
     box-shadow: 0 10px 28px rgba(45, 90, 69, 0.1);
   }
+}
 
 body[data-theme|="wellness-soft"] .wellness-row-icon ,
 body[data-theme|="wellness-soft"] .wellness-row-icon {
