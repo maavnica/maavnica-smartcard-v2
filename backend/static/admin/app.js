@@ -19,25 +19,70 @@ function getVisualThemeSelect() {
   return document.getElementById("visual-theme");
 }
 
+/** Valeurs autorisées = Set statique + toutes les <option value> du select (évite repli si JS/HTML désynchronisés). */
+function getVisualThemeOptionValues() {
+  const values = new Set(ALLOWED_VISUAL_THEMES);
+  const el = getVisualThemeSelect();
+  if (el) {
+    for (const opt of el.options) {
+      const v = (opt.value || "").trim().toLowerCase();
+      if (v) values.add(v);
+    }
+  }
+  return values;
+}
+
+function visualThemeSelectHasOption(theme) {
+  const el = getVisualThemeSelect();
+  if (!el || !theme) return false;
+  const t = String(theme).trim().toLowerCase();
+  return Array.from(el.options).some((opt) => (opt.value || "").trim().toLowerCase() === t);
+}
+
+function ensureVisualThemeOption(theme) {
+  const el = getVisualThemeSelect();
+  if (!el || !theme) return;
+  const raw = String(theme).trim();
+  if (!raw || visualThemeSelectHasOption(raw)) return;
+  const opt = document.createElement("option");
+  opt.value = raw;
+  opt.textContent = raw + " (enregistré)";
+  el.appendChild(opt);
+}
+
 function normalizeVisualThemeValue(value) {
   const v = (value == null ? "" : String(value)).trim().toLowerCase();
-  return ALLOWED_VISUAL_THEMES.has(v) ? v : "wellness-soft";
+  if (!v) return "wellness-soft";
+  if (getVisualThemeOptionValues().has(v)) return v;
+  return "wellness-soft";
 }
 
 function setVisualThemeSelect(value) {
   const el = getVisualThemeSelect();
   if (!el) return;
-  const safe = normalizeVisualThemeValue(value);
+  const raw = value == null ? "" : String(value).trim();
+  if (!raw) {
+    el.value = "wellness-soft";
+    return;
+  }
+  ensureVisualThemeOption(raw);
+  const safe = normalizeVisualThemeValue(raw);
   el.value = safe;
   if (el.value !== safe) {
-    console.warn("LOAD visual_theme: valeur non reconnue, repli wellness-soft", value);
+    console.warn(
+      "LOAD visual_theme: option absente après normalisation, repli wellness-soft",
+      { fromApi: value, normalized: safe }
+    );
     el.value = "wellness-soft";
   }
 }
 
 function readVisualThemeFromSelect() {
   const el = getVisualThemeSelect();
-  return normalizeVisualThemeValue(el && el.value ? el.value : "wellness-soft");
+  if (!el || !el.value) return "wellness-soft";
+  const selected = String(el.value).trim();
+  if (visualThemeSelectHasOption(selected)) return selected;
+  return normalizeVisualThemeValue(selected);
 }
 
 function ensureAdminApiKey() {
@@ -480,7 +525,16 @@ async function saveCard() {
     }
 
     const data = await res.json();
+    console.log("SAVE response visual_theme", data.visual_theme);
     fillForm(data);
+    const expectedTheme = normalizeVisualThemeValue(data.visual_theme);
+    if (readVisualThemeFromSelect() !== expectedTheme) {
+      console.warn("SAVE: écart select/API après fillForm", {
+        api: data.visual_theme,
+        expected: expectedTheme,
+        select: readVisualThemeFromSelect(),
+      });
+    }
     showToast("Carte enregistrée.");
 
     await loadFeedbackAndQuotes();

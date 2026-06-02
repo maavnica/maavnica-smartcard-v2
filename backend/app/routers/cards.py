@@ -67,6 +67,7 @@ def _persist_visual_theme(db: Session, card: models.Card, theme: str) -> None:
     if hasattr(card, "visual_theme"):
         card.visual_theme = safe
     write_card_visual_theme(db, card.id, safe)
+    db.flush()
 
 
 def _card_payload(card: schemas.CardCreate) -> dict:
@@ -233,6 +234,8 @@ def create_card(
     )
 
     db.add(db_card)
+    db.flush()
+    _persist_visual_theme(db, db_card, _normalize_visual_theme(db_card.visual_theme))
     db.commit()
     db.refresh(db_card)
 

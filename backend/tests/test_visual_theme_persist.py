@@ -166,6 +166,28 @@ class VisualThemePersistTests(unittest.TestCase):
         finally:
             db.close()
 
+    def test_get_by_slug_returns_wellness_soft_minimal_after_put(self):
+        """Flux admin : PUT puis GET /by-slug (rechargement formulaire)."""
+        from app.main import app
+
+        client = TestClient(app)
+        headers = {"Authorization": "Bearer test-admin-key"}
+        put_payload = {
+            "company_name": "Co",
+            "slug": "demo-vt",
+            "plan_type": "demo",
+            "region": "fr",
+            "visual_theme": "wellness-soft-minimal",
+            "profile": "bien_etre",
+        }
+        put_r = client.put(f"/api/cards/{self.card_id}", json=put_payload, headers=headers)
+        self.assertEqual(put_r.status_code, 200, put_r.text)
+        self.assertEqual(put_r.json().get("visual_theme"), "wellness-soft-minimal")
+
+        get_r = client.get("/api/cards/by-slug/demo-vt", headers=headers)
+        self.assertEqual(get_r.status_code, 200, get_r.text)
+        self.assertEqual(get_r.json().get("visual_theme"), "wellness-soft-minimal")
+
     def test_get_public_card_injects_wellness_soft_minimal(self):
         from app.main import app
 
