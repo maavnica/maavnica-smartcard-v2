@@ -1270,6 +1270,26 @@
           }
         }
 
+        const cityRaw = (
+          (card.city != null && String(card.city).trim()) ||
+          (card.service_city != null && String(card.service_city).trim()) ||
+          ""
+        )
+          .toString()
+          .trim();
+        const cityEl = document.getElementById("hero-city");
+        if (cityEl) {
+          if (cityRaw && isWellnessVisualTheme()) {
+            cityEl.textContent = cityRaw;
+            cityEl.style.display = "";
+            cityEl.setAttribute("aria-hidden", "false");
+          } else {
+            cityEl.textContent = "";
+            cityEl.style.display = "none";
+            cityEl.setAttribute("aria-hidden", "true");
+          }
+        }
+
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
           if (rawHeroTitle) {

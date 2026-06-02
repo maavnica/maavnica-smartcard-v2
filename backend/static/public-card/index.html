@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="/static/public-card/components.css?v=sc-arch-1" />
   <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-3" />
   <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=wellness-minimal-mapping-1" />
-  <link rel="stylesheet" href="/static/public-card/wellness-soft-minimal.css?v=wellness-minimal-v1-0-header" />
+  <link rel="stylesheet" href="/static/public-card/wellness-soft-minimal.css?v=wellness-minimal-v1-1-final" />
 </head>
 <body class="is-loading" data-theme="">
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
@@ -116,6 +116,7 @@
             <div class="hero-title" id="person-name">Prénom Nom</div>
             <div class="hero-company" id="company-name">Votre entreprise</div>
             <div class="hero-job-title" id="hero-job-title" style="display: none;" aria-hidden="true"></div>
+            <div class="hero-city" id="hero-city" style="display: none;" aria-hidden="true"></div>
             <div class="hero-professional-tagline" id="hero-professional-tagline">
               Contact, avis et demande en 1 clic
             </div>
@@ -608,7 +609,7 @@
   </div>
 
   <script src="/static/maavnica-consent.js"></script>
-  <script src="/static/public-card/shared.js?v=wellness-minimal-modal-1"></script>
+  <script src="/static/public-card/shared.js?v=wellness-minimal-city-1"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});
