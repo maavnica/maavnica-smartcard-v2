@@ -7,9 +7,26 @@
     const INTERNAL_MODE_LS_KEY = "maavnica_internal_mode";
     const baseUrl = window.location.origin || "";
 
+    var ALLOWED_VISUAL_THEMES = new Set([
+      "wellness-soft",
+      "wellness-soft-minimal",
+      "artisan",
+      "real-estate",
+      "corporate",
+      "maavnica",
+    ]);
+
     function isWellnessVisualTheme() {
       var t = document.body.getAttribute("data-theme");
       return t === "wellness-soft" || t === "wellness-soft-minimal";
+    }
+
+    /** Aligne body[data-theme] sur card.visual_theme (SSR + API, dont wellness-soft-minimal). */
+    function applyVisualThemeFromCard(card) {
+      if (!/^\/c\/[^/]+/i.test(window.location.pathname || "")) return;
+      var vt = card && card.visual_theme != null ? String(card.visual_theme).trim().toLowerCase() : "";
+      if (!vt || !ALLOWED_VISUAL_THEMES.has(vt)) return;
+      document.body.setAttribute("data-theme", vt);
     }
 
     function deviceInternalModeActive() {
@@ -1022,11 +1039,13 @@
           trackCardEvent(analyticsSlug, "visit_from_recommendation");
         }
 
+        applyVisualThemeFromCard(card);
+
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
         CURRENT_PROFILE_CONFIG = PROFILE_CONFIG[profileKey];
 
-        /* FR /c/{slug} : habillage = data-theme (visual_theme SSR). Pas de classes theme-* legacy. */
+        /* FR /c/{slug} : habillage = data-theme (visual_theme SSR + API). Pas de classes theme-* legacy. */
         if (/^\/c\/[^/]+/i.test(window.location.pathname || "")) {
           stripLegacyThemeClasses();
         } else {

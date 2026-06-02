@@ -134,6 +134,56 @@ class VisualThemePersistTests(unittest.TestCase):
         finally:
             db.close()
 
+    def test_put_visual_theme_wellness_soft_minimal_persists(self):
+        from app.database import read_card_visual_theme_by_slug
+        from app.main import app
+
+        client = TestClient(app)
+        payload = {
+            "company_name": "Co",
+            "slug": "demo-vt",
+            "plan_type": "demo",
+            "region": "fr",
+            "visual_theme": "wellness-soft-minimal",
+            "profile": "bien_etre",
+        }
+        r = client.put(
+            f"/api/cards/{self.card_id}",
+            json=payload,
+            headers={"Authorization": "Bearer test-admin-key"},
+        )
+        self.assertEqual(r.status_code, 200, r.text)
+        self.assertEqual(r.json().get("visual_theme"), "wellness-soft-minimal")
+
+        db = self.SessionTest()
+        try:
+            from app.database import read_card_visual_theme
+
+            self.assertEqual(read_card_visual_theme(db, self.card_id), "wellness-soft-minimal")
+            self.assertEqual(
+                read_card_visual_theme_by_slug(db, "demo-vt"), "wellness-soft-minimal"
+            )
+        finally:
+            db.close()
+
+    def test_get_public_card_injects_wellness_soft_minimal(self):
+        from app.main import app
+
+        db = self.SessionTest()
+        try:
+            from app.database import write_card_visual_theme
+
+            card = db.query(Card).filter(Card.id == self.card_id).first()
+            write_card_visual_theme(db, card.id, "wellness-soft-minimal")
+            db.commit()
+        finally:
+            db.close()
+
+        client = TestClient(app)
+        r = client.get("/c/demo-vt", follow_redirects=False)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('data-theme="wellness-soft-minimal"', r.text)
+
     def test_get_public_card_injects_artisan(self):
         from app.main import app
 
