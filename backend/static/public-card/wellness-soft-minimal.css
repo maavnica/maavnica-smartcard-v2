@@ -56,14 +56,19 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-avatars {
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-avatar {
-  width: 23px;
-  height: 23px;
+  width: 26px;
+  height: 26px;
   margin-left: -6px;
   border-width: 1.5px;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-avatar:nth-child(3)::after {
   font-size: 0.54rem;
+}
+
+/* —— Badge praticien —— */
+body[data-theme="wellness-soft-minimal"] .hero-badges {
+  top: 8px;
 }
 
 /* —— 2. Actions rapides —— */
