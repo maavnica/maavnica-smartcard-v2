@@ -54,12 +54,12 @@ body[data-theme="wellness-soft"] {
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: "DM Sans", system-ui, sans-serif;
   --wellness-cream: #faf7f0;
-  --wellness-radius-card: 36px;
-  --wellness-radius-inner: 22px;
+  --wellness-radius-card: 32px;
+  --wellness-radius-inner: 18px;
 
   font-family: var(--font-body);
   color: var(--card-text);
-  padding: 24px 16px 32px;
+  padding: 18px 14px 24px;
   background-color: var(--bg-page);
   background-image:
     radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.9), transparent 65%),
@@ -68,7 +68,7 @@ body[data-theme="wellness-soft"] {
 
 @media (min-width: 480px) {
   body[data-theme="wellness-soft"] {
-    padding: 36px 24px 48px;
+    padding: 28px 20px 36px;
   }
 }
 
@@ -84,7 +84,7 @@ body[data-theme="wellness-soft"] .phone-inner {
   position: relative;
   overflow: hidden;
   min-height: 0;
-  padding: 44px 26px 24px;
+  padding: 32px 22px 16px;
   border-radius: var(--wellness-radius-card);
   background: var(--wellness-cream);
   border: 1px solid rgba(221, 210, 196, 0.9);
@@ -130,8 +130,8 @@ body[data-theme="wellness-soft"] .wellness-avatar-stage {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 4px auto 30px;
-  padding: 18px 0 6px;
+  margin: 0 auto 14px;
+  padding: 6px 0 0;
 }
 
 body[data-theme="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) {
@@ -152,7 +152,7 @@ body[data-theme="wellness-soft"] .admin-preview-badge {
 
 /* —— Hero —— */
 body[data-theme="wellness-soft"] .hero {
-  padding: 50px 0 0;
+  padding: 38px 0 0;
   margin: 0;
   text-align: center;
   background: transparent;
@@ -181,9 +181,9 @@ body[data-theme="wellness-soft"] .hero-badges {
 body[data-theme="wellness-soft"] .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  font-size: 0.6rem;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 0.56rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -230,24 +230,24 @@ body[data-theme="wellness-soft"] .hero-main-row {
   flex-direction: column;
   align-items: center;
   gap: 0;
-  padding-top: 12px;
+  padding-top: 4px;
 }
 
 body[data-theme="wellness-soft"] .hero-avatar {
   position: relative;
   z-index: 2;
-  width: clamp(152px, 38vw, 178px);
-  height: clamp(152px, 38vw, 178px);
+  width: clamp(128px, 34vw, 148px);
+  height: clamp(128px, 34vw, 148px);
   margin: 0;
-  padding: 6px;
+  padding: 5px;
   border-radius: 50%;
   background: #fff;
   border: none;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.95),
-    0 0 0 7px rgba(255, 255, 255, 0.88),
-    0 0 0 8px rgba(221, 210, 196, 0.45),
-    0 22px 52px rgba(45, 90, 69, 0.15);
+    0 0 0 5px rgba(255, 255, 255, 0.88),
+    0 0 0 6px rgba(221, 210, 196, 0.45),
+    0 16px 40px rgba(45, 90, 69, 0.14);
 }
 
 body[data-theme="wellness-soft"] .hero-avatar img,
@@ -266,7 +266,7 @@ body[data-theme="wellness-soft"] #hero-avatar-fallback {
   background: linear-gradient(145deg, #c5d4b8 0%, #7a9470 55%, #4d6b52 100%);
   color: #fffdf8;
   font-family: var(--font-display);
-  font-size: 3.1rem;
+  font-size: 2.65rem;
   font-weight: 500;
 }
 
@@ -276,12 +276,12 @@ body[data-theme="wellness-soft"] #hero-subline {
 
 body[data-theme="wellness-soft"] #person-name.hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.65rem, 9vw, 3.35rem);
+  font-size: clamp(2.35rem, 8.2vw, 2.95rem);
   font-weight: 600;
   line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--card-text);
-  margin: 0 0 12px;
+  margin: 0 0 6px;
 }
 
 body[data-theme="wellness-soft"] #company-name.hero-company {
@@ -291,23 +291,23 @@ body[data-theme="wellness-soft"] #company-name.hero-company {
 body[data-theme="wellness-soft"] #hero-job-title {
   display: block !important;
   font-family: var(--font-body);
-  font-size: clamp(0.78rem, 2.3vw, 0.88rem);
+  font-size: clamp(0.72rem, 2.1vw, 0.82rem);
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--card-muted);
-  margin: 0 0 18px;
+  margin: 0 0 8px;
 }
 
 body[data-theme="wellness-soft"] #hero-professional-tagline {
   font-family: var(--font-display);
-  font-size: clamp(1.15rem, 3.6vw, 1.35rem);
+  font-size: clamp(1.05rem, 3.2vw, 1.2rem);
   font-weight: 500;
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.4;
   color: var(--card-muted);
-  margin: 0 auto 4px;
-  max-width: 21rem;
+  margin: 0 auto 2px;
+  max-width: 20rem;
   text-wrap: balance;
 }
 
@@ -336,7 +336,7 @@ body[data-theme="wellness-soft"] #hero-google-badge-compact.hero-google-rating-i
   width: 100%;
   max-width: 100%;
   min-height: 0;
-  margin: 24px 0 28px;
+  margin: 12px 0 14px;
   padding: 0;
   background: transparent !important;
   border: none !important;
@@ -353,13 +353,13 @@ body[data-theme="wellness-soft"] .wellness-google-rating-card a {
 body[data-theme="wellness-soft"] .wellness-google-inner {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   width: 100%;
-  padding: 16px 18px;
+  padding: 10px 14px;
   background: #fff;
   border: 1px solid var(--card-border);
   border-radius: var(--wellness-radius-inner);
-  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+  box-shadow: 0 4px 16px rgba(45, 90, 69, 0.05);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-left {
@@ -371,27 +371,27 @@ body[data-theme="wellness-soft"] .wellness-google-left {
 }
 
 body[data-theme="wellness-soft"] .wellness-google-star-icon {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1;
   color: #e8a317;
 }
 
 body[data-theme="wellness-soft"] .wellness-google-score {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--card-text);
   letter-spacing: -0.02em;
 }
 
 body[data-theme="wellness-soft"] .wellness-google-label {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: var(--card-muted);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-count {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -404,20 +404,20 @@ body[data-theme="wellness-soft"] .wellness-google-avatars {
   flex-shrink: 0;
   align-items: center;
   margin-left: auto;
-  padding: 5px 8px 5px 12px;
+  padding: 3px 6px 3px 9px;
   background: rgba(45, 90, 69, 0.05);
   border-radius: 999px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar {
-  width: 34px;
-  height: 34px;
-  margin-left: -10px;
+  width: 28px;
+  height: 28px;
+  margin-left: -8px;
   border-radius: 50%;
-  border: 2.5px solid #fff;
+  border: 2px solid #fff;
   background: linear-gradient(145deg, #ddd6cc 0%, #a89f94 100%);
-  box-shadow: 0 2px 8px rgba(36, 53, 46, 0.12);
+  box-shadow: 0 2px 6px rgba(36, 53, 46, 0.1);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar:first-child {
@@ -454,9 +454,9 @@ body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  min-height: 58px;
-  margin: 0 0 30px;
-  padding: 16px 24px;
+  min-height: 50px;
+  margin: 0 0 16px;
+  padding: 13px 20px;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -493,9 +493,9 @@ body[data-theme="wellness-soft"] .wellness-quick-actions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
-  margin: 4px 0 28px;
-  padding: 18px 8px;
-  border-radius: 20px;
+  margin: 0 0 16px;
+  padding: 12px 6px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
@@ -529,8 +529,8 @@ body[data-theme="wellness-soft"] #btn-discrete-partager {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 0 12px !important;
+  gap: 8px;
+  padding: 0 8px !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -569,13 +569,13 @@ body[data-theme="wellness-soft"] #btn-whatsapp::before,
 body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before,
 body[data-theme="wellness-soft"] #btn-discrete-partager::before {
   content: "";
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 22px;
+  background-size: 20px;
   border: 1px solid rgba(221, 210, 196, 0.85);
   box-shadow:
     0 4px 16px rgba(45, 90, 69, 0.06),
@@ -653,7 +653,7 @@ body[data-theme="wellness-soft"] #btn-discrete-partager::after {
 body[data-theme="wellness-soft"] .main-grid {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
   margin-top: 0;
 }
 
@@ -691,7 +691,7 @@ body[data-theme="wellness-soft"] #panel-recommend:has(#recommend-block[style*="d
 
 /* Carte recommandation — ligne cliquable */
 body[data-theme="wellness-soft"] .wellness-premium-reco-card {
-  margin: 0 0 14px;
+  margin: 0 0 8px;
   padding: 0;
   background: transparent;
   border: none;
@@ -701,9 +701,9 @@ body[data-theme="wellness-soft"] .wellness-premium-reco-card {
 body[data-theme="wellness-soft"] .wellness-premium-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
-  padding: 18px 18px 18px 16px;
+  padding: 12px 14px 12px 12px;
   text-align: left;
   cursor: pointer;
   font: inherit;
@@ -727,9 +727,9 @@ body[data-theme="wellness-soft"] .wellness-row-icon {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   background: rgba(45, 90, 69, 0.08);
   color: var(--card-primary);
 }
@@ -741,16 +741,16 @@ body[data-theme="wellness-soft"] .wellness-row-body {
 
 body[data-theme="wellness-soft"] .wellness-reco-title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.08rem;
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--card-text);
-  margin: 0 0 3px;
+  margin: 0 0 2px;
 }
 
 body[data-theme="wellness-soft"] .wellness-reco-sub {
-  font-size: 0.84rem;
-  line-height: 1.4;
+  font-size: 0.78rem;
+  line-height: 1.35;
   color: var(--card-muted);
   margin: 0;
 }
@@ -775,10 +775,10 @@ body[data-theme="wellness-soft"] #recommend-share-options {
 body[data-theme="wellness-soft"] .qr-wrap.wellness-qr-card {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
   margin: 0;
-  padding: 18px 18px 18px 16px;
+  padding: 12px 14px 12px 12px;
   background: #fff;
   border: 1px solid var(--card-border);
   border-radius: var(--wellness-radius-inner);
@@ -787,11 +787,11 @@ body[data-theme="wellness-soft"] .qr-wrap.wellness-qr-card {
 }
 
 body[data-theme="wellness-soft"] .qr-wrap img {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
-  padding: 6px;
-  border-radius: 12px;
+  padding: 5px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: #fff;
   box-shadow: 0 4px 12px rgba(45, 90, 69, 0.06);
@@ -812,15 +812,15 @@ body[data-theme="wellness-soft"] .qr-copy-hint--default {
 body[data-theme="wellness-soft"] .qr-wrap .qr-copy-main--wellness {
   display: block !important;
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.28;
   color: var(--card-text);
 }
 
 body[data-theme="wellness-soft"] .qr-copy-hint--wellness {
   display: block !important;
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   color: var(--card-muted);
 }
 
@@ -836,7 +836,7 @@ body[data-theme="wellness-soft"] .wellness-qr-chevron {
 }
 
 body[data-theme="wellness-soft"] .qr-powered-by {
-  margin: 8px 0 4px;
+  margin: 4px 0 2px;
   text-align: center;
   font-size: 0.62rem;
   letter-spacing: 0.06em;
@@ -845,8 +845,8 @@ body[data-theme="wellness-soft"] .qr-powered-by {
 }
 
 body[data-theme="wellness-soft"] .footer {
-  margin-top: 14px;
-  padding-top: 14px;
+  margin-top: 8px;
+  padding-top: 10px;
   text-align: center;
   font-size: 0.65rem;
   color: #b5aa9e;
@@ -873,7 +873,7 @@ body[data-theme="wellness-soft"] .acc-panel {
   background: transparent;
   border: none;
   padding: 0;
-  margin: 0 0 14px;
+  margin: 0 0 8px;
 }
 
 body[data-theme="wellness-soft"] .quote-input,
@@ -910,7 +910,7 @@ body[data-theme="wellness-soft"] .recommend-id-panel {
 
 /* Overrides compact générique */
 body[data-theme="wellness-soft"].public-card--compact .phone-inner {
-  padding: 44px 26px 24px;
+  padding: 32px 22px 16px;
   border-radius: var(--wellness-radius-card);
   background: var(--wellness-cream);
 }
@@ -921,7 +921,7 @@ body[data-theme="wellness-soft"].public-card--compact .main-grid > .card-block:f
 
 body[data-theme="wellness-soft"].public-card--compact .main-grid > .card-block--quote {
   order: 2;
-  gap: 14px;
+  gap: 8px;
 }
 
 body[data-theme="wellness-soft"].public-card--compact .card-block--quote .qr-wrap {
