@@ -188,7 +188,7 @@ class PublicSlugHttpTests(unittest.TestCase):
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
         self.assertIn('data-theme="artisan"', r.text)
-        self.assertIn("themes.css?v=visual-theme-4-artisan", r.text)
+        self.assertIn("themes.css?v=2026-06-02-wellness-final", r.text)
 
     def test_c_demo2_visual_theme_artisan_injected(self):
         from fastapi.testclient import TestClient

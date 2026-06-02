@@ -133,11 +133,20 @@ _BODY_DATA_THEME_ATTR_RE = re.compile(
     r'data-theme\s*=\s*["\'][^"\']*["\']',
     re.IGNORECASE,
 )
-_THEMES_CSS_LINK_RE = re.compile(
-    r'(/static/public-card/themes\.css)\?v=[^"\']+',
+# Pendant la phase de développement SmartCard, on privilégie la fraîcheur des assets au cache navigateur.
+PUBLIC_ASSET_VERSION = "2026-06-02-wellness-final"
+
+_PUBLIC_CARD_STATIC_ASSET_RE = re.compile(
+    r"(/static/(?:public-card/[\w.\-]+|maavnica-consent\.js|service-worker\.js))"
+    r'(?:\?v=[^"\'>\s]+)?',
     re.IGNORECASE,
 )
-_PUBLIC_THEMES_CSS_VERSION = "wellness-premium-3"
+
+_PUBLIC_CARD_DEV_NO_CACHE_HEADERS = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
 
 
 def _inject_public_card_visual_theme(html: str, visual_theme: str) -> str:
@@ -158,15 +167,21 @@ def _inject_public_card_visual_theme(html: str, visual_theme: str) -> str:
     return html[: match.start()] + f"<body{new_attrs}>" + html[match.end() :]
 
 
-def _inject_themes_css_cache_version(html: str) -> str:
-    """Force le rechargement de themes.css (évite un CDN/navigateur bloqué sur sc-arch-1)."""
-    if _THEMES_CSS_LINK_RE.search(html):
-        return _THEMES_CSS_LINK_RE.sub(
-            rf"\1?v={_PUBLIC_THEMES_CSS_VERSION}",
-            html,
-            count=1,
-        )
-    return html
+def _inject_public_card_asset_cache_version(html: str) -> str:
+    """Réécrit ?v= sur tous les CSS/JS public-card (cache-bust global après déploiement)."""
+    return _PUBLIC_CARD_STATIC_ASSET_RE.sub(
+        rf"\1?v={PUBLIC_ASSET_VERSION}",
+        html,
+    )
+
+
+def _is_public_card_dev_static_path(path: str) -> bool:
+    """Assets SmartCard publics : pas de cache long en phase de développement."""
+    return (
+        path.startswith("/static/public-card/")
+        or path == "/static/maavnica-consent.js"
+        or path == "/static/service-worker.js"
+    )
 
 
 def _log_public_card_v3_assets() -> None:
@@ -376,8 +391,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
 
-        # Cache: immutable pour les assets statiques, no-store pour le reste
-        if request.url.path.startswith("/static/"):
+        # Cache : anti-cache pour les assets public-card (phase dev SmartCard) ;
+        # immutable pour les autres statiques ; no-store pour le HTML /c/{slug} et l’API.
+        path = request.url.path
+        if _is_public_card_dev_static_path(path):
+            for header, value in _PUBLIC_CARD_DEV_NO_CACHE_HEADERS.items():
+                response.headers[header] = value
+        elif path.startswith("/static/"):
             response.headers["Cache-Control"] = "public, max-age=604800, immutable"
         else:
             response.headers["Cache-Control"] = "no-store"
@@ -574,7 +594,7 @@ async def serve_public_card(request: Request, slug: str):
     # Thème visuel toujours injecté ; SEO/OG en best-effort (ne pas renvoyer le HTML brut).
     html = file_path.read_text(encoding="utf-8")
     html = _inject_public_card_visual_theme(html, injected_visual_theme)
-    html = _inject_themes_css_cache_version(html)
+    html = _inject_public_card_asset_cache_version(html)
     try:
         html = _inject_fr_public_card_head(html, seo_fr)
         _, _, og_title, og_desc = _fr_public_card_seo_strings(seo_fr)
@@ -590,7 +610,11 @@ async def serve_public_card(request: Request, slug: str):
         )
     except Exception:
         _public_card_log.exception("public_card og_injection_failed slug=%s", slug_norm)
-    return HTMLResponse(content=html, media_type="text/html; charset=utf-8")
+    return HTMLResponse(
+        content=html,
+        media_type="text/html; charset=utf-8",
+        headers=_PUBLIC_CARD_DEV_NO_CACHE_HEADERS,
+    )
 
 
 
