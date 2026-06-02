@@ -135,3 +135,139 @@ body[data-theme="wellness-soft-minimal"] .main-grid {
     margin-bottom: 0;
   }
 }
+
+/* —— 4. Formulaire contact — modal —— */
+body[data-theme="wellness-soft-minimal"] .card-block--quote #panel-quote {
+  display: none !important;
+}
+
+body[data-theme="wellness-soft-minimal"].wellness-quote-modal-open {
+  overflow: hidden;
+}
+
+.wellness-contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 480px) {
+  .wellness-contact-modal {
+    align-items: center;
+    padding: 20px 16px;
+  }
+}
+
+.wellness-contact-modal.is-open {
+  display: flex;
+}
+
+.wellness-contact-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 53, 46, 0.38);
+  backdrop-filter: blur(2px);
+}
+
+.wellness-contact-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  max-height: min(92vh, 640px);
+  overflow: auto;
+  margin: 0;
+  padding: 20px 18px 18px;
+  background: var(--wellness-cream, #faf7f0);
+  border: 1px solid var(--card-border, #ddd2c4);
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+    0 -8px 40px rgba(36, 53, 46, 0.14),
+    0 24px 56px rgba(45, 90, 69, 0.12);
+  animation: wellness-contact-modal-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (min-width: 480px) {
+  .wellness-contact-modal-dialog {
+    border-radius: 22px;
+    padding: 22px 20px 20px;
+  }
+}
+
+@keyframes wellness-contact-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wellness-contact-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(221, 210, 196, 0.9);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--card-muted, #6d7d72);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(45, 90, 69, 0.06);
+}
+
+.wellness-contact-modal-close:hover {
+  color: var(--card-text, #24352e);
+  border-color: rgba(45, 90, 69, 0.25);
+}
+
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #panel-quote {
+  display: block !important;
+  margin: 0;
+  padding: 0;
+}
+
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #quote-section-label {
+  display: block !important;
+  margin: 0 32px 14px 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--card-text);
+}
+
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #btn-send-quote {
+  border-radius: 14px;
+  min-height: 46px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host .hint {
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--card-muted);
+  margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wellness-contact-modal-dialog {
+    animation: none;
+  }
+}

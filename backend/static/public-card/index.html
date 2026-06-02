@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="/static/public-card/components.css?v=sc-arch-1" />
   <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-3" />
   <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=wellness-minimal-mapping-1" />
-  <link rel="stylesheet" href="/static/public-card/wellness-soft-minimal.css?v=wellness-minimal-finish-2" />
+  <link rel="stylesheet" href="/static/public-card/wellness-soft-minimal.css?v=wellness-minimal-modal-1" />
 </head>
 <body class="is-loading" data-theme="">
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
@@ -587,8 +587,28 @@
     </div>
   </div>
 
+  <div id="wellness-contact-modal" class="wellness-contact-modal" aria-hidden="true">
+    <div class="wellness-contact-modal-backdrop" data-wellness-contact-close tabindex="-1"></div>
+    <div
+      class="wellness-contact-modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="quote-section-label"
+    >
+      <button
+        type="button"
+        class="wellness-contact-modal-close"
+        data-wellness-contact-close
+        aria-label="Fermer"
+      >
+        ×
+      </button>
+      <div id="wellness-contact-modal-host"></div>
+    </div>
+  </div>
+
   <script src="/static/maavnica-consent.js"></script>
-  <script src="/static/public-card/shared.js?v=wellness-minimal-fix-1"></script>
+  <script src="/static/public-card/shared.js?v=wellness-minimal-modal-1"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/static/service-worker.js").catch(function () {});

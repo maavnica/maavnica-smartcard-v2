@@ -21,6 +21,56 @@
       return t === "wellness-soft" || t === "wellness-soft-minimal";
     }
 
+    function isWellnessMinimalTheme() {
+      return document.body.getAttribute("data-theme") === "wellness-soft-minimal";
+    }
+
+    function openWellnessContactModal() {
+      var modal = document.getElementById("wellness-contact-modal");
+      if (!modal) return;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("wellness-quote-modal-open");
+      var first = document.getElementById("quote-name");
+      if (first) {
+        window.setTimeout(function () {
+          first.focus();
+        }, 60);
+      }
+    }
+
+    function closeWellnessContactModal() {
+      var modal = document.getElementById("wellness-contact-modal");
+      if (!modal) return;
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("wellness-quote-modal-open");
+    }
+
+    function initWellnessMinimalQuoteModal() {
+      if (!isWellnessMinimalTheme()) return;
+      var modal = document.getElementById("wellness-contact-modal");
+      var host = document.getElementById("wellness-contact-modal-host");
+      var panel = document.getElementById("panel-quote");
+      if (!modal || !host || !panel || modal.getAttribute("data-wellness-init") === "1") return;
+      modal.setAttribute("data-wellness-init", "1");
+      host.appendChild(panel);
+      modal.querySelectorAll("[data-wellness-contact-close]").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+          e.preventDefault();
+          closeWellnessContactModal();
+        });
+      });
+      if (!modal.getAttribute("data-wellness-esc-bound")) {
+        modal.setAttribute("data-wellness-esc-bound", "1");
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && modal.classList.contains("is-open")) {
+            closeWellnessContactModal();
+          }
+        });
+      }
+    }
+
     /** Aligne body[data-theme] sur card.visual_theme (SSR + API, dont wellness-soft-minimal). */
     function applyVisualThemeFromCard(card) {
       if (!/^\/c\/[^/]+/i.test(window.location.pathname || "")) return;
@@ -1040,6 +1090,7 @@
         }
 
         applyVisualThemeFromCard(card);
+        initWellnessMinimalQuoteModal();
 
         const rawProfile = (card.profile || "").toLowerCase();
         const profileKey = PROFILE_CONFIG[rawProfile] ? rawProfile : "artisan";
@@ -1894,6 +1945,9 @@
               document.getElementById("quote-phone").value = "";
               document.getElementById("quote-email").value = "";
               document.getElementById("quote-message").value = "";
+              if (isWellnessMinimalTheme()) {
+                closeWellnessContactModal();
+              }
             } catch (e) {
               console.error(e);
               showToast("Impossible d’envoyer la demande.", true);
@@ -2176,7 +2230,15 @@
     document.addEventListener("DOMContentLoaded", function () {
       var q = document.getElementById("acc-trigger-quote");
       var b = document.getElementById("btn-primary-demande-contact");
-      if (b && q) b.addEventListener("click", function () { q.click(); });
+      if (b) {
+        b.addEventListener("click", function () {
+          if (isWellnessMinimalTheme()) {
+            openWellnessContactModal();
+          } else if (q) {
+            q.click();
+          }
+        });
+      }
       var fa = document.getElementById("btn-cta-laisser-avis");
       var tf = document.getElementById("acc-trigger-feedback");
       if (fa && tf) fa.addEventListener("click", function () { tf.click(); });
