@@ -1,6 +1,6 @@
-/* Variante — Wellness Premium Minimal (sans motif floral).
+/* Variante — Wellness Premium Minimal v1.0 (sans motif floral).
  * Styles partagés : wellness-soft.css via body[data-theme|="wellness-soft"].
- * Finitions proportions et densité — wellness-soft-minimal uniquement. */
+ * Finitions proportions — wellness-soft-minimal uniquement. */
 
 body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
   display: none !important;
@@ -14,50 +14,102 @@ body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
   pointer-events: none !important;
 }
 
-/* —— 1. Carte Google —— */
+/* —— 1. Header — badge, photo, identité —— */
+body[data-theme="wellness-soft-minimal"] .hero-badges {
+  top: 21px;
+}
+
+body[data-theme="wellness-soft-minimal"] .hero {
+  padding-top: 56px;
+}
+
+body[data-theme="wellness-soft-minimal"] .hero-main-row {
+  padding-top: 10px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-avatar-stage {
+  margin-top: 0;
+  margin-bottom: 6px;
+  padding-top: 0;
+}
+
+body[data-theme="wellness-soft-minimal"] .hero-avatar {
+  width: clamp(116px, 30.6vw, 134px);
+  height: clamp(116px, 30.6vw, 134px);
+}
+
+body[data-theme="wellness-soft-minimal"] #hero-avatar-fallback {
+  font-size: 2.38rem;
+}
+
+/* —— 2. Bloc identité —— */
+body[data-theme="wellness-soft-minimal"] #person-name.hero-title {
+  margin-bottom: 2px;
+}
+
+body[data-theme="wellness-soft-minimal"] #hero-job-title {
+  margin-bottom: 4px;
+}
+
+/* —— 3. Carte Google —— */
 body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.wellness-google-rating-card,
 body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.hero-google-rating-inline {
-  margin: 10px 0 12px;
+  margin: 9px 0 11px;
+  align-items: stretch;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-inner {
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 16px;
+  padding: 14px 20px;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-left {
   align-items: center;
-  gap: 7px;
+  align-self: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
   line-height: 1;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-star-icon {
-  font-size: 1.17rem;
+  font-size: 1.29rem;
   line-height: 1;
+  align-self: center;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-score {
-  font-size: 1.47rem;
+  font-size: 1.62rem;
   font-weight: 700;
   line-height: 1;
+  align-self: center;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-label {
-  font-size: 0.89rem;
+  font-size: 0.98rem;
   font-weight: 700;
   line-height: 1.15;
+  align-self: center;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-count {
   font-size: 0.76rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
   align-self: center;
-  line-height: 1.2;
+  line-height: 1;
+  margin-right: 4px;
+  flex-shrink: 0;
 }
 
 body[data-theme="wellness-soft-minimal"] .wellness-google-avatars {
+  display: flex;
+  align-items: center;
   align-self: center;
+  flex-shrink: 0;
+  margin-left: 4px;
   padding: 2px 5px 2px 8px;
 }
 
@@ -72,28 +124,9 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-avatar:nth-child(3)::a
   font-size: 0.54rem;
 }
 
-/* —— Badge praticien —— */
-body[data-theme="wellness-soft-minimal"] .hero-badges {
-  top: 21px;
-}
-
-/* —— Photo / nom —— */
-body[data-theme="wellness-soft-minimal"] .wellness-avatar-stage {
-  margin-bottom: 8px;
-  padding-top: 2px;
-}
-
-body[data-theme="wellness-soft-minimal"] #person-name.hero-title {
-  margin-bottom: 3px;
-}
-
-body[data-theme="wellness-soft-minimal"] #hero-job-title {
-  margin-bottom: 5px;
-}
-
-/* —— 2. Actions rapides —— */
+/* —— 4. Actions rapides —— */
 body[data-theme="wellness-soft-minimal"] .wellness-quick-actions {
-  margin: 0 0 8px;
+  margin: 0 0 7px;
   padding: 4px 5px;
 }
 
@@ -119,6 +152,7 @@ body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::after,
 body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::after {
   font-size: 0.68rem;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 body[data-theme="wellness-soft-minimal"] #btn-call::after,
@@ -127,31 +161,63 @@ body[data-theme="wellness-soft-minimal"] #btn-whatsapp::after {
   height: 76%;
 }
 
-/* —— 3. Densité globale & mobile —— */
+/* —— 5. Bloc recommandation —— */
+body[data-theme="wellness-soft-minimal"] .wellness-premium-reco-card {
+  margin: 0 0 7px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-row-body.wellness-reco-texts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-reco-title,
+body[data-theme="wellness-soft-minimal"] #wellness-reco-title-text {
+  display: block;
+  width: 100%;
+  margin: 0 0 2px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-reco-sub,
+body[data-theme="wellness-soft-minimal"] #wellness-reco-sub-text {
+  display: block;
+  width: 100%;
+  margin: 0;
+  line-height: 1.35;
+}
+
+body[data-theme="wellness-soft-minimal"] #hint-post-prestation {
+  display: none !important;
+}
+
+/* —— 6. Densité globale —— */
 body[data-theme="wellness-soft-minimal"] .main-grid {
-  gap: 6px;
+  gap: 5px;
+}
+
+body[data-theme="wellness-soft-minimal"] .acc-panel {
+  margin: 0 0 7px;
 }
 
 @media (max-width: 479px) {
   body[data-theme="wellness-soft-minimal"] {
-    padding: 16px 14px 20px;
+    padding: 15px 14px 18px;
   }
 
   body[data-theme="wellness-soft-minimal"] .phone-inner,
   body[data-theme="wellness-soft-minimal"].public-card--compact .phone-inner {
-    padding: 28px 20px 14px;
+    padding: 26px 20px 13px;
   }
 
   body[data-theme="wellness-soft-minimal"] .hero {
-    padding-top: 32px;
-  }
-
-  body[data-theme="wellness-soft-minimal"] #person-name.hero-title {
-    margin-bottom: 3px;
-  }
-
-  body[data-theme="wellness-soft-minimal"] #hero-job-title {
-    margin-bottom: 5px;
+    padding-top: 50px;
   }
 
   body[data-theme="wellness-soft-minimal"] #hero-professional-tagline {
@@ -159,7 +225,7 @@ body[data-theme="wellness-soft-minimal"] .main-grid {
   }
 }
 
-/* —— 4. Formulaire contact — modal —— */
+/* —— Formulaire contact — modal —— */
 body[data-theme="wellness-soft-minimal"] .card-block--quote #panel-quote {
   display: none !important;
 }
