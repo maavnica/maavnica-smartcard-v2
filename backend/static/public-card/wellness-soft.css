@@ -2,15 +2,12 @@
 .wellness-deco-branch,
 .wellness-cta-leaf,
 .wellness-qr-chevron,
-.wellness-reco-wellness-only {
+.wellness-reco-wellness-only,
+.wellness-avatar-stage {
   display: none;
 }
 
 body:not([data-theme="wellness-soft"]) .wellness-reco-default {
-  display: block;
-}
-
-body[data-theme="wellness-soft"] .wellness-deco-branch {
   display: block;
 }
 
@@ -21,6 +18,14 @@ body[data-theme="wellness-soft"] .wellness-qr-chevron {
 
 body[data-theme="wellness-soft"] .wellness-reco-wellness-only {
   display: flex;
+}
+
+body[data-theme="wellness-soft"] .wellness-avatar-stage {
+  display: flex;
+}
+
+body[data-theme="wellness-soft"] .wellness-deco-branch {
+  display: block;
 }
 
 body[data-theme="wellness-soft"] .wellness-reco-default {
@@ -79,7 +84,7 @@ body[data-theme="wellness-soft"] .phone-inner {
   position: relative;
   overflow: hidden;
   min-height: 0;
-  padding: 40px 26px 22px;
+  padding: 44px 26px 24px;
   border-radius: var(--wellness-radius-card);
   background: var(--wellness-cream);
   border: 1px solid rgba(221, 210, 196, 0.9);
@@ -108,14 +113,25 @@ body[data-theme="wellness-soft"] .phone-inner::before {
 
 body[data-theme="wellness-soft"] .wellness-deco-branch {
   position: absolute;
-  top: -12px;
-  left: -18px;
-  width: min(58%, 220px);
+  top: 50%;
+  left: 50%;
+  width: min(115%, 290px);
   height: auto;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.42;
-  transform: rotate(-4deg);
+  opacity: 0.36;
+  transform: translate(calc(-72% - 8px), calc(-58% + 6px)) rotate(-11deg);
+  transform-origin: 70% 80%;
+}
+
+body[data-theme="wellness-soft"] .wellness-avatar-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 4px auto 30px;
+  padding: 18px 0 6px;
 }
 
 body[data-theme="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) {
@@ -136,7 +152,7 @@ body[data-theme="wellness-soft"] .admin-preview-badge {
 
 /* —— Hero —— */
 body[data-theme="wellness-soft"] .hero {
-  padding: 44px 0 0;
+  padding: 50px 0 0;
   margin: 0;
   text-align: center;
   background: transparent;
@@ -183,24 +199,55 @@ body[data-theme="wellness-soft"] #hero-badge-left {
   display: none !important;
 }
 
+/* Badge univers bien-être (le métier reste sous le nom) */
+body[data-theme="wellness-soft"] #hero-badge-right-icon {
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+body[data-theme="wellness-soft"] #hero-badge-right-icon::before {
+  content: "🌿";
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+body[data-theme="wellness-soft"] #hero-badge-right-text {
+  font-size: 0;
+  line-height: 0;
+}
+
+body[data-theme="wellness-soft"] #hero-badge-right-text::after {
+  content: "PRATICIEN BIEN-ÊTRE";
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+}
+
 body[data-theme="wellness-soft"] .hero-main-row {
   flex-direction: column;
   align-items: center;
   gap: 0;
-  padding-top: 8px;
+  padding-top: 12px;
 }
 
 body[data-theme="wellness-soft"] .hero-avatar {
-  width: clamp(128px, 32vw, 148px);
-  height: clamp(128px, 32vw, 148px);
-  margin: 8px auto 24px;
-  padding: 5px;
+  position: relative;
+  z-index: 2;
+  width: clamp(152px, 38vw, 178px);
+  height: clamp(152px, 38vw, 178px);
+  margin: 0;
+  padding: 6px;
   border-radius: 50%;
   background: #fff;
   border: none;
   box-shadow:
-    0 0 0 1px rgba(221, 210, 196, 0.6),
-    0 16px 40px rgba(45, 90, 69, 0.12);
+    0 0 0 1px rgba(255, 255, 255, 0.95),
+    0 0 0 7px rgba(255, 255, 255, 0.88),
+    0 0 0 8px rgba(221, 210, 196, 0.45),
+    0 22px 52px rgba(45, 90, 69, 0.15);
 }
 
 body[data-theme="wellness-soft"] .hero-avatar img,
@@ -219,7 +266,7 @@ body[data-theme="wellness-soft"] #hero-avatar-fallback {
   background: linear-gradient(145deg, #c5d4b8 0%, #7a9470 55%, #4d6b52 100%);
   color: #fffdf8;
   font-family: var(--font-display);
-  font-size: 2.75rem;
+  font-size: 3.1rem;
   font-weight: 500;
 }
 
@@ -234,7 +281,7 @@ body[data-theme="wellness-soft"] #person-name.hero-title {
   line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--card-text);
-  margin: 0 0 14px;
+  margin: 0 0 12px;
 }
 
 body[data-theme="wellness-soft"] #company-name.hero-company {
@@ -244,12 +291,12 @@ body[data-theme="wellness-soft"] #company-name.hero-company {
 body[data-theme="wellness-soft"] #hero-job-title {
   display: block !important;
   font-family: var(--font-body);
-  font-size: clamp(0.8rem, 2.4vw, 0.9rem);
+  font-size: clamp(0.78rem, 2.3vw, 0.88rem);
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--card-muted);
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 
 body[data-theme="wellness-soft"] #hero-professional-tagline {
@@ -257,10 +304,10 @@ body[data-theme="wellness-soft"] #hero-professional-tagline {
   font-size: clamp(1.15rem, 3.6vw, 1.35rem);
   font-weight: 500;
   font-style: italic;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--card-muted);
-  margin: 0 auto 6px;
-  max-width: 20rem;
+  margin: 0 auto 4px;
+  max-width: 21rem;
   text-wrap: balance;
 }
 
@@ -289,7 +336,7 @@ body[data-theme="wellness-soft"] #hero-google-badge-compact.hero-google-rating-i
   width: 100%;
   max-width: 100%;
   min-height: 0;
-  margin: 22px 0 26px;
+  margin: 24px 0 28px;
   padding: 0;
   background: transparent !important;
   border: none !important;
@@ -306,9 +353,9 @@ body[data-theme="wellness-soft"] .wellness-google-rating-card a {
 body[data-theme="wellness-soft"] .wellness-google-inner {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  padding: 14px 18px;
+  padding: 16px 18px;
   background: #fff;
   border: 1px solid var(--card-border);
   border-radius: var(--wellness-radius-inner);
@@ -355,17 +402,22 @@ body[data-theme="wellness-soft"] .wellness-google-count {
 body[data-theme="wellness-soft"] .wellness-google-avatars {
   display: flex;
   flex-shrink: 0;
+  align-items: center;
   margin-left: auto;
+  padding: 5px 8px 5px 12px;
+  background: rgba(45, 90, 69, 0.05);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar {
-  width: 28px;
-  height: 28px;
-  margin-left: -8px;
+  width: 34px;
+  height: 34px;
+  margin-left: -10px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  background: linear-gradient(135deg, #d4cfc6 0%, #a89f94 100%);
-  box-shadow: 0 2px 6px rgba(36, 53, 46, 0.1);
+  border: 2.5px solid #fff;
+  background: linear-gradient(145deg, #ddd6cc 0%, #a89f94 100%);
+  box-shadow: 0 2px 8px rgba(36, 53, 46, 0.12);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar:first-child {
@@ -373,11 +425,26 @@ body[data-theme="wellness-soft"] .wellness-google-avatar:first-child {
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar:nth-child(2) {
-  background: linear-gradient(135deg, #c8d4c0 0%, #8fa386 100%);
+  background: linear-gradient(145deg, #d0ddc8 0%, #8fa386 100%);
 }
 
 body[data-theme="wellness-soft"] .wellness-google-avatar:nth-child(3) {
-  background: linear-gradient(135deg, #d8cfc0 0%, #b5a696 100%);
+  background: linear-gradient(145deg, #e0d5c4 0%, #b5a696 100%);
+  position: relative;
+}
+
+body[data-theme="wellness-soft"] .wellness-google-avatar:nth-child(3)::after {
+  content: "+";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(36, 53, 46, 0.55);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
 }
 
 /* CTA principal */
@@ -388,7 +455,7 @@ body[data-theme="wellness-soft"] .hero .btn-primary-contact-hero {
   gap: 10px;
   width: 100%;
   min-height: 58px;
-  margin: 0 0 28px;
+  margin: 0 0 30px;
   padding: 16px 24px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -421,13 +488,16 @@ body[data-theme="wellness-soft"] .wellness-cta-leaf {
   }
 }
 
-/* Actions rapides + séparateurs */
+/* Actions rapides — premium, aéré */
 body[data-theme="wellness-soft"] .wellness-quick-actions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
-  margin: 0 0 24px;
-  padding: 4px 0;
+  margin: 4px 0 28px;
+  padding: 18px 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 body[data-theme="wellness-soft"] .hero-compact-tel-row,
@@ -459,24 +529,34 @@ body[data-theme="wellness-soft"] #btn-discrete-partager {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 0 8px !important;
+  gap: 12px;
+  padding: 0 12px !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   color: var(--card-text) !important;
 }
 
-body[data-theme="wellness-soft"] #btn-call,
-body[data-theme="wellness-soft"] #btn-whatsapp,
-body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
-  border-right: 1px solid rgba(109, 125, 114, 0.22);
-}
-
 body[data-theme="wellness-soft"] #btn-call::after,
 body[data-theme="wellness-soft"] #btn-whatsapp::after {
-  content: none;
-  display: none;
+  content: "";
+  position: absolute;
+  top: 14%;
+  right: 0;
+  width: 1px;
+  height: 72%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(109, 125, 114, 0.22) 20%,
+    rgba(109, 125, 114, 0.22) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+body[data-theme="wellness-soft"] #btn-cta-laisser-avis {
+  box-shadow: inset -1px 0 0 rgba(109, 125, 114, 0.14) !important;
 }
 
 body[data-theme="wellness-soft"] #btn-call .btn-link-leading,
@@ -489,15 +569,17 @@ body[data-theme="wellness-soft"] #btn-whatsapp::before,
 body[data-theme="wellness-soft"] #btn-cta-laisser-avis::before,
 body[data-theme="wellness-soft"] #btn-discrete-partager::before {
   content: "";
-  width: 54px;
-  height: 54px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 22px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 4px 14px rgba(45, 90, 69, 0.07);
+  border: 1px solid rgba(221, 210, 196, 0.85);
+  box-shadow:
+    0 4px 16px rgba(45, 90, 69, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 body[data-theme="wellness-soft"] #btn-call::before {
@@ -828,7 +910,7 @@ body[data-theme="wellness-soft"] .recommend-id-panel {
 
 /* Overrides compact générique */
 body[data-theme="wellness-soft"].public-card--compact .phone-inner {
-  padding: 40px 26px 22px;
+  padding: 44px 26px 24px;
   border-radius: var(--wellness-radius-card);
   background: var(--wellness-cream);
 }

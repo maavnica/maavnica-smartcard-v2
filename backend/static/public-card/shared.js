@@ -1290,10 +1290,6 @@
           badgeLeftText.textContent = CURRENT_PROFILE_CONFIG.badgeLeftText || badgeLeftText.textContent;
           badgeRightIcon.textContent = CURRENT_PROFILE_CONFIG.badgeRightIcon || "📍";
           badgeRightText.textContent = CURRENT_PROFILE_CONFIG.badgeRightText || badgeRightText.textContent;
-          if (document.body.getAttribute("data-theme") === "wellness-soft" && rawJobTitle) {
-            badgeRightIcon.textContent = "";
-            badgeRightText.textContent = rawJobTitle.toUpperCase();
-          }
         }
 
         const mainBlockTitle = document.getElementById("block-title-main");

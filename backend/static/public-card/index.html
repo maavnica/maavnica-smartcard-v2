@@ -15,7 +15,7 @@
 
   <link rel="stylesheet" href="/static/public-card/components.css?v=sc-arch-1" />
   <link rel="stylesheet" href="/static/public-card/themes.css?v=wellness-premium-3" />
-  <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=wellness-premium-3" />
+  <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=wellness-premium-v2" />
 </head>
 <body class="is-loading" data-theme="">
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
@@ -25,15 +25,6 @@
   </div>
   <div class="phone-shell">
     <div class="phone-inner">
-      <img
-        class="wellness-deco-branch"
-        src="/static/public-card/wellness-branch.svg"
-        alt=""
-        width="220"
-        height="220"
-        decoding="async"
-        aria-hidden="true"
-      />
       <div class="notch"></div>
       <div class="status-bar" id="status-bar">
         <span class="status-bar-inner">
@@ -102,10 +93,21 @@
         </div>
 
         <div class="hero-main-row">
-          <div class="hero-avatar" aria-label="Photo ou logo">
-            <img id="hero-avatar-img" alt="" width="84" height="84" />
-            <span id="hero-avatar-placeholder" aria-hidden="true"></span>
-            <span id="hero-avatar-fallback"></span>
+          <div class="wellness-avatar-stage">
+            <img
+              class="wellness-deco-branch"
+              src="/static/public-card/wellness-branch.svg"
+              alt=""
+              width="260"
+              height="260"
+              decoding="async"
+              aria-hidden="true"
+            />
+            <div class="hero-avatar" aria-label="Photo ou logo">
+              <img id="hero-avatar-img" alt="" width="84" height="84" />
+              <span id="hero-avatar-placeholder" aria-hidden="true"></span>
+              <span id="hero-avatar-fallback"></span>
+            </div>
           </div>
 
           <div class="hero-texts">
