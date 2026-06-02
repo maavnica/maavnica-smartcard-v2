@@ -1,5 +1,5 @@
 /* Variante test — Wellness Premium sans motif floral.
- * Hérite de tous les styles wellness-soft (sélecteurs partagés).
+ * Styles partagés : wellness-soft.css via body[data-theme|="wellness-soft"].
  * Seule différence : suppression totale de la branche botanique. */
 
 body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
