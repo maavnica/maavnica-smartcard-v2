@@ -7,6 +7,11 @@
     const INTERNAL_MODE_LS_KEY = "maavnica_internal_mode";
     const baseUrl = window.location.origin || "";
 
+    function isWellnessVisualTheme() {
+      var t = document.body.getAttribute("data-theme");
+      return t === "wellness-soft" || t === "wellness-soft-minimal";
+    }
+
     function deviceInternalModeActive() {
       try {
         return localStorage.getItem(INTERNAL_MODE_LS_KEY) === "1";
@@ -1049,7 +1054,7 @@
 
         if (personEl) personEl.textContent = primaryName;
 
-        if (document.body.getAttribute("data-theme") === "wellness-soft") {
+        if (isWellnessVisualTheme()) {
           const recoTitleEl = document.getElementById("wellness-reco-title-text");
           if (recoTitleEl) {
             const firstName = (primaryName || "").trim().split(/\s+/)[0];
@@ -1317,7 +1322,7 @@
         const wellnessCtaLabel = document.getElementById("wellness-cta-label");
         if (
           btnPrimaryContact &&
-          document.body.getAttribute("data-theme") === "wellness-soft"
+          isWellnessVisualTheme()
         ) {
           var wellnessCta = rawFormTitle;
           if (!wellnessCta) {
@@ -1389,7 +1394,7 @@
           const hasCount = typeof count === "number" && !isNaN(count) && count >= 0;
           const reviewLink = (card.google_review_link || "").toString().trim();
           const isWellnessTheme =
-            document.body.getAttribute("data-theme") === "wellness-soft";
+            isWellnessVisualTheme();
           ["hero-google-badge", "hero-google-badge-compact"].forEach(function (id) {
             const googleBadgeEl = document.getElementById(id);
             if (!googleBadgeEl) return;
@@ -2055,7 +2060,7 @@
           const btnFeedbackRecommendNudge = document.getElementById("btn-feedback-recommend-nudge");
           if (btnFeedbackRecommendNudge && (btnRecommendMain || btnRecommendWellnessRow)) {
             btnFeedbackRecommendNudge.onclick = function () {
-              if (btnRecommendWellnessRow && document.body.getAttribute("data-theme") === "wellness-soft") {
+              if (btnRecommendWellnessRow && isWellnessVisualTheme()) {
                 btnRecommendWellnessRow.click();
               } else if (btnRecommendMain) {
                 btnRecommendMain.click();

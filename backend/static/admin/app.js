@@ -8,6 +8,7 @@ const NON_EXPIRING_PLANS = new Set(["demo", "lifetime"]);
 /** Valeurs techniques visual_theme (seul champ qui pilote data-theme CSS). */
 const ALLOWED_VISUAL_THEMES = new Set([
   "wellness-soft",
+  "wellness-soft-minimal",
   "artisan",
   "real-estate",
   "corporate",

@@ -18,6 +18,7 @@ _ALLOWED_REGIONS = {"fr", "latam"}
 _ALLOWED_CARD_THEMES = {"classic", "experience"}
 _ALLOWED_VISUAL_THEMES = {
     "wellness-soft",
+    "wellness-soft-minimal",
     "artisan",
     "real-estate",
     "corporate",
@@ -192,7 +193,7 @@ class CardBase(BaseModel):
     def _visual_theme_validate(cls, v: str) -> str:
         if v not in _ALLOWED_VISUAL_THEMES:
             raise ValueError(
-                "visual_theme invalide (wellness-soft, artisan, real-estate, corporate, maavnica)."
+                "visual_theme invalide (wellness-soft, wellness-soft-minimal, artisan, real-estate, corporate, maavnica)."
             )
         return v
 
@@ -391,7 +392,7 @@ class CardUpdate(BaseModel):
             return None
         if v not in _ALLOWED_VISUAL_THEMES:
             raise ValueError(
-                "visual_theme invalide (wellness-soft, artisan, real-estate, corporate, maavnica)."
+                "visual_theme invalide (wellness-soft, wellness-soft-minimal, artisan, real-estate, corporate, maavnica)."
             )
         return v
 
