@@ -1,6 +1,6 @@
-/* Variante test — Wellness Premium sans motif floral.
+/* Variante — Wellness Premium Minimal (sans motif floral).
  * Styles partagés : wellness-soft.css via body[data-theme|="wellness-soft"].
- * Seule différence : suppression totale de la branche botanique. */
+ * Finitions proportions et densité — wellness-soft-minimal uniquement. */
 
 body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
   display: none !important;
@@ -12,4 +12,121 @@ body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
   opacity: 0 !important;
   overflow: hidden !important;
   pointer-events: none !important;
+}
+
+/* —— 1. Carte Google —— */
+body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.wellness-google-rating-card,
+body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.hero-google-rating-inline {
+  margin: 10px 0 12px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-inner {
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-left {
+  align-items: center;
+  gap: 7px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-star-icon {
+  font-size: 1.06rem;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-score {
+  font-size: 1.34rem;
+  font-weight: 700;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-label {
+  font-size: 0.81rem;
+  font-weight: 600;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-count {
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatars {
+  align-self: center;
+  padding: 2px 5px 2px 8px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatar {
+  width: 23px;
+  height: 23px;
+  margin-left: -6px;
+  border-width: 1.5px;
+}
+
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatar:nth-child(3)::after {
+  font-size: 0.54rem;
+}
+
+/* —— 2. Actions rapides —— */
+body[data-theme="wellness-soft-minimal"] .wellness-quick-actions {
+  margin: 0 0 14px;
+  padding: 10px 6px;
+}
+
+body[data-theme="wellness-soft-minimal"] #btn-call,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp,
+body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis,
+body[data-theme="wellness-soft-minimal"] #btn-discrete-partager {
+  gap: 6px;
+  padding: 0 6px !important;
+}
+
+body[data-theme="wellness-soft-minimal"] #btn-call::before,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp::before,
+body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::before,
+body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::before {
+  width: 44px;
+  height: 44px;
+}
+
+body[data-theme="wellness-soft-minimal"] #btn-call::after,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp::after {
+  top: 12%;
+  height: 76%;
+}
+
+/* —— 3. Densité globale & mobile —— */
+body[data-theme="wellness-soft-minimal"] .wellness-avatar-stage {
+  margin-bottom: 12px;
+  padding-top: 4px;
+}
+
+body[data-theme="wellness-soft-minimal"] .main-grid {
+  gap: 6px;
+}
+
+@media (max-width: 479px) {
+  body[data-theme="wellness-soft-minimal"] {
+    padding: 16px 14px 20px;
+  }
+
+  body[data-theme="wellness-soft-minimal"] .phone-inner,
+  body[data-theme="wellness-soft-minimal"].public-card--compact .phone-inner {
+    padding: 28px 20px 14px;
+  }
+
+  body[data-theme="wellness-soft-minimal"] .hero {
+    padding-top: 32px;
+  }
+
+  body[data-theme="wellness-soft-minimal"] #person-name.hero-title {
+    margin-bottom: 5px;
+  }
+
+  body[data-theme="wellness-soft-minimal"] #hero-job-title {
+    margin-bottom: 6px;
+  }
+
+  body[data-theme="wellness-soft-minimal"] #hero-professional-tagline {
+    margin-bottom: 0;
+  }
 }
