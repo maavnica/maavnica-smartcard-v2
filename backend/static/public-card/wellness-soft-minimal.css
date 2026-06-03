@@ -2,7 +2,7 @@
  * Styles partagés : wellness-soft.css via body[data-theme|="wellness-soft"].
  * Finitions proportions — wellness-soft-minimal uniquement. */
 
-body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
+body[data-theme="wellness-soft-minimal"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch {
   display: none !important;
   visibility: hidden !important;
   width: 0 !important;
@@ -15,7 +15,7 @@ body[data-theme="wellness-soft-minimal"] .wellness-deco-branch {
 }
 
 /* —— 1. Header — sans badge, photo et identité remontées —— */
-body[data-theme="wellness-soft-minimal"] .hero-badges {
+body[data-theme="wellness-soft-minimal"] .hero-badges , body[data-theme="artisan"] .hero-badges {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -25,43 +25,43 @@ body[data-theme="wellness-soft-minimal"] .hero-badges {
   pointer-events: none !important;
 }
 
-body[data-theme="wellness-soft-minimal"] .hero {
+body[data-theme="wellness-soft-minimal"] .hero , body[data-theme="artisan"] .hero {
   padding-top: 50px;
 }
 
-body[data-theme="wellness-soft-minimal"] .hero-main-row {
+body[data-theme="wellness-soft-minimal"] .hero-main-row , body[data-theme="artisan"] .hero-main-row {
   padding-top: 6px;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-avatar-stage {
+body[data-theme="wellness-soft-minimal"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage {
   margin-top: -9px;
   margin-bottom: 6px;
   padding-top: 0;
 }
 
-body[data-theme="wellness-soft-minimal"] .hero-texts {
+body[data-theme="wellness-soft-minimal"] .hero-texts , body[data-theme="artisan"] .hero-texts {
   margin-top: -4px;
 }
 
-body[data-theme="wellness-soft-minimal"] .hero-avatar {
+body[data-theme="wellness-soft-minimal"] .hero-avatar , body[data-theme="artisan"] .hero-avatar {
   width: clamp(116px, 30.6vw, 134px);
   height: clamp(116px, 30.6vw, 134px);
 }
 
-body[data-theme="wellness-soft-minimal"] #hero-avatar-fallback {
+body[data-theme="wellness-soft-minimal"] #hero-avatar-fallback , body[data-theme="artisan"] #hero-avatar-fallback {
   font-size: 2.38rem;
 }
 
 /* —— 2. Bloc identité —— */
-body[data-theme="wellness-soft-minimal"] #person-name.hero-title {
+body[data-theme="wellness-soft-minimal"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title {
   margin-bottom: 2px;
 }
 
-body[data-theme="wellness-soft-minimal"] #hero-job-title {
+body[data-theme="wellness-soft-minimal"] #hero-job-title , body[data-theme="artisan"] #hero-job-title {
   margin-bottom: 3px;
 }
 
-body[data-theme="wellness-soft-minimal"] #hero-city {
+body[data-theme="wellness-soft-minimal"] #hero-city , body[data-theme="artisan"] #hero-city {
   display: block;
   font-family: var(--font-body);
   font-size: clamp(0.64rem, 1.85vw, 0.74rem);
@@ -73,19 +73,19 @@ body[data-theme="wellness-soft-minimal"] #hero-city {
   margin: 1px 0 5px;
 }
 
-body[data-theme="wellness-soft-minimal"] #hero-city[aria-hidden="true"] {
+body[data-theme="wellness-soft-minimal"] #hero-city[aria-hidden="true"] , body[data-theme="artisan"] #hero-city[aria-hidden="true"] {
   display: none !important;
   margin: 0;
 }
 
 /* —— 3. Carte Google —— */
-body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.wellness-google-rating-card,
-body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.hero-google-rating-inline {
+body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.wellness-google-rating-card, body[data-theme="artisan"] #hero-google-badge-compact.wellness-google-rating-card,
+body[data-theme="wellness-soft-minimal"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline {
   margin: 9px 0 11px;
   align-items: stretch;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-inner {
+body[data-theme="wellness-soft-minimal"] .wellness-google-inner , body[data-theme="artisan"] .wellness-google-inner {
   align-items: center;
   gap: 8px;
   min-height: 50px;
@@ -93,7 +93,7 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-inner {
   box-sizing: border-box;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-left {
+body[data-theme="wellness-soft-minimal"] .wellness-google-left , body[data-theme="artisan"] .wellness-google-left {
   display: inline-flex;
   align-items: center;
   align-self: center;
@@ -105,20 +105,20 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-left {
   line-height: 1;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-star-icon {
+body[data-theme="wellness-soft-minimal"] .wellness-google-star-icon , body[data-theme="artisan"] .wellness-google-star-icon {
   font-size: 1.29rem;
   line-height: 1;
   align-self: center;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-score {
+body[data-theme="wellness-soft-minimal"] .wellness-google-score , body[data-theme="artisan"] .wellness-google-score {
   font-size: 1.62rem;
   font-weight: 700;
   line-height: 1;
   align-self: center;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-label {
+body[data-theme="wellness-soft-minimal"] .wellness-google-label , body[data-theme="artisan"] .wellness-google-label {
   font-size: 0.98rem;
   font-weight: 700;
   line-height: 1;
@@ -127,7 +127,7 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-label {
   flex-shrink: 0;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-count {
+body[data-theme="wellness-soft-minimal"] .wellness-google-count , body[data-theme="artisan"] .wellness-google-count {
   font-size: 0.76rem;
   font-weight: 700;
   display: flex;
@@ -140,7 +140,7 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-count {
   white-space: nowrap;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-avatars {
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatars , body[data-theme="artisan"] .wellness-google-avatars {
   display: flex;
   align-items: center;
   align-self: center;
@@ -149,60 +149,60 @@ body[data-theme="wellness-soft-minimal"] .wellness-google-avatars {
   padding: 1px 4px 1px 7px;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-avatar {
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatar , body[data-theme="artisan"] .wellness-google-avatar {
   width: 26px;
   height: 26px;
   margin-left: -6px;
   border-width: 1.5px;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-google-avatar:nth-child(3)::after {
+body[data-theme="wellness-soft-minimal"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after {
   font-size: 0.54rem;
 }
 
 /* —— 4. Actions rapides —— */
-body[data-theme="wellness-soft-minimal"] .wellness-quick-actions {
+body[data-theme="wellness-soft-minimal"] .wellness-quick-actions , body[data-theme="artisan"] .wellness-quick-actions {
   margin: 0 0 5px;
   padding: 0 5px 1px;
 }
 
-body[data-theme="wellness-soft-minimal"] #btn-call,
-body[data-theme="wellness-soft-minimal"] #btn-whatsapp,
-body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis,
-body[data-theme="wellness-soft-minimal"] #btn-discrete-partager {
+body[data-theme="wellness-soft-minimal"] #btn-call, body[data-theme="artisan"] #btn-call,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp, body[data-theme="artisan"] #btn-whatsapp,
+body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis, body[data-theme="artisan"] #btn-cta-laisser-avis,
+body[data-theme="wellness-soft-minimal"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager {
   gap: 3px;
   padding: 0 4px !important;
 }
 
-body[data-theme="wellness-soft-minimal"] #btn-call::before,
-body[data-theme="wellness-soft-minimal"] #btn-whatsapp::before,
-body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::before,
-body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::before {
+body[data-theme="wellness-soft-minimal"] #btn-call::before, body[data-theme="artisan"] #btn-call::before,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp::before, body[data-theme="artisan"] #btn-whatsapp::before,
+body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::before, body[data-theme="artisan"] #btn-cta-laisser-avis::before,
+body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before {
   width: 44px;
   height: 44px;
 }
 
-body[data-theme="wellness-soft-minimal"] #btn-call .btn-link-text::after,
-body[data-theme="wellness-soft-minimal"] #btn-whatsapp .btn-link-text::after,
-body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::after,
-body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::after {
+body[data-theme="wellness-soft-minimal"] #btn-call .btn-link-text::after, body[data-theme="artisan"] #btn-call .btn-link-text::after,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp .btn-link-text::after, body[data-theme="artisan"] #btn-whatsapp .btn-link-text::after,
+body[data-theme="wellness-soft-minimal"] #btn-cta-laisser-avis::after, body[data-theme="artisan"] #btn-cta-laisser-avis::after,
+body[data-theme="wellness-soft-minimal"] #btn-discrete-partager::after , body[data-theme="artisan"] #btn-discrete-partager::after {
   font-size: 0.68rem;
   line-height: 1.1;
   white-space: nowrap;
 }
 
-body[data-theme="wellness-soft-minimal"] #btn-call::after,
-body[data-theme="wellness-soft-minimal"] #btn-whatsapp::after {
+body[data-theme="wellness-soft-minimal"] #btn-call::after, body[data-theme="artisan"] #btn-call::after,
+body[data-theme="wellness-soft-minimal"] #btn-whatsapp::after , body[data-theme="artisan"] #btn-whatsapp::after {
   top: 12%;
   height: 76%;
 }
 
 /* —— 5. Bloc recommandation —— */
-body[data-theme="wellness-soft-minimal"] .wellness-premium-reco-card {
+body[data-theme="wellness-soft-minimal"] .wellness-premium-reco-card , body[data-theme="artisan"] .wellness-premium-reco-card {
   margin: 0 0 7px;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-row-body.wellness-reco-texts {
+body[data-theme="wellness-soft-minimal"] .wellness-row-body.wellness-reco-texts , body[data-theme="artisan"] .wellness-row-body.wellness-reco-texts {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -210,8 +210,8 @@ body[data-theme="wellness-soft-minimal"] .wellness-row-body.wellness-reco-texts 
   min-width: 0;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-reco-title,
-body[data-theme="wellness-soft-minimal"] #wellness-reco-title-text {
+body[data-theme="wellness-soft-minimal"] .wellness-reco-title, body[data-theme="artisan"] .wellness-reco-title,
+body[data-theme="wellness-soft-minimal"] #wellness-reco-title-text , body[data-theme="artisan"] #wellness-reco-title-text {
   display: block;
   width: 100%;
   margin: 0 0 2px;
@@ -221,52 +221,52 @@ body[data-theme="wellness-soft-minimal"] #wellness-reco-title-text {
   text-overflow: ellipsis;
 }
 
-body[data-theme="wellness-soft-minimal"] .wellness-reco-sub,
-body[data-theme="wellness-soft-minimal"] #wellness-reco-sub-text {
+body[data-theme="wellness-soft-minimal"] .wellness-reco-sub, body[data-theme="artisan"] .wellness-reco-sub,
+body[data-theme="wellness-soft-minimal"] #wellness-reco-sub-text , body[data-theme="artisan"] #wellness-reco-sub-text {
   display: block;
   width: 100%;
   margin: 0;
   line-height: 1.35;
 }
 
-body[data-theme="wellness-soft-minimal"] #hint-post-prestation {
+body[data-theme="wellness-soft-minimal"] #hint-post-prestation , body[data-theme="artisan"] #hint-post-prestation {
   display: none !important;
 }
 
 /* —— 6. Densité globale —— */
-body[data-theme="wellness-soft-minimal"] .main-grid {
+body[data-theme="wellness-soft-minimal"] .main-grid , body[data-theme="artisan"] .main-grid {
   gap: 5px;
 }
 
-body[data-theme="wellness-soft-minimal"] .acc-panel {
+body[data-theme="wellness-soft-minimal"] .acc-panel , body[data-theme="artisan"] .acc-panel {
   margin: 0 0 7px;
 }
 
 @media (max-width: 479px) {
-  body[data-theme="wellness-soft-minimal"] {
+  body[data-theme="wellness-soft-minimal"] , body[data-theme="artisan"] {
     padding: 15px 14px 18px;
   }
 
-  body[data-theme="wellness-soft-minimal"] .phone-inner,
-  body[data-theme="wellness-soft-minimal"].public-card--compact .phone-inner {
+  body[data-theme="wellness-soft-minimal"] .phone-inner, body[data-theme="artisan"] .phone-inner,
+  body[data-theme="wellness-soft-minimal"].public-card--compact .phone-inner , body[data-theme="artisan"].public-card--compact .phone-inner {
     padding: 26px 20px 13px;
   }
 
-  body[data-theme="wellness-soft-minimal"] .hero {
+  body[data-theme="wellness-soft-minimal"] .hero , body[data-theme="artisan"] .hero {
     padding-top: 44px;
   }
 
-  body[data-theme="wellness-soft-minimal"] #hero-professional-tagline {
+  body[data-theme="wellness-soft-minimal"] #hero-professional-tagline , body[data-theme="artisan"] #hero-professional-tagline {
     margin-bottom: 0;
   }
 }
 
 /* —— Formulaire contact — modal —— */
-body[data-theme="wellness-soft-minimal"] .card-block--quote #panel-quote {
+body[data-theme="wellness-soft-minimal"] .card-block--quote #panel-quote , body[data-theme="artisan"] .card-block--quote #panel-quote {
   display: none !important;
 }
 
-body[data-theme="wellness-soft-minimal"].wellness-quote-modal-open {
+body[data-theme="wellness-soft-minimal"].wellness-quote-modal-open , body[data-theme="artisan"].wellness-quote-modal-open {
   overflow: hidden;
 }
 
@@ -359,13 +359,13 @@ body[data-theme="wellness-soft-minimal"].wellness-quote-modal-open {
   border-color: rgba(45, 90, 69, 0.25);
 }
 
-body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #panel-quote {
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #panel-quote , body[data-theme="artisan"] #wellness-contact-modal-host #panel-quote {
   display: block !important;
   margin: 0;
   padding: 0;
 }
 
-body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #quote-section-label {
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #quote-section-label , body[data-theme="artisan"] #wellness-contact-modal-host #quote-section-label {
   display: block !important;
   margin: 0 32px 14px 0;
   font-family: var(--font-display);
@@ -376,7 +376,7 @@ body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #quote-sec
   color: var(--card-text);
 }
 
-body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #btn-send-quote {
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #btn-send-quote , body[data-theme="artisan"] #wellness-contact-modal-host #btn-send-quote {
   border-radius: 14px;
   min-height: 46px;
   font-size: 0.78rem;
@@ -384,7 +384,7 @@ body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host #btn-send-
   letter-spacing: 0.06em;
 }
 
-body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host .hint {
+body[data-theme="wellness-soft-minimal"] #wellness-contact-modal-host .hint , body[data-theme="artisan"] #wellness-contact-modal-host .hint {
   font-size: 0.68rem;
   line-height: 1.45;
   color: var(--card-muted);

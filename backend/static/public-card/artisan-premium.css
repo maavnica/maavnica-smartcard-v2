@@ -1,154 +1,125 @@
-/* Artisan Premium — finitions portrait & layout (base wellness-soft-minimal).
- * Dépend de wellness-soft.css (.wellness-avatar-stage masqué par défaut hors wellness).
+/* Artisan Premium — palette & teintes uniquement
+ * Structure / densité / composants : wellness-soft.css + wellness-soft-minimal.css
  * Actif via body[data-theme="artisan"]. */
 
-/* —— Portrait centré (réintègre la photo masquée par wellness-soft.css) —— */
-body[data-theme="artisan"] .wellness-deco-branch {
-  display: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
+/* —— Tokens palette finale —— */
+body[data-theme="artisan"] {
+  --card-bg: #f7f3ed;
+  --card-surface: #fcfaf7;
+  --card-primary: #8a6b4d;
+  --card-accent: #8a6b4d;
+  --card-accent-wood: #8a6b4d;
+  --card-text: #2d2d2d;
+  --card-muted: #6f665c;
+  --card-border: #ddd2c4;
+  --card-shadow: 0 24px 56px rgba(92, 64, 51, 0.08);
+  --bg-page: #f7f3ed;
+  --primary: #5c4033;
+  --primary-soft: rgba(92, 64, 51, 0.12);
+  --text-main: #2d2d2d;
+  --text-soft: #6f665c;
+  --border-soft: rgba(138, 107, 77, 0.22);
+  --wellness-cream: #fcfaf7;
+  --artisan-cta: #5c4033;
+  --artisan-cta-hover: #523628;
+
+  font-family: var(--font-body);
+  color: var(--card-text);
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.92), transparent 65%),
+    linear-gradient(180deg, #faf6f0 0%, #f0ebe3 100%);
 }
 
-body[data-theme="artisan"] .wellness-avatar-stage {
-  position: relative;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto 10px;
-  padding: 4px 0 0;
-}
-
-body[data-theme="artisan"] .hero-main-row {
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0;
-  padding-top: 4px;
-}
-
-body[data-theme="artisan"] .hero {
-  padding-top: 18px;
-}
-
-body[data-theme="artisan"] .hero-badges {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
-}
-
-body[data-theme="artisan"].public-card--compact .hero-badges {
-  display: none !important;
-}
-
-body[data-theme="artisan"] .hero-avatar {
-  position: relative;
-  z-index: 2;
-  width: clamp(108px, 28vw, 124px);
-  height: clamp(108px, 28vw, 124px);
-  margin: 0 auto;
-  padding: 4px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #fff;
-  border: none;
+body[data-theme="artisan"] .phone-inner {
+  background: var(--wellness-cream);
+  border-color: rgba(221, 210, 196, 0.9);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.95),
-    0 0 0 5px rgba(245, 240, 232, 0.9),
-    0 0 0 6px rgba(213, 205, 192, 0.45),
-    0 14px 36px rgba(58, 48, 38, 0.14);
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    var(--card-shadow);
 }
 
-body[data-theme="artisan"] .hero-avatar img,
-body[data-theme="artisan"] #hero-avatar-fallback,
-body[data-theme="artisan"] #hero-avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
+body[data-theme="artisan"] .phone-inner::after {
+  opacity: 0.28;
+}
+
+/* —— Accroche 2 lignes (hero_title + hero_text) — hauteur légèrement réduite —— */
+body[data-theme="artisan"] #hero-professional-tagline {
+  white-space: pre-line;
+  line-height: 1.32;
+  font-size: clamp(1.02rem, 3.05vw, 1.16rem);
+}
+
+body[data-theme="artisan"] .wellness-cta-leaf {
+  display: none !important;
+}
+
+/* —— Portrait : anneau plus fin, ombre brune —— */
+body[data-theme="artisan"] .hero-avatar {
+  padding: 4px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.96),
+    0 0 0 3px rgba(252, 250, 247, 0.94),
+    0 0 0 4px rgba(221, 210, 196, 0.32),
+    0 12px 30px rgba(92, 64, 51, 0.11);
 }
 
 body[data-theme="artisan"] #hero-avatar-fallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(155deg, #e8dfd0 0%, #a8896e 48%, #6b5344 100%);
-  color: #faf7ef;
-  font-family: var(--font-display);
-  font-size: 2.1rem;
-  font-weight: 500;
+  background: linear-gradient(145deg, #e8dfd0 0%, #a8896e 55%, #6b5344 100%);
 }
 
-body[data-theme="artisan"] .hero-texts {
-  width: 100%;
-  margin-top: 2px;
+/* —— Google : même composant, teinte artisan —— */
+body[data-theme="artisan"] .wellness-google-inner {
+  box-shadow: 0 4px 16px rgba(92, 64, 51, 0.05);
 }
 
-/* —— Identité —— */
-body[data-theme="artisan"] #person-name.hero-title {
-  margin-bottom: 3px;
+body[data-theme="artisan"] .wellness-google-star-icon {
+  color: #c9a227;
 }
 
-body[data-theme="artisan"] #hero-job-title {
-  margin-bottom: 4px;
+body[data-theme="artisan"] .wellness-google-avatars {
+  background: rgba(92, 64, 51, 0.05);
 }
 
-body[data-theme="artisan"] #hero-city {
-  display: block;
-  font-family: var(--font-body);
-  font-size: clamp(0.64rem, 1.85vw, 0.74rem);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--card-accent-wood, #6b4a32);
-  line-height: 1.15;
-  margin: 0 0 6px;
+body[data-theme="artisan"] .wellness-google-avatar {
+  box-shadow: 0 2px 6px rgba(92, 64, 51, 0.1);
 }
 
-body[data-theme="artisan"] #hero-city[aria-hidden="true"] {
-  display: none !important;
-  margin: 0;
+body[data-theme="artisan"] .wellness-google-avatar:nth-child(2) {
+  background: linear-gradient(145deg, #e8dfd0 0%, #b5a696 100%);
 }
 
-body[data-theme="artisan"] #hero-professional-tagline {
-  margin-bottom: 2px;
+body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after {
+  color: rgba(92, 64, 51, 0.55);
 }
 
-/* —— Actions rapides — icônes sobres (SVG, pas emojis outils) —— */
-body[data-theme="artisan"] #btn-call::before,
-body[data-theme="artisan"] #btn-whatsapp::before,
-body[data-theme="artisan"] #btn-cta-laisser-avis::before,
-body[data-theme="artisan"] #btn-discrete-partager::before {
-  content: "";
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #fff;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 20px;
-  border: 1px solid rgba(213, 205, 192, 0.9);
+/* —— CTA : dimensions wellness, brun profond —— */
+body[data-theme="artisan"] .hero .btn-primary-contact-hero {
+  background: linear-gradient(180deg, #6b4b3a 0%, var(--artisan-cta) 100%) !important;
+  border: none !important;
   box-shadow:
-    0 4px 14px rgba(58, 48, 38, 0.08),
-    0 1px 0 rgba(255, 255, 255, 0.9) inset;
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
+    0 12px 32px rgba(92, 64, 51, 0.24),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset !important;
 }
 
+@media (hover: hover) {
+  body[data-theme="artisan"] .hero .btn-primary-contact-hero:hover {
+    background: linear-gradient(180deg, #745240 0%, var(--artisan-cta-hover) 100%) !important;
+    box-shadow: 0 14px 36px rgba(92, 64, 51, 0.28) !important;
+  }
+}
+
+body[data-theme="artisan"] #btn-send-feedback,
+body[data-theme="artisan"] #btn-send-quote,
+body[data-theme="artisan"] .btn-share-card-main,
+body[data-theme="artisan"] .recommend-id-confirm {
+  background: linear-gradient(180deg, #6b4b3a 0%, var(--artisan-cta) 100%) !important;
+  color: #faf7ef !important;
+  border: none !important;
+  box-shadow: 0 10px 24px rgba(92, 64, 51, 0.2) !important;
+}
+
+/* —— Actions rapides : icônes brunes (structure wellness inchangée) —— */
 body[data-theme="artisan"] #btn-call::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%235C4033' stroke-width='1.7'/%3E%3C/svg%3E");
 }
@@ -162,15 +133,57 @@ body[data-theme="artisan"] #btn-cta-laisser-avis::before {
 }
 
 body[data-theme="artisan"] #btn-discrete-partager::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M14 4h6v6M10 14 20 4M15 20H4V9' stroke='%235C4033' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%235C4033' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-@media (max-width: 479px) {
-  body[data-theme="artisan"] .hero {
-    padding-top: 14px;
-  }
+body[data-theme="artisan"] #btn-call::after,
+body[data-theme="artisan"] #btn-whatsapp::after {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(138, 107, 77, 0.2) 20%,
+    rgba(138, 107, 77, 0.2) 80%,
+    transparent 100%
+  );
+}
 
-  body[data-theme="artisan"] .wellness-avatar-stage {
-    margin-bottom: 8px;
-  }
+body[data-theme="artisan"] #btn-cta-laisser-avis {
+  box-shadow: inset -1px 0 0 rgba(138, 107, 77, 0.14) !important;
+}
+
+/* —— Reco & QR : teinte artisan légère —— */
+body[data-theme="artisan"] .wellness-premium-row {
+  box-shadow: 0 4px 16px rgba(92, 64, 51, 0.05);
+}
+
+body[data-theme="artisan"] .wellness-premium-row:hover {
+  border-color: rgba(138, 107, 77, 0.32);
+}
+
+body[data-theme="artisan"] .qr-wrap.wellness-qr-card {
+  box-shadow: 0 6px 22px rgba(92, 64, 51, 0.06);
+}
+
+body[data-theme="artisan"] .qr-wrap img {
+  box-shadow: 0 4px 12px rgba(92, 64, 51, 0.06);
+}
+
+body[data-theme="artisan"] .footer a {
+  color: var(--card-primary);
+}
+
+/* —— Modal contact —— */
+body[data-theme="artisan"] .wellness-contact-modal-backdrop {
+  background: rgba(45, 45, 45, 0.36);
+}
+
+body[data-theme="artisan"] .wellness-contact-modal-dialog {
+  background: var(--wellness-cream);
+  box-shadow:
+    0 -8px 40px rgba(45, 45, 45, 0.12),
+    0 24px 56px rgba(92, 64, 51, 0.1);
+}
+
+body[data-theme="artisan"] #wellness-contact-modal-host #btn-send-quote {
+  background: linear-gradient(180deg, #6b4b3a 0%, var(--artisan-cta) 100%) !important;
 }

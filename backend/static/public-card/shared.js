@@ -21,10 +21,99 @@
       return t === "wellness-soft" || t === "wellness-soft-minimal";
     }
 
-    /** Portrait centré + ville sous le métier (wellness & artisan premium). */
+    function isArtisanPremiumTheme() {
+      return document.body.getAttribute("data-theme") === "artisan";
+    }
+
+    /** Layout premium partagé : wellness-soft* + artisan-premium. */
+    function isPremiumLayoutTheme() {
+      return isWellnessVisualTheme() || isArtisanPremiumTheme();
+    }
+
+    /** Densité minimal + modal contact (wellness-soft-minimal & artisan-premium). */
+    function isPremiumMinimalLayoutTheme() {
+      return isWellnessMinimalTheme() || isArtisanPremiumTheme();
+    }
+
+    /** Portrait centré + ville sous le métier. */
     function isPortraitHeroTheme() {
-      var t = document.body.getAttribute("data-theme");
-      return isWellnessVisualTheme() || t === "artisan";
+      return isPremiumLayoutTheme();
+    }
+
+    function syncDemoMarketingVisibility(isDemoCard) {
+      var show = isDemoCard && !isPremiumLayoutTheme();
+      document.querySelectorAll(".demo-marketing").forEach(function (el) {
+        el.classList.toggle("demo-marketing--on", show);
+        el.setAttribute("aria-hidden", show ? "false" : "true");
+      });
+    }
+
+    function trimCardStr(v) {
+      return v != null && v !== undefined ? String(v).trim() : "";
+    }
+
+    /** hero_cta_text peut porter un libellé Google personnalisé (ex. « avis vérifiés »). */
+    function isGoogleReviewCountSuffix(text) {
+      var t = trimCardStr(text).toLowerCase();
+      if (!t) return false;
+      return (
+        t === "avis vérifiés" ||
+        t === "avis verifies" ||
+        t === "clients satisfaits" ||
+        /\bavis\s+v[ée]rifi[ée]s\b/.test(t) ||
+        /\bclients\s+satisfaits\b/.test(t)
+      );
+    }
+
+    function formatGoogleReviewCountLabel(count, heroCtaText) {
+      var t = trimCardStr(heroCtaText).toLowerCase();
+      if (isGoogleReviewCountSuffix(heroCtaText)) {
+        if (/\bclients\s+satisfaits\b/.test(t)) return count + " clients satisfaits";
+        return count + " avis vérifiés";
+      }
+      return count + " avis";
+    }
+
+    /** Ville + complément facultatif (city « AUXERRE • … » ou hero_cta_text hors libellé Google). */
+    function formatHeroCityLine(card) {
+      var cityMain = trimCardStr(card.city);
+      var cityAlt = trimCardStr(card.service_city);
+      if (!cityMain && cityAlt) return cityAlt;
+      if (!cityMain) return "";
+
+      var splitChars = [" • ", " · ", " | ", " — "];
+      for (var si = 0; si < splitChars.length; si++) {
+        var sep = splitChars[si];
+        if (cityMain.indexOf(sep) !== -1) {
+          var parts = cityMain.split(sep).map(function (p) {
+            return trimCardStr(p);
+          }).filter(Boolean);
+          if (parts.length >= 2) return parts.join(" • ");
+        }
+      }
+
+      var heroCta = trimCardStr(card.hero_cta_text);
+      if (heroCta && !isGoogleReviewCountSuffix(heroCta)) {
+        if (/^et\s+/i.test(heroCta)) return cityMain + " " + heroCta;
+        return cityMain + " • " + heroCta;
+      }
+      return cityMain;
+    }
+
+    function resolvePremiumHeroCta(profileKey, rawFormTitle) {
+      var custom = trimCardStr(rawFormTitle);
+      if (profileKey === "artisan") {
+        if (!custom || /^demande de contact$/i.test(custom)) {
+          return (
+            (CURRENT_PROFILE_CONFIG && CURRENT_PROFILE_CONFIG.quoteSectionLabel) ||
+            "Demande de devis"
+          );
+        }
+        return custom;
+      }
+      if (custom) return custom;
+      if (profileKey === "bien_etre" || profileKey === "medical") return "Prendre rendez-vous";
+      return "Demande de contact";
     }
 
     function isWellnessMinimalTheme() {
@@ -54,7 +143,7 @@
     }
 
     function initWellnessMinimalQuoteModal() {
-      if (!isWellnessMinimalTheme()) return;
+      if (!isPremiumMinimalLayoutTheme()) return;
       var modal = document.getElementById("wellness-contact-modal");
       var host = document.getElementById("wellness-contact-modal-host");
       var panel = document.getElementById("panel-quote");
@@ -1034,10 +1123,7 @@
       const isDemoCard = isDemoSlug(slug);
       document.body.classList.toggle("client-card-mode", !isDemoCard);
       applyClientMidsectionVisibility(isDemoCard);
-      document.querySelectorAll(".demo-marketing").forEach(function (el) {
-        el.classList.toggle("demo-marketing--on", isDemoCard);
-        el.setAttribute("aria-hidden", isDemoCard ? "false" : "true");
-      });
+      syncDemoMarketingVisibility(isDemoCard);
 
       if (isDemoCard) {
         document.body.classList.add("owner-share-tools");
@@ -1123,6 +1209,7 @@
         }
 
         applyVisualThemeFromCard(card);
+        syncDemoMarketingVisibility(isDemoCard);
         initWellnessMinimalQuoteModal();
 
         const rawProfile = (card.profile || "").toLowerCase();
@@ -1157,7 +1244,7 @@
 
         if (personEl) personEl.textContent = primaryName;
 
-        if (isWellnessVisualTheme()) {
+        if (isPremiumLayoutTheme()) {
           const recoTitleEl = document.getElementById("wellness-reco-title-text");
           if (recoTitleEl) {
             const firstName = (primaryName || "").trim().split(/\s+/)[0];
@@ -1289,6 +1376,8 @@
 
         const rawJobTitle = (card.job_title || "").toString().trim();
         const rawHeroTitle = (card.hero_title || "").toString().trim();
+        const rawHeroText = (card.hero_text || "").toString().trim();
+        const rawHeroCta = (card.hero_cta_text || "").toString().trim();
 
         const jobTitleEl = document.getElementById("hero-job-title");
         if (jobTitleEl) {
@@ -1303,17 +1392,11 @@
           }
         }
 
-        const cityRaw = (
-          (card.city != null && String(card.city).trim()) ||
-          (card.service_city != null && String(card.service_city).trim()) ||
-          ""
-        )
-          .toString()
-          .trim();
+        const cityLine = formatHeroCityLine(card);
         const cityEl = document.getElementById("hero-city");
         if (cityEl) {
-          if (cityRaw && isPortraitHeroTheme()) {
-            cityEl.textContent = cityRaw;
+          if (cityLine && isPortraitHeroTheme()) {
+            cityEl.textContent = cityLine;
             cityEl.style.display = "";
             cityEl.setAttribute("aria-hidden", "false");
           } else {
@@ -1326,7 +1409,10 @@
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
           if (rawHeroTitle) {
-            heroTaglineEl.textContent = rawHeroTitle;
+            heroTaglineEl.textContent =
+              isPremiumLayoutTheme() && rawHeroText
+                ? rawHeroTitle + "\n" + rawHeroText
+                : rawHeroTitle;
             heroTaglineEl.style.display = "";
           } else if (!compactUi || isDemoCard) {
             heroTaglineEl.textContent = DEFAULT_HERO_TITLE;
@@ -1369,9 +1455,13 @@
 
         const reassuranceEl = document.getElementById("hero-reassurance");
         const socialProofEl = document.getElementById("hero-social-proof");
-        const rawHeroText = (card.hero_text || "").toString().trim();
         if (reassuranceEl && socialProofEl) {
-          if (rawHeroText) {
+          if (rawHeroText && isPremiumLayoutTheme()) {
+            reassuranceEl.textContent = "";
+            reassuranceEl.style.display = "none";
+            socialProofEl.textContent = "";
+            socialProofEl.style.display = "none";
+          } else if (rawHeroText) {
             reassuranceEl.textContent = rawHeroText;
             reassuranceEl.style.display = "";
             socialProofEl.textContent = "";
@@ -1390,7 +1480,6 @@
         }
 
         const subtitleEl = document.getElementById("hero-subtitle");
-        const rawHeroCta = (card.hero_cta_text || "").toString().trim();
         if (subtitleEl) {
           if (rawHeroCta) {
             subtitleEl.textContent = rawHeroCta;
@@ -1445,16 +1534,9 @@
         const wellnessCtaLabel = document.getElementById("wellness-cta-label");
         if (
           btnPrimaryContact &&
-          isWellnessVisualTheme()
+          isPremiumLayoutTheme()
         ) {
-          var wellnessCta = rawFormTitle;
-          if (!wellnessCta) {
-            if (profileKey === "bien_etre" || profileKey === "medical") {
-              wellnessCta = "Prendre rendez-vous";
-            } else {
-              wellnessCta = "Demande de contact";
-            }
-          }
+          var wellnessCta = resolvePremiumHeroCta(profileKey, rawFormTitle);
           if (wellnessCtaLabel) {
             wellnessCtaLabel.textContent = wellnessCta.toUpperCase();
           } else {
@@ -1517,7 +1599,7 @@
           const hasCount = typeof count === "number" && !isNaN(count) && count >= 0;
           const reviewLink = (card.google_review_link || "").toString().trim();
           const isWellnessTheme =
-            isWellnessVisualTheme();
+            isPremiumLayoutTheme();
           ["hero-google-badge", "hero-google-badge-compact"].forEach(function (id) {
             const googleBadgeEl = document.getElementById(id);
             if (!googleBadgeEl) return;
@@ -1553,7 +1635,7 @@
 
                 const countEl = document.createElement("span");
                 countEl.className = "wellness-google-count";
-                countEl.textContent = count + " avis";
+                countEl.textContent = formatGoogleReviewCountLabel(count, card.hero_cta_text);
 
                 const avatarsEl = document.createElement("div");
                 avatarsEl.className = "wellness-google-avatars";
@@ -1582,7 +1664,11 @@
                   googleBadgeEl.appendChild(inner);
                 }
               } else if (reviewLink) {
-                const text = "⭐ " + ratingStr + " sur Google • " + count + " avis";
+                const text =
+                  "⭐ " +
+                  ratingStr +
+                  " sur Google • " +
+                  formatGoogleReviewCountLabel(count, card.hero_cta_text);
                 const a = document.createElement("a");
                 a.href = reviewLink;
                 a.target = "_blank";
@@ -1594,7 +1680,10 @@
                 googleBadgeEl.appendChild(a);
               } else {
                 googleBadgeEl.textContent =
-                  "⭐ " + ratingStr + " sur Google • " + count + " avis";
+                  "⭐ " +
+                  ratingStr +
+                  " sur Google • " +
+                  formatGoogleReviewCountLabel(count, card.hero_cta_text);
               }
               googleBadgeEl.style.display = "flex";
             } else {
@@ -1998,7 +2087,7 @@
               document.getElementById("quote-phone").value = "";
               document.getElementById("quote-email").value = "";
               document.getElementById("quote-message").value = "";
-              if (isWellnessMinimalTheme()) {
+              if (isPremiumMinimalLayoutTheme()) {
                 closeWellnessContactModal();
               }
             } catch (e) {
@@ -2186,7 +2275,7 @@
           const btnFeedbackRecommendNudge = document.getElementById("btn-feedback-recommend-nudge");
           if (btnFeedbackRecommendNudge && (btnRecommendMain || btnRecommendWellnessRow)) {
             btnFeedbackRecommendNudge.onclick = function () {
-              if (btnRecommendWellnessRow && isWellnessVisualTheme()) {
+              if (btnRecommendWellnessRow && isPremiumLayoutTheme()) {
                 btnRecommendWellnessRow.click();
               } else if (btnRecommendMain) {
                 btnRecommendMain.click();
@@ -2287,7 +2376,7 @@
       var b = document.getElementById("btn-primary-demande-contact");
       if (b) {
         b.addEventListener("click", function () {
-          if (isWellnessMinimalTheme()) {
+          if (isPremiumMinimalLayoutTheme()) {
             openWellnessContactModal();
           } else if (q) {
             q.click();
