@@ -1431,22 +1431,22 @@
     }
 
     /* ——— Variante compacte (FR / index.html — LATAM utilise index_latam.html) ——— */
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .phone-inner {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .phone-inner {
       min-height: 0;
       padding-bottom: 14px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero {
       padding: 10px 12px 11px;
       margin-bottom: 11px;
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.08) inset,
         0 10px 28px -18px rgba(0, 0, 0, 0.45);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-badges,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #hero-recommend-conversion {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-badges,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #hero-recommend-conversion {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-professional-tagline {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-professional-tagline {
       font-size: 12px;
       font-weight: 600;
       margin: 5px 0 6px;
@@ -1458,8 +1458,8 @@
       -webkit-line-clamp: 4;
       overflow: hidden;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-reassurance,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-social-proof {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-reassurance,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-social-proof {
       font-size: 11px;
       font-weight: 400;
       line-height: 1.38;
@@ -1472,7 +1472,7 @@
       overflow: hidden;
       opacity: 0.94;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-subtitle {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-subtitle {
       font-size: 11px;
       font-weight: 600;
       line-height: 1.38;
@@ -1485,24 +1485,24 @@
       overflow: hidden;
       opacity: 0.97;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-title {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-title {
       font-size: 16px;
       margin-top: 0;
       margin-bottom: 3px;
       letter-spacing: -0.01em;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-company {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-company {
       font-size: 11px;
       font-weight: 500;
       margin-bottom: 4px;
       color: rgba(203, 213, 225, 0.88);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-job-title {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-job-title {
       font-size: 11px;
       margin-bottom: 4px;
       color: rgba(226, 232, 240, 0.9);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-recommend-count {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-recommend-count {
       margin: 3px 0 5px;
       font-size: 10px;
       font-weight: 600;
@@ -1522,10 +1522,10 @@
       color: rgba(248, 250, 252, 0.98);
       letter-spacing: 0.03em;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #hero-tagline-row {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #hero-tagline-row {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-meta {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-meta {
       margin-top: 6px;
       padding-top: 8px;
       gap: 3px;
@@ -1534,25 +1534,25 @@
       border-top: 1px solid rgba(148, 163, 184, 0.14);
       opacity: 0.92;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-meta-label {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-meta-label {
       font-weight: 500;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-meta-value {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-meta-value {
       color: rgba(148, 163, 184, 0.9);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-contact-line {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-contact-line {
       margin-top: 8px;
       padding-top: 9px;
       border-top: 1px solid rgba(148, 163, 184, 0.16);
       font-size: 10px;
       color: rgba(203, 213, 225, 0.8);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-contact-item span:last-child {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-contact-item span:last-child {
       font-size: 10px;
       color: rgba(209, 213, 219, 0.88);
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-compact-contact-row {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-compact-contact-row {
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -1561,33 +1561,33 @@
       padding-top: 10px;
       border-top: 1px solid rgba(148, 163, 184, 0.2);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-compact-tel-row {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-compact-tel-row {
       width: 100%;
     }
     body.public-card--legacy .hero-compact-contact-row,
     body.public-card--legacy .hero-compact-social {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-slot-call-wa {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-slot-call-wa {
       display: flex;
       flex: 1 1 auto;
       gap: 6px;
       min-width: 0;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-slot-add-contact {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-slot-add-contact {
       width: 100%;
       flex: 0 0 auto;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-compact-social {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-compact-social {
       display: flex;
       gap: 8px;
       margin-top: 8px;
       flex-wrap: wrap;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-compact-social[hidden] {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-compact-social[hidden] {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-social-ic {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-social-ic {
       width: 36px;
       height: 36px;
       border-radius: 10px;
@@ -1602,13 +1602,13 @@
       background: rgba(15, 23, 42, 0.88);
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-social-ic:hover {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-social-ic:hover {
       border-color: var(--primary);
       color: var(--primary);
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-call,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-whatsapp {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-call,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-whatsapp {
       flex: 1 1 0;
       min-width: 0;
       margin-top: 0 !important;
@@ -1620,7 +1620,7 @@
       border-radius: 11px;
       gap: 6px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-add-contact {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-add-contact {
       width: 100%;
       max-width: none;
       flex: 1 1 auto;
@@ -1642,33 +1642,33 @@
       transition: border-color 0.15s ease-out, background 0.15s ease-out, transform 0.12s ease-out;
     }
     @media (hover: hover) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-add-contact:hover {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-add-contact:hover {
         border-color: rgba(253, 186, 116, 0.45) !important;
         background: rgba(30, 41, 59, 0.72) !important;
       }
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-add-contact:active {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-add-contact:active {
       transform: scale(0.98);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-call .btn-link-text,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-whatsapp .btn-link-text {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-call .btn-link-text,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-whatsapp .btn-link-text {
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: left;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-add-contact .btn-link-text {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-add-contact .btn-link-text {
       overflow: visible;
       text-overflow: unset;
       white-space: normal;
       text-align: center;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #btn-add-contact .btn-link-leading {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #btn-add-contact .btn-link-leading {
       flex-shrink: 0;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-primary-cta-wrap {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-primary-cta-wrap {
       margin: 0 0 11px;
       display: flex;
       flex-direction: column;
@@ -1690,7 +1690,7 @@
       text-align: center;
       color: rgba(148, 163, 184, 0.78);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .p12-soft-hint {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .p12-soft-hint {
       display: block;
     }
     body.public-card--legacy .p12-soft-hint {
@@ -1700,7 +1700,7 @@
       opacity: 0.5;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-contact-hero {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-contact-hero {
       width: 100%;
       margin-top: 0;
       padding: 10px 14px;
@@ -1714,11 +1714,11 @@
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-primary-cta-wrap > .btn-primary {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-primary-cta-wrap > .btn-primary {
       width: 100%;
       margin-top: 0 !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta {
       padding: 9px 14px;
       font-size: 12px;
       font-weight: 700;
@@ -1733,26 +1733,26 @@
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s ease-out;
     }
     @media (hover: hover) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-contact-hero:hover {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-contact-hero:hover {
         filter: brightness(1.06);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.2) inset,
           0 14px 30px -8px rgba(249, 115, 22, 0.56);
       }
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta:not(.btn-primary--avis-secondary):hover {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta:not(.btn-primary--avis-secondary):hover {
         filter: brightness(1.02);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.16) inset,
           0 8px 18px -10px rgba(249, 115, 22, 0.3);
       }
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-contact-hero:active,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta:active {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-contact-hero:active,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta:active {
       transform: scale(0.97);
     }
 
     /* P1.2 : après .btn-primary-stack-cta — reco plus affirmée, avis visuellement secondaire */
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]) {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]) {
       padding: 10px 14px;
       font-size: 13px;
       font-weight: 700;
@@ -1763,14 +1763,14 @@
         0 14px 34px -10px rgba(249, 115, 22, 0.55);
     }
     @media (hover: hover) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]):hover {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta.btn-primary--reco-first:not([hidden]):hover {
         filter: brightness(1.05);
         box-shadow:
           0 1px 0 rgba(255, 255, 255, 0.22) inset,
           0 16px 36px -10px rgba(249, 115, 22, 0.58);
       }
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta.btn-primary--avis-secondary {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta.btn-primary--avis-secondary {
       padding: 8px 14px;
       font-size: 11px;
       font-weight: 600;
@@ -1787,7 +1787,7 @@
       opacity: 1;
     }
     @media (hover: hover) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .btn-primary-stack-cta.btn-primary--avis-secondary:hover {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .btn-primary-stack-cta.btn-primary--avis-secondary:hover {
         filter: none;
         border-color: var(--primary);
         color: var(--primary);
@@ -1796,7 +1796,7 @@
       }
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-cta-reassurance {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-cta-reassurance {
       margin: 2px 0 0;
       padding: 0 4px;
       text-align: center;
@@ -1810,7 +1810,7 @@
       display: none !important;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-discrete-row {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-discrete-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -1819,10 +1819,10 @@
       margin-top: 9px;
       padding-top: 4px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-discrete-row:not(:has(button:not([hidden]))) {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-discrete-row:not(:has(button:not([hidden]))) {
       display: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-discrete-link {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-discrete-link {
       padding: 4px 2px;
       margin: 0;
       font-size: 11px;
@@ -1836,15 +1836,15 @@
       transition: color 0.15s ease-out, transform 0.12s ease-out;
     }
     @media (hover: hover) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-discrete-link:hover:not(:disabled) {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-discrete-link:hover:not(:disabled) {
         color: rgba(253, 186, 116, 0.95);
       }
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-discrete-link:active:not(:disabled) {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-discrete-link:active:not(:disabled) {
       transform: scale(0.97);
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .compact-acc-triggers-host {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .compact-acc-triggers-host {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -1860,22 +1860,22 @@
     body.public-card--legacy #acc-trigger-quote {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #acc-trigger-quote {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #acc-trigger-quote {
       display: none !important;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .acc-panel:not(.is-open) {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .acc-panel:not(.is-open) {
       display: none !important;
     }
     body.public-card--legacy .acc-panel {
       display: block !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .acc-panel {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .acc-panel {
       margin-bottom: 8px;
       padding-bottom: 8px;
       border-bottom: 1px solid rgba(148, 163, 184, 0.15);
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .acc-panel:last-of-type {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .acc-panel:last-of-type {
       border-bottom: none;
     }
 
@@ -1890,43 +1890,43 @@
       }
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .acc-panel.is-open {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .acc-panel.is-open {
       animation: p11-acc-panel-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #left-col-head {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #left-col-head {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .legacy-contact-row {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .legacy-contact-row {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #slot-call-legacy {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #slot-call-legacy {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #panel-feedback > .section-label:first-of-type {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-feedback > .section-label:first-of-type {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .section-label--autres-facons {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .section-label--autres-facons {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #hint-share-signature,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #hint-post-prestation {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #hint-share-signature,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #hint-post-prestation {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #contact-actions-guide,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #pill-section-hint {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #contact-actions-guide,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #pill-section-hint {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #panel-pay {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-pay {
       border: none;
       padding-bottom: 0;
       margin-bottom: 4px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #panel-pay:not(.is-open) .btn-link {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-pay:not(.is-open) .btn-link {
       pointer-events: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #panel-quote:not(.is-open) .quote-input,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #panel-quote:not(.is-open) #btn-send-quote {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-quote:not(.is-open) .quote-input,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-quote:not(.is-open) #btn-send-quote {
       pointer-events: none;
     }
 
@@ -1937,10 +1937,10 @@
     .qr-copy-hint--wellness {
       display: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .qr-wrap .qr-copy-main--default {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .qr-wrap .qr-copy-main--default {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .qr-wrap .qr-copy-main--compact-fr {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .qr-wrap .qr-copy-main--compact-fr {
       display: block !important;
     }
     body.public-card--legacy .qr-wrap .qr-copy-main--compact-fr {
@@ -1949,67 +1949,67 @@
     body.public-card--legacy .qr-wrap .qr-copy-main--default {
       display: block !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .qr-copy-main {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .qr-copy-main {
       font-size: 11px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .qr-copy-hint {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .qr-copy-hint {
       display: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .main-grid {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .main-grid {
       display: flex;
       flex-direction: column;
       gap: 10px;
       align-items: stretch;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .main-grid > .card-block:first-child {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .main-grid > .card-block:first-child {
       order: 2;
       position: relative;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .main-grid > .card-block--quote {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .main-grid > .card-block--quote {
       order: 1;
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .card-block--quote .qr-wrap {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .card-block--quote .qr-wrap {
       order: -2;
       margin-top: 0;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .card-block--quote .qr-powered-by {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .card-block--quote .qr-powered-by {
       order: -1;
       margin-top: 0;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .card-block--quote .acc-panel--quote {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .card-block--quote .acc-panel--quote {
       order: 0;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .card-block {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .card-block {
       padding: 11px 11px 10px;
       display: flex;
       flex-direction: column;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .post-share-block {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .post-share-block {
       margin-top: 0;
       padding: 10px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .post-share-title,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .post-share-hint,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .post-share-kicker,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .post-share-benefits {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .post-share-title,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .post-share-hint,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .post-share-kicker,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .post-share-benefits {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #post-share-block .btn-share-card-main {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #post-share-block .btn-share-card-main {
       margin-bottom: 6px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #recommend-block .post-share-title,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) #recommend-block .post-share-hint {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #recommend-block .post-share-title,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #recommend-block .post-share-hint {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .feedback-recommend-nudge {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .feedback-recommend-nudge {
       padding: 10px;
       margin-top: 8px;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .feedback-recommend-nudge-hint {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .feedback-recommend-nudge-hint {
       display: none;
     }
 
@@ -2018,10 +2018,10 @@
     }
 
     /* Note Google dans le hero (compact FR uniquement — bloc colonne masqué en compact) */
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-google-badge-wrap {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-google-badge-wrap {
       display: none !important;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-google-rating-inline {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-google-rating-inline {
       align-items: center;
       justify-content: flex-start;
       gap: 0;
@@ -2041,11 +2041,11 @@
       box-shadow: none;
       border-radius: 0;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-google-rating-inline a {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-google-rating-inline a {
       color: inherit;
       text-decoration: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .hero-google-rating-inline a:hover {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .hero-google-rating-inline a:hover {
       text-decoration: underline;
       color: rgba(253, 186, 116, 0.95);
     }
@@ -2054,7 +2054,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .acc-panel.is-open {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .acc-panel.is-open {
         animation: none !important;
       }
       .hero,
@@ -2294,7 +2294,7 @@
         padding: 14px 14px 18px;
       }
 
-      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .phone-inner {
+      body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .phone-inner {
         padding-bottom: 14px;
       }
 

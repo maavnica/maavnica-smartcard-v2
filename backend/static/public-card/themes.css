@@ -1,14 +1,14 @@
 ﻿/* SmartCard FR — thèmes visuels officiels (body[data-theme="…"] uniquement)
  * Piloté par visual_theme (admin + SSR). Les classes body.theme-* legacy ne s’appliquent pas si data-theme est défini.
- * Actifs : wellness-soft, artisan-premium (data-theme="artisan")
- * Prévu : immobilier, corporate, maavnica
+ * Actifs : wellness-soft, artisan-premium (data-theme="artisan"), immobilier-premium (data-theme="real-estate")
+ * Prévu : corporate, maavnica
  *
  * Contrat tokens (par thème sur body[data-theme="…"]) :
  * --card-bg, --card-surface, --card-primary, --card-text, --card-muted,
  * --card-border, --card-shadow, --font-display, --font-body
  */
 
-/* body[data-theme="immobilier"] { } */
+/* immobilier-premium → wellness-soft*.css + immobilier-premium.css (data-theme="real-estate") */
 /* body[data-theme="corporate"] { } */
 /* body[data-theme="maavnica"] { } */
 

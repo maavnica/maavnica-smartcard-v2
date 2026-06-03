@@ -7,36 +7,37 @@
   display: none;
 }
 
-body:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]) .wellness-reco-default {
+body:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) .wellness-reco-default {
   display: block;
 }
 
-body[data-theme|="wellness-soft"] .wellness-cta-leaf, body[data-theme="artisan"] .wellness-cta-leaf,
-body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron {
+body[data-theme|="wellness-soft"] .wellness-cta-leaf, body[data-theme="artisan"] .wellness-cta-leaf, body[data-theme="real-estate"] .wellness-cta-leaf,
+body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron , body[data-theme="real-estate"] .wellness-qr-chevron {
   display: inline-flex;
 }
 
-body[data-theme|="wellness-soft"] .wellness-reco-wellness-only , body[data-theme="artisan"] .wellness-reco-wellness-only {
+body[data-theme|="wellness-soft"] .wellness-reco-wellness-only , body[data-theme="artisan"] .wellness-reco-wellness-only , body[data-theme="real-estate"] .wellness-reco-wellness-only {
   display: flex;
 }
 
-body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage {
+body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage , body[data-theme="real-estate"] .wellness-avatar-stage {
   display: flex;
 }
 
-body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch {
+body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch , body[data-theme="real-estate"] .wellness-deco-branch {
   display: block;
 }
 
-body[data-theme|="wellness-soft"] .wellness-reco-default , body[data-theme="artisan"] .wellness-reco-default {
+body[data-theme|="wellness-soft"] .wellness-reco-default , body[data-theme="artisan"] .wellness-reco-default , body[data-theme="real-estate"] .wellness-reco-default {
   display: none !important;
 }
 
 /* Wellness Premium — layout dédié (reconstruction fidèle maquette)
- * Actif via body[data-theme|="wellness-soft"] (wellness-soft et wellness-soft-minimal), body[data-theme="artisan"] (wellness-soft et wellness-soft-minimal)
+ * Actif via body[data-theme|="wellness-soft"] (wellness-soft et wellness-soft-minimal)
+, body[data-theme="artisan"] (wellness-soft et wellness-soft-minimal), body[data-theme="real-estate"] (wellness-soft et wellness-soft-minimal)
  */
 
-body[data-theme|="wellness-soft"] , body[data-theme="artisan"] {
+body[data-theme|="wellness-soft"], body[data-theme="artisan"], body[data-theme="real-estate"] {
   --card-bg: #efe7de;
   --card-surface: #faf7f0;
   --card-primary: #2d5a45;
@@ -67,12 +68,12 @@ body[data-theme|="wellness-soft"] , body[data-theme="artisan"] {
 }
 
 @media (min-width: 480px) {
-  body[data-theme|="wellness-soft"] , body[data-theme="artisan"] {
+  body[data-theme|="wellness-soft"], body[data-theme="artisan"], body[data-theme="real-estate"] {
     padding: 28px 20px 36px;
   }
 }
 
-body[data-theme|="wellness-soft"] .phone-shell , body[data-theme="artisan"] .phone-shell {
+body[data-theme|="wellness-soft"] .phone-shell , body[data-theme="artisan"] .phone-shell , body[data-theme="real-estate"] .phone-shell {
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
@@ -80,7 +81,7 @@ body[data-theme|="wellness-soft"] .phone-shell , body[data-theme="artisan"] .pho
   filter: drop-shadow(0 32px 64px rgba(36, 53, 46, 0.1));
 }
 
-body[data-theme|="wellness-soft"] .phone-inner , body[data-theme="artisan"] .phone-inner {
+body[data-theme|="wellness-soft"] .phone-inner , body[data-theme="artisan"] .phone-inner , body[data-theme="real-estate"] .phone-inner {
   position: relative;
   overflow: hidden;
   min-height: 0;
@@ -94,8 +95,8 @@ body[data-theme|="wellness-soft"] .phone-inner , body[data-theme="artisan"] .pho
 }
 
 /* Texture papier premium */
-body[data-theme|="wellness-soft"] .phone-inner::after , body[data-theme="artisan"] .phone-inner::after ,
-body[data-theme|="wellness-soft"] .phone-inner::after , body[data-theme="artisan"] .phone-inner::after {
+body[data-theme|="wellness-soft"] .phone-inner::after , body[data-theme="artisan"] .phone-inner::after , body[data-theme="real-estate"] .phone-inner::after ,
+body[data-theme|="wellness-soft"] .phone-inner::after , body[data-theme="artisan"] .phone-inner::after , body[data-theme="real-estate"] .phone-inner::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -107,14 +108,14 @@ body[data-theme|="wellness-soft"] .phone-inner::after , body[data-theme="artisan
   mix-blend-mode: multiply;
 }
 
-body[data-theme|="wellness-soft"] .phone-inner::before , body[data-theme="artisan"] .phone-inner::before ,
-body[data-theme|="wellness-soft"] .phone-inner::before , body[data-theme="artisan"] .phone-inner::before {
+body[data-theme|="wellness-soft"] .phone-inner::before , body[data-theme="artisan"] .phone-inner::before , body[data-theme="real-estate"] .phone-inner::before ,
+body[data-theme|="wellness-soft"] .phone-inner::before , body[data-theme="artisan"] .phone-inner::before , body[data-theme="real-estate"] .phone-inner::before {
   content: none;
   display: none;
 }
 
-body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch ,
-body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch {
+body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch , body[data-theme="real-estate"] .wellness-deco-branch ,
+body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artisan"] .wellness-deco-branch , body[data-theme="real-estate"] .wellness-deco-branch {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -127,8 +128,8 @@ body[data-theme|="wellness-soft"] .wellness-deco-branch , body[data-theme="artis
   transform-origin: 70% 80%;
 }
 
-body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage ,
-body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage {
+body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage , body[data-theme="real-estate"] .wellness-avatar-stage ,
+body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="artisan"] .wellness-avatar-stage , body[data-theme="real-estate"] .wellness-avatar-stage {
   position: relative;
   display: flex;
   justify-content: center;
@@ -138,19 +139,19 @@ body[data-theme|="wellness-soft"] .wellness-avatar-stage , body[data-theme="arti
   padding: 6px 0 0;
 }
 
-body[data-theme|="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="artisan"] .phone-inner > *:not(.wellness-deco-branch) ,
-body[data-theme|="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="artisan"] .phone-inner > *:not(.wellness-deco-branch) {
+body[data-theme|="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="artisan"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="real-estate"] .phone-inner > *:not(.wellness-deco-branch) ,
+body[data-theme|="wellness-soft"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="artisan"] .phone-inner > *:not(.wellness-deco-branch) , body[data-theme="real-estate"] .phone-inner > *:not(.wellness-deco-branch) {
   position: relative;
   z-index: 2;
 }
 
-body[data-theme|="wellness-soft"] .notch, body[data-theme="artisan"] .notch,
-body[data-theme|="wellness-soft"] .status-bar, body[data-theme="artisan"] .status-bar,
-body[data-theme|="wellness-soft"] .demo-marketing, body[data-theme="artisan"] .demo-marketing,
-body[data-theme|="wellness-soft"] #demo-banner-shell, body[data-theme="artisan"] #demo-banner-shell,
-body[data-theme|="wellness-soft"] #demo-cta-shell, body[data-theme="artisan"] #demo-cta-shell,
-body[data-theme|="wellness-soft"] #admin-preview-badge , body[data-theme="artisan"] #admin-preview-badge ,
-body[data-theme|="wellness-soft"] #admin-preview-badge , body[data-theme="artisan"] #admin-preview-badge {
+body[data-theme|="wellness-soft"] .notch, body[data-theme="artisan"] .notch, body[data-theme="real-estate"] .notch,
+body[data-theme|="wellness-soft"] .status-bar, body[data-theme="artisan"] .status-bar, body[data-theme="real-estate"] .status-bar,
+body[data-theme|="wellness-soft"] .demo-marketing, body[data-theme="artisan"] .demo-marketing, body[data-theme="real-estate"] .demo-marketing,
+body[data-theme|="wellness-soft"] #demo-banner-shell, body[data-theme="artisan"] #demo-banner-shell, body[data-theme="real-estate"] #demo-banner-shell,
+body[data-theme|="wellness-soft"] #demo-cta-shell, body[data-theme="artisan"] #demo-cta-shell, body[data-theme="real-estate"] #demo-cta-shell,
+body[data-theme|="wellness-soft"] #admin-preview-badge , body[data-theme="artisan"] #admin-preview-badge , body[data-theme="real-estate"] #admin-preview-badge ,
+body[data-theme|="wellness-soft"] #admin-preview-badge , body[data-theme="artisan"] #admin-preview-badge , body[data-theme="real-estate"] #admin-preview-badge {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -162,14 +163,14 @@ body[data-theme|="wellness-soft"] #admin-preview-badge , body[data-theme="artisa
   border: none !important;
 }
 
-body[data-theme|="wellness-soft"] .admin-preview-badge , body[data-theme="artisan"] .admin-preview-badge ,
-body[data-theme|="wellness-soft"] .admin-preview-badge , body[data-theme="artisan"] .admin-preview-badge {
+body[data-theme|="wellness-soft"] .admin-preview-badge , body[data-theme="artisan"] .admin-preview-badge , body[data-theme="real-estate"] .admin-preview-badge ,
+body[data-theme|="wellness-soft"] .admin-preview-badge , body[data-theme="artisan"] .admin-preview-badge , body[data-theme="real-estate"] .admin-preview-badge {
   color: var(--card-muted);
 }
 
 /* —— Hero —— */
-body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero ,
-body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero {
+body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero , body[data-theme="real-estate"] .hero ,
+body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero , body[data-theme="real-estate"] .hero {
   padding: 38px 0 0;
   margin: 0;
   text-align: center;
@@ -179,13 +180,13 @@ body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero {
   overflow: visible;
 }
 
-body[data-theme|="wellness-soft"] .hero::before , body[data-theme="artisan"] .hero::before ,
-body[data-theme|="wellness-soft"] .hero::before , body[data-theme="artisan"] .hero::before {
+body[data-theme|="wellness-soft"] .hero::before , body[data-theme="artisan"] .hero::before , body[data-theme="real-estate"] .hero::before ,
+body[data-theme|="wellness-soft"] .hero::before , body[data-theme="artisan"] .hero::before , body[data-theme="real-estate"] .hero::before {
   display: none;
 }
 
-body[data-theme|="wellness-soft"] .hero-badges , body[data-theme="artisan"] .hero-badges ,
-body[data-theme|="wellness-soft"] .hero-badges , body[data-theme="artisan"] .hero-badges {
+body[data-theme|="wellness-soft"] .hero-badges , body[data-theme="artisan"] .hero-badges , body[data-theme="real-estate"] .hero-badges ,
+body[data-theme|="wellness-soft"] .hero-badges , body[data-theme="artisan"] .hero-badges , body[data-theme="real-estate"] .hero-badges {
   display: flex !important;
   position: absolute;
   top: 0;
@@ -198,8 +199,8 @@ body[data-theme|="wellness-soft"] .hero-badges , body[data-theme="artisan"] .her
   pointer-events: none;
 }
 
-body[data-theme|="wellness-soft"] .hero-badge , body[data-theme="artisan"] .hero-badge ,
-body[data-theme|="wellness-soft"] .hero-badge , body[data-theme="artisan"] .hero-badge {
+body[data-theme|="wellness-soft"] .hero-badge , body[data-theme="artisan"] .hero-badge , body[data-theme="real-estate"] .hero-badge ,
+body[data-theme|="wellness-soft"] .hero-badge , body[data-theme="artisan"] .hero-badge , body[data-theme="real-estate"] .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -216,35 +217,35 @@ body[data-theme|="wellness-soft"] .hero-badge , body[data-theme="artisan"] .hero
   pointer-events: auto;
 }
 
-body[data-theme|="wellness-soft"] #hero-badge-left , body[data-theme="artisan"] #hero-badge-left ,
-body[data-theme|="wellness-soft"] #hero-badge-left , body[data-theme="artisan"] #hero-badge-left {
+body[data-theme|="wellness-soft"] #hero-badge-left , body[data-theme="artisan"] #hero-badge-left , body[data-theme="real-estate"] #hero-badge-left ,
+body[data-theme|="wellness-soft"] #hero-badge-left , body[data-theme="artisan"] #hero-badge-left , body[data-theme="real-estate"] #hero-badge-left {
   display: none !important;
 }
 
 /* Badge univers bien-être (le métier reste sous le nom) */
-body[data-theme|="wellness-soft"] #hero-badge-right-icon , body[data-theme="artisan"] #hero-badge-right-icon ,
-body[data-theme|="wellness-soft"] #hero-badge-right-icon , body[data-theme="artisan"] #hero-badge-right-icon {
+body[data-theme|="wellness-soft"] #hero-badge-right-icon , body[data-theme="artisan"] #hero-badge-right-icon , body[data-theme="real-estate"] #hero-badge-right-icon ,
+body[data-theme|="wellness-soft"] #hero-badge-right-icon , body[data-theme="artisan"] #hero-badge-right-icon , body[data-theme="real-estate"] #hero-badge-right-icon {
   font-size: 0;
   line-height: 0;
   width: 0;
   overflow: hidden;
 }
 
-body[data-theme|="wellness-soft"] #hero-badge-right-icon::before , body[data-theme="artisan"] #hero-badge-right-icon::before ,
-body[data-theme|="wellness-soft"] #hero-badge-right-icon::before , body[data-theme="artisan"] #hero-badge-right-icon::before {
+body[data-theme|="wellness-soft"] #hero-badge-right-icon::before , body[data-theme="artisan"] #hero-badge-right-icon::before , body[data-theme="real-estate"] #hero-badge-right-icon::before ,
+body[data-theme|="wellness-soft"] #hero-badge-right-icon::before , body[data-theme="artisan"] #hero-badge-right-icon::before , body[data-theme="real-estate"] #hero-badge-right-icon::before {
   content: "🌿";
   font-size: 0.72rem;
   line-height: 1;
 }
 
-body[data-theme|="wellness-soft"] #hero-badge-right-text , body[data-theme="artisan"] #hero-badge-right-text ,
-body[data-theme|="wellness-soft"] #hero-badge-right-text , body[data-theme="artisan"] #hero-badge-right-text {
+body[data-theme|="wellness-soft"] #hero-badge-right-text , body[data-theme="artisan"] #hero-badge-right-text , body[data-theme="real-estate"] #hero-badge-right-text ,
+body[data-theme|="wellness-soft"] #hero-badge-right-text , body[data-theme="artisan"] #hero-badge-right-text , body[data-theme="real-estate"] #hero-badge-right-text {
   font-size: 0;
   line-height: 0;
 }
 
-body[data-theme|="wellness-soft"] #hero-badge-right-text::after , body[data-theme="artisan"] #hero-badge-right-text::after ,
-body[data-theme|="wellness-soft"] #hero-badge-right-text::after , body[data-theme="artisan"] #hero-badge-right-text::after {
+body[data-theme|="wellness-soft"] #hero-badge-right-text::after , body[data-theme="artisan"] #hero-badge-right-text::after , body[data-theme="real-estate"] #hero-badge-right-text::after ,
+body[data-theme|="wellness-soft"] #hero-badge-right-text::after , body[data-theme="artisan"] #hero-badge-right-text::after , body[data-theme="real-estate"] #hero-badge-right-text::after {
   content: "PRATICIEN BIEN-ÊTRE";
   font-size: 0.58rem;
   font-weight: 600;
@@ -252,16 +253,16 @@ body[data-theme|="wellness-soft"] #hero-badge-right-text::after , body[data-them
   line-height: 1.2;
 }
 
-body[data-theme|="wellness-soft"] .hero-main-row , body[data-theme="artisan"] .hero-main-row ,
-body[data-theme|="wellness-soft"] .hero-main-row , body[data-theme="artisan"] .hero-main-row {
+body[data-theme|="wellness-soft"] .hero-main-row , body[data-theme="artisan"] .hero-main-row , body[data-theme="real-estate"] .hero-main-row ,
+body[data-theme|="wellness-soft"] .hero-main-row , body[data-theme="artisan"] .hero-main-row , body[data-theme="real-estate"] .hero-main-row {
   flex-direction: column;
   align-items: center;
   gap: 0;
   padding-top: 4px;
 }
 
-body[data-theme|="wellness-soft"] .hero-avatar , body[data-theme="artisan"] .hero-avatar ,
-body[data-theme|="wellness-soft"] .hero-avatar , body[data-theme="artisan"] .hero-avatar {
+body[data-theme|="wellness-soft"] .hero-avatar , body[data-theme="artisan"] .hero-avatar , body[data-theme="real-estate"] .hero-avatar ,
+body[data-theme|="wellness-soft"] .hero-avatar , body[data-theme="artisan"] .hero-avatar , body[data-theme="real-estate"] .hero-avatar {
   position: relative;
   z-index: 2;
   width: clamp(128px, 34vw, 148px);
@@ -278,18 +279,18 @@ body[data-theme|="wellness-soft"] .hero-avatar , body[data-theme="artisan"] .her
     0 16px 40px rgba(45, 90, 69, 0.14);
 }
 
-body[data-theme|="wellness-soft"] .hero-avatar img, body[data-theme="artisan"] .hero-avatar img,
-body[data-theme|="wellness-soft"] #hero-avatar-fallback, body[data-theme="artisan"] #hero-avatar-fallback,
-body[data-theme|="wellness-soft"] #hero-avatar-placeholder , body[data-theme="artisan"] #hero-avatar-placeholder ,
-body[data-theme|="wellness-soft"] #hero-avatar-placeholder , body[data-theme="artisan"] #hero-avatar-placeholder {
+body[data-theme|="wellness-soft"] .hero-avatar img, body[data-theme="artisan"] .hero-avatar img, body[data-theme="real-estate"] .hero-avatar img,
+body[data-theme|="wellness-soft"] #hero-avatar-fallback, body[data-theme="artisan"] #hero-avatar-fallback, body[data-theme="real-estate"] #hero-avatar-fallback,
+body[data-theme|="wellness-soft"] #hero-avatar-placeholder , body[data-theme="artisan"] #hero-avatar-placeholder , body[data-theme="real-estate"] #hero-avatar-placeholder ,
+body[data-theme|="wellness-soft"] #hero-avatar-placeholder , body[data-theme="artisan"] #hero-avatar-placeholder , body[data-theme="real-estate"] #hero-avatar-placeholder {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
 
-body[data-theme|="wellness-soft"] #hero-avatar-fallback , body[data-theme="artisan"] #hero-avatar-fallback ,
-body[data-theme|="wellness-soft"] #hero-avatar-fallback , body[data-theme="artisan"] #hero-avatar-fallback {
+body[data-theme|="wellness-soft"] #hero-avatar-fallback , body[data-theme="artisan"] #hero-avatar-fallback , body[data-theme="real-estate"] #hero-avatar-fallback ,
+body[data-theme|="wellness-soft"] #hero-avatar-fallback , body[data-theme="artisan"] #hero-avatar-fallback , body[data-theme="real-estate"] #hero-avatar-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -300,13 +301,13 @@ body[data-theme|="wellness-soft"] #hero-avatar-fallback , body[data-theme="artis
   font-weight: 500;
 }
 
-body[data-theme|="wellness-soft"] #hero-subline , body[data-theme="artisan"] #hero-subline ,
-body[data-theme|="wellness-soft"] #hero-subline , body[data-theme="artisan"] #hero-subline {
+body[data-theme|="wellness-soft"] #hero-subline , body[data-theme="artisan"] #hero-subline , body[data-theme="real-estate"] #hero-subline ,
+body[data-theme|="wellness-soft"] #hero-subline , body[data-theme="artisan"] #hero-subline , body[data-theme="real-estate"] #hero-subline {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title ,
-body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title {
+body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title , body[data-theme="real-estate"] #person-name.hero-title ,
+body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title , body[data-theme="real-estate"] #person-name.hero-title {
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 8.2vw, 2.95rem);
   font-weight: 600;
@@ -316,13 +317,13 @@ body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="art
   margin: 0 0 6px;
 }
 
-body[data-theme|="wellness-soft"] #company-name.hero-company , body[data-theme="artisan"] #company-name.hero-company ,
-body[data-theme|="wellness-soft"] #company-name.hero-company , body[data-theme="artisan"] #company-name.hero-company {
+body[data-theme|="wellness-soft"] #company-name.hero-company , body[data-theme="artisan"] #company-name.hero-company , body[data-theme="real-estate"] #company-name.hero-company ,
+body[data-theme|="wellness-soft"] #company-name.hero-company , body[data-theme="artisan"] #company-name.hero-company , body[data-theme="real-estate"] #company-name.hero-company {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"] #hero-job-title , body[data-theme="artisan"] #hero-job-title ,
-body[data-theme|="wellness-soft"] #hero-job-title , body[data-theme="artisan"] #hero-job-title {
+body[data-theme|="wellness-soft"] #hero-job-title , body[data-theme="artisan"] #hero-job-title , body[data-theme="real-estate"] #hero-job-title ,
+body[data-theme|="wellness-soft"] #hero-job-title , body[data-theme="artisan"] #hero-job-title , body[data-theme="real-estate"] #hero-job-title {
   display: block !important;
   font-family: var(--font-body);
   font-size: clamp(0.72rem, 2.1vw, 0.82rem);
@@ -333,8 +334,8 @@ body[data-theme|="wellness-soft"] #hero-job-title , body[data-theme="artisan"] #
   margin: 0 0 8px;
 }
 
-body[data-theme|="wellness-soft"] #hero-professional-tagline , body[data-theme="artisan"] #hero-professional-tagline ,
-body[data-theme|="wellness-soft"] #hero-professional-tagline , body[data-theme="artisan"] #hero-professional-tagline {
+body[data-theme|="wellness-soft"] #hero-professional-tagline , body[data-theme="artisan"] #hero-professional-tagline , body[data-theme="real-estate"] #hero-professional-tagline ,
+body[data-theme|="wellness-soft"] #hero-professional-tagline , body[data-theme="artisan"] #hero-professional-tagline , body[data-theme="real-estate"] #hero-professional-tagline {
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 3.2vw, 1.2rem);
   font-weight: 500;
@@ -346,29 +347,29 @@ body[data-theme|="wellness-soft"] #hero-professional-tagline , body[data-theme="
   text-wrap: balance;
 }
 
-body[data-theme|="wellness-soft"] .hero-reassurance, body[data-theme="artisan"] .hero-reassurance,
-body[data-theme|="wellness-soft"] .hero-social-proof, body[data-theme="artisan"] .hero-social-proof,
-body[data-theme|="wellness-soft"] .hero-subtitle, body[data-theme="artisan"] .hero-subtitle,
-body[data-theme|="wellness-soft"] .hero-meta, body[data-theme="artisan"] .hero-meta,
-body[data-theme|="wellness-soft"] .hero-contact-line, body[data-theme="artisan"] .hero-contact-line,
-body[data-theme|="wellness-soft"] #hero-recommend-conversion, body[data-theme="artisan"] #hero-recommend-conversion,
-body[data-theme|="wellness-soft"] .p12-soft-hint, body[data-theme="artisan"] .p12-soft-hint,
-body[data-theme|="wellness-soft"] #left-col-head, body[data-theme="artisan"] #left-col-head,
-body[data-theme|="wellness-soft"] #hint-share-signature, body[data-theme="artisan"] #hint-share-signature,
-body[data-theme|="wellness-soft"] #hint-post-prestation, body[data-theme="artisan"] #hint-post-prestation,
-body[data-theme|="wellness-soft"] .hero-google-badge-wrap, body[data-theme="artisan"] .hero-google-badge-wrap,
-body[data-theme|="wellness-soft"] #contact-actions-guide, body[data-theme="artisan"] #contact-actions-guide,
-body[data-theme|="wellness-soft"] #pill-section-hint, body[data-theme="artisan"] #pill-section-hint,
-body[data-theme|="wellness-soft"] .compact-cta-reassurance, body[data-theme="artisan"] .compact-cta-reassurance,
-body[data-theme|="wellness-soft"] .compact-primary-cta-wrap , body[data-theme="artisan"] .compact-primary-cta-wrap ,
-body[data-theme|="wellness-soft"] .compact-primary-cta-wrap , body[data-theme="artisan"] .compact-primary-cta-wrap {
+body[data-theme|="wellness-soft"] .hero-reassurance, body[data-theme="artisan"] .hero-reassurance, body[data-theme="real-estate"] .hero-reassurance,
+body[data-theme|="wellness-soft"] .hero-social-proof, body[data-theme="artisan"] .hero-social-proof, body[data-theme="real-estate"] .hero-social-proof,
+body[data-theme|="wellness-soft"] .hero-subtitle, body[data-theme="artisan"] .hero-subtitle, body[data-theme="real-estate"] .hero-subtitle,
+body[data-theme|="wellness-soft"] .hero-meta, body[data-theme="artisan"] .hero-meta, body[data-theme="real-estate"] .hero-meta,
+body[data-theme|="wellness-soft"] .hero-contact-line, body[data-theme="artisan"] .hero-contact-line, body[data-theme="real-estate"] .hero-contact-line,
+body[data-theme|="wellness-soft"] #hero-recommend-conversion, body[data-theme="artisan"] #hero-recommend-conversion, body[data-theme="real-estate"] #hero-recommend-conversion,
+body[data-theme|="wellness-soft"] .p12-soft-hint, body[data-theme="artisan"] .p12-soft-hint, body[data-theme="real-estate"] .p12-soft-hint,
+body[data-theme|="wellness-soft"] #left-col-head, body[data-theme="artisan"] #left-col-head, body[data-theme="real-estate"] #left-col-head,
+body[data-theme|="wellness-soft"] #hint-share-signature, body[data-theme="artisan"] #hint-share-signature, body[data-theme="real-estate"] #hint-share-signature,
+body[data-theme|="wellness-soft"] #hint-post-prestation, body[data-theme="artisan"] #hint-post-prestation, body[data-theme="real-estate"] #hint-post-prestation,
+body[data-theme|="wellness-soft"] .hero-google-badge-wrap, body[data-theme="artisan"] .hero-google-badge-wrap, body[data-theme="real-estate"] .hero-google-badge-wrap,
+body[data-theme|="wellness-soft"] #contact-actions-guide, body[data-theme="artisan"] #contact-actions-guide, body[data-theme="real-estate"] #contact-actions-guide,
+body[data-theme|="wellness-soft"] #pill-section-hint, body[data-theme="artisan"] #pill-section-hint, body[data-theme="real-estate"] #pill-section-hint,
+body[data-theme|="wellness-soft"] .compact-cta-reassurance, body[data-theme="artisan"] .compact-cta-reassurance, body[data-theme="real-estate"] .compact-cta-reassurance,
+body[data-theme|="wellness-soft"] .compact-primary-cta-wrap , body[data-theme="artisan"] .compact-primary-cta-wrap , body[data-theme="real-estate"] .compact-primary-cta-wrap ,
+body[data-theme|="wellness-soft"] .compact-primary-cta-wrap , body[data-theme="artisan"] .compact-primary-cta-wrap , body[data-theme="real-estate"] .compact-primary-cta-wrap {
   display: none !important;
 }
 
 /* Carte Google */
-body[data-theme|="wellness-soft"] #hero-google-badge-compact.wellness-google-rating-card, body[data-theme="artisan"] #hero-google-badge-compact.wellness-google-rating-card,
-body[data-theme|="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline ,
-body[data-theme|="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline {
+body[data-theme|="wellness-soft"] #hero-google-badge-compact.wellness-google-rating-card, body[data-theme="artisan"] #hero-google-badge-compact.wellness-google-rating-card, body[data-theme="real-estate"] #hero-google-badge-compact.wellness-google-rating-card,
+body[data-theme|="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="real-estate"] #hero-google-badge-compact.hero-google-rating-inline ,
+body[data-theme|="wellness-soft"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="artisan"] #hero-google-badge-compact.hero-google-rating-inline , body[data-theme="real-estate"] #hero-google-badge-compact.hero-google-rating-inline {
   display: flex !important;
   width: 100%;
   max-width: 100%;
@@ -380,16 +381,16 @@ body[data-theme|="wellness-soft"] #hero-google-badge-compact.hero-google-rating-
   box-shadow: none !important;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-rating-card a , body[data-theme="artisan"] .wellness-google-rating-card a ,
-body[data-theme|="wellness-soft"] .wellness-google-rating-card a , body[data-theme="artisan"] .wellness-google-rating-card a {
+body[data-theme|="wellness-soft"] .wellness-google-rating-card a , body[data-theme="artisan"] .wellness-google-rating-card a , body[data-theme="real-estate"] .wellness-google-rating-card a ,
+body[data-theme|="wellness-soft"] .wellness-google-rating-card a , body[data-theme="artisan"] .wellness-google-rating-card a , body[data-theme="real-estate"] .wellness-google-rating-card a {
   display: block;
   width: 100%;
   text-decoration: none;
   color: inherit;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-inner , body[data-theme="artisan"] .wellness-google-inner ,
-body[data-theme|="wellness-soft"] .wellness-google-inner , body[data-theme="artisan"] .wellness-google-inner {
+body[data-theme|="wellness-soft"] .wellness-google-inner , body[data-theme="artisan"] .wellness-google-inner , body[data-theme="real-estate"] .wellness-google-inner ,
+body[data-theme|="wellness-soft"] .wellness-google-inner , body[data-theme="artisan"] .wellness-google-inner , body[data-theme="real-estate"] .wellness-google-inner {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -401,8 +402,8 @@ body[data-theme|="wellness-soft"] .wellness-google-inner , body[data-theme="arti
   box-shadow: 0 4px 16px rgba(45, 90, 69, 0.05);
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-left , body[data-theme="artisan"] .wellness-google-left ,
-body[data-theme|="wellness-soft"] .wellness-google-left , body[data-theme="artisan"] .wellness-google-left {
+body[data-theme|="wellness-soft"] .wellness-google-left , body[data-theme="artisan"] .wellness-google-left , body[data-theme="real-estate"] .wellness-google-left ,
+body[data-theme|="wellness-soft"] .wellness-google-left , body[data-theme="artisan"] .wellness-google-left , body[data-theme="real-estate"] .wellness-google-left {
   display: flex;
   align-items: baseline;
   gap: 6px;
@@ -410,15 +411,15 @@ body[data-theme|="wellness-soft"] .wellness-google-left , body[data-theme="artis
   min-width: 0;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-star-icon , body[data-theme="artisan"] .wellness-google-star-icon ,
-body[data-theme|="wellness-soft"] .wellness-google-star-icon , body[data-theme="artisan"] .wellness-google-star-icon {
+body[data-theme|="wellness-soft"] .wellness-google-star-icon , body[data-theme="artisan"] .wellness-google-star-icon , body[data-theme="real-estate"] .wellness-google-star-icon ,
+body[data-theme|="wellness-soft"] .wellness-google-star-icon , body[data-theme="artisan"] .wellness-google-star-icon , body[data-theme="real-estate"] .wellness-google-star-icon {
   font-size: 0.95rem;
   line-height: 1;
   color: #e8a317;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-score , body[data-theme="artisan"] .wellness-google-score ,
-body[data-theme|="wellness-soft"] .wellness-google-score , body[data-theme="artisan"] .wellness-google-score {
+body[data-theme|="wellness-soft"] .wellness-google-score , body[data-theme="artisan"] .wellness-google-score , body[data-theme="real-estate"] .wellness-google-score ,
+body[data-theme|="wellness-soft"] .wellness-google-score , body[data-theme="artisan"] .wellness-google-score , body[data-theme="real-estate"] .wellness-google-score {
   font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 600;
@@ -426,15 +427,15 @@ body[data-theme|="wellness-soft"] .wellness-google-score , body[data-theme="arti
   letter-spacing: -0.02em;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-label , body[data-theme="artisan"] .wellness-google-label ,
-body[data-theme|="wellness-soft"] .wellness-google-label , body[data-theme="artisan"] .wellness-google-label {
+body[data-theme|="wellness-soft"] .wellness-google-label , body[data-theme="artisan"] .wellness-google-label , body[data-theme="real-estate"] .wellness-google-label ,
+body[data-theme|="wellness-soft"] .wellness-google-label , body[data-theme="artisan"] .wellness-google-label , body[data-theme="real-estate"] .wellness-google-label {
   font-size: 0.72rem;
   font-weight: 500;
   color: var(--card-muted);
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-count , body[data-theme="artisan"] .wellness-google-count ,
-body[data-theme|="wellness-soft"] .wellness-google-count , body[data-theme="artisan"] .wellness-google-count {
+body[data-theme|="wellness-soft"] .wellness-google-count , body[data-theme="artisan"] .wellness-google-count , body[data-theme="real-estate"] .wellness-google-count ,
+body[data-theme|="wellness-soft"] .wellness-google-count , body[data-theme="artisan"] .wellness-google-count , body[data-theme="real-estate"] .wellness-google-count {
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -443,8 +444,8 @@ body[data-theme|="wellness-soft"] .wellness-google-count , body[data-theme="arti
   white-space: nowrap;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatars , body[data-theme="artisan"] .wellness-google-avatars ,
-body[data-theme|="wellness-soft"] .wellness-google-avatars , body[data-theme="artisan"] .wellness-google-avatars {
+body[data-theme|="wellness-soft"] .wellness-google-avatars , body[data-theme="artisan"] .wellness-google-avatars , body[data-theme="real-estate"] .wellness-google-avatars ,
+body[data-theme|="wellness-soft"] .wellness-google-avatars , body[data-theme="artisan"] .wellness-google-avatars , body[data-theme="real-estate"] .wellness-google-avatars {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -455,8 +456,8 @@ body[data-theme|="wellness-soft"] .wellness-google-avatars , body[data-theme="ar
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatar , body[data-theme="artisan"] .wellness-google-avatar ,
-body[data-theme|="wellness-soft"] .wellness-google-avatar , body[data-theme="artisan"] .wellness-google-avatar {
+body[data-theme|="wellness-soft"] .wellness-google-avatar , body[data-theme="artisan"] .wellness-google-avatar , body[data-theme="real-estate"] .wellness-google-avatar ,
+body[data-theme|="wellness-soft"] .wellness-google-avatar , body[data-theme="artisan"] .wellness-google-avatar , body[data-theme="real-estate"] .wellness-google-avatar {
   width: 28px;
   height: 28px;
   margin-left: -8px;
@@ -466,24 +467,24 @@ body[data-theme|="wellness-soft"] .wellness-google-avatar , body[data-theme="art
   box-shadow: 0 2px 6px rgba(36, 53, 46, 0.1);
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatar:first-child , body[data-theme="artisan"] .wellness-google-avatar:first-child ,
-body[data-theme|="wellness-soft"] .wellness-google-avatar:first-child , body[data-theme="artisan"] .wellness-google-avatar:first-child {
+body[data-theme|="wellness-soft"] .wellness-google-avatar:first-child , body[data-theme="artisan"] .wellness-google-avatar:first-child , body[data-theme="real-estate"] .wellness-google-avatar:first-child ,
+body[data-theme|="wellness-soft"] .wellness-google-avatar:first-child , body[data-theme="artisan"] .wellness-google-avatar:first-child , body[data-theme="real-estate"] .wellness-google-avatar:first-child {
   margin-left: 0;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(2) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(2) ,
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(2) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(2) {
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(2) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(2) , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(2) ,
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(2) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(2) , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(2) {
   background: linear-gradient(145deg, #d0ddc8 0%, #8fa386 100%);
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3) ,
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3) {
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3) , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(3) ,
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3) , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3) , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(3) {
   background: linear-gradient(145deg, #e0d5c4 0%, #b5a696 100%);
   position: relative;
 }
 
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after ,
-body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after {
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(3)::after ,
+body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="artisan"] .wellness-google-avatar:nth-child(3)::after , body[data-theme="real-estate"] .wellness-google-avatar:nth-child(3)::after {
   content: "+";
   position: absolute;
   inset: 0;
@@ -498,8 +499,8 @@ body[data-theme|="wellness-soft"] .wellness-google-avatar:nth-child(3)::after , 
 }
 
 /* CTA principal */
-body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero , body[data-theme="artisan"] .hero .btn-primary-contact-hero ,
-body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero , body[data-theme="artisan"] .hero .btn-primary-contact-hero {
+body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero , body[data-theme="artisan"] .hero .btn-primary-contact-hero , body[data-theme="real-estate"] .hero .btn-primary-contact-hero ,
+body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero , body[data-theme="artisan"] .hero .btn-primary-contact-hero , body[data-theme="real-estate"] .hero .btn-primary-contact-hero {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -521,8 +522,8 @@ body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero , body[data-th
     0 2px 0 rgba(255, 255, 255, 0.12) inset !important;
 }
 
-body[data-theme|="wellness-soft"] .wellness-cta-leaf , body[data-theme="artisan"] .wellness-cta-leaf ,
-body[data-theme|="wellness-soft"] .wellness-cta-leaf , body[data-theme="artisan"] .wellness-cta-leaf {
+body[data-theme|="wellness-soft"] .wellness-cta-leaf , body[data-theme="artisan"] .wellness-cta-leaf , body[data-theme="real-estate"] .wellness-cta-leaf ,
+body[data-theme|="wellness-soft"] .wellness-cta-leaf , body[data-theme="artisan"] .wellness-cta-leaf , body[data-theme="real-estate"] .wellness-cta-leaf {
   display: inline-flex;
   width: 20px;
   height: 20px;
@@ -534,16 +535,16 @@ body[data-theme|="wellness-soft"] .wellness-cta-leaf , body[data-theme="artisan"
 }
 
 @media (hover: hover) {
-body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero:hover , body[data-theme="artisan"] .hero .btn-primary-contact-hero:hover ,
-body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero:hover , body[data-theme="artisan"] .hero .btn-primary-contact-hero:hover {
+body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero:hover , body[data-theme="artisan"] .hero .btn-primary-contact-hero:hover , body[data-theme="real-estate"] .hero .btn-primary-contact-hero:hover ,
+body[data-theme|="wellness-soft"] .hero .btn-primary-contact-hero:hover , body[data-theme="artisan"] .hero .btn-primary-contact-hero:hover , body[data-theme="real-estate"] .hero .btn-primary-contact-hero:hover {
     background: linear-gradient(180deg, #3d7a5e 0%, #346552 100%) !important;
     box-shadow: 0 14px 36px rgba(45, 90, 69, 0.32) !important;
   }
 }
 
 /* Actions rapides — premium, aéré */
-body[data-theme|="wellness-soft"] .wellness-quick-actions , body[data-theme="artisan"] .wellness-quick-actions ,
-body[data-theme|="wellness-soft"] .wellness-quick-actions , body[data-theme="artisan"] .wellness-quick-actions {
+body[data-theme|="wellness-soft"] .wellness-quick-actions , body[data-theme="artisan"] .wellness-quick-actions , body[data-theme="real-estate"] .wellness-quick-actions ,
+body[data-theme|="wellness-soft"] .wellness-quick-actions , body[data-theme="artisan"] .wellness-quick-actions , body[data-theme="real-estate"] .wellness-quick-actions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
@@ -554,37 +555,37 @@ body[data-theme|="wellness-soft"] .wellness-quick-actions , body[data-theme="art
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
-body[data-theme|="wellness-soft"] .hero-compact-tel-row, body[data-theme="artisan"] .hero-compact-tel-row,
-body[data-theme|="wellness-soft"] .hero-slot-call-wa , body[data-theme="artisan"] .hero-slot-call-wa ,
-body[data-theme|="wellness-soft"] .hero-slot-call-wa , body[data-theme="artisan"] .hero-slot-call-wa {
+body[data-theme|="wellness-soft"] .hero-compact-tel-row, body[data-theme="artisan"] .hero-compact-tel-row, body[data-theme="real-estate"] .hero-compact-tel-row,
+body[data-theme|="wellness-soft"] .hero-slot-call-wa , body[data-theme="artisan"] .hero-slot-call-wa , body[data-theme="real-estate"] .hero-slot-call-wa ,
+body[data-theme|="wellness-soft"] .hero-slot-call-wa , body[data-theme="artisan"] .hero-slot-call-wa , body[data-theme="real-estate"] .hero-slot-call-wa {
   display: contents;
 }
 
-body[data-theme|="wellness-soft"] .hero-slot-add-contact , body[data-theme="artisan"] .hero-slot-add-contact ,
-body[data-theme|="wellness-soft"] .hero-slot-add-contact , body[data-theme="artisan"] .hero-slot-add-contact {
+body[data-theme|="wellness-soft"] .hero-slot-add-contact , body[data-theme="artisan"] .hero-slot-add-contact , body[data-theme="real-estate"] .hero-slot-add-contact ,
+body[data-theme|="wellness-soft"] .hero-slot-add-contact , body[data-theme="artisan"] .hero-slot-add-contact , body[data-theme="real-estate"] .hero-slot-add-contact {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="artisan"] .wellness-quick-actions > #btn-cta-laisser-avis ,
-body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="artisan"] .wellness-quick-actions > #btn-cta-laisser-avis {
+body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="artisan"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="real-estate"] .wellness-quick-actions > #btn-cta-laisser-avis ,
+body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="artisan"] .wellness-quick-actions > #btn-cta-laisser-avis , body[data-theme="real-estate"] .wellness-quick-actions > #btn-cta-laisser-avis {
   grid-column: 3;
 }
 
-body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="artisan"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) ,
-body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="artisan"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) {
+body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="artisan"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="real-estate"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) ,
+body[data-theme|="wellness-soft"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="artisan"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) , body[data-theme="real-estate"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]) {
   grid-column: 4;
 }
 
-body[data-theme|="wellness-soft"] #btn-discrete-partager[hidden] , body[data-theme="artisan"] #btn-discrete-partager[hidden] ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager[hidden] , body[data-theme="artisan"] #btn-discrete-partager[hidden] {
+body[data-theme|="wellness-soft"] #btn-discrete-partager[hidden] , body[data-theme="artisan"] #btn-discrete-partager[hidden] , body[data-theme="real-estate"] #btn-discrete-partager[hidden] ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager[hidden] , body[data-theme="artisan"] #btn-discrete-partager[hidden] , body[data-theme="real-estate"] #btn-discrete-partager[hidden] {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"] #btn-call, body[data-theme="artisan"] #btn-call,
-body[data-theme|="wellness-soft"] #btn-whatsapp, body[data-theme="artisan"] #btn-whatsapp,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis, body[data-theme="artisan"] #btn-cta-laisser-avis,
-body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager {
+body[data-theme|="wellness-soft"] #btn-call, body[data-theme="artisan"] #btn-call, body[data-theme="real-estate"] #btn-call,
+body[data-theme|="wellness-soft"] #btn-whatsapp, body[data-theme="artisan"] #btn-whatsapp, body[data-theme="real-estate"] #btn-whatsapp,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis, body[data-theme="artisan"] #btn-cta-laisser-avis, body[data-theme="real-estate"] #btn-cta-laisser-avis,
+body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager , body[data-theme="real-estate"] #btn-discrete-partager ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager , body[data-theme="real-estate"] #btn-discrete-partager {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -597,9 +598,9 @@ body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="arti
   color: var(--card-text) !important;
 }
 
-body[data-theme|="wellness-soft"] #btn-call::after, body[data-theme="artisan"] #btn-call::after,
-body[data-theme|="wellness-soft"] #btn-whatsapp::after , body[data-theme="artisan"] #btn-whatsapp::after ,
-body[data-theme|="wellness-soft"] #btn-whatsapp::after , body[data-theme="artisan"] #btn-whatsapp::after {
+body[data-theme|="wellness-soft"] #btn-call::after, body[data-theme="artisan"] #btn-call::after, body[data-theme="real-estate"] #btn-call::after,
+body[data-theme|="wellness-soft"] #btn-whatsapp::after , body[data-theme="artisan"] #btn-whatsapp::after , body[data-theme="real-estate"] #btn-whatsapp::after ,
+body[data-theme|="wellness-soft"] #btn-whatsapp::after , body[data-theme="artisan"] #btn-whatsapp::after , body[data-theme="real-estate"] #btn-whatsapp::after {
   content: "";
   position: absolute;
   top: 14%;
@@ -616,22 +617,22 @@ body[data-theme|="wellness-soft"] #btn-whatsapp::after , body[data-theme="artisa
   pointer-events: none;
 }
 
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis , body[data-theme="artisan"] #btn-cta-laisser-avis ,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis , body[data-theme="artisan"] #btn-cta-laisser-avis {
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis , body[data-theme="artisan"] #btn-cta-laisser-avis , body[data-theme="real-estate"] #btn-cta-laisser-avis ,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis , body[data-theme="artisan"] #btn-cta-laisser-avis , body[data-theme="real-estate"] #btn-cta-laisser-avis {
   box-shadow: inset -1px 0 0 rgba(109, 125, 114, 0.14) !important;
 }
 
-body[data-theme|="wellness-soft"] #btn-call .btn-link-leading, body[data-theme="artisan"] #btn-call .btn-link-leading,
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-leading , body[data-theme="artisan"] #btn-whatsapp .btn-link-leading ,
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-leading , body[data-theme="artisan"] #btn-whatsapp .btn-link-leading {
+body[data-theme|="wellness-soft"] #btn-call .btn-link-leading, body[data-theme="artisan"] #btn-call .btn-link-leading, body[data-theme="real-estate"] #btn-call .btn-link-leading,
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-leading , body[data-theme="artisan"] #btn-whatsapp .btn-link-leading , body[data-theme="real-estate"] #btn-whatsapp .btn-link-leading ,
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-leading , body[data-theme="artisan"] #btn-whatsapp .btn-link-leading , body[data-theme="real-estate"] #btn-whatsapp .btn-link-leading {
   display: none;
 }
 
-body[data-theme|="wellness-soft"] #btn-call::before, body[data-theme="artisan"] #btn-call::before,
-body[data-theme|="wellness-soft"] #btn-whatsapp::before, body[data-theme="artisan"] #btn-whatsapp::before,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before, body[data-theme="artisan"] #btn-cta-laisser-avis::before,
-body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before {
+body[data-theme|="wellness-soft"] #btn-call::before, body[data-theme="artisan"] #btn-call::before, body[data-theme="real-estate"] #btn-call::before,
+body[data-theme|="wellness-soft"] #btn-whatsapp::before, body[data-theme="artisan"] #btn-whatsapp::before, body[data-theme="real-estate"] #btn-whatsapp::before,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before, body[data-theme="artisan"] #btn-cta-laisser-avis::before, body[data-theme="real-estate"] #btn-cta-laisser-avis::before,
+body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before , body[data-theme="real-estate"] #btn-discrete-partager::before ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before , body[data-theme="real-estate"] #btn-discrete-partager::before {
   content: "";
   width: 48px;
   height: 48px;
@@ -646,35 +647,35 @@ body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-the
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-body[data-theme|="wellness-soft"] #btn-call::before , body[data-theme="artisan"] #btn-call::before ,
-body[data-theme|="wellness-soft"] #btn-call::before , body[data-theme="artisan"] #btn-call::before {
+body[data-theme|="wellness-soft"] #btn-call::before , body[data-theme="artisan"] #btn-call::before , body[data-theme="real-estate"] #btn-call::before ,
+body[data-theme|="wellness-soft"] #btn-call::before , body[data-theme="artisan"] #btn-call::before , body[data-theme="real-estate"] #btn-call::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-body[data-theme|="wellness-soft"] #btn-whatsapp::before , body[data-theme="artisan"] #btn-whatsapp::before ,
-body[data-theme|="wellness-soft"] #btn-whatsapp::before , body[data-theme="artisan"] #btn-whatsapp::before {
+body[data-theme|="wellness-soft"] #btn-whatsapp::before , body[data-theme="artisan"] #btn-whatsapp::before , body[data-theme="real-estate"] #btn-whatsapp::before ,
+body[data-theme|="wellness-soft"] #btn-whatsapp::before , body[data-theme="artisan"] #btn-whatsapp::before , body[data-theme="real-estate"] #btn-whatsapp::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before , body[data-theme="artisan"] #btn-cta-laisser-avis::before ,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before , body[data-theme="artisan"] #btn-cta-laisser-avis::before {
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before , body[data-theme="artisan"] #btn-cta-laisser-avis::before , body[data-theme="real-estate"] #btn-cta-laisser-avis::before ,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::before , body[data-theme="artisan"] #btn-cta-laisser-avis::before , body[data-theme="real-estate"] #btn-cta-laisser-avis::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before {
+body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before , body[data-theme="real-estate"] #btn-discrete-partager::before ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager::before , body[data-theme="artisan"] #btn-discrete-partager::before , body[data-theme="real-estate"] #btn-discrete-partager::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-body[data-theme|="wellness-soft"] #btn-call .btn-link-text, body[data-theme="artisan"] #btn-call .btn-link-text,
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text , body[data-theme="artisan"] #btn-whatsapp .btn-link-text ,
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text , body[data-theme="artisan"] #btn-whatsapp .btn-link-text {
+body[data-theme|="wellness-soft"] #btn-call .btn-link-text, body[data-theme="artisan"] #btn-call .btn-link-text, body[data-theme="real-estate"] #btn-call .btn-link-text,
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text , body[data-theme="artisan"] #btn-whatsapp .btn-link-text , body[data-theme="real-estate"] #btn-whatsapp .btn-link-text ,
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text , body[data-theme="artisan"] #btn-whatsapp .btn-link-text , body[data-theme="real-estate"] #btn-whatsapp .btn-link-text {
   font-size: 0;
   line-height: 0;
 }
 
-body[data-theme|="wellness-soft"] #btn-call .btn-link-text::after , body[data-theme="artisan"] #btn-call .btn-link-text::after ,
-body[data-theme|="wellness-soft"] #btn-call .btn-link-text::after , body[data-theme="artisan"] #btn-call .btn-link-text::after {
+body[data-theme|="wellness-soft"] #btn-call .btn-link-text::after , body[data-theme="artisan"] #btn-call .btn-link-text::after , body[data-theme="real-estate"] #btn-call .btn-link-text::after ,
+body[data-theme|="wellness-soft"] #btn-call .btn-link-text::after , body[data-theme="artisan"] #btn-call .btn-link-text::after , body[data-theme="real-estate"] #btn-call .btn-link-text::after {
   content: "Appeler";
   font-size: 0.72rem;
   font-weight: 500;
@@ -682,8 +683,8 @@ body[data-theme|="wellness-soft"] #btn-call .btn-link-text::after , body[data-th
   color: var(--card-text);
 }
 
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text::after , body[data-theme="artisan"] #btn-whatsapp .btn-link-text::after ,
-body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text::after , body[data-theme="artisan"] #btn-whatsapp .btn-link-text::after {
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text::after , body[data-theme="artisan"] #btn-whatsapp .btn-link-text::after , body[data-theme="real-estate"] #btn-whatsapp .btn-link-text::after ,
+body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text::after , body[data-theme="artisan"] #btn-whatsapp .btn-link-text::after , body[data-theme="real-estate"] #btn-whatsapp .btn-link-text::after {
   content: "WhatsApp";
   font-size: 0.72rem;
   font-weight: 500;
@@ -691,14 +692,14 @@ body[data-theme|="wellness-soft"] #btn-whatsapp .btn-link-text::after , body[dat
   color: var(--card-text);
 }
 
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis, body[data-theme="artisan"] #btn-cta-laisser-avis,
-body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager {
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis, body[data-theme="artisan"] #btn-cta-laisser-avis, body[data-theme="real-estate"] #btn-cta-laisser-avis,
+body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager , body[data-theme="real-estate"] #btn-discrete-partager ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager , body[data-theme="artisan"] #btn-discrete-partager , body[data-theme="real-estate"] #btn-discrete-partager {
   font-size: 0;
 }
 
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::after , body[data-theme="artisan"] #btn-cta-laisser-avis::after ,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::after , body[data-theme="artisan"] #btn-cta-laisser-avis::after {
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::after , body[data-theme="artisan"] #btn-cta-laisser-avis::after , body[data-theme="real-estate"] #btn-cta-laisser-avis::after ,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::after , body[data-theme="artisan"] #btn-cta-laisser-avis::after , body[data-theme="real-estate"] #btn-cta-laisser-avis::after {
   content: "Avis";
   font-size: 0.72rem;
   font-weight: 500;
@@ -710,8 +711,8 @@ body[data-theme|="wellness-soft"] #btn-cta-laisser-avis::after , body[data-theme
   background: none;
 }
 
-body[data-theme|="wellness-soft"] #btn-discrete-partager::after , body[data-theme="artisan"] #btn-discrete-partager::after ,
-body[data-theme|="wellness-soft"] #btn-discrete-partager::after , body[data-theme="artisan"] #btn-discrete-partager::after {
+body[data-theme|="wellness-soft"] #btn-discrete-partager::after , body[data-theme="artisan"] #btn-discrete-partager::after , body[data-theme="real-estate"] #btn-discrete-partager::after ,
+body[data-theme|="wellness-soft"] #btn-discrete-partager::after , body[data-theme="artisan"] #btn-discrete-partager::after , body[data-theme="real-estate"] #btn-discrete-partager::after {
   content: "Partager";
   font-size: 0.72rem;
   font-weight: 500;
@@ -724,54 +725,54 @@ body[data-theme|="wellness-soft"] #btn-discrete-partager::after , body[data-them
 }
 
 /* Grille principale */
-body[data-theme|="wellness-soft"] .main-grid , body[data-theme="artisan"] .main-grid ,
-body[data-theme|="wellness-soft"] .main-grid , body[data-theme="artisan"] .main-grid {
+body[data-theme|="wellness-soft"] .main-grid , body[data-theme="artisan"] .main-grid , body[data-theme="real-estate"] .main-grid ,
+body[data-theme|="wellness-soft"] .main-grid , body[data-theme="artisan"] .main-grid , body[data-theme="real-estate"] .main-grid {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 0;
 }
 
-body[data-theme|="wellness-soft"] .card-block, body[data-theme="artisan"] .card-block,
-body[data-theme|="wellness-soft"] .card-block--quote , body[data-theme="artisan"] .card-block--quote ,
-body[data-theme|="wellness-soft"] .card-block--quote , body[data-theme="artisan"] .card-block--quote {
+body[data-theme|="wellness-soft"] .card-block, body[data-theme="artisan"] .card-block, body[data-theme="real-estate"] .card-block,
+body[data-theme|="wellness-soft"] .card-block--quote , body[data-theme="artisan"] .card-block--quote , body[data-theme="real-estate"] .card-block--quote ,
+body[data-theme|="wellness-soft"] .card-block--quote , body[data-theme="artisan"] .card-block--quote , body[data-theme="real-estate"] .card-block--quote {
   padding: 0;
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
-body[data-theme|="wellness-soft"] .card-block::before , body[data-theme="artisan"] .card-block::before ,
-body[data-theme|="wellness-soft"] .card-block::before , body[data-theme="artisan"] .card-block::before {
+body[data-theme|="wellness-soft"] .card-block::before , body[data-theme="artisan"] .card-block::before , body[data-theme="real-estate"] .card-block::before ,
+body[data-theme|="wellness-soft"] .card-block::before , body[data-theme="artisan"] .card-block::before , body[data-theme="real-estate"] .card-block::before {
   display: none;
 }
 
-body[data-theme|="wellness-soft"] #slot-call-legacy, body[data-theme="artisan"] #slot-call-legacy,
-body[data-theme|="wellness-soft"] #legacy-contact-row, body[data-theme="artisan"] #legacy-contact-row,
-body[data-theme|="wellness-soft"] .compact-acc-trigger--quote, body[data-theme="artisan"] .compact-acc-trigger--quote,
-body[data-theme|="wellness-soft"] #panel-feedback:not(.is-open), body[data-theme="artisan"] #panel-feedback:not(.is-open),
-body[data-theme|="wellness-soft"] #panel-share:not(.is-open), body[data-theme="artisan"] #panel-share:not(.is-open),
-body[data-theme|="wellness-soft"] #panel-pay:not(.is-open) , body[data-theme="artisan"] #panel-pay:not(.is-open) ,
-body[data-theme|="wellness-soft"] #panel-pay:not(.is-open) , body[data-theme="artisan"] #panel-pay:not(.is-open) {
+body[data-theme|="wellness-soft"] #slot-call-legacy, body[data-theme="artisan"] #slot-call-legacy, body[data-theme="real-estate"] #slot-call-legacy,
+body[data-theme|="wellness-soft"] #legacy-contact-row, body[data-theme="artisan"] #legacy-contact-row, body[data-theme="real-estate"] #legacy-contact-row,
+body[data-theme|="wellness-soft"] .compact-acc-trigger--quote, body[data-theme="artisan"] .compact-acc-trigger--quote, body[data-theme="real-estate"] .compact-acc-trigger--quote,
+body[data-theme|="wellness-soft"] #panel-feedback:not(.is-open), body[data-theme="artisan"] #panel-feedback:not(.is-open), body[data-theme="real-estate"] #panel-feedback:not(.is-open),
+body[data-theme|="wellness-soft"] #panel-share:not(.is-open), body[data-theme="artisan"] #panel-share:not(.is-open), body[data-theme="real-estate"] #panel-share:not(.is-open),
+body[data-theme|="wellness-soft"] #panel-pay:not(.is-open) , body[data-theme="artisan"] #panel-pay:not(.is-open) , body[data-theme="real-estate"] #panel-pay:not(.is-open) ,
+body[data-theme|="wellness-soft"] #panel-pay:not(.is-open) , body[data-theme="artisan"] #panel-pay:not(.is-open) , body[data-theme="real-estate"] #panel-pay:not(.is-open) {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"].public-card--compact #panel-recommend , body[data-theme="artisan"].public-card--compact #panel-recommend ,
-body[data-theme|="wellness-soft"].public-card--compact #panel-recommend , body[data-theme="artisan"].public-card--compact #panel-recommend {
+body[data-theme|="wellness-soft"].public-card--compact #panel-recommend , body[data-theme="artisan"].public-card--compact #panel-recommend , body[data-theme="real-estate"].public-card--compact #panel-recommend ,
+body[data-theme|="wellness-soft"].public-card--compact #panel-recommend , body[data-theme="artisan"].public-card--compact #panel-recommend , body[data-theme="real-estate"].public-card--compact #panel-recommend {
   display: block !important;
   border: none;
   padding: 0;
   margin: 0;
 }
 
-body[data-theme|="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="artisan"] #panel-recommend:has(#recommend-block[style*="display: none"]) ,
-body[data-theme|="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="artisan"] #panel-recommend:has(#recommend-block[style*="display: none"]) {
+body[data-theme|="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="artisan"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="real-estate"] #panel-recommend:has(#recommend-block[style*="display: none"]) ,
+body[data-theme|="wellness-soft"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="artisan"] #panel-recommend:has(#recommend-block[style*="display: none"]) , body[data-theme="real-estate"] #panel-recommend:has(#recommend-block[style*="display: none"]) {
   display: none !important;
 }
 
 /* Carte recommandation — ligne cliquable */
-body[data-theme|="wellness-soft"] .wellness-premium-reco-card , body[data-theme="artisan"] .wellness-premium-reco-card ,
-body[data-theme|="wellness-soft"] .wellness-premium-reco-card , body[data-theme="artisan"] .wellness-premium-reco-card {
+body[data-theme|="wellness-soft"] .wellness-premium-reco-card , body[data-theme="artisan"] .wellness-premium-reco-card , body[data-theme="real-estate"] .wellness-premium-reco-card ,
+body[data-theme|="wellness-soft"] .wellness-premium-reco-card , body[data-theme="artisan"] .wellness-premium-reco-card , body[data-theme="real-estate"] .wellness-premium-reco-card {
   margin: 0 0 8px;
   padding: 0;
   background: transparent;
@@ -779,8 +780,8 @@ body[data-theme|="wellness-soft"] .wellness-premium-reco-card , body[data-theme=
   box-shadow: none;
 }
 
-body[data-theme|="wellness-soft"] .wellness-premium-row , body[data-theme="artisan"] .wellness-premium-row ,
-body[data-theme|="wellness-soft"] .wellness-premium-row , body[data-theme="artisan"] .wellness-premium-row {
+body[data-theme|="wellness-soft"] .wellness-premium-row , body[data-theme="artisan"] .wellness-premium-row , body[data-theme="real-estate"] .wellness-premium-row ,
+body[data-theme|="wellness-soft"] .wellness-premium-row , body[data-theme="artisan"] .wellness-premium-row , body[data-theme="real-estate"] .wellness-premium-row {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -798,15 +799,15 @@ body[data-theme|="wellness-soft"] .wellness-premium-row , body[data-theme="artis
 }
 
 @media (hover: hover) {
-body[data-theme|="wellness-soft"] .wellness-premium-row:hover , body[data-theme="artisan"] .wellness-premium-row:hover ,
-body[data-theme|="wellness-soft"] .wellness-premium-row:hover , body[data-theme="artisan"] .wellness-premium-row:hover {
+body[data-theme|="wellness-soft"] .wellness-premium-row:hover , body[data-theme="artisan"] .wellness-premium-row:hover , body[data-theme="real-estate"] .wellness-premium-row:hover ,
+body[data-theme|="wellness-soft"] .wellness-premium-row:hover , body[data-theme="artisan"] .wellness-premium-row:hover , body[data-theme="real-estate"] .wellness-premium-row:hover {
     border-color: rgba(45, 90, 69, 0.25);
     box-shadow: 0 10px 28px rgba(45, 90, 69, 0.1);
   }
 }
 
-body[data-theme|="wellness-soft"] .wellness-row-icon , body[data-theme="artisan"] .wellness-row-icon ,
-body[data-theme|="wellness-soft"] .wellness-row-icon , body[data-theme="artisan"] .wellness-row-icon {
+body[data-theme|="wellness-soft"] .wellness-row-icon , body[data-theme="artisan"] .wellness-row-icon , body[data-theme="real-estate"] .wellness-row-icon ,
+body[data-theme|="wellness-soft"] .wellness-row-icon , body[data-theme="artisan"] .wellness-row-icon , body[data-theme="real-estate"] .wellness-row-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -818,14 +819,14 @@ body[data-theme|="wellness-soft"] .wellness-row-icon , body[data-theme="artisan"
   color: var(--card-primary);
 }
 
-body[data-theme|="wellness-soft"] .wellness-row-body , body[data-theme="artisan"] .wellness-row-body ,
-body[data-theme|="wellness-soft"] .wellness-row-body , body[data-theme="artisan"] .wellness-row-body {
+body[data-theme|="wellness-soft"] .wellness-row-body , body[data-theme="artisan"] .wellness-row-body , body[data-theme="real-estate"] .wellness-row-body ,
+body[data-theme|="wellness-soft"] .wellness-row-body , body[data-theme="artisan"] .wellness-row-body , body[data-theme="real-estate"] .wellness-row-body {
   flex: 1;
   min-width: 0;
 }
 
-body[data-theme|="wellness-soft"] .wellness-reco-title , body[data-theme="artisan"] .wellness-reco-title ,
-body[data-theme|="wellness-soft"] .wellness-reco-title , body[data-theme="artisan"] .wellness-reco-title {
+body[data-theme|="wellness-soft"] .wellness-reco-title , body[data-theme="artisan"] .wellness-reco-title , body[data-theme="real-estate"] .wellness-reco-title ,
+body[data-theme|="wellness-soft"] .wellness-reco-title , body[data-theme="artisan"] .wellness-reco-title , body[data-theme="real-estate"] .wellness-reco-title {
   font-family: var(--font-display);
   font-size: 1.08rem;
   font-weight: 600;
@@ -834,16 +835,16 @@ body[data-theme|="wellness-soft"] .wellness-reco-title , body[data-theme="artisa
   margin: 0 0 2px;
 }
 
-body[data-theme|="wellness-soft"] .wellness-reco-sub , body[data-theme="artisan"] .wellness-reco-sub ,
-body[data-theme|="wellness-soft"] .wellness-reco-sub , body[data-theme="artisan"] .wellness-reco-sub {
+body[data-theme|="wellness-soft"] .wellness-reco-sub , body[data-theme="artisan"] .wellness-reco-sub , body[data-theme="real-estate"] .wellness-reco-sub ,
+body[data-theme|="wellness-soft"] .wellness-reco-sub , body[data-theme="artisan"] .wellness-reco-sub , body[data-theme="real-estate"] .wellness-reco-sub {
   font-size: 0.78rem;
   line-height: 1.35;
   color: var(--card-muted);
   margin: 0;
 }
 
-body[data-theme|="wellness-soft"] .wellness-row-chevron , body[data-theme="artisan"] .wellness-row-chevron ,
-body[data-theme|="wellness-soft"] .wellness-row-chevron , body[data-theme="artisan"] .wellness-row-chevron {
+body[data-theme|="wellness-soft"] .wellness-row-chevron , body[data-theme="artisan"] .wellness-row-chevron , body[data-theme="real-estate"] .wellness-row-chevron ,
+body[data-theme|="wellness-soft"] .wellness-row-chevron , body[data-theme="artisan"] .wellness-row-chevron , body[data-theme="real-estate"] .wellness-row-chevron {
   flex-shrink: 0;
   width: 10px;
   height: 10px;
@@ -854,15 +855,15 @@ body[data-theme|="wellness-soft"] .wellness-row-chevron , body[data-theme="artis
   opacity: 0.55;
 }
 
-body[data-theme|="wellness-soft"] .wellness-reco-action, body[data-theme="artisan"] .wellness-reco-action,
-body[data-theme|="wellness-soft"] #recommend-share-options , body[data-theme="artisan"] #recommend-share-options ,
-body[data-theme|="wellness-soft"] #recommend-share-options , body[data-theme="artisan"] #recommend-share-options {
+body[data-theme|="wellness-soft"] .wellness-reco-action, body[data-theme="artisan"] .wellness-reco-action, body[data-theme="real-estate"] .wellness-reco-action,
+body[data-theme|="wellness-soft"] #recommend-share-options , body[data-theme="artisan"] #recommend-share-options , body[data-theme="real-estate"] #recommend-share-options ,
+body[data-theme|="wellness-soft"] #recommend-share-options , body[data-theme="artisan"] #recommend-share-options , body[data-theme="real-estate"] #recommend-share-options {
   display: none !important;
 }
 
 /* Carte QR */
-body[data-theme|="wellness-soft"] .qr-wrap.wellness-qr-card , body[data-theme="artisan"] .qr-wrap.wellness-qr-card ,
-body[data-theme|="wellness-soft"] .qr-wrap.wellness-qr-card , body[data-theme="artisan"] .qr-wrap.wellness-qr-card {
+body[data-theme|="wellness-soft"] .qr-wrap.wellness-qr-card , body[data-theme="artisan"] .qr-wrap.wellness-qr-card , body[data-theme="real-estate"] .qr-wrap.wellness-qr-card ,
+body[data-theme|="wellness-soft"] .qr-wrap.wellness-qr-card , body[data-theme="artisan"] .qr-wrap.wellness-qr-card , body[data-theme="real-estate"] .qr-wrap.wellness-qr-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -876,8 +877,8 @@ body[data-theme|="wellness-soft"] .qr-wrap.wellness-qr-card , body[data-theme="a
   text-align: left;
 }
 
-body[data-theme|="wellness-soft"] .qr-wrap img , body[data-theme="artisan"] .qr-wrap img ,
-body[data-theme|="wellness-soft"] .qr-wrap img , body[data-theme="artisan"] .qr-wrap img {
+body[data-theme|="wellness-soft"] .qr-wrap img , body[data-theme="artisan"] .qr-wrap img , body[data-theme="real-estate"] .qr-wrap img ,
+body[data-theme|="wellness-soft"] .qr-wrap img , body[data-theme="artisan"] .qr-wrap img , body[data-theme="real-estate"] .qr-wrap img {
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -888,22 +889,22 @@ body[data-theme|="wellness-soft"] .qr-wrap img , body[data-theme="artisan"] .qr-
   box-shadow: 0 4px 12px rgba(45, 90, 69, 0.06);
 }
 
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy , body[data-theme="artisan"] .qr-wrap .qr-copy ,
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy , body[data-theme="artisan"] .qr-wrap .qr-copy {
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy , body[data-theme="artisan"] .qr-wrap .qr-copy , body[data-theme="real-estate"] .qr-wrap .qr-copy ,
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy , body[data-theme="artisan"] .qr-wrap .qr-copy , body[data-theme="real-estate"] .qr-wrap .qr-copy {
   flex: 1;
   min-width: 0;
   gap: 4px;
 }
 
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--default, body[data-theme="artisan"] .qr-wrap .qr-copy-main--default,
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--compact-fr, body[data-theme="artisan"] .qr-wrap .qr-copy-main--compact-fr,
-body[data-theme|="wellness-soft"] .qr-copy-hint--default , body[data-theme="artisan"] .qr-copy-hint--default ,
-body[data-theme|="wellness-soft"] .qr-copy-hint--default , body[data-theme="artisan"] .qr-copy-hint--default {
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--default, body[data-theme="artisan"] .qr-wrap .qr-copy-main--default, body[data-theme="real-estate"] .qr-wrap .qr-copy-main--default,
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--compact-fr, body[data-theme="artisan"] .qr-wrap .qr-copy-main--compact-fr, body[data-theme="real-estate"] .qr-wrap .qr-copy-main--compact-fr,
+body[data-theme|="wellness-soft"] .qr-copy-hint--default , body[data-theme="artisan"] .qr-copy-hint--default , body[data-theme="real-estate"] .qr-copy-hint--default ,
+body[data-theme|="wellness-soft"] .qr-copy-hint--default , body[data-theme="artisan"] .qr-copy-hint--default , body[data-theme="real-estate"] .qr-copy-hint--default {
   display: none !important;
 }
 
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--wellness , body[data-theme="artisan"] .qr-wrap .qr-copy-main--wellness ,
-body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--wellness , body[data-theme="artisan"] .qr-wrap .qr-copy-main--wellness {
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--wellness , body[data-theme="artisan"] .qr-wrap .qr-copy-main--wellness , body[data-theme="real-estate"] .qr-wrap .qr-copy-main--wellness ,
+body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--wellness , body[data-theme="artisan"] .qr-wrap .qr-copy-main--wellness , body[data-theme="real-estate"] .qr-wrap .qr-copy-main--wellness {
   display: block !important;
   font-family: var(--font-display);
   font-size: 0.98rem;
@@ -912,15 +913,15 @@ body[data-theme|="wellness-soft"] .qr-wrap .qr-copy-main--wellness , body[data-t
   color: var(--card-text);
 }
 
-body[data-theme|="wellness-soft"] .qr-copy-hint--wellness , body[data-theme="artisan"] .qr-copy-hint--wellness ,
-body[data-theme|="wellness-soft"] .qr-copy-hint--wellness , body[data-theme="artisan"] .qr-copy-hint--wellness {
+body[data-theme|="wellness-soft"] .qr-copy-hint--wellness , body[data-theme="artisan"] .qr-copy-hint--wellness , body[data-theme="real-estate"] .qr-copy-hint--wellness ,
+body[data-theme|="wellness-soft"] .qr-copy-hint--wellness , body[data-theme="artisan"] .qr-copy-hint--wellness , body[data-theme="real-estate"] .qr-copy-hint--wellness {
   display: block !important;
   font-size: 0.74rem;
   color: var(--card-muted);
 }
 
-body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron ,
-body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron {
+body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron , body[data-theme="real-estate"] .wellness-qr-chevron ,
+body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisan"] .wellness-qr-chevron , body[data-theme="real-estate"] .wellness-qr-chevron {
   flex-shrink: 0;
   width: 10px;
   height: 10px;
@@ -931,8 +932,8 @@ body[data-theme|="wellness-soft"] .wellness-qr-chevron , body[data-theme="artisa
   opacity: 0.55;
 }
 
-body[data-theme|="wellness-soft"] .qr-powered-by , body[data-theme="artisan"] .qr-powered-by ,
-body[data-theme|="wellness-soft"] .qr-powered-by , body[data-theme="artisan"] .qr-powered-by {
+body[data-theme|="wellness-soft"] .qr-powered-by , body[data-theme="artisan"] .qr-powered-by , body[data-theme="real-estate"] .qr-powered-by ,
+body[data-theme|="wellness-soft"] .qr-powered-by , body[data-theme="artisan"] .qr-powered-by , body[data-theme="real-estate"] .qr-powered-by {
   margin: 4px 0 2px;
   text-align: center;
   font-size: 0.62rem;
@@ -941,8 +942,8 @@ body[data-theme|="wellness-soft"] .qr-powered-by , body[data-theme="artisan"] .q
   opacity: 0.75;
 }
 
-body[data-theme|="wellness-soft"] .footer , body[data-theme="artisan"] .footer ,
-body[data-theme|="wellness-soft"] .footer , body[data-theme="artisan"] .footer {
+body[data-theme|="wellness-soft"] .footer , body[data-theme="artisan"] .footer , body[data-theme="real-estate"] .footer ,
+body[data-theme|="wellness-soft"] .footer , body[data-theme="artisan"] .footer , body[data-theme="real-estate"] .footer {
   margin-top: 8px;
   padding-top: 10px;
   text-align: center;
@@ -953,95 +954,95 @@ body[data-theme|="wellness-soft"] .footer , body[data-theme="artisan"] .footer {
   opacity: 0.85;
 }
 
-body[data-theme|="wellness-soft"] .footer a , body[data-theme="artisan"] .footer a ,
-body[data-theme|="wellness-soft"] .footer a , body[data-theme="artisan"] .footer a {
+body[data-theme|="wellness-soft"] .footer a , body[data-theme="artisan"] .footer a , body[data-theme="real-estate"] .footer a ,
+body[data-theme|="wellness-soft"] .footer a , body[data-theme="artisan"] .footer a , body[data-theme="real-estate"] .footer a {
   color: var(--card-primary);
 }
 
 /* Boutons & panels */
-body[data-theme|="wellness-soft"] .btn-primary-contact-hero, body[data-theme="artisan"] .btn-primary-contact-hero,
-body[data-theme|="wellness-soft"] #btn-send-feedback, body[data-theme="artisan"] #btn-send-feedback,
-body[data-theme|="wellness-soft"] #btn-send-quote, body[data-theme="artisan"] #btn-send-quote,
-body[data-theme|="wellness-soft"] .recommend-id-confirm , body[data-theme="artisan"] .recommend-id-confirm ,
-body[data-theme|="wellness-soft"] .recommend-id-confirm , body[data-theme="artisan"] .recommend-id-confirm {
+body[data-theme|="wellness-soft"] .btn-primary-contact-hero, body[data-theme="artisan"] .btn-primary-contact-hero, body[data-theme="real-estate"] .btn-primary-contact-hero,
+body[data-theme|="wellness-soft"] #btn-send-feedback, body[data-theme="artisan"] #btn-send-feedback, body[data-theme="real-estate"] #btn-send-feedback,
+body[data-theme|="wellness-soft"] #btn-send-quote, body[data-theme="artisan"] #btn-send-quote, body[data-theme="real-estate"] #btn-send-quote,
+body[data-theme|="wellness-soft"] .recommend-id-confirm , body[data-theme="artisan"] .recommend-id-confirm , body[data-theme="real-estate"] .recommend-id-confirm ,
+body[data-theme|="wellness-soft"] .recommend-id-confirm , body[data-theme="artisan"] .recommend-id-confirm , body[data-theme="real-estate"] .recommend-id-confirm {
   background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
   color: #fff !important;
   border: none !important;
 }
 
-body[data-theme|="wellness-soft"] .acc-panel , body[data-theme="artisan"] .acc-panel ,
-body[data-theme|="wellness-soft"] .acc-panel , body[data-theme="artisan"] .acc-panel {
+body[data-theme|="wellness-soft"] .acc-panel , body[data-theme="artisan"] .acc-panel , body[data-theme="real-estate"] .acc-panel ,
+body[data-theme|="wellness-soft"] .acc-panel , body[data-theme="artisan"] .acc-panel , body[data-theme="real-estate"] .acc-panel {
   background: transparent;
   border: none;
   padding: 0;
   margin: 0 0 8px;
 }
 
-body[data-theme|="wellness-soft"] .quote-input, body[data-theme="artisan"] .quote-input,
-body[data-theme|="wellness-soft"] .feedback-input, body[data-theme="artisan"] .feedback-input,
-body[data-theme|="wellness-soft"] .pill , body[data-theme="artisan"] .pill ,
-body[data-theme|="wellness-soft"] .pill , body[data-theme="artisan"] .pill {
+body[data-theme|="wellness-soft"] .quote-input, body[data-theme="artisan"] .quote-input, body[data-theme="real-estate"] .quote-input,
+body[data-theme|="wellness-soft"] .feedback-input, body[data-theme="artisan"] .feedback-input, body[data-theme="real-estate"] .feedback-input,
+body[data-theme|="wellness-soft"] .pill , body[data-theme="artisan"] .pill , body[data-theme="real-estate"] .pill ,
+body[data-theme|="wellness-soft"] .pill , body[data-theme="artisan"] .pill , body[data-theme="real-estate"] .pill {
   background: #fff;
   border: 1px solid var(--card-border);
 }
 
-body[data-theme|="wellness-soft"] .premium-load-layer , body[data-theme="artisan"] .premium-load-layer ,
-body[data-theme|="wellness-soft"] .premium-load-layer , body[data-theme="artisan"] .premium-load-layer {
+body[data-theme|="wellness-soft"] .premium-load-layer , body[data-theme="artisan"] .premium-load-layer , body[data-theme="real-estate"] .premium-load-layer ,
+body[data-theme|="wellness-soft"] .premium-load-layer , body[data-theme="artisan"] .premium-load-layer , body[data-theme="real-estate"] .premium-load-layer {
   background: var(--wellness-cream);
   border-radius: var(--wellness-radius-card);
 }
 
-body[data-theme|="wellness-soft"] .skeleton-shimmer , body[data-theme="artisan"] .skeleton-shimmer ,
-body[data-theme|="wellness-soft"] .skeleton-shimmer , body[data-theme="artisan"] .skeleton-shimmer {
+body[data-theme|="wellness-soft"] .skeleton-shimmer , body[data-theme="artisan"] .skeleton-shimmer , body[data-theme="real-estate"] .skeleton-shimmer ,
+body[data-theme|="wellness-soft"] .skeleton-shimmer , body[data-theme="artisan"] .skeleton-shimmer , body[data-theme="real-estate"] .skeleton-shimmer {
   background: rgba(45, 90, 69, 0.1);
 }
 
-body[data-theme|="wellness-soft"] .toast , body[data-theme="artisan"] .toast ,
-body[data-theme|="wellness-soft"] .toast , body[data-theme="artisan"] .toast {
+body[data-theme|="wellness-soft"] .toast , body[data-theme="artisan"] .toast , body[data-theme="real-estate"] .toast ,
+body[data-theme|="wellness-soft"] .toast , body[data-theme="artisan"] .toast , body[data-theme="real-estate"] .toast {
   background: rgba(36, 53, 46, 0.92);
   color: #faf7f0;
   border-radius: 999px;
 }
 
-body[data-theme|="wellness-soft"] .recommend-id-modal , body[data-theme="artisan"] .recommend-id-modal ,
-body[data-theme|="wellness-soft"] .recommend-id-modal , body[data-theme="artisan"] .recommend-id-modal {
+body[data-theme|="wellness-soft"] .recommend-id-modal , body[data-theme="artisan"] .recommend-id-modal , body[data-theme="real-estate"] .recommend-id-modal ,
+body[data-theme|="wellness-soft"] .recommend-id-modal , body[data-theme="artisan"] .recommend-id-modal , body[data-theme="real-estate"] .recommend-id-modal {
   background: rgba(36, 53, 46, 0.35);
 }
 
-body[data-theme|="wellness-soft"] .recommend-id-panel , body[data-theme="artisan"] .recommend-id-panel ,
-body[data-theme|="wellness-soft"] .recommend-id-panel , body[data-theme="artisan"] .recommend-id-panel {
+body[data-theme|="wellness-soft"] .recommend-id-panel , body[data-theme="artisan"] .recommend-id-panel , body[data-theme="real-estate"] .recommend-id-panel ,
+body[data-theme|="wellness-soft"] .recommend-id-panel , body[data-theme="artisan"] .recommend-id-panel , body[data-theme="real-estate"] .recommend-id-panel {
   background: var(--wellness-cream);
   border: 1px solid var(--card-border);
   color: var(--card-text);
 }
 
 /* Overrides compact générique */
-body[data-theme|="wellness-soft"].public-card--compact .phone-inner , body[data-theme="artisan"].public-card--compact .phone-inner ,
-body[data-theme|="wellness-soft"].public-card--compact .phone-inner , body[data-theme="artisan"].public-card--compact .phone-inner {
+body[data-theme|="wellness-soft"].public-card--compact .phone-inner , body[data-theme="artisan"].public-card--compact .phone-inner , body[data-theme="real-estate"].public-card--compact .phone-inner ,
+body[data-theme|="wellness-soft"].public-card--compact .phone-inner , body[data-theme="artisan"].public-card--compact .phone-inner , body[data-theme="real-estate"].public-card--compact .phone-inner {
   padding: 32px 22px 16px;
   border-radius: var(--wellness-radius-card);
   background: var(--wellness-cream);
 }
 
-body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="artisan"].public-card--compact .main-grid > .card-block:first-child ,
-body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="artisan"].public-card--compact .main-grid > .card-block:first-child {
+body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="artisan"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="real-estate"].public-card--compact .main-grid > .card-block:first-child ,
+body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="artisan"].public-card--compact .main-grid > .card-block:first-child , body[data-theme="real-estate"].public-card--compact .main-grid > .card-block:first-child {
   order: 1;
 }
 
-body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block--quote , body[data-theme="artisan"].public-card--compact .main-grid > .card-block--quote ,
-body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block--quote , body[data-theme="artisan"].public-card--compact .main-grid > .card-block--quote {
+body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block--quote , body[data-theme="artisan"].public-card--compact .main-grid > .card-block--quote , body[data-theme="real-estate"].public-card--compact .main-grid > .card-block--quote ,
+body[data-theme|="wellness-soft"].public-card--compact .main-grid > .card-block--quote , body[data-theme="artisan"].public-card--compact .main-grid > .card-block--quote , body[data-theme="real-estate"].public-card--compact .main-grid > .card-block--quote {
   order: 2;
   gap: 8px;
 }
 
-body[data-theme|="wellness-soft"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="artisan"].public-card--compact .card-block--quote .qr-wrap ,
-body[data-theme|="wellness-soft"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="artisan"].public-card--compact .card-block--quote .qr-wrap {
+body[data-theme|="wellness-soft"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="artisan"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="real-estate"].public-card--compact .card-block--quote .qr-wrap ,
+body[data-theme|="wellness-soft"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="artisan"].public-card--compact .card-block--quote .qr-wrap , body[data-theme="real-estate"].public-card--compact .card-block--quote .qr-wrap {
   order: 0;
   margin-top: 0;
 }
 
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="artisan"] #btn-cta-laisser-avis.btn-primary--avis-secondary ,
-body[data-theme|="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="artisan"] #btn-cta-laisser-avis.btn-primary--avis-secondary {
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="artisan"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="real-estate"] #btn-cta-laisser-avis.btn-primary--avis-secondary ,
+body[data-theme|="wellness-soft"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="artisan"] #btn-cta-laisser-avis.btn-primary--avis-secondary , body[data-theme="real-estate"] #btn-cta-laisser-avis.btn-primary--avis-secondary {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;

@@ -1,0 +1,204 @@
+/* Immobilier Premium — palette & teintes uniquement
+ * Structure / densité / composants : wellness-soft.css + wellness-soft-minimal.css
+ * Actif via body[data-theme="real-estate"]. */
+
+/* —— Tokens palette finale —— */
+body[data-theme="real-estate"] {
+  --card-bg: #f6f1ea;
+  --card-surface: #fcfaf7;
+  --card-primary: #8a6f3e;
+  --card-accent: #8a6f3e;
+  --card-accent-gold: #c6a76b;
+  --card-text: #1f2933;
+  --card-muted: #5c6b75;
+  --card-border: #e5ddd2;
+  --card-shadow: 0 24px 56px rgba(31, 77, 58, 0.08);
+  --bg-page: #f6f1ea;
+  --primary: #1f4d3a;
+  --primary-soft: rgba(31, 77, 58, 0.12);
+  --text-main: #1f2933;
+  --text-soft: #5c6b75;
+  --border-soft: rgba(138, 111, 62, 0.22);
+  --wellness-cream: #fcfaf7;
+  --immo-cta: #1f4d3a;
+  --immo-cta-hover: #1a4232;
+
+  font-family: var(--font-body);
+  color: var(--card-text);
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.92), transparent 65%),
+    linear-gradient(180deg, #faf6f0 0%, #efe8de 100%);
+}
+
+body[data-theme="real-estate"] .phone-inner {
+  background: var(--wellness-cream);
+  border-color: rgba(229, 221, 210, 0.9);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    var(--card-shadow);
+}
+
+body[data-theme="real-estate"] .phone-inner::after {
+  opacity: 0.28;
+}
+
+/* Densité hero : wellness-soft-minimal.css (padding 50px / 44px mobile). */
+
+body[data-theme="real-estate"] #hero-city {
+  color: var(--card-primary);
+}
+
+body[data-theme="real-estate"] #hero-professional-tagline {
+  color: var(--card-muted);
+}
+
+/* —— Photo —— */
+body[data-theme="real-estate"] .hero-avatar {
+  width: clamp(110px, 29.07vw, 127px);
+  height: clamp(110px, 29.07vw, 127px);
+  padding: 4px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.96),
+    0 0 0 3px rgba(252, 250, 247, 0.94),
+    0 0 0 4px rgba(198, 167, 107, 0.28),
+    0 12px 30px rgba(31, 77, 58, 0.1);
+}
+
+body[data-theme="real-estate"] #hero-avatar-fallback {
+  font-size: 2.26rem;
+  background: linear-gradient(145deg, #ebe3d6 0%, #b8a07a 55%, #6b5a42 100%);
+}
+
+body[data-theme="real-estate"] .wellness-cta-leaf {
+  display: none !important;
+}
+
+/* —— Google —— */
+body[data-theme="real-estate"] .wellness-google-inner {
+  box-shadow: 0 4px 16px rgba(31, 77, 58, 0.05);
+}
+
+body[data-theme="real-estate"] .wellness-google-star-icon {
+  color: #c6a76b;
+  font-size: 1.35rem;
+}
+
+body[data-theme="real-estate"] .wellness-google-score {
+  font-size: 1.7rem;
+}
+
+body[data-theme="real-estate"] .wellness-google-label {
+  font-size: 1.03rem;
+}
+
+body[data-theme="real-estate"] .wellness-google-avatars {
+  background: rgba(31, 77, 58, 0.05);
+}
+
+body[data-theme="real-estate"] .wellness-google-avatar {
+  box-shadow: 0 2px 6px rgba(31, 77, 58, 0.1);
+}
+
+body[data-theme="real-estate"] .wellness-google-avatar:nth-child(2) {
+  background: linear-gradient(145deg, #ebe3d6 0%, #b5a696 100%);
+}
+
+body[data-theme="real-estate"] .wellness-google-avatar:nth-child(3)::after {
+  color: rgba(31, 77, 58, 0.55);
+}
+
+/* —— CTA principal —— */
+body[data-theme="real-estate"] .hero .btn-primary-contact-hero {
+  background: linear-gradient(180deg, #2a5f48 0%, var(--immo-cta) 100%) !important;
+  border: none !important;
+  box-shadow:
+    0 12px 32px rgba(31, 77, 58, 0.24),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset !important;
+}
+
+@media (hover: hover) {
+  body[data-theme="real-estate"] .hero .btn-primary-contact-hero:hover {
+    background: linear-gradient(180deg, #316b52 0%, var(--immo-cta-hover) 100%) !important;
+    box-shadow: 0 14px 36px rgba(31, 77, 58, 0.28) !important;
+  }
+}
+
+body[data-theme="real-estate"] #btn-send-feedback,
+body[data-theme="real-estate"] #btn-send-quote,
+body[data-theme="real-estate"] .btn-share-card-main,
+body[data-theme="real-estate"] .recommend-id-confirm {
+  background: linear-gradient(180deg, #2a5f48 0%, var(--immo-cta) 100%) !important;
+  color: #faf7ef !important;
+  border: none !important;
+  box-shadow: 0 10px 24px rgba(31, 77, 58, 0.2) !important;
+}
+
+/* —— Actions rapides —— */
+body[data-theme="real-estate"] #btn-call::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%231F4D3A' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="real-estate"] #btn-whatsapp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%231F4D3A' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="real-estate"] #btn-cta-laisser-avis::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%231F4D3A' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="real-estate"] #btn-discrete-partager::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%231F4D3A' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="real-estate"] #btn-call::after,
+body[data-theme="real-estate"] #btn-whatsapp::after {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(138, 111, 62, 0.2) 20%,
+    rgba(138, 111, 62, 0.2) 80%,
+    transparent 100%
+  );
+}
+
+body[data-theme="real-estate"] #btn-cta-laisser-avis {
+  box-shadow: inset -1px 0 0 rgba(138, 111, 62, 0.14) !important;
+}
+
+/* —— Reco & QR —— */
+body[data-theme="real-estate"] .wellness-premium-row {
+  box-shadow: 0 4px 16px rgba(31, 77, 58, 0.05);
+}
+
+body[data-theme="real-estate"] .wellness-premium-row:hover {
+  border-color: rgba(138, 111, 62, 0.32);
+}
+
+body[data-theme="real-estate"] .qr-wrap.wellness-qr-card {
+  box-shadow: 0 6px 22px rgba(31, 77, 58, 0.06);
+}
+
+body[data-theme="real-estate"] .qr-wrap img {
+  box-shadow: 0 4px 12px rgba(31, 77, 58, 0.06);
+}
+
+body[data-theme="real-estate"] .footer a {
+  color: var(--card-primary);
+}
+
+/* —— Modal contact —— */
+body[data-theme="real-estate"] .wellness-contact-modal-backdrop {
+  background: rgba(31, 41, 51, 0.36);
+}
+
+body[data-theme="real-estate"] .wellness-contact-modal-dialog {
+  background: var(--wellness-cream);
+  box-shadow:
+    0 -8px 40px rgba(31, 41, 51, 0.12),
+    0 24px 56px rgba(31, 77, 58, 0.1);
+}
+
+body[data-theme="real-estate"] #wellness-contact-modal-host #btn-send-quote {
+  background: linear-gradient(180deg, #2a5f48 0%, var(--immo-cta) 100%) !important;
+}

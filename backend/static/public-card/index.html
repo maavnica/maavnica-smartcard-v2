@@ -18,8 +18,21 @@
   <link rel="stylesheet" href="/static/public-card/wellness-soft.css?v=2026-06-03-artisan-final" />
   <link rel="stylesheet" href="/static/public-card/wellness-soft-minimal.css?v=2026-06-02-final-minimal" />
   <link rel="stylesheet" href="/static/public-card/artisan-premium.css?v=2026-06-03-artisan-final-proportions" />
+  <link rel="stylesheet" href="/static/public-card/immobilier-premium.css?v=2026-06-03-immo-premium-final" />
 </head>
 <body class="is-loading public-card--compact" data-theme="">
+  <script>
+    (function () {
+      var m = (location.pathname || "").match(/^\/c\/([^/]+)/i);
+      if (!m) return;
+      var slug = decodeURIComponent(m[1]).toLowerCase();
+      if (slug !== "demo3") return;
+      var t = (document.body.getAttribute("data-theme") || "").trim().toLowerCase();
+      if (!t || t === "wellness-soft" || t === "wellness-soft-minimal") {
+        document.body.setAttribute("data-theme", "real-estate");
+      }
+    })();
+  </script>
   <h1 id="public-card-seo-h1" class="sr-only">Maavnica SmartCard</h1>
   <div id="inactive-card-message" class="inactive-card-message"></div>
   <div id="admin-preview-badge" class="admin-preview-badge" hidden>
@@ -610,7 +623,7 @@
   </div>
 
   <script src="/static/maavnica-consent.js?v=2026-06-02-mobile-layout-fix"></script>
-  <script src="/static/public-card/shared.js?v=2026-06-03-artisan-hero-clean"></script>
+  <script src="/static/public-card/shared.js?v=2026-06-03-immo-premium-final"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistrations().then(function (regs) {

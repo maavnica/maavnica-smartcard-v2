@@ -25,14 +25,23 @@
       return document.body.getAttribute("data-theme") === "artisan";
     }
 
-    /** Layout premium partagé : wellness-soft* + artisan-premium. */
-    function isPremiumLayoutTheme() {
-      return isWellnessVisualTheme() || isArtisanPremiumTheme();
+    function isImmobilierPremiumTheme() {
+      return document.body.getAttribute("data-theme") === "real-estate";
     }
 
-    /** Densité minimal + modal contact (wellness-soft-minimal & artisan-premium). */
+    /** Ville seule (artisan & immobilier premium). */
+    function isPortraitCityTheme() {
+      return isArtisanPremiumTheme() || isImmobilierPremiumTheme();
+    }
+
+    /** Layout premium partagé : wellness-soft* + artisan + immobilier. */
+    function isPremiumLayoutTheme() {
+      return isWellnessVisualTheme() || isArtisanPremiumTheme() || isImmobilierPremiumTheme();
+    }
+
+    /** Densité minimal + modal contact (wellness-soft-minimal, artisan & immobilier). */
     function isPremiumMinimalLayoutTheme() {
-      return isWellnessMinimalTheme() || isArtisanPremiumTheme();
+      return isWellnessMinimalTheme() || isArtisanPremiumTheme() || isImmobilierPremiumTheme();
     }
 
     /** Portrait centré + ville sous le métier. */
@@ -100,13 +109,16 @@
       return cityMain;
     }
 
-    /** Artisan : ville seule (AUXERRE ou AUXERRE ET AGGLOMÉRATION). */
-    function formatArtisanCityLine(card) {
+    /** Portrait premium : ville seule (AUXERRE ou AUXERRE ET AGGLOMÉRATION). */
+    function formatPortraitCityLine(card) {
       var cityMain = trimCardStr(card.city) || trimCardStr(card.service_city);
       if (!cityMain) return "";
 
-      if (cityMain.indexOf(" • ") !== -1) {
-        var parts = cityMain.split(" • ").map(function (p) {
+      var splitChars = [" • ", " · ", " | ", " — ", " / "];
+      for (var ci = 0; ci < splitChars.length; ci++) {
+        var sep = splitChars[ci];
+        if (cityMain.indexOf(sep) === -1) continue;
+        var parts = cityMain.split(sep).map(function (p) {
           return trimCardStr(p);
         }).filter(Boolean);
         var first = parts[0] || "";
@@ -114,6 +126,9 @@
           var second = parts[1];
           if (/^et\s+/i.test(second) || /agglo|périph|alentour|communes/i.test(second)) {
             return /^et\s+/i.test(second) ? first + " " + second : first + " et " + second;
+          }
+          if (/estimation|vente|achat|contact|avis|devis|mandat|immobilier|smartcard/i.test(second)) {
+            return first;
           }
         }
         return first;
@@ -142,19 +157,73 @@
       return isArtisanLandingChecklist(text);
     }
 
-    /** Artisan : une seule accroche, sans checklist landing. */
-    function resolveArtisanHeroTagline(heroTitle, heroText) {
+    /** Accroche courte — filtre textes landing / mini-site (artisan & immobilier). */
+    function isPortraitLandingFluff(text) {
+      var t = trimCardStr(text).toLowerCase();
+      if (!t) return true;
+      if (/une carte pro telle qu/.test(t)) return true;
+      if (/comme une carte reçue/.test(t)) return true;
+      if (/en un regard, on y retrouve/.test(t)) return true;
+      if (/contact direct et des demandes claires/.test(t)) return true;
+      if (/partage simple pour recommander/.test(t)) return true;
+      if (/contact, avis et demande/.test(t)) return true;
+      if (/coordonnées, avis/.test(t)) return true;
+      if (/demandes? de (visite|estimation|contact)/.test(t)) return true;
+      if (/plus d['’]avis google/.test(t)) return true;
+      if (/carte pro intelligente/.test(t)) return true;
+      if (/recommandation.*mandat/.test(t)) return true;
+      return isArtisanLandingFluff(text);
+    }
+
+    function isPortraitTaglineTooLong(text) {
+      var t = trimCardStr(text);
+      if (!t) return true;
+      if (t.length <= 52) return false;
+      return !/[•·|]/.test(t);
+    }
+
+    function normalizePortraitTaglineBullets(text) {
+      return trimCardStr(text)
+        .replace(/\s*[\/|]\s*/g, " • ")
+        .replace(/\s*·\s*/g, " • ")
+        .replace(/\s*•\s*/g, " • ")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+    }
+
+    /** Portrait premium : une seule accroche courte (pas de paragraphe commercial). */
+    function resolvePortraitHeroTagline(heroTitle, heroText, profileKey) {
       var title = trimCardStr(heroTitle);
       var text = trimCardStr(heroText);
+      var isImmo = isImmobilierPremiumTheme() || profileKey === "immo";
+
       if (isArtisanLandingChecklist(title)) title = "";
-      if (isArtisanLandingFluff(text)) text = "";
-      if (title && !isArtisanLandingFluff(title)) return title;
-      if (text && !isArtisanLandingFluff(text)) return text;
+      if (isPortraitLandingFluff(text)) text = "";
+      if (isPortraitLandingFluff(title)) title = "";
+
+      if (title && !isPortraitTaglineTooLong(title)) {
+        return normalizePortraitTaglineBullets(title);
+      }
+      if (text && !isPortraitTaglineTooLong(text)) {
+        return normalizePortraitTaglineBullets(text);
+      }
+      if (isImmo) return "Estimation • Vente • Achat";
       return "";
     }
 
     function resolvePremiumHeroCta(profileKey, rawFormTitle) {
       var custom = trimCardStr(rawFormTitle);
+      if (isImmobilierPremiumTheme() || profileKey === "immo") {
+        if (/^estimer mon bien$/i.test(custom)) return "Estimer mon bien";
+        if (
+          !custom ||
+          /^demande de (contact|visite|estimation|information|devis)/i.test(custom) ||
+          /^demande de contact$/i.test(custom)
+        ) {
+          return "Obtenir une estimation";
+        }
+        return custom;
+      }
       if (profileKey === "artisan") {
         if (!custom || /^demande de contact$/i.test(custom)) {
           return (
@@ -223,6 +292,13 @@
     function applyVisualThemeFromCard(card) {
       if (!/^\/c\/[^/]+/i.test(window.location.pathname || "")) return;
       var vt = card && card.visual_theme != null ? String(card.visual_theme).trim().toLowerCase() : "";
+      var slug = getSlugFromPath();
+      if (
+        slug === "demo3" &&
+        (!vt || vt === "wellness-soft" || vt === "wellness-soft-minimal")
+      ) {
+        vt = "real-estate";
+      }
       if (!vt || !ALLOWED_VISUAL_THEMES.has(vt)) return;
       document.body.setAttribute("data-theme", vt);
     }
@@ -1445,8 +1521,8 @@
           }
         }
 
-        const cityLine = isArtisanPremiumTheme()
-          ? formatArtisanCityLine(card)
+        const cityLine = isPortraitCityTheme()
+          ? formatPortraitCityLine(card)
           : formatHeroCityLine(card);
         const cityEl = document.getElementById("hero-city");
         if (cityEl) {
@@ -1463,10 +1539,14 @@
 
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
-          if (isArtisanPremiumTheme()) {
-            var artisanTagline = resolveArtisanHeroTagline(rawHeroTitle, rawHeroText);
-            if (artisanTagline) {
-              heroTaglineEl.textContent = artisanTagline;
+          if (isPortraitCityTheme()) {
+            var portraitTagline = resolvePortraitHeroTagline(
+              rawHeroTitle,
+              rawHeroText,
+              profileKey
+            );
+            if (portraitTagline) {
+              heroTaglineEl.textContent = portraitTagline;
               heroTaglineEl.style.display = "";
             } else {
               heroTaglineEl.textContent = "";
