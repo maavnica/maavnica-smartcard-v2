@@ -74,7 +74,7 @@
       return count + " avis";
     }
 
-    /** Ville + complément facultatif (city « AUXERRE • … » ou hero_cta_text hors libellé Google). */
+    /** Ville + complément facultatif (wellness — hors thème artisan). */
     function formatHeroCityLine(card) {
       var cityMain = trimCardStr(card.city);
       var cityAlt = trimCardStr(card.service_city);
@@ -98,6 +98,59 @@
         return cityMain + " • " + heroCta;
       }
       return cityMain;
+    }
+
+    /** Artisan : ville seule (AUXERRE ou AUXERRE ET AGGLOMÉRATION). */
+    function formatArtisanCityLine(card) {
+      var cityMain = trimCardStr(card.city) || trimCardStr(card.service_city);
+      if (!cityMain) return "";
+
+      if (cityMain.indexOf(" • ") !== -1) {
+        var parts = cityMain.split(" • ").map(function (p) {
+          return trimCardStr(p);
+        }).filter(Boolean);
+        var first = parts[0] || "";
+        if (parts.length >= 2) {
+          var second = parts[1];
+          if (/^et\s+/i.test(second) || /agglo|périph|alentour|communes/i.test(second)) {
+            return /^et\s+/i.test(second) ? first + " " + second : first + " et " + second;
+          }
+        }
+        return first;
+      }
+      return cityMain;
+    }
+
+    function isArtisanLandingChecklist(text) {
+      var t = trimCardStr(text)
+        .toLowerCase()
+        .replace(/[✔✓☑]/g, "")
+        .trim();
+      if (!t) return false;
+      var hasIntervention = /intervention rapide/.test(t);
+      var hasDevisClair = /devis clair/.test(t);
+      var hasTravail = /travail soign/.test(t);
+      if (hasIntervention && hasDevisClair && hasTravail) return true;
+      if (hasIntervention && hasDevisClair && t.length < 140) return true;
+      return false;
+    }
+
+    function isArtisanLandingFluff(text) {
+      var t = trimCardStr(text).toLowerCase();
+      if (!t) return true;
+      if (/demander un devis rapide/.test(t)) return true;
+      return isArtisanLandingChecklist(text);
+    }
+
+    /** Artisan : une seule accroche, sans checklist landing. */
+    function resolveArtisanHeroTagline(heroTitle, heroText) {
+      var title = trimCardStr(heroTitle);
+      var text = trimCardStr(heroText);
+      if (isArtisanLandingChecklist(title)) title = "";
+      if (isArtisanLandingFluff(text)) text = "";
+      if (title && !isArtisanLandingFluff(title)) return title;
+      if (text && !isArtisanLandingFluff(text)) return text;
+      return "";
     }
 
     function resolvePremiumHeroCta(profileKey, rawFormTitle) {
@@ -1392,7 +1445,9 @@
           }
         }
 
-        const cityLine = formatHeroCityLine(card);
+        const cityLine = isArtisanPremiumTheme()
+          ? formatArtisanCityLine(card)
+          : formatHeroCityLine(card);
         const cityEl = document.getElementById("hero-city");
         if (cityEl) {
           if (cityLine && isPortraitHeroTheme()) {
@@ -1408,7 +1463,16 @@
 
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
-          if (rawHeroTitle) {
+          if (isArtisanPremiumTheme()) {
+            var artisanTagline = resolveArtisanHeroTagline(rawHeroTitle, rawHeroText);
+            if (artisanTagline) {
+              heroTaglineEl.textContent = artisanTagline;
+              heroTaglineEl.style.display = "";
+            } else {
+              heroTaglineEl.textContent = "";
+              heroTaglineEl.style.display = "none";
+            }
+          } else if (rawHeroTitle) {
             heroTaglineEl.textContent =
               isPremiumLayoutTheme() && rawHeroText
                 ? rawHeroTitle + "\n" + rawHeroText

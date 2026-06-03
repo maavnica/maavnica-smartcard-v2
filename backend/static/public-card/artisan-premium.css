@@ -43,19 +43,31 @@ body[data-theme="artisan"] .phone-inner::after {
   opacity: 0.28;
 }
 
-/* —— Accroche 2 lignes (hero_title + hero_text) — hauteur légèrement réduite —— */
+/* —— Hero compact (densité SmartCard, pas landing) —— */
+body[data-theme="artisan"] .hero {
+  padding-top: 46px;
+}
+
+body[data-theme="artisan"] #hero-city {
+  margin-bottom: 4px;
+}
+
 body[data-theme="artisan"] #hero-professional-tagline {
-  white-space: pre-line;
-  line-height: 1.32;
-  font-size: clamp(1.02rem, 3.05vw, 1.16rem);
+  white-space: normal;
+  line-height: 1.36;
+  margin-bottom: 2px;
 }
 
-body[data-theme="artisan"] .wellness-cta-leaf {
-  display: none !important;
+@media (max-width: 479px) {
+  body[data-theme="artisan"] .hero {
+    padding-top: 40px;
+  }
 }
 
-/* —— Portrait : anneau plus fin, ombre brune —— */
+/* —— Proportions finales (v1 produit) —— */
 body[data-theme="artisan"] .hero-avatar {
+  width: clamp(110px, 29.07vw, 127px);
+  height: clamp(110px, 29.07vw, 127px);
   padding: 4px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.96),
@@ -65,16 +77,34 @@ body[data-theme="artisan"] .hero-avatar {
 }
 
 body[data-theme="artisan"] #hero-avatar-fallback {
+  font-size: 2.26rem;
   background: linear-gradient(145deg, #e8dfd0 0%, #a8896e 55%, #6b5344 100%);
 }
 
-/* —— Google : même composant, teinte artisan —— */
+body[data-theme="artisan"] .hero-texts {
+  margin-top: -8px;
+}
+
+body[data-theme="artisan"] .wellness-cta-leaf {
+  display: none !important;
+}
+
+/* —— Google : teinte artisan + preuve sociale renforcée (bloc gauche +5 %) —— */
 body[data-theme="artisan"] .wellness-google-inner {
   box-shadow: 0 4px 16px rgba(92, 64, 51, 0.05);
 }
 
 body[data-theme="artisan"] .wellness-google-star-icon {
   color: #c9a227;
+  font-size: 1.35rem;
+}
+
+body[data-theme="artisan"] .wellness-google-score {
+  font-size: 1.7rem;
+}
+
+body[data-theme="artisan"] .wellness-google-label {
+  font-size: 1.03rem;
 }
 
 body[data-theme="artisan"] .wellness-google-avatars {
