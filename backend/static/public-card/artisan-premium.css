@@ -1,0 +1,176 @@
+/* Artisan Premium — finitions portrait & layout (base wellness-soft-minimal).
+ * Dépend de wellness-soft.css (.wellness-avatar-stage masqué par défaut hors wellness).
+ * Actif via body[data-theme="artisan"]. */
+
+/* —— Portrait centré (réintègre la photo masquée par wellness-soft.css) —— */
+body[data-theme="artisan"] .wellness-deco-branch {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="artisan"] .wellness-avatar-stage {
+  position: relative;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto 10px;
+  padding: 4px 0 0;
+}
+
+body[data-theme="artisan"] .hero-main-row {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  padding-top: 4px;
+}
+
+body[data-theme="artisan"] .hero {
+  padding-top: 18px;
+}
+
+body[data-theme="artisan"] .hero-badges {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="artisan"].public-card--compact .hero-badges {
+  display: none !important;
+}
+
+body[data-theme="artisan"] .hero-avatar {
+  position: relative;
+  z-index: 2;
+  width: clamp(108px, 28vw, 124px);
+  height: clamp(108px, 28vw, 124px);
+  margin: 0 auto;
+  padding: 4px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  border: none;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.95),
+    0 0 0 5px rgba(245, 240, 232, 0.9),
+    0 0 0 6px rgba(213, 205, 192, 0.45),
+    0 14px 36px rgba(58, 48, 38, 0.14);
+}
+
+body[data-theme="artisan"] .hero-avatar img,
+body[data-theme="artisan"] #hero-avatar-fallback,
+body[data-theme="artisan"] #hero-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body[data-theme="artisan"] #hero-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(155deg, #e8dfd0 0%, #a8896e 48%, #6b5344 100%);
+  color: #faf7ef;
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 500;
+}
+
+body[data-theme="artisan"] .hero-texts {
+  width: 100%;
+  margin-top: 2px;
+}
+
+/* —— Identité —— */
+body[data-theme="artisan"] #person-name.hero-title {
+  margin-bottom: 3px;
+}
+
+body[data-theme="artisan"] #hero-job-title {
+  margin-bottom: 4px;
+}
+
+body[data-theme="artisan"] #hero-city {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(0.64rem, 1.85vw, 0.74rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--card-accent-wood, #6b4a32);
+  line-height: 1.15;
+  margin: 0 0 6px;
+}
+
+body[data-theme="artisan"] #hero-city[aria-hidden="true"] {
+  display: none !important;
+  margin: 0;
+}
+
+body[data-theme="artisan"] #hero-professional-tagline {
+  margin-bottom: 2px;
+}
+
+/* —— Actions rapides — icônes sobres (SVG, pas emojis outils) —— */
+body[data-theme="artisan"] #btn-call::before,
+body[data-theme="artisan"] #btn-whatsapp::before,
+body[data-theme="artisan"] #btn-cta-laisser-avis::before,
+body[data-theme="artisan"] #btn-discrete-partager::before {
+  content: "";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  border: 1px solid rgba(213, 205, 192, 0.9);
+  box-shadow:
+    0 4px 14px rgba(58, 48, 38, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+}
+
+body[data-theme="artisan"] #btn-call::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%235C4033' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="artisan"] #btn-whatsapp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%235C4033' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="artisan"] #btn-cta-laisser-avis::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%235C4033' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="artisan"] #btn-discrete-partager::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M14 4h6v6M10 14 20 4M15 20H4V9' stroke='%235C4033' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 479px) {
+  body[data-theme="artisan"] .hero {
+    padding-top: 14px;
+  }
+
+  body[data-theme="artisan"] .wellness-avatar-stage {
+    margin-bottom: 8px;
+  }
+}

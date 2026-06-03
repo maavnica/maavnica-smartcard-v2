@@ -21,6 +21,12 @@
       return t === "wellness-soft" || t === "wellness-soft-minimal";
     }
 
+    /** Portrait centré + ville sous le métier (wellness & artisan premium). */
+    function isPortraitHeroTheme() {
+      var t = document.body.getAttribute("data-theme");
+      return isWellnessVisualTheme() || t === "artisan";
+    }
+
     function isWellnessMinimalTheme() {
       return document.body.getAttribute("data-theme") === "wellness-soft-minimal";
     }
@@ -1306,7 +1312,7 @@
           .trim();
         const cityEl = document.getElementById("hero-city");
         if (cityEl) {
-          if (cityRaw && isWellnessVisualTheme()) {
+          if (cityRaw && isPortraitHeroTheme()) {
             cityEl.textContent = cityRaw;
             cityEl.style.display = "";
             cityEl.setAttribute("aria-hidden", "false");
