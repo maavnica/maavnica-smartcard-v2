@@ -229,6 +229,65 @@
       return "";
     }
 
+    /** Preuve sociale recommandations — carte discrète type Google (Maavnica uniquement). */
+    function renderMaavnicaRecoProof(recommendShareCount) {
+      if (!isMaavnicaPremiumTheme()) return;
+      var count = Math.max(0, Math.floor(Number(recommendShareCount) || 0));
+      var existing = document.getElementById("maavnica-reco-proof-card");
+      if (existing) existing.remove();
+      if (count < 1) return;
+
+      var wrap = document.createElement("div");
+      wrap.id = "maavnica-reco-proof-card";
+      wrap.className =
+        "hero-google-badge wellness-google-rating-card maavnica-reco-proof";
+      wrap.setAttribute("aria-label", "Recommandations partagées");
+
+      var inner = document.createElement("div");
+      inner.className = "wellness-google-inner";
+
+      var left = document.createElement("div");
+      left.className = "wellness-google-left";
+
+      var star = document.createElement("span");
+      star.className = "wellness-google-star-icon";
+      star.setAttribute("aria-hidden", "true");
+      star.textContent = "★";
+
+      var label = document.createElement("span");
+      label.className = "wellness-google-label";
+      label.textContent =
+        count === 1
+          ? "1 recommandation partagée"
+          : count + " recommandations partagées";
+
+      left.appendChild(star);
+      left.appendChild(label);
+      inner.appendChild(left);
+      wrap.appendChild(inner);
+
+      var googleEl = document.getElementById("hero-google-badge-compact");
+      var insertParent = googleEl && googleEl.parentNode ? googleEl.parentNode : null;
+      if (
+        insertParent &&
+        googleEl.style.display !== "none" &&
+        !googleEl.hidden
+      ) {
+        insertParent.insertBefore(wrap, googleEl.nextSibling);
+        return;
+      }
+
+      var reassurance = document.getElementById("hero-reassurance");
+      var tagline = document.getElementById("hero-professional-tagline");
+      var insertAfter =
+        reassurance && reassurance.style.display !== "none"
+          ? reassurance
+          : tagline;
+      if (insertAfter && insertAfter.parentNode) {
+        insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
+      }
+    }
+
     function resolvePremiumHeroCta(profileKey, rawFormTitle) {
       var custom = trimCardStr(rawFormTitle);
       if (isMaavnicaPremiumTheme()) {
@@ -1611,7 +1670,17 @@
         const heroRecommendCountEl = document.getElementById("hero-recommend-count");
         const heroRecommendConversionEl = document.getElementById("hero-recommend-conversion");
         if (heroRecommendCountEl) {
-          if (recommendShareCount >= 1) {
+          if (isMaavnicaPremiumTheme()) {
+            heroRecommendCountEl.textContent = "";
+            heroRecommendCountEl.hidden = true;
+            heroRecommendCountEl.setAttribute("aria-hidden", "true");
+            if (heroRecommendConversionEl) {
+              heroRecommendConversionEl.textContent = "";
+              heroRecommendConversionEl.classList.remove("is-visible");
+              heroRecommendConversionEl.hidden = true;
+              heroRecommendConversionEl.setAttribute("aria-hidden", "true");
+            }
+          } else if (recommendShareCount >= 1) {
             heroRecommendCountEl.textContent =
               recommendShareCount === 1
                 ? "Une recommandation personnelle a déjà été partagée 👍"
@@ -1879,6 +1948,8 @@
             }
           });
         })();
+
+        renderMaavnicaRecoProof(recommendShareCount);
 
         const cardPublicUrl = getPublicCardUrl(analyticsSlug);
         const cityShare = (
