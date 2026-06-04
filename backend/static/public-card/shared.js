@@ -214,13 +214,17 @@
     function resolvePremiumHeroCta(profileKey, rawFormTitle) {
       var custom = trimCardStr(rawFormTitle);
       if (isImmobilierPremiumTheme() || profileKey === "immo") {
-        if (/^estimer mon bien$/i.test(custom)) return "Estimer mon bien";
+        if (/^obtenir une estimation$/i.test(custom)) return "Obtenir une estimation";
         if (
           !custom ||
-          /^demande de (contact|visite|estimation|information|devis)/i.test(custom) ||
-          /^demande de contact$/i.test(custom)
+          /^demande de (contact|visite|estimation|information|devis|rdv)/i.test(custom) ||
+          /^demande de contact$/i.test(custom) ||
+          /^demande de rdv$/i.test(custom)
         ) {
-          return "Obtenir une estimation";
+          return "Estimer mon bien";
+        }
+        if (/estimation/i.test(custom) && !/estimer mon bien/i.test(custom)) {
+          return custom;
         }
         return custom;
       }
