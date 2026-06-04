@@ -1,0 +1,1423 @@
+/* Maavnica Premium — thème isolé (/c/arnaud-huard, data-theme="maavnica" uniquement)
+ * Layout : miroir wellness premium (sans modifier wellness-soft*.css).
+ * Palette : fond clair, carte crème, texte bleu nuit, CTA pétrole, accent orange discret. */
+
+/* —— Visibilité composants premium —— */
+body[data-theme="maavnica"] .wellness-cta-leaf,
+body[data-theme="maavnica"] .wellness-qr-chevron {
+  display: inline-flex;
+}
+
+body[data-theme="maavnica"] .wellness-reco-wellness-only,
+body[data-theme="maavnica"] .wellness-avatar-stage {
+  display: flex;
+}
+
+body[data-theme="maavnica"] .wellness-deco-branch {
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .wellness-reco-default {
+  display: none !important;
+}
+
+/* —— Tokens palette Maavnica (écrase les défauts layout) —— */
+body[data-theme="maavnica"] {
+  --card-bg: #f3f1ec;
+  --card-surface: #faf8f4;
+  --card-primary: #1a4a57;
+  --card-accent: #e07830;
+  --card-text: #1b2d3f;
+  --card-muted: #5c6773;
+  --card-border: #d8dde3;
+  --card-shadow: 0 24px 56px rgba(27, 45, 63, 0.09);
+  --bg-page: #f3f1ec;
+  --primary: #1a4a57;
+  --primary-soft: rgba(26, 74, 87, 0.1);
+  --text-main: #1b2d3f;
+  --text-soft: #5c6773;
+  --border-soft: rgba(27, 45, 63, 0.18);
+  --wellness-cream: #faf8f4;
+  --maavnica-cta: #1a4a57;
+  --maavnica-cta-hover: #225a6a;
+  --maavnica-orange: #e07830;
+
+  font-family: var(--font-body);
+  color: var(--card-text);
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.92), transparent 65%),
+    linear-gradient(180deg, #f7f5f0 0%, #ebe8e2 100%);
+}
+
+
+/* —— Layout premium —— */
+/* Layout premium Maavnica — actif via body[data-theme="maavnica"] uniquement */
+
+body[data-theme="maavnica"]{
+  --card-bg: #efe7de;
+  --card-surface: #faf7f0;
+  --card-primary: #2d5a45;
+  --card-text: #24352e;
+  --card-muted: #6d7d72;
+  --card-border: #ddd2c4;
+  --card-shadow: 0 24px 56px rgba(45, 90, 69, 0.08);
+  --bg-page: #f3ede4;
+  --hero-bg: transparent;
+  --primary: #2d5a45;
+  --primary-soft: rgba(45, 90, 69, 0.1);
+  --text-main: #24352e;
+  --text-soft: #6d7d72;
+  --border-soft: rgba(109, 125, 114, 0.25);
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --wellness-cream: #faf7f0;
+  --wellness-radius-card: 32px;
+  --wellness-radius-inner: 18px;
+
+  font-family: var(--font-body);
+  color: var(--card-text);
+  padding: 18px 14px 24px;
+  background-color: var(--bg-page);
+  background-image:
+radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 255, 255, 0.9), transparent 65%), linear-gradient(180deg, #f5efe6 0%, #ebe3d8 100%);, },  @media (min-width: 480px){
+body[data-theme="maavnica"]{
+    padding: 28px 20px 36px;
+  }
+}
+
+body[data-theme="maavnica"] .phone-shell{
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 8px;
+  filter: drop-shadow(0 32px 64px rgba(36, 53, 46, 0.1));
+}
+
+body[data-theme="maavnica"] .phone-inner{
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  padding: 32px 22px 16px;
+  border-radius: var(--wellness-radius-card);
+  background: var(--wellness-cream);
+  border: 1px solid rgba(221, 210, 196, 0.9);
+  box-shadow:
+body[data-theme="maavnica"] .phone-inner::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+body[data-theme="maavnica"] .phone-inner::before{
+  content: none;
+  display: none;
+}
+
+body[data-theme="maavnica"] .wellness-deco-branch{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(115%, 290px);
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.36;
+  transform: translate(calc(-72% - 8px), calc(-58% + 6px)) rotate(-11deg);
+  transform-origin: 70% 80%;
+}
+
+body[data-theme="maavnica"] .wellness-avatar-stage{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto 14px;
+  padding: 6px 0 0;
+}
+
+body[data-theme="maavnica"] .phone-inner > *:not(.wellness-deco-branch){
+  position: relative;
+  z-index: 2;
+}
+
+body[data-theme="maavnica"] .notch{
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  border: none !important;
+}
+
+body[data-theme="maavnica"] .admin-preview-badge{
+  color: var(--card-muted);
+}
+
+/* —— Hero —— */
+body[data-theme="maavnica"] .hero{
+  padding: 38px 0 0;
+  margin: 0;
+  text-align: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body[data-theme="maavnica"] .hero::before{
+  display: none;
+}
+
+body[data-theme="maavnica"] .hero-badges{
+  display: flex !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+body[data-theme="maavnica"] .hero-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(45, 90, 69, 0.06);
+  pointer-events: auto;
+}
+
+body[data-theme="maavnica"] #hero-badge-left{
+  display: none !important;
+}
+
+/* Badge univers bien-être (le métier reste sous le nom) */
+body[data-theme="maavnica"] #hero-badge-right-icon{
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+body[data-theme="maavnica"] #hero-badge-right-icon::before{
+  content: "🌿";
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+body[data-theme="maavnica"] #hero-badge-right-text{
+  font-size: 0;
+  line-height: 0;
+}
+
+body[data-theme="maavnica"] #hero-badge-right-text::after{
+  content: "PRATICIEN BIEN-ÊTRE";
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+}
+
+body[data-theme="maavnica"] .hero-main-row{
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding-top: 4px;
+}
+
+body[data-theme="maavnica"] .hero-avatar{
+  position: relative;
+  z-index: 2;
+  width: clamp(128px, 34vw, 148px);
+  height: clamp(128px, 34vw, 148px);
+  margin: 0;
+  padding: 5px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow:
+body[data-theme="maavnica"] .hero-avatar img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body[data-theme="maavnica"] #hero-avatar-fallback{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #c5d4b8 0%, #7a9470 55%, #4d6b52 100%);
+  color: #fffdf8;
+  font-family: var(--font-display);
+  font-size: 2.65rem;
+  font-weight: 500;
+}
+
+body[data-theme="maavnica"] #hero-subline{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] #person-name.hero-title{
+  font-family: var(--font-display);
+  font-size: clamp(2.35rem, 8.2vw, 2.95rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--card-text);
+  margin: 0 0 6px;
+}
+
+body[data-theme="maavnica"] #company-name.hero-company{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] #hero-job-title{
+  display: block !important;
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 2.1vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  margin: 0 0 8px;
+}
+
+body[data-theme="maavnica"] #hero-professional-tagline{
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3.2vw, 1.2rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--card-muted);
+  margin: 0 auto 2px;
+  max-width: 20rem;
+  text-wrap: balance;
+}
+
+body[data-theme="maavnica"] .hero-reassurance{
+  display: none !important;
+}
+
+/* Carte Google */
+body[data-theme="maavnica"] #hero-google-badge-compact.wellness-google-rating-card{
+  display: flex !important;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  margin: 12px 0 14px;
+  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body[data-theme="maavnica"] .wellness-google-rating-card a{
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+body[data-theme="maavnica"] .wellness-google-inner{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 4px 16px rgba(45, 90, 69, 0.05);
+}
+
+body[data-theme="maavnica"] .wellness-google-left{
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+body[data-theme="maavnica"] .wellness-google-star-icon{
+  font-size: 0.95rem;
+  line-height: 1;
+  color: #e8a317;
+}
+
+body[data-theme="maavnica"] .wellness-google-score{
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--card-text);
+  letter-spacing: -0.02em;
+}
+
+body[data-theme="maavnica"] .wellness-google-label{
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--card-muted);
+}
+
+body[data-theme="maavnica"] .wellness-google-count{
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  white-space: nowrap;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatars{
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin-left: auto;
+  padding: 3px 6px 3px 9px;
+  background: rgba(45, 90, 69, 0.05);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar{
+  width: 28px;
+  height: 28px;
+  margin-left: -8px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: linear-gradient(145deg, #ddd6cc 0%, #a89f94 100%);
+  box-shadow: 0 2px 6px rgba(36, 53, 46, 0.1);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:first-child{
+  margin-left: 0;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(2){
+  background: linear-gradient(145deg, #d0ddc8 0%, #8fa386 100%);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(3){
+  background: linear-gradient(145deg, #e0d5c4 0%, #b5a696 100%);
+  position: relative;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(3)::after{
+  content: "+";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(36, 53, 46, 0.55);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+}
+
+/* CTA principal */
+body[data-theme="maavnica"] .hero .btn-primary-contact-hero{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 50px;
+  margin: 0 0 16px;
+  padding: 13px 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none !important;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
+  color: #fff !important;
+  box-shadow:
+body[data-theme="maavnica"] .wellness-cta-leaf{
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 21c-4-3.5-7-7.5-7-12a5 5 0 0 1 9.5-2.2A5 5 0 0 1 19 9c0 4.5-3 8.5-7 12Z' stroke='%23ffffff' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M12 21V9' stroke='%23ffffff' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+@media (hover: hover){
+body[data-theme="maavnica"] .hero .btn-primary-contact-hero:hover{
+    background: linear-gradient(180deg, #3d7a5e 0%, #346552 100%) !important;
+    box-shadow: 0 14px 36px rgba(45, 90, 69, 0.32) !important;
+  }
+}
+
+/* Actions rapides — premium, aéré */
+body[data-theme="maavnica"] .wellness-quick-actions{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 16px;
+  padding: 12px 6px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+body[data-theme="maavnica"] .hero-compact-tel-row{
+  display: contents;
+}
+
+body[data-theme="maavnica"] .hero-slot-add-contact{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .wellness-quick-actions > #btn-cta-laisser-avis{
+  grid-column: 3;
+}
+
+body[data-theme="maavnica"] .wellness-quick-actions > #btn-discrete-partager:not([hidden]){
+  grid-column: 4;
+}
+
+body[data-theme="maavnica"] #btn-discrete-partager[hidden]{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] #btn-call{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--card-text) !important;
+}
+
+body[data-theme="maavnica"] #btn-call::after{
+  content: "";
+  position: absolute;
+  top: 14%;
+  right: 0;
+  width: 1px;
+  height: 72%;
+  background: linear-gradient(
+body[data-theme="maavnica"] #btn-cta-laisser-avis{
+  box-shadow: inset -1px 0 0 rgba(109, 125, 114, 0.14) !important;
+}
+
+body[data-theme="maavnica"] #btn-call .btn-link-leading{
+  display: none;
+}
+
+body[data-theme="maavnica"] #btn-call::before{
+  content: "";
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  border: 1px solid rgba(221, 210, 196, 0.85);
+  box-shadow:
+body[data-theme="maavnica"] #btn-call::before{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-whatsapp::before{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis::before{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-discrete-partager::before{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%232D5A45' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-call .btn-link-text{
+  font-size: 0;
+  line-height: 0;
+}
+
+body[data-theme="maavnica"] #btn-call .btn-link-text::after{
+  content: "Appeler";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] #btn-whatsapp .btn-link-text::after{
+  content: "WhatsApp";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis{
+  font-size: 0;
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis::after{
+  content: "Avis";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+}
+
+body[data-theme="maavnica"] #btn-discrete-partager::after{
+  content: "Partager";
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--card-text);
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+}
+
+/* Grille principale */
+body[data-theme="maavnica"] .main-grid{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 0;
+}
+
+body[data-theme="maavnica"] .card-block{
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body[data-theme="maavnica"] .card-block::before{
+  display: none;
+}
+
+body[data-theme="maavnica"] #slot-call-legacy{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .public-card--compact #panel-recommend{
+  display: block !important;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+body[data-theme="maavnica"] #panel-recommend:has(#recommend-block[style*="display: none"]){
+  display: none !important;
+}
+
+/* Carte recommandation — ligne cliquable */
+body[data-theme="maavnica"] .wellness-premium-reco-card{
+  margin: 0 0 8px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body[data-theme="maavnica"] .wellness-premium-row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px 12px 12px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@media (hover: hover){
+body[data-theme="maavnica"] .wellness-premium-row:hover{
+    border-color: rgba(45, 90, 69, 0.25);
+    box-shadow: 0 10px 28px rgba(45, 90, 69, 0.1);
+  }
+}
+
+body[data-theme="maavnica"] .wellness-row-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(45, 90, 69, 0.08);
+  color: var(--card-primary);
+}
+
+body[data-theme="maavnica"] .wellness-row-body{
+  flex: 1;
+  min-width: 0;
+}
+
+body[data-theme="maavnica"] .wellness-reco-title{
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--card-text);
+  margin: 0 0 2px;
+}
+
+body[data-theme="maavnica"] .wellness-reco-sub{
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--card-muted);
+  margin: 0;
+}
+
+body[data-theme="maavnica"] .wellness-row-chevron{
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-right: 2px solid var(--card-muted);
+  border-bottom: 2px solid var(--card-muted);
+  transform: rotate(-45deg);
+  opacity: 0.55;
+}
+
+body[data-theme="maavnica"] .wellness-reco-action{
+  display: none !important;
+}
+
+/* Carte QR */
+body[data-theme="maavnica"] .qr-wrap.wellness-qr-card{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px 12px 12px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--wellness-radius-inner);
+  box-shadow: 0 6px 22px rgba(45, 90, 69, 0.06);
+  text-align: left;
+}
+
+body[data-theme="maavnica"] .qr-wrap img{
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(45, 90, 69, 0.06);
+}
+
+body[data-theme="maavnica"] .qr-wrap .qr-copy{
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+body[data-theme="maavnica"] .qr-wrap .qr-copy-main--default{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .qr-wrap .qr-copy-main--wellness{
+  display: block !important;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.28;
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] .qr-copy-hint--wellness{
+  display: block !important;
+  font-size: 0.74rem;
+  color: var(--card-muted);
+}
+
+body[data-theme="maavnica"] .wellness-qr-chevron{
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-right: 2px solid var(--card-muted);
+  border-bottom: 2px solid var(--card-muted);
+  transform: rotate(-45deg);
+  opacity: 0.55;
+}
+
+body[data-theme="maavnica"] .qr-powered-by{
+  margin: 4px 0 2px;
+  text-align: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: #b5aa9e;
+  opacity: 0.75;
+}
+
+body[data-theme="maavnica"] .footer{
+  margin-top: 8px;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #b5aa9e;
+  border-top: 1px solid rgba(221, 210, 196, 0.65);
+  background: transparent;
+  opacity: 0.85;
+}
+
+body[data-theme="maavnica"] .footer a{
+  color: var(--card-primary);
+}
+
+/* Boutons & panels */
+body[data-theme="maavnica"] .btn-primary-contact-hero{
+  background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+body[data-theme="maavnica"] .acc-panel{
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 0 8px;
+}
+
+body[data-theme="maavnica"] .quote-input{
+  background: #fff;
+  border: 1px solid var(--card-border);
+}
+
+body[data-theme="maavnica"] .premium-load-layer{
+  background: var(--wellness-cream);
+  border-radius: var(--wellness-radius-card);
+}
+
+body[data-theme="maavnica"] .skeleton-shimmer{
+  background: rgba(45, 90, 69, 0.1);
+}
+
+body[data-theme="maavnica"] .toast{
+  background: rgba(36, 53, 46, 0.92);
+  color: #faf7f0;
+  border-radius: 999px;
+}
+
+body[data-theme="maavnica"] .recommend-id-modal{
+  background: rgba(36, 53, 46, 0.35);
+}
+
+body[data-theme="maavnica"] .recommend-id-panel{
+  background: var(--wellness-cream);
+  border: 1px solid var(--card-border);
+  color: var(--card-text);
+}
+
+/* Overrides compact générique */
+body[data-theme="maavnica"] .public-card--compact .phone-inner{
+  padding: 32px 22px 16px;
+  border-radius: var(--wellness-radius-card);
+  background: var(--wellness-cream);
+}
+
+body[data-theme="maavnica"] .public-card--compact .main-grid > .card-block:first-child{
+  order: 1;
+}
+
+body[data-theme="maavnica"] .public-card--compact .main-grid > .card-block--quote{
+  order: 2;
+  gap: 8px;
+}
+
+body[data-theme="maavnica"] .public-card--compact .card-block--quote .qr-wrap{
+  order: 0;
+  margin-top: 0;
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis.btn-primary--avis-secondary{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* —— Densité minimal —— */
+
+body[data-theme="maavnica"] .wellness-deco-branch{
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+/* —— 1. Header — sans badge, photo et identité remontées —— */
+body[data-theme="maavnica"] .hero-badges{
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="maavnica"] .hero{
+  padding-top: 50px;
+}
+
+body[data-theme="maavnica"] .hero-main-row{
+  padding-top: 6px;
+}
+
+body[data-theme="maavnica"] .wellness-avatar-stage{
+  margin-top: -9px;
+  margin-bottom: 6px;
+  padding-top: 0;
+}
+
+body[data-theme="maavnica"] .hero-texts{
+  margin-top: -4px;
+}
+
+body[data-theme="maavnica"] .hero-avatar{
+  width: clamp(116px, 30.6vw, 134px);
+  height: clamp(116px, 30.6vw, 134px);
+}
+
+body[data-theme="maavnica"] #hero-avatar-fallback{
+  font-size: 2.38rem;
+}
+
+/* —— 2. Bloc identité —— */
+body[data-theme="maavnica"] #person-name.hero-title{
+  margin-bottom: 2px;
+}
+
+body[data-theme="maavnica"] #hero-job-title{
+  margin-bottom: 3px;
+}
+
+body[data-theme="maavnica"] #hero-city{
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(0.64rem, 1.85vw, 0.74rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--card-primary, #2d5a45);
+  line-height: 1.15;
+  margin: 1px 0 5px;
+}
+
+body[data-theme="maavnica"] #hero-city[aria-hidden="true"]{
+  display: none !important;
+  margin: 0;
+}
+
+/* —— 3. Carte Google —— */
+body[data-theme="maavnica"] #hero-google-badge-compact.wellness-google-rating-card{
+  margin: 9px 0 11px;
+  align-items: stretch;
+}
+
+body[data-theme="maavnica"] .wellness-google-inner{
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 10px 14px 10px 16px;
+  box-sizing: border-box;
+}
+
+body[data-theme="maavnica"] .wellness-google-left{
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 5px;
+  flex: 0 1 auto;
+  min-width: min-content;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+body[data-theme="maavnica"] .wellness-google-star-icon{
+  font-size: 1.29rem;
+  line-height: 1;
+  align-self: center;
+}
+
+body[data-theme="maavnica"] .wellness-google-score{
+  font-size: 1.62rem;
+  font-weight: 700;
+  line-height: 1;
+  align-self: center;
+}
+
+body[data-theme="maavnica"] .wellness-google-label{
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1;
+  align-self: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+body[data-theme="maavnica"] .wellness-google-count{
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  line-height: 1;
+  margin-left: auto;
+  margin-right: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatars{
+  display: flex;
+  align-items: center;
+  align-self: center;
+  flex-shrink: 0;
+  margin-left: 0;
+  padding: 1px 4px 1px 7px;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar{
+  width: 26px;
+  height: 26px;
+  margin-left: -6px;
+  border-width: 1.5px;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(3)::after{
+  font-size: 0.54rem;
+}
+
+/* —— 4. Actions rapides —— */
+body[data-theme="maavnica"] .wellness-quick-actions{
+  margin: 0 0 5px;
+  padding: 0 5px 1px;
+}
+
+body[data-theme="maavnica"] #btn-call{
+  gap: 3px;
+  padding: 0 4px !important;
+}
+
+body[data-theme="maavnica"] #btn-call::before{
+  width: 44px;
+  height: 44px;
+}
+
+body[data-theme="maavnica"] #btn-call .btn-link-text::after{
+  font-size: 0.68rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+body[data-theme="maavnica"] #btn-call::after{
+  top: 12%;
+  height: 76%;
+}
+
+/* —— 5. Bloc recommandation —— */
+body[data-theme="maavnica"] .wellness-premium-reco-card{
+  margin: 0 0 7px;
+}
+
+body[data-theme="maavnica"] .wellness-row-body.wellness-reco-texts{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+
+body[data-theme="maavnica"] .wellness-reco-title{
+  display: block;
+  width: 100%;
+  margin: 0 0 2px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body[data-theme="maavnica"] .wellness-reco-sub{
+  display: block;
+  width: 100%;
+  margin: 0;
+  line-height: 1.35;
+}
+
+body[data-theme="maavnica"] #hint-post-prestation{
+  display: none !important;
+}
+
+/* —— 6. Densité globale —— */
+body[data-theme="maavnica"] .main-grid{
+  gap: 5px;
+}
+
+body[data-theme="maavnica"] .acc-panel{
+  margin: 0 0 7px;
+}
+
+@media (max-width: 479px){
+body[data-theme="maavnica"]{
+    padding: 15px 14px 18px;
+  }
+
+body[data-theme="maavnica"] .phone-inner{
+    padding: 26px 20px 13px;
+  }
+
+body[data-theme="maavnica"] .hero{
+    padding-top: 44px;
+  }
+
+body[data-theme="maavnica"] #hero-professional-tagline{
+    margin-bottom: 0;
+  }
+}
+
+/* —— Formulaire contact — modal —— */
+body[data-theme="maavnica"] .card-block--quote #panel-quote{
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .wellness-quote-modal-open{
+  overflow: hidden;
+}
+
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 480px){
+    align-items: center;
+    padding: 20px 16px;
+  }
+}
+
+  display: flex;
+}
+
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 53, 46, 0.38);
+  backdrop-filter: blur(2px);
+}
+
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  max-height: min(92vh, 640px);
+  overflow: auto;
+  margin: 0;
+  padding: 20px 18px 18px;
+  background: var(--wellness-cream, #faf7f0);
+  border: 1px solid var(--card-border, #ddd2c4);
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+0 -8px 40px rgba(36, 53, 46, 0.14), 0 24px 56px rgba(45, 90, 69, 0.12);, animation: wellness-contact-modal-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;, },  @media (min-width: 480px){
+    border-radius: 22px;
+    padding: 22px 20px 20px;
+  }
+}
+
+from{
+    opacity: 0;
+    transform: translateY(20px);
+  }
+to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(221, 210, 196, 0.9);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--card-muted, #6d7d72);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(45, 90, 69, 0.06);
+}
+
+  color: var(--card-text, #24352e);
+  border-color: rgba(45, 90, 69, 0.25);
+}
+
+body[data-theme="maavnica"] #wellness-contact-modal-host #panel-quote{
+  display: block !important;
+  margin: 0;
+  padding: 0;
+}
+
+body[data-theme="maavnica"] #wellness-contact-modal-host #quote-section-label{
+  display: block !important;
+  margin: 0 32px 14px 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] #wellness-contact-modal-host #btn-send-quote{
+  border-radius: 14px;
+  min-height: 46px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+body[data-theme="maavnica"] #wellness-contact-modal-host .hint{
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--card-muted);
+  margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce){
+    animation: none;
+  }
+}
+/* —— Finitions Maavnica (palette, CTA, accents) —— */
+
+body[data-theme="maavnica"] .phone-inner {
+  background: var(--wellness-cream);
+  border-color: rgba(216, 221, 227, 0.95);
+}
+
+body[data-theme="maavnica"] .phone-inner::after {
+  opacity: 0.24;
+}
+
+body[data-theme="maavnica"] .hero {
+  padding-top: 46px;
+}
+
+body[data-theme="maavnica"] #hero-city {
+  color: var(--card-muted);
+  margin-bottom: 4px;
+}
+
+body[data-theme="maavnica"] #hero-job-title {
+  color: var(--card-muted);
+}
+
+body[data-theme="maavnica"] #person-name.hero-title {
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] #hero-professional-tagline {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--card-text);
+  white-space: normal;
+  line-height: 1.36;
+}
+
+body[data-theme="maavnica"] .hero-reassurance {
+  display: block !important;
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 2.4vw, 0.92rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--card-muted);
+  margin: 0 auto 10px;
+  max-width: 20rem;
+  text-wrap: balance;
+}
+
+body[data-theme="maavnica"] .wellness-cta-leaf {
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .hero-avatar {
+  width: clamp(110px, 29.07vw, 127px);
+  height: clamp(110px, 29.07vw, 127px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.96),
+    0 0 0 3px rgba(250, 248, 244, 0.94),
+    0 0 0 4px rgba(224, 120, 48, 0.18),
+    0 12px 30px rgba(27, 45, 63, 0.11);
+}
+
+body[data-theme="maavnica"] #hero-avatar-fallback {
+  font-size: 2.26rem;
+  background: linear-gradient(145deg, #e8eef2 0%, #6b8a9a 55%, #1a4a57 100%);
+  color: #fffdf8;
+}
+
+body[data-theme="maavnica"] .hero-texts {
+  margin-top: -8px;
+}
+
+body[data-theme="maavnica"] .wellness-google-inner {
+  box-shadow: 0 4px 16px rgba(27, 45, 63, 0.05);
+  border-color: var(--card-border);
+}
+
+body[data-theme="maavnica"] .wellness-google-star-icon {
+  color: var(--maavnica-orange);
+  font-size: 1.35rem;
+}
+
+body[data-theme="maavnica"] .wellness-google-score {
+  color: var(--card-text);
+  font-size: 1.7rem;
+}
+
+body[data-theme="maavnica"] .wellness-google-avatars {
+  background: rgba(26, 74, 87, 0.06);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(3)::after {
+  color: rgba(27, 45, 63, 0.5);
+}
+
+body[data-theme="maavnica"] .hero .btn-primary-contact-hero {
+  background: linear-gradient(180deg, #225a6a 0%, var(--maavnica-cta) 100%) !important;
+  border: none !important;
+  box-shadow:
+    0 12px 32px rgba(26, 74, 87, 0.24),
+    0 2px 0 rgba(255, 255, 255, 0.12) inset !important;
+}
+
+@media (hover: hover) {
+  body[data-theme="maavnica"] .hero .btn-primary-contact-hero:hover {
+    background: linear-gradient(180deg, #2a6a7c 0%, var(--maavnica-cta-hover) 100%) !important;
+    box-shadow: 0 14px 36px rgba(26, 74, 87, 0.28) !important;
+  }
+}
+
+body[data-theme="maavnica"] #btn-send-feedback,
+body[data-theme="maavnica"] #btn-send-quote,
+body[data-theme="maavnica"] .btn-share-card-main,
+body[data-theme="maavnica"] .recommend-id-confirm {
+  background: linear-gradient(180deg, #225a6a 0%, var(--maavnica-cta) 100%) !important;
+  color: #faf8f4 !important;
+  border: none !important;
+  box-shadow: 0 10px 24px rgba(26, 74, 87, 0.2) !important;
+}
+
+body[data-theme="maavnica"] #btn-call::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%231A4A57' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-whatsapp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%231A4A57' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%23E07830' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-discrete-partager::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%231A4A57' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-call::after,
+body[data-theme="maavnica"] #btn-whatsapp::after {
+  background: linear-gradient(180deg, transparent 0%, rgba(26, 74, 87, 0.18) 20%, rgba(26, 74, 87, 0.18) 80%, transparent 100%);
+}
+
+body[data-theme="maavnica"] .wellness-premium-row {
+  box-shadow: 0 4px 16px rgba(27, 45, 63, 0.05);
+}
+
+body[data-theme="maavnica"] .wellness-premium-row:hover {
+  border-color: rgba(224, 120, 48, 0.35);
+}
+
+body[data-theme="maavnica"] .wellness-row-chevron,
+body[data-theme="maavnica"] .wellness-qr-chevron {
+  color: var(--maavnica-orange);
+}
+
+body[data-theme="maavnica"] .footer a {
+  color: var(--card-primary);
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-backdrop {
+  background: rgba(27, 45, 63, 0.36);
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-dialog {
+  background: var(--wellness-cream);
+}
+
+body[data-theme="maavnica"] #wellness-contact-modal-host #btn-send-quote {
+  background: linear-gradient(180deg, #225a6a 0%, var(--maavnica-cta) 100%) !important;
+}

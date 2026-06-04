@@ -29,19 +29,37 @@
       return document.body.getAttribute("data-theme") === "real-estate";
     }
 
-    /** Ville seule (artisan & immobilier premium). */
+    function isMaavnicaPremiumTheme() {
+      return document.body.getAttribute("data-theme") === "maavnica";
+    }
+
+    /** Ville seule (artisan, immobilier & maavnica premium). */
     function isPortraitCityTheme() {
-      return isArtisanPremiumTheme() || isImmobilierPremiumTheme();
+      return (
+        isArtisanPremiumTheme() ||
+        isImmobilierPremiumTheme() ||
+        isMaavnicaPremiumTheme()
+      );
     }
 
-    /** Layout premium partagé : wellness-soft* + artisan + immobilier. */
+    /** Layout premium partagé : wellness-soft* + artisan + immobilier + maavnica. */
     function isPremiumLayoutTheme() {
-      return isWellnessVisualTheme() || isArtisanPremiumTheme() || isImmobilierPremiumTheme();
+      return (
+        isWellnessVisualTheme() ||
+        isArtisanPremiumTheme() ||
+        isImmobilierPremiumTheme() ||
+        isMaavnicaPremiumTheme()
+      );
     }
 
-    /** Densité minimal + modal contact (wellness-soft-minimal, artisan & immobilier). */
+    /** Densité minimal + modal contact (wellness-soft-minimal, artisan, immobilier & maavnica). */
     function isPremiumMinimalLayoutTheme() {
-      return isWellnessMinimalTheme() || isArtisanPremiumTheme() || isImmobilierPremiumTheme();
+      return (
+        isWellnessMinimalTheme() ||
+        isArtisanPremiumTheme() ||
+        isImmobilierPremiumTheme() ||
+        isMaavnicaPremiumTheme()
+      );
     }
 
     /** Portrait centré + ville sous le métier. */
@@ -213,6 +231,10 @@
 
     function resolvePremiumHeroCta(profileKey, rawFormTitle) {
       var custom = trimCardStr(rawFormTitle);
+      if (isMaavnicaPremiumTheme()) {
+        if (custom) return custom;
+        return "Demander ma SmartCard";
+      }
       if (isImmobilierPremiumTheme() || profileKey === "immo") {
         if (/^obtenir une estimation$/i.test(custom)) return "Obtenir une estimation";
         if (
@@ -302,6 +324,12 @@
         (!vt || vt === "wellness-soft" || vt === "wellness-soft-minimal")
       ) {
         vt = "real-estate";
+      }
+      if (
+        slug === "arnaud-huard" &&
+        (!vt || vt === "wellness-soft" || vt === "wellness-soft-minimal")
+      ) {
+        vt = "maavnica";
       }
       if (!vt || !ALLOWED_VISUAL_THEMES.has(vt)) return;
       document.body.setAttribute("data-theme", vt);
@@ -1544,17 +1572,22 @@
         const heroTaglineEl = document.getElementById("hero-professional-tagline");
         if (heroTaglineEl) {
           if (isPortraitCityTheme()) {
-            var portraitTagline = resolvePortraitHeroTagline(
-              rawHeroTitle,
-              rawHeroText,
-              profileKey
-            );
-            if (portraitTagline) {
-              heroTaglineEl.textContent = portraitTagline;
+            if (isMaavnicaPremiumTheme() && rawHeroTitle) {
+              heroTaglineEl.textContent = rawHeroTitle;
               heroTaglineEl.style.display = "";
             } else {
-              heroTaglineEl.textContent = "";
-              heroTaglineEl.style.display = "none";
+              var portraitTagline = resolvePortraitHeroTagline(
+                rawHeroTitle,
+                rawHeroText,
+                profileKey
+              );
+              if (portraitTagline) {
+                heroTaglineEl.textContent = portraitTagline;
+                heroTaglineEl.style.display = "";
+              } else {
+                heroTaglineEl.textContent = "";
+                heroTaglineEl.style.display = "none";
+              }
             }
           } else if (rawHeroTitle) {
             heroTaglineEl.textContent =
@@ -1604,7 +1637,12 @@
         const reassuranceEl = document.getElementById("hero-reassurance");
         const socialProofEl = document.getElementById("hero-social-proof");
         if (reassuranceEl && socialProofEl) {
-          if (rawHeroText && isPremiumLayoutTheme()) {
+          if (rawHeroText && isMaavnicaPremiumTheme()) {
+            reassuranceEl.textContent = rawHeroText;
+            reassuranceEl.style.display = "";
+            socialProofEl.textContent = "";
+            socialProofEl.style.display = "none";
+          } else if (rawHeroText && isPremiumLayoutTheme()) {
             reassuranceEl.textContent = "";
             reassuranceEl.style.display = "none";
             socialProofEl.textContent = "";

@@ -239,6 +239,22 @@ class VisualThemePersistTests(unittest.TestCase):
         self.assertIn("#8b5e3c", artisan_part)
         self.assertIn("#5a615e", artisan_part)
 
+    def test_maavnica_premium_css_isolated(self):
+        import re
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parents[1] / "static" / "public-card"
+        css = (root / "maavnica-premium.css").read_text(encoding="utf-8")
+        html = (root / "index.html").read_text(encoding="utf-8")
+        self.assertIn("maavnica-premium.css", html)
+        self.assertIn('body[data-theme="maavnica"]', css)
+        self.assertIn("--maavnica-cta:", css)
+        bad = re.findall(
+            r'body\[data-theme[^\]]*"(?:artisan|real-estate|wellness-soft)',
+            css,
+        )
+        self.assertEqual(bad, [], msg="maavnica-premium.css ne doit cibler aucun autre thème")
+
 
 if __name__ == "__main__":
     unittest.main()
