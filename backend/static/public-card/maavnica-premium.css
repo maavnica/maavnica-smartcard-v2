@@ -221,10 +221,10 @@ body[data-theme="maavnica"] #hero-avatar-fallback{
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #c5d4b8 0%, #7a9470 55%, #4d6b52 100%);
-  color: #fffdf8;
+  background: linear-gradient(145deg, #dce8e6 0%, #5a9e98 52%, #0f766e 100%);
+  color: #fcfcfa;
   font-family: var(--font-display);
-  font-size: 2.65rem;
+  font-size: 2.26rem;
   font-weight: 500;
 }
 
@@ -261,7 +261,7 @@ body[data-theme="maavnica"] #hero-professional-tagline{
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 3.2vw, 1.2rem);
   font-weight: 500;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.4;
   color: var(--card-muted);
   margin: 0 auto 2px;
@@ -417,10 +417,6 @@ body[data-theme="maavnica"] .wellness-cta-leaf{
   background-size: contain;
 }
 
-@media (hover: hover) {body[data-theme="maavnica"] .hero .btn-primary-contact-hero:hover{
-    background: linear-gradient(180deg, #3d7a5e 0%, #346552 100%) !important;
-    box-shadow: 0 14px 36px rgba(45, 90, 69, 0.32) !important;
-  }}
 
 body[data-theme="maavnica"] .wellness-quick-actions{
   display: grid;
@@ -768,7 +764,7 @@ body[data-theme="maavnica"] .footer a{
 }
 
 body[data-theme="maavnica"] .recommend-id-confirm{
-  background: linear-gradient(180deg, #356b52 0%, #2d5a45 100%) !important;
+  background: var(--maavnica-cta, #0f766e) !important;
   color: #fff !important;
   border: none !important;
 }
@@ -1129,32 +1125,36 @@ body[data-theme="maavnica"] #wellness-contact-modal-host .hint{
     animation: none;
   }}
 
-/* —— Palette & finitions Maavnica (base immobilier premium) —— */
+/* —— Palette & finitions Maavnica (miroir immobilier-premium.css) —— */
 body[data-theme="maavnica"] {
   --card-bg: #f8f6f1;
-  --card-surface: #f8f6f1;
-  --card-primary: #1e5a5e;
-  --card-accent: #e07a2d;
-  --card-text: #1d2b3a;
-  --card-muted: #5e6670;
-  --card-border: #ddd8cf;
-  --card-shadow: 0 24px 56px rgba(29, 43, 58, 0.08);
+  --card-surface: #fcfcfa;
+  --card-primary: #0f766e;
+  --card-accent: #14b8a6;
+  --card-text: #14213d;
+  --card-muted: #475569;
+  --card-border: #d9d4c8;
+  --card-shadow: 0 24px 56px rgba(20, 33, 61, 0.09);
   --bg-page: #f8f6f1;
-  --primary: #1e5a5e;
-  --primary-soft: rgba(30, 90, 94, 0.1);
-  --text-main: #1d2b3a;
-  --text-soft: #5e6670;
-  --border-soft: rgba(29, 43, 58, 0.16);
-  --wellness-cream: #f8f6f1;
-  --maavnica-cta: #1e5a5e;
-  --maavnica-cta-hover: #247068;
+  --primary: #0f766e;
+  --primary-soft: rgba(15, 118, 110, 0.1);
+  --text-main: #14213d;
+  --text-soft: #475569;
+  --border-soft: rgba(20, 33, 61, 0.14);
+  --wellness-cream: #fcfcfa;
+  --maavnica-cta: #0f766e;
+  --maavnica-cta-hover: #14b8a6;
+  --maavnica-green: #0f766e;
+  --maavnica-turquoise: #14b8a6;
+  --maavnica-navy: #14213d;
   --maavnica-orange: #e07a2d;
-  --maavnica-stone: #6b7a86;
 
   font-family: var(--font-body);
   color: var(--card-text);
   background-color: var(--bg-page);
-  background-image: none;
+  background-image:
+    radial-gradient(ellipse 88% 68% at 50% -8%, rgba(255, 255, 255, 0.9), transparent 62%),
+    linear-gradient(180deg, #faf8f4 0%, #f0ece4 100%);
   padding: 18px 14px 24px;
 }
 
@@ -1174,7 +1174,7 @@ body[data-theme="maavnica"] .phone-inner {
 }
 
 body[data-theme="maavnica"] .phone-inner::after {
-  opacity: 0.18;
+  opacity: 0.14;
 }
 
 body[data-theme="maavnica"] .hero-badges {
@@ -1218,19 +1218,19 @@ body[data-theme="maavnica"] .hero-avatar {
   padding: 4px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.96),
-    0 0 0 3px rgba(248, 246, 241, 0.94),
-    0 0 0 4px rgba(224, 122, 45, 0.14),
-    0 12px 30px rgba(29, 43, 58, 0.1);
+    0 0 0 3px rgba(252, 252, 250, 0.94),
+    0 0 0 4px rgba(15, 118, 110, 0.16),
+    0 12px 30px rgba(20, 33, 61, 0.1);
 }
 
 body[data-theme="maavnica"] #hero-avatar-fallback {
   font-size: 2.26rem;
-  background: linear-gradient(145deg, #e8eef2 0%, #7a9aa8 52%, #1e5a5e 100%);
-  color: #fffdf8;
+  background: linear-gradient(145deg, #dce8e6 0%, #5a9e98 52%, #0f766e 100%);
+  color: #fcfcfa;
 }
 
 body[data-theme="maavnica"] #hero-city {
-  color: var(--maavnica-stone);
+  color: var(--maavnica-green);
 }
 
 body[data-theme="maavnica"] #hero-job-title {
@@ -1240,19 +1240,20 @@ body[data-theme="maavnica"] #hero-job-title {
 body[data-theme="maavnica"] #hero-professional-tagline {
   font-style: normal;
   font-weight: 500;
-  color: var(--card-text);
+  color: var(--card-muted);
   line-height: 1.36;
 }
 
 body[data-theme="maavnica"] .hero-reassurance {
   display: block !important;
   font-family: var(--font-body);
-  font-size: clamp(0.82rem, 2.4vw, 0.92rem);
+  font-size: clamp(0.82rem, 2.4vw, 0.9rem);
   font-weight: 500;
-  font-style: italic;
+  font-style: normal;
   color: var(--card-muted);
-  margin: 0 auto 10px;
+  margin: 0 auto 8px;
   max-width: 20rem;
+  text-wrap: balance;
 }
 
 body[data-theme="maavnica"] #hero-recommend-count,
@@ -1265,51 +1266,84 @@ body[data-theme="maavnica"] #hero-recommend-conversion {
   overflow: hidden !important;
 }
 
-body[data-theme="maavnica"] .maavnica-reco-proof {
+body[data-theme="maavnica"] #hero-google-badge-compact.wellness-google-rating-card,
+body[data-theme="maavnica"] #hero-google-badge-compact.hero-google-rating-inline,
+body[data-theme="maavnica"] #maavnica-reco-proof-card.wellness-google-rating-card,
+body[data-theme="maavnica"] #maavnica-reco-proof-card.hero-google-rating-inline {
   display: flex !important;
   width: 100%;
+  max-width: 100%;
   margin: 9px 0 11px;
+  align-items: stretch;
   padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-body[data-theme="maavnica"] .maavnica-reco-proof .wellness-google-inner {
-  justify-content: center;
-  gap: 8px;
-  min-height: 50px;
+body[data-theme="maavnica"] .wellness-google-inner {
+  box-shadow: 0 4px 16px rgba(20, 33, 61, 0.06);
+  border-color: var(--card-border);
 }
 
-body[data-theme="maavnica"] .maavnica-reco-proof .wellness-google-label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: none;
+body[data-theme="maavnica"] .wellness-google-star-icon {
+  color: var(--maavnica-green);
+  font-size: 1.35rem;
+}
+
+body[data-theme="maavnica"] .wellness-google-score {
+  font-size: 1.7rem;
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] .wellness-google-label,
+body[data-theme="maavnica"] .wellness-google-count {
   color: var(--card-muted);
 }
 
-body[data-theme="maavnica"] .maavnica-reco-proof .wellness-google-star-icon {
-  color: var(--maavnica-orange);
-  font-size: 1.1rem;
+body[data-theme="maavnica"] .wellness-google-avatars {
+  background: rgba(15, 118, 110, 0.06);
+}
+
+body[data-theme="maavnica"] .hero-texts:has(#maavnica-reco-proof-card) #hero-google-badge-compact {
+  display: none !important;
+}
+
+body[data-theme="maavnica"] .maavnica-reco-proof .wellness-google-label {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--card-muted);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar {
+  box-shadow: 0 2px 6px rgba(20, 33, 61, 0.1);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(2) {
+  background: linear-gradient(145deg, #dce8e6 0%, #7ab5af 100%);
+}
+
+body[data-theme="maavnica"] .wellness-google-avatar:nth-child(3)::after {
+  color: rgba(20, 33, 61, 0.5);
 }
 
 body[data-theme="maavnica"] .wellness-cta-leaf {
   display: none !important;
 }
 
-body[data-theme="maavnica"] .wellness-google-star-icon {
-  color: var(--maavnica-orange);
-}
-
 body[data-theme="maavnica"] .hero .btn-primary-contact-hero {
   background: var(--maavnica-cta) !important;
   color: #fff !important;
   border: none !important;
-  box-shadow: 0 12px 32px rgba(30, 90, 94, 0.2), 0 2px 0 rgba(255, 255, 255, 0.08) inset !important;
+  box-shadow:
+    0 12px 32px rgba(15, 118, 110, 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.1) inset !important;
 }
 
 @media (hover: hover) {
   body[data-theme="maavnica"] .hero .btn-primary-contact-hero:hover {
     background: var(--maavnica-cta-hover) !important;
-    box-shadow: 0 14px 36px rgba(30, 90, 94, 0.24) !important;
+    box-shadow: 0 14px 36px rgba(15, 118, 110, 0.28) !important;
   }
 }
 
@@ -1321,29 +1355,121 @@ body[data-theme="maavnica"] .recommend-id-confirm {
   background: var(--maavnica-cta) !important;
   color: #fff !important;
   border: none !important;
-  box-shadow: 0 10px 24px rgba(30, 90, 94, 0.18) !important;
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.18) !important;
 }
 
 body[data-theme="maavnica"] #wellness-contact-modal-host #btn-send-quote {
   background: var(--maavnica-cta) !important;
 }
 
-body[data-theme="maavnica"] #btn-cta-laisser-avis::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%23E07A2D' stroke-width='1.7'/%3E%3C/svg%3E");
+body[data-theme="maavnica"] #btn-call::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6.5 4h2.8l1.2 3.5-1.8 1.2a11 11 0 0 0 5.3 5.3l1.2-1.8L19 14.7V17.5A1.5 1.5 0 0 1 17.5 19 16 16 0 0 1 5 6.5 1.5 1.5 0 0 1 6.5 5Z' stroke='%2314213D' stroke-width='1.7'/%3E%3C/svg%3E");
 }
 
-body[data-theme="maavnica"] #btn-call::before,
-body[data-theme="maavnica"] #btn-whatsapp::before,
+body[data-theme="maavnica"] #btn-whatsapp::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4a8 8 0 0 0-6.9 12.1L4 20l3.9-1A8 8 0 1 0 12 4Z' stroke='%230F766E' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 4.5 14.2 9l4.8.4-3.6 3.1 1.1 4.7L12 15.8 7.5 17.2l1.1-4.7L5 9.4l4.8-.4L12 4.5Z' stroke='%230F766E' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
 body[data-theme="maavnica"] #btn-discrete-partager::before {
-  filter: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 12V5.5A1.5 1.5 0 0 1 9.5 4h10A1.5 1.5 0 0 1 21 5.5v10a1.5 1.5 0 0 1-1.5 1.5H13m-5 0H3m5 0-3-3.5L11 12l-3 3.5' stroke='%2314213D' stroke-width='1.7'/%3E%3C/svg%3E");
+}
+
+body[data-theme="maavnica"] #btn-call::after,
+body[data-theme="maavnica"] #btn-whatsapp::after {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(15, 118, 110, 0.16) 20%,
+    rgba(15, 118, 110, 0.16) 80%,
+    transparent 100%
+  );
+}
+
+body[data-theme="maavnica"] #btn-cta-laisser-avis {
+  box-shadow: inset -1px 0 0 rgba(15, 118, 110, 0.18) !important;
+}
+
+@media (hover: hover) {
+  body[data-theme="maavnica"] #btn-call:hover::before,
+  body[data-theme="maavnica"] #btn-whatsapp:hover::before,
+  body[data-theme="maavnica"] #btn-cta-laisser-avis:hover::before,
+  body[data-theme="maavnica"] #btn-discrete-partager:hover::before {
+    filter: drop-shadow(0 0 6px rgba(20, 184, 166, 0.35));
+  }
+}
+
+body[data-theme="maavnica"] .wellness-premium-row {
+  box-shadow: 0 4px 16px rgba(20, 33, 61, 0.06);
+  border-color: var(--card-border);
+}
+
+@media (hover: hover) {
+  body[data-theme="maavnica"] .wellness-premium-row:hover {
+    border-color: rgba(15, 118, 110, 0.28);
+    box-shadow: 0 10px 28px rgba(20, 33, 61, 0.1);
+  }
+}
+
+body[data-theme="maavnica"] .wellness-row-icon {
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--maavnica-green);
 }
 
 body[data-theme="maavnica"] .wellness-row-chevron,
 body[data-theme="maavnica"] .wellness-qr-chevron {
-  border-right-color: var(--maavnica-stone);
-  border-bottom-color: var(--maavnica-stone);
+  border-right-color: var(--maavnica-green);
+  border-bottom-color: var(--maavnica-green);
+  opacity: 0.65;
+}
+
+body[data-theme="maavnica"] .qr-wrap.wellness-qr-card {
+  box-shadow: 0 6px 22px rgba(20, 33, 61, 0.07);
+  border-color: var(--card-border);
+}
+
+body[data-theme="maavnica"] .qr-wrap img {
+  box-shadow: 0 4px 12px rgba(20, 33, 61, 0.08);
+  border-color: var(--card-border);
+}
+
+body[data-theme="maavnica"] .footer {
+  border-top-color: rgba(217, 212, 200, 0.75);
+  color: rgba(71, 85, 105, 0.55);
+  font-size: 0.58rem;
+  opacity: 1;
 }
 
 body[data-theme="maavnica"] .footer a {
-  color: var(--maavnica-stone);
+  color: var(--maavnica-green);
+}
+
+body[data-theme="maavnica"] .qr-powered-by {
+  color: rgba(71, 85, 105, 0.42);
+  font-size: 0.56rem;
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-backdrop {
+  background: rgba(20, 33, 61, 0.38);
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-dialog {
+  background: var(--wellness-cream);
+  border-color: var(--card-border);
+  box-shadow:
+    0 -8px 40px rgba(20, 33, 61, 0.14),
+    0 24px 56px rgba(20, 33, 61, 0.1);
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-close {
+  border-color: var(--card-border);
+  color: var(--card-muted);
+}
+
+body[data-theme="maavnica"] .wellness-contact-modal-close:hover {
+  color: var(--card-text);
+  border-color: rgba(20, 33, 61, 0.22);
 }
