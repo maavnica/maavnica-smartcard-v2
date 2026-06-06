@@ -42,34 +42,34 @@
       "#" +
       BANNER_ID +
       "{position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));" +
-      "background:rgba(2,6,23,.96);border-top:1px solid rgba(148,163,184,.35);box-shadow:0 -8px 32px rgba(0,0,0,.45);font-family:system-ui,-apple-system,Segoe UI,sans-serif;}" +
+      "background:rgba(253,251,248,.97);border-top:1px solid #e8e3dc;box-shadow:0 -8px 32px rgba(26,35,50,.08);font-family:\"DM Sans\",system-ui,sans-serif;}" +
       "#" +
       BANNER_ID +
       " .mcb-inner{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;}" +
       "#" +
       BANNER_ID +
-      " .mcb-text{flex:1 1 220px;font-size:12px;line-height:1.45;color:#cbd5e1;margin:0;}" +
+      " .mcb-text{flex:1 1 220px;font-size:12px;line-height:1.45;color:#566070;margin:0;}" +
       "#" +
       BANNER_ID +
-      " .mcb-text a{color:#93c5fd;text-underline-offset:3px;}" +
+      " .mcb-text a{color:#1e4a56;text-underline-offset:3px;}" +
       "#" +
       BANNER_ID +
       " .mcb-actions{display:flex;flex-wrap:wrap;gap:8px;flex:0 0 auto;}" +
       "#" +
       BANNER_ID +
-      " .mcb-btn{border-radius:999px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(148,163,184,.4);}" +
+      " .mcb-btn{border-radius:4px;padding:8px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(30,74,86,.35);}" +
       "#" +
       BANNER_ID +
-      " .mcb-btn--ghost{background:transparent;color:#e5e7eb;}" +
+      " .mcb-btn--ghost{background:transparent;color:#1e4a56;}" +
       "#" +
       BANNER_ID +
-      " .mcb-btn--ghost:hover{border-color:rgba(148,163,184,.65);}" +
+      " .mcb-btn--ghost:hover{border-color:#1e4a56;background:rgba(30,74,86,.05);}" +
       "#" +
       BANNER_ID +
-      " .mcb-btn--primary{background:#facc15;color:#020617;border-color:#facc15;}" +
+      " .mcb-btn--primary{background:#1e4a56;color:#fff;border-color:#1e4a56;}" +
       "#" +
       BANNER_ID +
-      " .mcb-btn--primary:hover{opacity:.92;}" +
+      " .mcb-btn--primary:hover{background:#2a6270;border-color:#2a6270;}" +
       "@media(max-width:520px){#" +
       BANNER_ID +
       " .mcb-actions{width:100%;}#" +

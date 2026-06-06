@@ -4,17 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Être recontacté — SmartCard Maavnica</title>
-  <meta name="description" content="Demandez à être rappelé pour la SmartCard : avis Google et contact après chaque intervention." />
+  <meta name="description" content="Demandez à être recontacté pour découvrir votre SmartCard — carte professionnelle de confiance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at 50% 0%, #0f172a 0%, #020617 55%, #000 100%);
-      color: #e5e7eb;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: #f6f4f0;
+      color: #1a2332;
       line-height: 1.55;
       min-height: 100vh;
     }
-    a { color: #93c5fd; text-decoration: none; }
+    a { color: #1e4a56; text-decoration: none; }
     a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
     .wrap {
@@ -26,18 +29,21 @@
     .back-link {
       display: inline-block;
       margin-bottom: 18px;
-      font-size: 14px;
-      color: #93c5fd;
-      opacity: 0.9;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1e4a56;
+      opacity: 0.85;
     }
     .back-link:hover { opacity: 1; }
 
     .card {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      border-radius: 18px;
-      padding: 22px 20px 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      background: #fdfbf8;
+      border: 1px solid #e8e3dc;
+      border-radius: 12px;
+      padding: 28px 24px;
+      box-shadow: 0 24px 56px rgba(26, 35, 50, 0.07);
     }
 
     .badge {
@@ -45,24 +51,25 @@
       align-items: center;
       gap: 6px;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #facc15;
+      color: #b09872;
       margin-bottom: 10px;
     }
 
     h1 {
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
-      font-weight: 800;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.5rem, 4vw, 1.85rem);
+      font-weight: 600;
       letter-spacing: -0.02em;
-      line-height: 1.2;
+      line-height: 1.15;
       margin-bottom: 10px;
     }
 
     .sub {
       font-size: 15px;
-      color: #cbd5e1;
+      color: #566070;
       margin-bottom: 20px;
       line-height: 1.45;
     }
@@ -71,7 +78,7 @@
       display: block;
       font-size: 12px;
       font-weight: 600;
-      color: #94a3b8;
+      color: #566070;
       margin: 12px 0 6px;
     }
     label:first-of-type { margin-top: 0; }
@@ -79,16 +86,16 @@
     input, textarea, select {
       width: 100%;
       padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      background: rgba(2, 6, 23, 0.75);
-      color: #f1f5f9;
+      border-radius: 4px;
+      border: 1px solid #e8e3dc;
+      background: #fff;
+      color: #1a2332;
       font-size: 15px;
       outline: none;
     }
     input:focus, textarea:focus, select:focus {
-      border-color: rgba(250, 204, 21, 0.5);
-      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.2);
+      border-color: #1e4a56;
+      box-shadow: 0 0 0 1px rgba(30, 74, 86, 0.15);
     }
     textarea {
       min-height: 100px;
@@ -108,19 +115,19 @@
       width: 100%;
       margin-top: 18px;
       padding: 14px 18px;
-      border-radius: 999px;
+      border-radius: 4px;
       border: none;
-      background: #facc15;
-      color: #020617;
-      font-weight: 800;
-      font-size: 15px;
+      background: #1e4a56;
+      color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 12px 32px rgba(250, 204, 21, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.2s ease;
     }
     .btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 40px rgba(250, 204, 21, 0.4);
+      background: #2a6270;
     }
     .btn:disabled {
       opacity: 0.65;
@@ -130,7 +137,7 @@
     .hint {
       margin-top: 12px;
       font-size: 12px;
-      color: #94a3b8;
+      color: #8f8880;
       line-height: 1.45;
     }
 
@@ -140,14 +147,15 @@
       padding: 8px 0 4px;
     }
     .thankyou h2 {
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
       margin-bottom: 10px;
-      color: #fff;
+      color: #1a2332;
     }
     .thankyou p {
       font-size: 15px;
-      color: #cbd5e1;
+      color: #566070;
       margin-bottom: 18px;
       line-height: 1.5;
     }
@@ -156,16 +164,18 @@
       align-items: center;
       justify-content: center;
       padding: 12px 22px;
-      border-radius: 999px;
-      background: rgba(148, 163, 184, 0.15);
-      color: #e5e7eb;
-      font-weight: 700;
-      font-size: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 4px;
+      background: transparent;
+      color: #1e4a56;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(30, 74, 86, 0.35);
       text-decoration: none;
     }
     .thankyou .btn-home:hover {
-      background: rgba(148, 163, 184, 0.22);
+      background: rgba(30, 74, 86, 0.05);
       text-decoration: none;
     }
   </style>
@@ -175,9 +185,9 @@
     <a href="/" class="back-link">← Retour à la présentation SmartCard</a>
 
     <div class="card" id="cardBlock">
-      <p class="badge">SmartCard · Artisan</p>
-      <h1>Demandez à être recontacté</h1>
-      <p class="sub">Expliquez votre besoin et nous revenons vers vous rapidement.</p>
+      <p class="badge">Maavnica · SmartCard</p>
+      <h1>Être recontacté</h1>
+      <p class="sub">Parlez-nous de votre activité — nous revenons vers vous avec simplicité.</p>
 
       <form id="recontactForm" action="/api/contact" method="POST">
         <input type="text" name="honey" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
