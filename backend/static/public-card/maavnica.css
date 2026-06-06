@@ -22,34 +22,35 @@ body[data-theme="maavnica"] .wellness-reco-default{
 }
 /* Layout wellness — maavnica (copie wellness-soft). */
 body[data-theme="maavnica"]{
-  --card-bg: #f0efed;
-  --card-surface: #fdfcfb;
+  --card-bg: #f3f0eb;
+  --card-surface: #fdfbf8;
   --card-primary: #1e4a56;
   --card-text: #1a2332;
-  --card-muted: #5c6678;
-  --card-border: #e4e2de;
+  --card-muted: #566070;
+  --card-border: #e8e3dc;
   --card-shadow: 0 24px 56px rgba(26, 35, 50, 0.07);
-  --bg-page: #f4f3f1;
+  --bg-page: #f6f4f0;
   --hero-bg: transparent;
   --primary: #1e4a56;
   --primary-soft: rgba(30, 74, 86, 0.08);
   --text-main: #1a2332;
-  --text-soft: #5c6678;
-  --border-soft: rgba(92, 102, 120, 0.22);
+  --text-soft: #566070;
+  --border-soft: rgba(92, 102, 120, 0.2);
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: "DM Sans", system-ui, sans-serif;
-  --wellness-cream: #fdfcfb;
+  --wellness-cream: #fdfbf8;
   --wellness-radius-card: 32px;
   --wellness-radius-inner: 18px;
-  --maav-accent: #a8926a;
-  --maav-accent-soft: rgba(168, 146, 106, 0.14);
+  --maav-accent: #b09872;
+  --maav-accent-soft: rgba(176, 152, 114, 0.24);
+  --maav-accent-line: rgba(176, 152, 114, 0.18);
 
   font-family: var(--font-body);
   color: var(--card-text);
   padding: 18px 14px 24px;
   background-color: var(--bg-page);
   background-image:
-    radial-gradient(ellipse 100% 75% at 50% -15%, rgba(255, 255, 255, 0.82), transparent 68%);
+    radial-gradient(ellipse 100% 75% at 50% -15%, rgba(255, 250, 245, 0.88), transparent 68%);
 }
 
 
@@ -1132,11 +1133,34 @@ body[data-theme="maavnica"] .phone-shell{
 }
 
 body[data-theme="maavnica"] .phone-inner{
-  background: var(--wellness-cream);
-  border-color: rgba(228, 226, 222, 0.95);
+  background-color: var(--wellness-cream);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' fill='none'%3E%3Cpath d='M50 108V42' stroke='%23b09872' stroke-width='1.1' opacity='0.09' stroke-linecap='round'/%3E%3Cpath d='M50 48C50 48 28 38 22 18' stroke='%23b09872' stroke-width='1' opacity='0.07' stroke-linecap='round'/%3E%3Cpath d='M50 48C50 48 72 38 78 18' stroke='%23b09872' stroke-width='1' opacity='0.07' stroke-linecap='round'/%3E%3Cpath d='M50 55C50 55 32 50 26 32' stroke='%23b09872' stroke-width='0.9' opacity='0.06' stroke-linecap='round'/%3E%3Cpath d='M50 55C50 55 68 50 74 32' stroke='%23b09872' stroke-width='0.9' opacity='0.06' stroke-linecap='round'/%3E%3Cpath d='M50 62C50 62 38 60 34 46' stroke='%23b09872' stroke-width='0.85' opacity='0.05' stroke-linecap='round'/%3E%3Cpath d='M50 62C50 62 62 60 66 46' stroke='%23b09872' stroke-width='0.85' opacity='0.05' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 148px auto;
+  background-position: center 9%;
+  background-repeat: no-repeat;
+  border-color: rgba(232, 227, 220, 0.96);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.98) inset,
     var(--card-shadow);
+}
+
+body[data-theme="maavnica"] .phone-inner::after{
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+}
+
+body[data-theme="maavnica"] .wellness-avatar-stage::before{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 158px;
+  height: 158px;
+  transform: translate(-50%, -54%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(176, 152, 114, 0.1) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 body[data-theme="maavnica"] .hero-badge{
@@ -1148,10 +1172,11 @@ body[data-theme="maavnica"] .hero-badge{
 
 body[data-theme="maavnica"] .hero-avatar{
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.95),
-    0 0 0 5px rgba(255, 255, 255, 0.88),
+    0 0 0 1px rgba(255, 255, 255, 0.96),
+    0 0 0 5px rgba(255, 253, 250, 0.9),
     0 0 0 6px var(--maav-accent-soft),
-    0 16px 40px rgba(26, 35, 50, 0.11);
+    0 0 0 7px rgba(176, 152, 114, 0.1),
+    0 16px 40px rgba(26, 35, 50, 0.1);
 }
 
 body[data-theme="maavnica"] #hero-avatar-fallback{
@@ -1170,8 +1195,24 @@ body[data-theme="maavnica"] #hero-job-title{
 }
 
 body[data-theme="maavnica"] #hero-professional-tagline{
-  color: #6b6570;
+  color: #635f5a;
   font-style: italic;
+}
+
+body[data-theme="maavnica"] #hero-recommend-count{
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.025em;
+  color: var(--card-text);
+  background: linear-gradient(180deg, #fff 0%, #faf7f2 100%) !important;
+  border: 1px solid rgba(176, 152, 114, 0.3) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 3px 12px rgba(26, 35, 50, 0.04) !important;
 }
 
 body[data-theme="maavnica"] #hero-city{
@@ -1180,16 +1221,17 @@ body[data-theme="maavnica"] #hero-city{
 
 body[data-theme="maavnica"] .wellness-google-inner{
   background: #fff;
-  border-color: var(--card-border);
+  border-color: rgba(232, 227, 220, 0.96);
   box-shadow: 0 4px 16px rgba(26, 35, 50, 0.04);
 }
 
 body[data-theme="maavnica"] .wellness-google-star-icon{
-  color: #c4a24e;
+  color: #b8924a;
 }
 
 body[data-theme="maavnica"] .wellness-google-avatars{
-  background: var(--primary-soft);
+  background: rgba(176, 152, 114, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(176, 152, 114, 0.1);
 }
 
 body[data-theme="maavnica"] .wellness-google-avatar:nth-child(2){
@@ -1220,7 +1262,7 @@ body[data-theme="maavnica"] .recommend-id-confirm{
 }
 
 body[data-theme="maavnica"] .wellness-cta-leaf{
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 20V9.5' stroke='%23fdfcfb' stroke-width='1.35' stroke-linecap='round'/%3E%3Cpath d='M12 9.5C12 9.5 8.2 7.8 7 4.2' stroke='%23fdfcfb' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 9.5C12 9.5 15.8 7.8 17 4.2' stroke='%23fdfcfb' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 11.2C12 11.2 9.3 10.1 8.2 7.1' stroke='%23a8926a' stroke-width='1.05' stroke-linecap='round' opacity='0.85'/%3E%3Cpath d='M12 11.2C12 11.2 14.7 10.1 15.8 7.1' stroke='%23a8926a' stroke-width='1.05' stroke-linecap='round' opacity='0.85'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 20V9.5' stroke='%23fdfcfb' stroke-width='1.35' stroke-linecap='round'/%3E%3Cpath d='M12 9.5C12 9.5 8.2 7.8 7 4.2' stroke='%23fdfcfb' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 9.5C12 9.5 15.8 7.8 17 4.2' stroke='%23fdfcfb' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 11.2C12 11.2 9.3 10.1 8.2 7.1' stroke='%23b09872' stroke-width='1.08' stroke-linecap='round' opacity='0.95'/%3E%3Cpath d='M12 11.2C12 11.2 14.7 10.1 15.8 7.1' stroke='%23b09872' stroke-width='1.08' stroke-linecap='round' opacity='0.95'/%3E%3C/svg%3E");
 }
 
 body[data-theme="maavnica"] .wellness-quick-actions{
@@ -1233,24 +1275,25 @@ body[data-theme="maavnica"] #btn-whatsapp::after{
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(92, 102, 120, 0.18) 20%,
-    rgba(92, 102, 120, 0.18) 80%,
+    var(--maav-accent-line) 20%,
+    var(--maav-accent-line) 80%,
     transparent 100%
   );
 }
 
 body[data-theme="maavnica"] #btn-cta-laisser-avis{
-  box-shadow: inset -1px 0 0 rgba(92, 102, 120, 0.12) !important;
+  box-shadow: inset -1px 0 0 var(--maav-accent-line) !important;
 }
 
 body[data-theme="maavnica"] #btn-call::before,
 body[data-theme="maavnica"] #btn-whatsapp::before,
 body[data-theme="maavnica"] #btn-cta-laisser-avis::before,
 body[data-theme="maavnica"] #btn-discrete-partager::before{
-  border-color: rgba(228, 226, 222, 0.95);
+  border-color: rgba(176, 152, 114, 0.24);
   box-shadow:
     0 4px 16px rgba(26, 35, 50, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 0 0 1px rgba(176, 152, 114, 0.08);
 }
 
 body[data-theme="maavnica"] #btn-call::before{
@@ -1270,30 +1313,47 @@ body[data-theme="maavnica"] #btn-discrete-partager::before{
 }
 
 body[data-theme="maavnica"] .wellness-premium-row{
-  border-color: var(--card-border);
+  border-color: rgba(232, 227, 220, 0.95);
   box-shadow: 0 6px 22px rgba(26, 35, 50, 0.05);
 }
 
 @media (hover: hover) {
   body[data-theme="maavnica"] .wellness-premium-row:hover{
-    border-color: rgba(30, 74, 86, 0.22);
-    box-shadow: 0 10px 28px rgba(26, 35, 50, 0.08);
+    border-color: rgba(176, 152, 114, 0.28);
+    box-shadow: 0 10px 28px rgba(26, 35, 50, 0.07);
   }
 }
 
 body[data-theme="maavnica"] .wellness-row-icon{
-  background: var(--primary-soft);
+  background: rgba(176, 152, 114, 0.1);
   color: var(--card-primary);
+  box-shadow: inset 0 0 0 1px rgba(176, 152, 114, 0.12);
 }
 
 body[data-theme="maavnica"] .qr-wrap.wellness-qr-card{
-  border-color: var(--card-border);
+  border-color: rgba(232, 227, 220, 0.95);
   box-shadow: 0 6px 22px rgba(26, 35, 50, 0.05);
 }
 
 body[data-theme="maavnica"] .qr-wrap img{
-  border-color: var(--card-border);
+  border-color: rgba(176, 152, 114, 0.22);
   box-shadow: 0 4px 12px rgba(26, 35, 50, 0.05);
+}
+
+body[data-theme="maavnica"] .qr-wrap .qr-copy-main--wellness{
+  color: var(--card-text);
+}
+
+body[data-theme="maavnica"] .qr-copy-hint--wellness{
+  color: #434b58;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+body[data-theme="maavnica"] .wellness-qr-chevron{
+  border-right-color: rgba(176, 152, 114, 0.45);
+  border-bottom-color: rgba(176, 152, 114, 0.45);
+  opacity: 0.62;
 }
 
 body[data-theme="maavnica"] .qr-powered-by{
@@ -1301,8 +1361,8 @@ body[data-theme="maavnica"] .qr-powered-by{
 }
 
 body[data-theme="maavnica"] .footer{
-  color: #9a9590;
-  border-top-color: rgba(228, 226, 222, 0.85);
+  color: #8f8880;
+  border-top-color: var(--maav-accent-line);
 }
 
 body[data-theme="maavnica"] .footer a{
