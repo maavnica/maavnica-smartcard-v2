@@ -6,9 +6,9 @@ UPDATE cards
 SET
   visual_theme = 'maavnica',
   display_name = 'Arnaud Huard',
-  job_title = 'FONDATEUR MAAVNICA',
-  city = 'AUXERRE',
+  job_title = 'Fondateur Maavnica',
+  city = 'Auxerre',
   hero_title = 'Transformez vos recommandations en clients',
-  hero_text = 'Le bouche-à-oreille devient enfin mesurable.',
+  hero_text = 'Le bouche-à-oreille, enfin mesurable.',
   form_title = 'Demander ma SmartCard'
 WHERE lower(slug) = 'arnaud-huard';

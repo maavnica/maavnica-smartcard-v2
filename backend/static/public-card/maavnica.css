@@ -1190,29 +1190,57 @@ body[data-theme="maavnica"] #person-name.hero-title{
 }
 
 body[data-theme="maavnica"] #hero-job-title{
-  color: var(--card-muted);
-  letter-spacing: 0.2em;
+  font-family: var(--font-display);
+  font-size: clamp(0.76rem, 2.15vw, 0.86rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: var(--card-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(176, 152, 114, 0.42);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
 }
 
 body[data-theme="maavnica"] #hero-professional-tagline{
-  color: #635f5a;
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 2.35vw, 0.9rem);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.48;
+  color: #8f8880;
+  white-space: pre-line;
+}
+
+body[data-theme="maavnica"] #hero-professional-tagline::first-line{
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  font-weight: 500;
   font-style: italic;
+  line-height: 1.38;
+  color: #5a534c;
 }
 
 body[data-theme="maavnica"] #hero-recommend-count{
-  margin-left: auto;
-  margin-right: auto;
-  font-family: var(--font-body);
-  font-size: 0.68rem;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.025em;
+  margin: 4px auto 7px;
+  padding: 6px 14px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.018em;
   color: var(--card-text);
-  background: linear-gradient(180deg, #fff 0%, #faf7f2 100%) !important;
-  border: 1px solid rgba(176, 152, 114, 0.3) !important;
+  background: linear-gradient(180deg, #fffefb 0%, #f7f2ea 100%) !important;
+  border: 1px solid rgba(176, 152, 114, 0.38) !important;
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 3px 12px rgba(26, 35, 50, 0.04) !important;
+    0 1px 0 rgba(255, 255, 255, 0.92) inset,
+    0 4px 14px rgba(26, 35, 50, 0.05) !important;
+}
+
+body[data-theme="maavnica"] #hero-recommend-count .maav-reco-n{
+  color: var(--card-primary);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 body[data-theme="maavnica"] #hero-city{

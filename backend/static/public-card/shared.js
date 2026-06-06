@@ -1598,11 +1598,21 @@
         const heroRecommendConversionEl = document.getElementById("hero-recommend-conversion");
         if (heroRecommendCountEl) {
           if (recommendShareCount >= 1) {
-            heroRecommendCountEl.textContent =
-              recommendShareCount === 1
-                ? "Une recommandation personnelle a déjà été partagée 👍"
-                : recommendShareCount +
-                  " recommandations personnelles ont déjà été partagées 👍";
+            if (document.body.getAttribute("data-theme") === "maavnica") {
+              var recoN = recommendShareCount;
+              heroRecommendCountEl.innerHTML =
+                recoN === 1
+                  ? 'Déjà <span class="maav-reco-n">1</span> recommandation partagée'
+                  : 'Déjà <span class="maav-reco-n">' +
+                    recoN +
+                    "</span> recommandations partagées";
+            } else {
+              heroRecommendCountEl.textContent =
+                recommendShareCount === 1
+                  ? "Une recommandation personnelle a déjà été partagée 👍"
+                  : recommendShareCount +
+                    " recommandations personnelles ont déjà été partagées 👍";
+            }
             heroRecommendCountEl.hidden = false;
             heroRecommendCountEl.setAttribute("aria-hidden", "false");
             if (heroRecommendConversionEl) {
