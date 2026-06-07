@@ -1,131 +1,1205 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Programme d’affiliation — Maavnica SmartCard</title>
-  <meta name="description" content="Recommandez Maavnica SmartCard et percevez une commission sur chaque vente validée." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programme ambassadeur — SmartCard Maavnica</title>
+  <meta name="description"
+        content="Recommandez la carte professionnelle de confiance SmartCard à des professionnels que vous estimez — avec la même exigence que celle que vous portez à votre propre réputation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
   <style>
-    *{ box-sizing:border-box; margin:0; padding:0; }
-    body{
-      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-      color:#e2e8f0;
-      background:linear-gradient(180deg,#050814,#071029);
-      min-height:100vh;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f6f4f0;
+      --surface: #fdfbf8;
+      --primary: #1e4a56;
+      --primary-hover: #2a6270;
+      --accent: #b09872;
+      --accent-line: rgba(176, 152, 114, 0.22);
+      --text: #1a2332;
+      --muted: #566070;
+      --muted-soft: #8f8880;
+      --border: #e8e3dc;
+      --shadow: 0 24px 56px rgba(26, 35, 50, 0.07);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+      --max: 1080px;
+      --section-pad: clamp(48px, 8vw, 72px);
     }
-    a{ color:#93c5fd; text-decoration:none; }
-    .wrap{ max-width:960px; margin:0 auto; padding:24px 18px 44px; }
-    .top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:13px; }
-    .card{ border:1px solid rgba(148,163,184,.24); border-radius:16px; background:rgba(15,23,42,.55); padding:16px; margin-bottom:12px; }
-    .hero{ border-color:rgba(34,197,94,.35); background:linear-gradient(180deg, rgba(34,197,94,.14), rgba(15,23,42,.62)); }
-    h1{ font-size:28px; margin-bottom:8px; }
-    h2{ font-size:18px; margin-bottom:8px; }
-    p{ font-size:14px; color:#cbd5e1; margin-bottom:8px; }
-    ul,ol{ margin-left:18px; font-size:13px; color:#cbd5e1; }
-    li{ margin:6px 0; }
-    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media (max-width: 860px){ .grid{ grid-template-columns:1fr; } }
-    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .btn{ display:inline-flex; padding:10px 14px; border-radius:999px; font-size:13px; font-weight:700; border:1px solid rgba(148,163,184,.32); }
-    .btn.main{ background:#22c55e; color:#052e16; border-color:rgba(34,197,94,.65); }
-    .note{ font-size:12px; color:#94a3b8; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 clamp(18px, 4vw, 28px);
+    }
+
+    .section { padding: var(--section-pad) 0; }
+
+    .section--alt {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .display-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(2rem, 5vw, 2.85rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .display-sub {
+      font-size: clamp(1rem, 2.2vw, 1.12rem);
+      color: var(--muted);
+      margin-top: 14px;
+      max-width: 52ch;
+      line-height: 1.55;
+    }
+
+    .lead {
+      font-family: var(--font-display);
+      font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+      max-width: 58ch;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.65rem, 3.5vw, 2.15rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 56ch;
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: rgba(30, 74, 86, 0.35);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(30, 74, 86, 0.05);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .card-preview {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(221, 210, 196, 0.85);
+      background: var(--surface);
+    }
+
+    .card-preview img { width: 100%; height: auto; }
+
+    /* S0 */
+    .page-topbar {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .page-topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-topbar-brand img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .page-topbar-brand span {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .page-topbar-brand em {
+      font-style: normal;
+      color: var(--muted-soft);
+      font-weight: 500;
+      margin-left: 6px;
+      padding-left: 10px;
+      border-left: 1px solid var(--border);
+    }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    .back-link:hover { color: var(--primary-hover); }
+
+    /* Hero */
+    .hero {
+      padding: clamp(40px, 7vw, 64px) 0 clamp(32px, 5vw, 48px);
+      background:
+        radial-gradient(ellipse 100% 75% at 50% -15%, rgba(255, 250, 245, 0.95), transparent 68%),
+        var(--bg);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 5vw, 48px);
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { order: -1; max-width: 320px; margin: 0 auto; }
+    }
+
+    .hero-context {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--muted-soft);
+      max-width: 44ch;
+    }
+
+    .hero-visual {
+      max-width: 360px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 860px) {
+      .hero-visual { margin-left: auto; margin-right: auto; }
+    }
+
+    /* Constatation */
+    .constat-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+      max-width: 56ch;
+    }
+
+    .constat-list li {
+      font-size: 15px;
+      color: var(--muted);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .constat-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* Promesse */
+    .transform-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.8vw, 1.45rem);
+      font-style: italic;
+      color: var(--primary);
+      line-height: 1.45;
+      margin: 24px 0 32px;
+      padding: 20px 0;
+      border-top: 1px solid var(--accent-line);
+      border-bottom: 1px solid var(--accent-line);
+      max-width: 58ch;
+    }
+
+    .offers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 768px) {
+      .offers-grid { grid-template-columns: 1fr; }
+    }
+
+    .offer-card {
+      padding: 28px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .offer-level {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .offer-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .offer-tagline {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .offer-price {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .offer-price span {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .offer-legal {
+      font-size: 11px;
+      color: var(--muted-soft);
+      margin-bottom: 18px;
+    }
+
+    .offer-features {
+      list-style: none;
+      flex: 1;
+      display: grid;
+      gap: 10px;
+    }
+
+    .offer-features li {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .offer-features li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* Rôle */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .pillars-grid { grid-template-columns: 1fr; }
+    }
+
+    .pillar {
+      padding: 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .pillar h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .pillar p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .role-closing {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text);
+      max-width: 52ch;
+      margin-bottom: 24px;
+    }
+
+    .ethics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .ethics-grid { grid-template-columns: 1fr; }
+    }
+
+    .ethics-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .ethics-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .ethics-list li {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .ethics-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* Métiers */
+    .metier-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .metier-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .metier-grid { grid-template-columns: 1fr; }
+    }
+
+    .metier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .metier-card:hover {
+      box-shadow: var(--shadow);
+      border-color: rgba(176, 152, 114, 0.35);
+    }
+
+    .metier-card .card-preview {
+      border-radius: 14px;
+      max-height: 280px;
+      overflow: hidden;
+    }
+
+    .metier-card .card-preview img {
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .metier-hook {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .metier-tag {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .metier-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .metier-link {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .projection-closing {
+      margin-top: 28px;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    /* Garantie */
+    .cred-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 4vw, 40px);
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .cred-grid { grid-template-columns: 1fr; }
+    }
+
+    .cred-pillars {
+      list-style: none;
+      display: grid;
+      gap: 18px;
+    }
+
+    .cred-pillars li h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .cred-pillars li p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .say-list, .dont-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .say-list li, .dont-list li {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .say-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .dont-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--muted-soft);
+    }
+
+    /* Fondateur */
+    .founder-block {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 720px;
+    }
+
+    .founder-block h3 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .founder-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .founder-quote p + p { margin-top: 14px; }
+
+    .founder-signature {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .founder-signature strong {
+      display: block;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Reconnaissance */
+    .recognition-amt {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .recognition-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .recognition-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .recognition-note {
+      font-size: 12px;
+      color: var(--muted-soft);
+      margin-top: 4px;
+    }
+
+    .recognition-intro {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 56ch;
+      margin-bottom: 28px;
+      line-height: 1.55;
+    }
+
+    .recognition-intro em {
+      font-style: italic;
+      color: var(--muted-soft);
+    }
+
+    .faq-list {
+      max-width: 680px;
+      display: grid;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+      margin-top: 28px;
+    }
+
+    .faq-item {
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-item h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .faq-item p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* Adhésion */
+    .invitation {
+      text-align: center;
+      padding: clamp(48px, 8vw, 72px) 0;
+    }
+
+    .invitation .section-title,
+    .invitation .section-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .benefits-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      max-width: 520px;
+      margin: 28px auto;
+      text-align: left;
+    }
+
+    .benefits-list li {
+      font-size: 15px;
+      color: var(--muted);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .benefits-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .invitation .btn-row {
+      justify-content: center;
+    }
+
+    .invitation .btn-primary {
+      min-width: min(100%, 420px);
+    }
+
+    /* Premier geste */
+    .steps {
+      list-style: none;
+      display: grid;
+      gap: 20px;
+      max-width: 640px;
+    }
+
+    .steps li {
+      padding: 20px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .steps strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .steps span {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .steps-closing {
+      margin-top: 24px;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    .geste-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 32px 0 40px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .footer-brand { max-width: 280px; }
+
+    .footer-brand strong {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+
+    .footer-copy {
+      width: 100%;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--accent-line);
+      font-size: 12px;
+      color: var(--muted-soft);
+    }
+
+    .footer-note {
+      width: 100%;
+      font-size: 11px;
+      color: var(--muted-soft);
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <strong>Programme d’affiliation SmartCard</strong>
-      <a href="/">← Accueil</a>
+
+  <!-- S0 — En-tête -->
+  <header class="page-topbar" id="top" data-section="s0-entete">
+    <div class="container page-topbar-inner">
+      <div class="page-topbar-brand">
+        <img src="/static/logo-palmier.png" alt="" width="28" height="28" decoding="async" role="presentation" />
+        <span>Maavnica<em>Programme ambassadeur</em></span>
+      </div>
+      <a href="/" class="back-link" data-cta="back-landing">← Retour SmartCard</a>
     </div>
+  </header>
 
-    <section class="card hero">
-      <h1>Recommandez SmartCard avec un discours simple et crédible</h1>
-      <p><strong>💡 Tu connais des pros ?</strong><br/>Ils ont déjà des clients satisfaits...<br/>👉 mais ils ne les exploitent pas<br/>👉 ils perdent du business sans le savoir<br/><strong>👉 montre-leur ça</strong></p>
-      <p><strong>⚡ Mode rapide</strong><br/>1. prends une démo<br/>2. copie un message<br/>3. envoie à 3 personnes<br/>👉 ça prend 2 minutes</p>
-      <p><strong>SmartCard transforme les clients satisfaits en recommandations visibles, traçables et exploitables.</strong></p>
-      <p><strong>La recommandation devient un véritable générateur de business.</strong></p>
-      <p><strong>👉 Aujourd’hui, la plupart des recommandations se perdent.</strong><br/>SmartCard permet de les capter et de les transformer en contacts.</p>
-      <p>Aujourd’hui, des clients recommandent... sans que le professionnel le sache.<br/><strong>👉 des opportunités sont perdues sans être visibles.</strong></p>
-      <div class="btns">
-        <a class="btn main" href="/static/devenir-affilie.html">Devenir affilié</a>
-        <a class="btn" href="/static/kit-affilie.html">Commencer en 2 minutes</a>
+  <!-- S1 — Hero -->
+  <header class="hero" id="hero" data-section="s1-hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Recommandation</p>
+        <h1 class="display-title">Vous connaissez des professionnels exigeants — SmartCard leur donne la forme qu'ils méritent</h1>
+        <p class="display-sub">
+          SmartCard est la carte professionnelle de confiance qui transforme naturellement la satisfaction de vos clients en recommandations. Ce programme vous invite à la recommander — avec la même exigence que celle que vous portez à votre propre réputation.
+        </p>
+        <div class="btn-row">
+          <a href="#constatation" class="btn btn-secondary" data-cta="discover-program">Découvrir le programme</a>
+        </div>
+        <p class="hero-context">Pour comptables, consultants, réseaux professionnels, prescripteurs métier et clients satisfaits.</p>
       </div>
-      <p><strong>👉 tu n’as rien à vendre, juste à montrer</strong></p>
-    </section>
-
-    <section class="card">
-      <h2>Positionnement produit</h2>
-      <ul>
-        <li><strong>SmartCard Solo</strong> : contact, avis Google, demandes entrantes</li>
-        <li><strong>SmartCard Business</strong> : recommandation client, bouche-à-oreille digitalisé, recommandations visibles et traçables</li>
-        <li><strong>Multi-cartes / équipes / agences / plusieurs établissements</strong> : uniquement sur devis</li>
-      </ul>
-    </section>
-
-    <section class="card">
-      <h2>Commissions et règles</h2>
-      <ul>
-        <li>20 EUR sur une première souscription Solo validée</li>
-        <li>35 EUR sur une première souscription Business validée</li>
-        <li>Commission uniquement à la première souscription validée</li>
-        <li>Aucun revenu automatique</li>
-        <li>Ne pas promettre de résultats</li>
-      </ul>
-    </section>
-
-    <section class="card grid">
-      <div>
-        <h2>Quelle démo envoyer ?</h2>
-        <ul>
-          <li>Démo 1 — Artisan / service local : <a href="/c/demo">/c/demo</a><br/>👉 regarde cette démo</li>
-          <li>Démo 2 — Bien-être / accompagnement : <a href="/c/demo2">/c/demo2</a><br/>👉 regarde cette démo</li>
-          <li>Démo 3 — Immobilier / mise en relation : <a href="/c/demo3">/c/demo3</a><br/>👉 regarde cette démo</li>
-        </ul>
-        <p><strong>👉 En immobilier, une recommandation peut devenir un mandat.</strong><br/>👉 C’est un levier direct de business.</p>
+      <div class="hero-visual">
+        <div class="card-preview">
+          <img
+            src="/static/landing-v2/hero-maavnica.png"
+            alt="SmartCard Maavnica — carte professionnelle de confiance"
+            width="360"
+            height="720"
+            loading="eager"
+            decoding="async" />
+        </div>
       </div>
-      <div>
-        <h2>Parcours affilié débutant</h2>
-        <ol>
-          <li>Choisir un professionnel dans son réseau</li>
-          <li>Envoyer la bonne démo selon son métier</li>
-          <li>Copier un message du kit</li>
-          <li>Proposer un échange court</li>
-        </ol>
-      </div>
-    </section>
+    </div>
+  </header>
 
-    <section class="card">
-      <h2>Permission d’envoi</h2>
-      <p>👉 tu n’as rien à vendre</p>
-      <p>👉 tu montres juste la démo</p>
-      <p>👉 même si tu n’es pas commercial</p>
-      <p>👉 l’objectif est juste de faire découvrir</p>
-    </section>
-
-    <section class="card">
-      <h2>Mini scénario réel</h2>
-      <p>Tu connais un artisan ?</p>
-      <p>→ tu envoies la démo → il comprend en 30 sec → il teste → il peut devenir client</p>
-      <p><strong>👉 c’est comme ça que tu déclenches une vente</strong></p>
-    </section>
-
-    <section class="card">
-      <h2>À ne pas faire</h2>
-      <ul>
-        <li>❌ ne pas survendre</li>
-        <li>❌ ne pas promettre des résultats</li>
-        <li>❌ ne pas parler technique</li>
+  <!-- S2 — Constatation -->
+  <section class="section section--alt" id="constatation" data-section="s2-constatation">
+    <div class="container">
+      <p class="eyebrow">Constatation</p>
+      <h2 class="section-title">Des professionnels compétents méritent une présentation à la hauteur de leur travail</h2>
+      <p class="section-sub">Dans votre réseau, il y a des professionnels sérieux, appréciés de leurs clients — dont la présentation ne reflète pas toujours la qualité de leur travail.</p>
+      <p class="lead">Vous connaissez probablement des artisans, praticiens, agents ou indépendants compétents et appréciés. Leurs clients sont satisfaits — mais ne savent pas toujours comment les recommander. Le bouche-à-oreille se perd, naturellement, sans que le professionnel le sache.</p>
+      <ul class="constat-list">
+        <li>Leurs clients satisfaits ne savent pas toujours comment les recommander</li>
+        <li>Leur présentation professionnelle ne reflète pas toujours leur sérieux</li>
+        <li>Des recommandations se perdent — sans être visibles</li>
       </ul>
-      <p><strong>👉 montre juste la démo, c’est suffisant</strong></p>
-    </section>
+    </div>
+  </section>
 
-    <p class="note">Ton lien affilié est suivi automatiquement quand il est partagé.</p>
-    <p class="legal-mini" style="margin-top:20px;font-size:11px;color:#94a3b8;text-align:center;">
-      <a href="/static/confidentialite.html">Confidentialité</a> ·
-      <a href="/static/mentions-legales.html">Mentions</a> ·
-      <a href="/static/cookies.html">Cookies</a>
-    </p>
-  </div>
+  <!-- S3 — Promesse SmartCard -->
+  <section class="section" id="promesse" data-section="s3-promesse">
+    <div class="container">
+      <p class="eyebrow">Promesse</p>
+      <h2 class="section-title">SmartCard prolonge la confiance — naturellement</h2>
+      <p class="section-sub">SmartCard transforme naturellement la satisfaction en recommandations — avec élégance, simplicité et crédibilité. Ce n'est pas un outil. C'est un geste pensé pour durer.</p>
+      <blockquote class="transform-quote">SmartCard ne crée pas la confiance — elle la prolonge.</blockquote>
+      <div class="offers-grid">
+        <article class="offer-card">
+          <p class="offer-level">Niveau de service</p>
+          <h3 class="offer-name">SmartCard Solo</h3>
+          <p class="offer-tagline">Votre carte de confiance</p>
+          <p class="offer-price">39€ <span>HT / an</span></p>
+          <p class="offer-legal">TVA non applicable – art. 293B du CGI</p>
+          <ul class="offer-features">
+            <li>Votre carte professionnelle, à partager en un geste</li>
+            <li>Une présentation claire de qui vous êtes et de ce que vous faites</li>
+            <li>Un parcours de contact et d'avis, pensé pour vos clients</li>
+            <li>Idéal pour les indépendants et professionnels de service</li>
+          </ul>
+        </article>
+        <article class="offer-card">
+          <p class="offer-level">Niveau d'accompagnement</p>
+          <h3 class="offer-name">SmartCard Business</h3>
+          <p class="offer-tagline">Votre moteur de recommandation</p>
+          <p class="offer-price">99€ <span>HT / an</span></p>
+          <p class="offer-legal">TVA non applicable – art. 293B du CGI</p>
+          <ul class="offer-features">
+            <li>Tout ce que SmartCard Solo apporte</li>
+            <li>Un parcours de recommandation intégré pour vos clients satisfaits</li>
+            <li>Un geste simple de partage vers un proche ou un futur client</li>
+            <li>Idéal pour développer votre activité par la confiance</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 — Rôle ambassadeur -->
+  <section class="section section--alt" id="role" data-section="s4-role">
+    <div class="container">
+      <p class="eyebrow">Votre rôle</p>
+      <h2 class="section-title">Vous n'avez rien à vendre — vous montrez</h2>
+      <p class="section-sub">Votre place dans la recommandation est simple, claire et digne de la relation que vous entretenez avec les professionnels que vous estimez.</p>
+      <p class="role-closing">En rejoignant le programme ambassadeur SmartCard, vous devenez un relais de confiance — pas un vendeur. Votre rôle s'arrête à la recommandation. Maavnica prend en charge la production, l'accompagnement et le support.</p>
+      <div class="pillars-grid">
+        <div class="pillar">
+          <h3>Montrer</h3>
+          <p>Faire découvrir la démo adaptée au métier du professionnel que vous avez en tête.</p>
+        </div>
+        <div class="pillar">
+          <h3>Orienter</h3>
+          <p>Lui indiquer que SmartCard existe — et pourquoi elle peut lui correspondre.</p>
+        </div>
+        <div class="pillar">
+          <h3>Recommander</h3>
+          <p>Lui transmettre votre lien personnel, s'il le souhaite — avec sincérité.</p>
+        </div>
+      </div>
+      <div class="ethics-grid">
+        <div class="ethics-box">
+          <h3>Ce que vous ne faites pas</h3>
+          <ul class="ethics-list">
+            <li>Vous ne vendez pas</li>
+            <li>Vous ne promettez pas de résultats</li>
+            <li>Vous ne gérez pas la relation client — Maavnica s'en charge</li>
+            <li>Vous ne parlez pas technique — la démo parle d'elle-même</li>
+          </ul>
+        </div>
+        <div class="ethics-box">
+          <p class="role-closing" style="margin-bottom:0;">Vous n'avez rien à vendre. Vous montrez. C'est suffisant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 — Projection démos -->
+  <section class="section" id="projection" data-section="s5-projection">
+    <div class="container">
+      <p class="eyebrow">Projection</p>
+      <h2 class="section-title">À qui pensez-vous ?</h2>
+      <p class="section-sub">Montrez la démo adaptée au métier du professionnel que vous avez en tête. La carte parle d'elle-même — votre rôle est de faire le lien.</p>
+      <div class="metier-grid">
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-artisan.png" alt="Carte SmartCard — Artisan" loading="lazy" />
+          </div>
+          <p class="metier-hook">Artisan</p>
+          <h3 class="metier-tag">Restez présent après l'intervention</h3>
+          <p class="metier-text">Pour les professionnels de terrain qui vivent du bouche-à-oreille local. Votre carte rassure et permet à vos clients satisfaits de vous recommander — naturellement.</p>
+          <a href="/c/demo" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="artisan">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-bienetre.png" alt="Carte SmartCard — Bien-être" loading="lazy" />
+          </div>
+          <p class="metier-hook">Bien-être</p>
+          <h3 class="metier-tag">Inspirez confiance dès le premier regard</h3>
+          <p class="metier-text">Pour les praticiens pour qui la relation est au cœur de la pratique. Une présentation sobre, humaine, qui respecte le registre de confiance.</p>
+          <a href="/c/demo2" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="bienetre">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-immobilier.png" alt="Carte SmartCard — Immobilier" loading="lazy" />
+          </div>
+          <p class="metier-hook">Immobilier</p>
+          <h3 class="metier-tag">Prolongez la relation après chaque visite</h3>
+          <p class="metier-text">Pour les agents et professionnels de la mise en relation. Une carte claire, crédible, facile à transmettre à un proche ou un futur client.</p>
+          <a href="/c/demo3" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="immobilier">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-maavnica.png" alt="Carte SmartCard — Dirigeant Maavnica" loading="lazy" />
+          </div>
+          <p class="metier-hook">Dirigeant</p>
+          <h3 class="metier-tag">Une présentation à la hauteur de votre responsabilité</h3>
+          <p class="metier-text">Pour les dirigeants et professionnels exigeants. Un registre corporate, sobre et élégant — où la confiance prime sur la visibilité bruyante.</p>
+          <a href="/c/arnaud-huard" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="maavnica">Voir cette carte</a>
+        </article>
+      </div>
+      <p class="projection-closing">Choisissez un professionnel. Montrez la démo. Votre geste suffit.</p>
+    </div>
+  </section>
+
+  <!-- S6 — Garantie & éthique -->
+  <section class="section section--alt" id="garantie" data-section="s6-garantie">
+    <div class="container">
+      <p class="eyebrow">Garantie</p>
+      <h2 class="section-title">Recommandez en toute confiance — votre réputation est protégée</h2>
+      <p class="section-sub">Vous recommandez ce que vous avez vu. Maavnica garantit le reste. Voici le cadre qui protège votre crédibilité.</p>
+      <div class="cred-grid">
+        <div>
+          <ul class="cred-pillars">
+            <li>
+              <h3>Maavnica prend en charge</h3>
+              <p>La production et la personnalisation de la carte, l'accompagnement du professionnel recommandé, le support client — vous n'êtes pas intermédiaire.</p>
+            </li>
+            <li>
+              <h3>Votre rôle s'arrête à la recommandation</h3>
+              <p>Vous montrez, vous orientez. Maavnica gère le reste — production, support, suivi de la commande.</p>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="section-title" style="font-size:1.25rem;margin-bottom:12px;">Ce que vous pouvez dire</h3>
+          <ul class="say-list">
+            <li>« Je connais une carte professionnelle de confiance — voici à quoi ressemblerait la vôtre »</li>
+            <li>« SmartCard prolonge naturellement la relation avec vos clients satisfaits »</li>
+            <li>« Regardez cette démo — vous verrez par vous-même »</li>
+          </ul>
+          <h3 class="section-title" style="font-size:1.25rem;margin:24px 0 12px;">Ce que vous ne devez pas promettre</h3>
+          <ul class="dont-list">
+            <li>Des résultats chiffrés ou un retour sur investissement</li>
+            <li>Une transformation immédiate de l'activité</li>
+            <li>Des fonctionnalités que vous n'avez pas vérifiées</li>
+          </ul>
+          <p class="steps-closing" style="margin-top:20px;">Montrez la démo. C'est suffisant. Ne promettez rien de plus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 — Fondateur -->
+  <section class="section" id="fondateur" data-section="s7-fondateur">
+    <div class="container">
+      <aside class="founder-block">
+        <h3>L'approche Maavnica</h3>
+        <div class="founder-quote">
+          <p>Si vous recommandez SmartCard, c'est la même exigence que la mienne que vous portez.</p>
+          <p>SmartCard est pensée pour durer — pas pour convertir. Pas de marketing bruyant. Pas de promesses creuses. Une carte professionnelle, conçue avec la conviction que la confiance mérite une forme digne.</p>
+          <p>Maavnica tiendra la promesse que vous aurez faite en notre nom.</p>
+        </div>
+        <p class="founder-signature"><strong>Arnaud Huard</strong>Fondateur de Maavnica</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- S8 — Reconnaissance -->
+  <section class="section section--alt" id="reconnaissance" data-section="s8-reconnaissance">
+    <div class="container">
+      <p class="eyebrow">Reconnaissance</p>
+      <h2 class="section-title">Votre recommandation est reconnue</h2>
+      <p class="recognition-intro">
+        Lorsqu'un professionnel que vous avez orienté choisit SmartCard, votre geste est reconnu — simplement, loyalement, transparentement.
+        <em>Il ne s'agit pas d'un revenu — c'est une marque de reconnaissance pour avoir orienté un professionnel vers une solution digne de confiance.</em>
+      </p>
+      <div class="offers-grid">
+        <article class="offer-card">
+          <p class="offer-level">Niveau de service</p>
+          <h3 class="offer-name">SmartCard Solo</h3>
+          <p class="offer-tagline">Votre carte de confiance</p>
+          <p class="offer-price">39€ <span>HT / an</span></p>
+          <div class="recognition-amt">
+            <p class="recognition-label">Reconnaissance</p>
+            <p class="recognition-value">20€</p>
+            <p class="recognition-note">Lors de la première souscription Solo validée</p>
+          </div>
+        </article>
+        <article class="offer-card">
+          <p class="offer-level">Niveau d'accompagnement</p>
+          <h3 class="offer-name">SmartCard Business</h3>
+          <p class="offer-tagline">Votre moteur de recommandation</p>
+          <p class="offer-price">99€ <span>HT / an</span></p>
+          <div class="recognition-amt">
+            <p class="recognition-label">Reconnaissance</p>
+            <p class="recognition-value">35€</p>
+            <p class="recognition-note">Lors de la première souscription Business validée</p>
+          </div>
+        </article>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Première souscription uniquement</h4>
+          <p>La reconnaissance s'applique à la première souscription validée — pas de revenu récurrent.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Versement après validation</h4>
+          <p>Versement après validation côté Maavnica, une fois la commande confirmée.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Présentation honnête</h4>
+          <p>Recommandation sincère — sans promesse de résultats pour le professionnel orienté.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Transparence</h4>
+          <p>Montants clairs, règles simples — votre geste est valorisé loyalement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9 — Adhésion -->
+  <section class="section invitation" id="adhesion" data-section="s9-adhesion">
+    <div class="container">
+      <p class="eyebrow">Adhésion</p>
+      <h2 class="section-title">Rejoignez le programme ambassadeur SmartCard</h2>
+      <p class="section-sub">Inscrivez-vous pour recevoir vos liens, vos supports et un accompagnement discret — pour recommander SmartCard avec la même exigence que la nôtre.</p>
+      <ul class="benefits-list">
+        <li>Votre lien personnel de recommandation</li>
+        <li>Accès aux démos par métier</li>
+        <li>Kit ambassadeur — messages types sobres, adaptables</li>
+        <li>Accompagnement discret par email</li>
+        <li>Règles claires pour protéger votre réputation</li>
+      </ul>
+      <div class="btn-row">
+        <a href="/static/devenir-affilie.html" class="btn btn-primary" data-cta="join-program">Rejoindre le programme ambassadeur</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S10 — Premier geste -->
+  <section class="section section--alt" id="premier-geste" data-section="s10-geste">
+    <div class="container">
+      <p class="eyebrow">Premier geste</p>
+      <h2 class="section-title">Votre premier geste de recommandation</h2>
+      <p class="section-sub">Pas de discours. Pas de script de vente. Choisissez un professionnel que vous estimez, montrez la démo adaptée à son métier — et laissez la carte parler.</p>
+      <ol class="steps">
+        <li>
+          <strong>Pensez à un professionnel que vous estimez</strong>
+          <span>Artisan, praticien, agent, dirigeant — quelqu'un de votre réseau.</span>
+        </li>
+        <li>
+          <strong>Choisissez la démo adaptée à son métier</strong>
+          <span>Artisan, Bien-être, Immobilier ou Dirigeant — la carte correspond à son univers.</span>
+        </li>
+        <li>
+          <strong>Montrez-la</strong>
+          <span>Par message, en personne — comme vous le feriez naturellement. Votre geste suffit.</span>
+        </li>
+      </ol>
+      <p class="steps-closing">Vous n'avez rien à vendre. Vous montrez.</p>
+      <div class="geste-actions">
+        <a href="/static/kit-affilie.html" class="btn btn-secondary" data-cta="kit-ambassador">Accéder au kit ambassadeur</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S11 — Footer -->
+  <footer class="site-footer" id="signature" data-section="s11-signature">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <strong>Maavnica</strong>
+        <p>Éditeur de cartes professionnelles de confiance.</p>
+      </div>
+      <nav class="footer-links" aria-label="Liens légaux">
+        <a href="/static/mentions-legales.html">Mentions légales</a>
+        <a href="/static/cgv-smartcard.html">CGV</a>
+        <a href="/static/confidentialite.html">Confidentialité</a>
+        <a href="/static/cookies.html">Cookies</a>
+      </nav>
+      <p class="footer-copy">© 2025 Maavnica · SmartCard</p>
+      <p class="footer-note">Votre lien de recommandation est suivi automatiquement lorsqu'il est partagé.</p>
+    </div>
+  </footer>
+
   <script>
     (function () {
       try {
@@ -136,132 +1210,6 @@
         localStorage.setItem("maavnica_affiliate_ref", s);
         localStorage.setItem("maavnica_affiliate_ref_ts", String(Date.now()));
       } catch (e) {}
-    })();
-  </script>
-  <script>
-    (function () {
-      try {
-        var p = new URLSearchParams(window.location.search);
-        if ((p.get("lang") || "").toLowerCase() === "es") {
-          document.documentElement.lang = "es";
-        }
-      } catch (e) {}
-      const isLatam = document.documentElement.lang === "es";
-      if (!isLatam) return;
-
-      const CONTENT_ES = {
-        docTitle: "Programa de afiliación — Maavnica SmartCard",
-        metaDescription:
-          "Recomienda SmartCard y gana 10$ por venta. Comisión solo en el primer pago; sin comisión en renovaciones.",
-        topLabel: "Programa de afiliación SmartCard",
-        topHome: "← Inicio",
-        title: "Gana dinero recomendando SmartCard",
-        body:
-          "Recomienda SmartCard a profesionales de tu entorno y gana:<br/><strong>10$ por cada cliente que se suscriba.</strong><br/><br/>Pago válido solo en el primer pago del cliente.<br/>(No hay comisión en renovaciones)<br/><br/>Una demo ya está lista para compartir y mostrar cómo funciona.",
-        buttons: {
-          primary: {
-            text: "Convertirme en afiliado",
-            href: "https://smartcard.maavnica.com/static/devenir-affilie.html?lang=es"
-          },
-          secondary: { text: "Ver una demo", href: "/c/demo-latam-plomero" }
-        },
-        blockMain: {
-          title: "Simple y directo",
-          html:
-            "<p>👉 Compartes tu demo o enlace</p>" +
-            "<p>👉 El profesional se registra</p>" +
-            "<p>👉 Recibes tu comisión</p>" +
-            "<p>Sin gestión cliente<br/>Sin soporte<br/>Maavnica se encarga de todo</p>"
-        },
-        blockConditions: {
-          title: "Condiciones",
-          html:
-            "<ul>" +
-            "<li>✔ Comisión solo en el primer pago</li>" +
-            "<li>✔ No hay comisión en renovaciones</li>" +
-            "<li>✔ Pago después de validación</li>" +
-            "</ul>"
-        },
-        blockNetwork: {
-          title: "Para tu red",
-          html:
-            "<p>Independientes, artesanos, comercios, agencias, redes profesionales...</p>"
-        }
-      };
-
-      document.title = CONTENT_ES.docTitle;
-      var metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute("content", CONTENT_ES.metaDescription);
-
-      var topStrong = document.querySelector(".top strong");
-      var topLink = document.querySelector(".top a");
-      if (topStrong) topStrong.textContent = CONTENT_ES.topLabel;
-      if (topLink) topLink.textContent = CONTENT_ES.topHome;
-
-      var hero = document.querySelector(".card.hero");
-      if (hero) {
-        var bp = CONTENT_ES.buttons.primary;
-        var bs = CONTENT_ES.buttons.secondary;
-        hero.innerHTML =
-          "<h1>" +
-          CONTENT_ES.title +
-          "</h1>" +
-          "<p>" +
-          CONTENT_ES.body +
-          "</p>" +
-          '<div class="btns">' +
-          '<a class="btn main" href="' +
-          bp.href +
-          '">' +
-          bp.text +
-          "</a>" +
-          '<a class="btn" href="' +
-          bs.href +
-          '">' +
-          bs.text +
-          "</a>" +
-          "</div>" +
-          "<p><strong>👉 No tienes nada que vender, solo mostrar la demo</strong></p>";
-        var primaryBtn = hero.querySelector(".btn.main");
-        if (primaryBtn) {
-          primaryBtn.setAttribute(
-            "href",
-            "https://smartcard.maavnica.com/static/devenir-affilie.html?lang=es"
-          );
-        }
-      }
-
-      var cards = document.querySelectorAll(".wrap > section.card");
-      if (cards.length > 3) {
-        var c1 = cards[1];
-        if (c1) {
-          c1.innerHTML =
-            "<h2>" + CONTENT_ES.blockMain.title + "</h2>" + CONTENT_ES.blockMain.html;
-        }
-        var c2 = cards[2];
-        if (c2) {
-          c2.innerHTML =
-            "<h2>" +
-            CONTENT_ES.blockConditions.title +
-            "</h2>" +
-            CONTENT_ES.blockConditions.html;
-        }
-        var c3 = cards[3];
-        if (c3) {
-          c3.innerHTML =
-            "<h2>" +
-            CONTENT_ES.blockNetwork.title +
-            "</h2>" +
-            CONTENT_ES.blockNetwork.html;
-          c3.style.gridTemplateColumns = "1fr";
-        }
-      }
-
-      for (var i = 4; i < cards.length; i++) {
-        if (cards[i]) cards[i].style.display = "none";
-      }
-      var note = document.querySelector(".wrap > p.note");
-      if (note) note.style.display = "none";
     })();
   </script>
   <script src="/static/maavnica-consent.js"></script>
@@ -279,30 +1227,28 @@
           var a = e.target.closest("a");
           if (!a) return;
           var h = a.getAttribute("href") || "";
-          if (h.indexOf("/c/") === 0 || h.indexOf("/c/") !== -1) {
+          var cta = a.getAttribute("data-cta") || "";
+          if (h.indexOf("/c/") !== -1) {
             SA.track({
               event_type: "demo_click",
               page_type: "affiliate",
-              target: h.split("?")[0].slice(0, 200),
+              target: a.getAttribute("data-demo") || h.split("?")[0].slice(0, 200),
             });
             return;
           }
-          if (
-            h.indexOf("devenir-affilie") !== -1 ||
-            h.indexOf("kit-affilie") !== -1
-          ) {
+          if (h.indexOf("devenir-affilie") !== -1 || h.indexOf("kit-affilie") !== -1 || cta === "join-program" || cta === "kit-ambassador") {
             SA.track({
               event_type: "affiliate_click",
               page_type: "affiliate",
-              target: h.split("?")[0].slice(0, 200),
+              target: cta || h.split("?")[0].slice(0, 200),
             });
             return;
           }
-          if (h === "/" || h.indexOf("smartcard.maavnica.com") !== -1) {
+          if (h === "/" || cta === "back-landing" || cta === "discover-program") {
             SA.track({
               event_type: "cta_click",
               page_type: "affiliate",
-              target: "back_landing",
+              target: cta || "back_landing",
             });
           }
         },
