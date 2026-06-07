@@ -3,196 +3,1158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kit affilié SmartCard – Maavnica</title>
+  <title>Kit ambassadeur — SmartCard Maavnica</title>
+  <meta name="description"
+        content="Votre kit pour recommander SmartCard avec justesse — lien personnel, démos par métier et messages types sobres." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:#020617; color:#e2e8f0; line-height:1.55; }
-    a { color:#93c5fd; text-decoration:none; }
-    .wrap { max-width:980px; margin:0 auto; padding:24px 18px 48px; }
-    .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; font-size:13px; }
-    .box { border:1px solid rgba(148,163,184,.24); border-radius:16px; background:rgba(15,23,42,.55); padding:16px; margin-bottom:14px; }
-    h1 { font-size:26px; margin-bottom:8px; }
-    h2 { font-size:18px; margin-bottom:8px; }
-    p { font-size:14px; color:#cbd5e1; margin-bottom:8px; }
-    ul, ol { margin-left:18px; color:#cbd5e1; font-size:13px; }
-    li { margin:6px 0; }
-    .hero { border-color:rgba(34,197,94,.32); background:linear-gradient(180deg, rgba(34,197,94,.14), rgba(15,23,42,.6)); }
-    .cta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-    .btn { display:inline-flex; padding:9px 14px; border-radius:999px; border:1px solid rgba(148,163,184,.32); font-size:13px; font-weight:700; }
-    .btn.main { background:#22c55e; color:#052e16; border-color:rgba(34,197,94,.6); }
-    .code { white-space:pre-wrap; background:#020617; border:1px solid #334155; border-radius:10px; padding:10px; font-size:12px; color:#e2e8f0; margin-top:6px; }
-    .muted { font-size:12px; color:#94a3b8; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f6f4f0;
+      --surface: #fdfbf8;
+      --primary: #1e4a56;
+      --primary-hover: #2a6270;
+      --accent: #b09872;
+      --accent-line: rgba(176, 152, 114, 0.22);
+      --text: #1a2332;
+      --muted: #566070;
+      --muted-soft: #8f8880;
+      --border: #e8e3dc;
+      --shadow: 0 24px 56px rgba(26, 35, 50, 0.07);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "DM Sans", system-ui, sans-serif;
+      --max: 1080px;
+      --section-pad: clamp(40px, 7vw, 56px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 clamp(18px, 4vw, 28px);
+    }
+
+    .section { padding: var(--section-pad) 0; }
+
+    .section--alt {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .display-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.85rem, 4.5vw, 2.5rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .display-sub {
+      font-size: clamp(1rem, 2.2vw, 1.08rem);
+      color: var(--muted);
+      margin-top: 14px;
+      max-width: 52ch;
+      line-height: 1.55;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 56ch;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: rgba(30, 74, 86, 0.35);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(30, 74, 86, 0.05);
+    }
+
+    .btn-sm {
+      padding: 10px 16px;
+      font-size: 11px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .card-preview {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(221, 210, 196, 0.85);
+      background: var(--surface);
+    }
+
+    .card-preview img { width: 100%; height: auto; }
+
+    /* S0 */
+    .page-topbar {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .page-topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-topbar-brand img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .page-topbar-brand span {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .page-topbar-brand em {
+      font-style: normal;
+      color: var(--muted-soft);
+      font-weight: 500;
+      margin-left: 6px;
+      padding-left: 10px;
+      border-left: 1px solid var(--border);
+    }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    .back-link:hover { color: var(--primary-hover); }
+
+    /* Hero */
+    .hero {
+      padding: clamp(32px, 6vw, 48px) 0 clamp(24px, 4vw, 36px);
+      background:
+        radial-gradient(ellipse 100% 75% at 50% -15%, rgba(255, 250, 245, 0.95), transparent 68%),
+        var(--bg);
+    }
+
+    /* Lien personnel */
+    .link-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .link-main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .link-url {
+      flex: 1;
+      min-width: 200px;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      word-break: break-all;
+    }
+
+    .link-note {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+      max-width: 58ch;
+    }
+
+    .link-extra {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .link-extra h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .link-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .link-list li {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .link-list code,
+    .link-list a {
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 12px;
+      color: var(--primary);
+      word-break: break-all;
+    }
+
+    .ref-hint {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted-soft);
+      font-style: italic;
+    }
+
+    /* Démos */
+    .metier-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .metier-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .metier-grid { grid-template-columns: 1fr; }
+    }
+
+    .metier-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .metier-card:hover {
+      box-shadow: var(--shadow);
+      border-color: rgba(176, 152, 114, 0.35);
+    }
+
+    .metier-card .card-preview {
+      border-radius: 14px;
+      max-height: 280px;
+      overflow: hidden;
+    }
+
+    .metier-card .card-preview img {
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .metier-hook {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .metier-tag {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .metier-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .metier-link {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    /* Messages */
+    .message-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .message-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .message-card-hd {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .message-card-hd h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .message-body {
+      padding: 18px 22px 22px;
+    }
+
+    .message-text {
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+
+    .message-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted-soft);
+    }
+
+    /* Éthique */
+    .ethics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .ethics-grid { grid-template-columns: 1fr; }
+    }
+
+    .ethics-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .say-list, .dont-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .say-list li, .dont-list li {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .say-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .dont-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--muted-soft);
+    }
+
+    .ethics-closing {
+      margin-top: 20px;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    /* Reconnaissance */
+    .recognition-intro {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 56ch;
+      margin-bottom: 24px;
+      line-height: 1.55;
+    }
+
+    .recognition-intro em {
+      font-style: italic;
+      color: var(--muted-soft);
+    }
+
+    .offers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .offers-grid { grid-template-columns: 1fr; }
+    }
+
+    .offer-card {
+      padding: 24px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .offer-level {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .offer-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .offer-tagline {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .recognition-amt {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .recognition-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .recognition-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .recognition-note {
+      font-size: 12px;
+      color: var(--muted-soft);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+
+    /* Premier geste */
+    .steps {
+      list-style: none;
+      display: grid;
+      gap: 16px;
+      max-width: 640px;
+    }
+
+    .steps li {
+      padding: 20px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .steps strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .steps span {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .steps-closing {
+      margin-top: 24px;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    .copy-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 100;
+    }
+
+    .copy-toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 32px 0 40px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .footer-brand { max-width: 280px; }
+
+    .footer-brand strong {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+
+    .footer-copy {
+      width: 100%;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--accent-line);
+      font-size: 12px;
+      color: var(--muted-soft);
+    }
+
+    .footer-note {
+      width: 100%;
+      font-size: 11px;
+      color: var(--muted-soft);
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <strong>Maavnica SmartCard - Kit affilié</strong>
-      <a href="/affiliation.html">← Retour affiliation</a>
-    </div>
 
-    <section class="box hero">
-      <h1>Kit affilié prêt à l'action</h1>
-      <p><strong>💡 Tu connais des pros ?</strong><br/>Ils ont déjà des clients satisfaits...<br/>👉 mais ils ne les exploitent pas<br/>👉 ils perdent du business sans le savoir<br/><strong>👉 montre-leur ça</strong></p>
-      <p><strong>⚡ Mode rapide</strong><br/>1. prends une démo<br/>2. copie un message<br/>3. envoie à 3 personnes<br/>👉 ça prend 2 minutes</p>
-      <p><strong>SmartCard aide les professionnels à transformer leurs clients satisfaits en recommandations visibles et traçables.</strong></p>
-      <p><strong>La recommandation devient un véritable générateur de business.</strong></p>
-      <p><strong>👉 Aujourd’hui, la plupart des recommandations se perdent.</strong><br/>SmartCard permet de les capter et de les transformer en contacts.</p>
-      <p>Aujourd’hui, des clients recommandent... sans que le professionnel le sache.<br/><strong>👉 des opportunités sont perdues sans être visibles.</strong></p>
-      <div class="cta-row">
-        <a class="btn main" href="#mission">Commencer en 2 minutes</a>
-        <a class="btn" href="/affiliation.html">Page affiliation</a>
+  <!-- S0 — En-tête -->
+  <header class="page-topbar" id="top" data-section="s0-entete">
+    <div class="container page-topbar-inner">
+      <div class="page-topbar-brand">
+        <img src="/static/logo-palmier.png" alt="" width="28" height="28" decoding="async" role="presentation" />
+        <span>Maavnica<em>Kit ambassadeur</em></span>
       </div>
-      <p><strong>👉 tu n’as rien à vendre, juste à montrer</strong></p>
-    </section>
+      <a href="/static/affiliation.html" class="back-link" data-cta="back-program">← Programme ambassadeur</a>
+    </div>
+  </header>
 
-    <section class="box">
-      <h2>1) Résumé simple</h2>
-      <ul>
-        <li>SmartCard Solo = contact + avis Google + demandes entrantes</li>
-        <li>SmartCard Business = recommandation client + bouche-à-oreille digitalisé + recommandations visibles et traçables</li>
-        <li>Multi-cartes / équipes / agences / plusieurs établissements = uniquement sur devis</li>
-      </ul>
-    </section>
+  <!-- S1 — Hero -->
+  <header class="hero" id="hero" data-section="s1-hero">
+    <div class="container">
+      <p class="eyebrow">Kit ambassadeur</p>
+      <h1 class="display-title">Votre kit pour recommander SmartCard avec justesse</h1>
+      <p class="display-sub">
+        Un support discret pour orienter un professionnel que vous estimez — avec sobriété, clarté et la même exigence que celle que vous portez à votre propre réputation.
+      </p>
+    </div>
+  </header>
 
-    <section class="box">
-      <h2>2) Vos liens affiliés</h2>
-      <p>Utilisez toujours vos liens trackés avec <code>?ref=...</code> pour rattacher la recommandation à votre profil.</p>
-      <ul>
-        <li>Lien principal : <code>https://smartcard.maavnica.com/?ref=votre_ref</code></li>
-        <li>Lien Solo : <code>https://smartcard.maavnica.com/static/contact-smartcard.html?offre=solo&ref=votre_ref</code></li>
-        <li>Lien Business : <code>https://smartcard.maavnica.com/static/contact-smartcard.html?offre=business&ref=votre_ref</code></li>
-      </ul>
-    </section>
+  <!-- S2 — Votre lien de recommandation -->
+  <section class="section section--alt" id="lien" data-section="s2-lien">
+    <div class="container">
+      <p class="eyebrow">Votre lien</p>
+      <h2 class="section-title">Votre lien de recommandation</h2>
+      <p class="link-note">
+        Ce lien permet à Maavnica d'identifier votre recommandation lorsque le professionnel que vous avez orienté choisit SmartCard.
+      </p>
+      <div class="link-panel">
+        <p class="link-note" style="margin-bottom:0;font-size:13px;color:var(--muted-soft);">
+          Paramètre <code style="font-size:12px;">?ref=</code> — conservé sur tous vos liens personnels.
+        </p>
+        <div class="link-main">
+          <div class="link-url" id="linkMainDisplay" aria-live="polite">—</div>
+          <button type="button" class="btn btn-primary btn-sm" id="btnCopyMain" data-cta="copy-main-link">Copier mon lien</button>
+        </div>
+        <p class="ref-hint" id="refHint" hidden>
+          Votre référence personnelle apparaîtra ici dès qu'elle vous aura été transmise par email, ou via l'adresse de cette page avec <code>?ref=votre_reference</code>.
+        </p>
+        <div class="link-extra">
+          <h3>Liens vers SmartCard</h3>
+          <ul class="link-list">
+            <li>Lien principal : <a href="#" id="linkMainAnchor" target="_blank" rel="noopener noreferrer">—</a></li>
+            <li>SmartCard Solo : <a href="#" id="linkSoloAnchor" target="_blank" rel="noopener noreferrer">—</a></li>
+            <li>SmartCard Business : <a href="#" id="linkBusinessAnchor" target="_blank" rel="noopener noreferrer">—</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="box">
-      <h2>3) Quelle démo envoyer ?</h2>
-      <ul>
-        <li>Artisan / service local / intervention → <code>/c/demo</code><br/>👉 regarde cette démo</li>
-        <li>Bien-être / accompagnement / relation de confiance → <code>/c/demo2</code><br/>👉 regarde cette démo</li>
-        <li>Agent immobilier / recommandation locale / mise en relation → <code>/c/demo3</code><br/>👉 regarde cette démo</li>
-      </ul>
-      <p><strong>👉 En immobilier, une recommandation peut devenir un mandat.</strong><br/>👉 C’est un levier direct de business.</p>
-    </section>
+  <!-- S3 — Les cartes à montrer -->
+  <section class="section" id="demos" data-section="s3-demos">
+    <div class="container">
+      <p class="eyebrow">Démonstrations</p>
+      <h2 class="section-title">Les cartes à montrer</h2>
+      <p class="section-sub">Choisissez la démonstration la plus adaptée au professionnel que vous avez en tête. La carte parle d'elle-même — votre rôle est de faire le lien.</p>
+      <div class="metier-grid">
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-artisan.png" alt="Carte SmartCard — Artisan" loading="lazy" />
+          </div>
+          <p class="metier-hook">Artisan</p>
+          <h3 class="metier-tag">Restez présent après l'intervention</h3>
+          <p class="metier-text">Pour les professionnels de terrain qui vivent du bouche-à-oreille local. Votre carte rassure et permet à vos clients satisfaits de vous recommander — naturellement.</p>
+          <a href="/c/demo" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="artisan" data-cta="demo-artisan">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-bienetre.png" alt="Carte SmartCard — Bien-être" loading="lazy" />
+          </div>
+          <p class="metier-hook">Bien-être</p>
+          <h3 class="metier-tag">Inspirez confiance dès le premier regard</h3>
+          <p class="metier-text">Pour les praticiens pour qui la relation est au cœur de la pratique. Une présentation sobre, humaine, qui respecte le registre de confiance.</p>
+          <a href="/c/demo2" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="bienetre" data-cta="demo-bienetre">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-immobilier.png" alt="Carte SmartCard — Immobilier" loading="lazy" />
+          </div>
+          <p class="metier-hook">Immobilier</p>
+          <h3 class="metier-tag">Prolongez la relation après chaque visite</h3>
+          <p class="metier-text">Pour les agents et professionnels de la mise en relation. Une carte claire, crédible, facile à transmettre à un proche ou un futur client.</p>
+          <a href="/c/demo3" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="immobilier" data-cta="demo-immobilier">Voir cette carte</a>
+        </article>
+        <article class="metier-card">
+          <div class="card-preview">
+            <img src="/static/landing-v2/demo-maavnica.png" alt="Carte SmartCard — Dirigeant Maavnica" loading="lazy" />
+          </div>
+          <p class="metier-hook">Dirigeant</p>
+          <h3 class="metier-tag">Une présentation à la hauteur de votre responsabilité</h3>
+          <p class="metier-text">Pour les dirigeants et professionnels exigeants. Un registre corporate, sobre et élégant — où la confiance prime sur la visibilité bruyante.</p>
+          <a href="/c/arnaud-huard" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="maavnica" data-cta="demo-maavnica">Voir cette carte</a>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <section class="box" id="mission">
-      <h2>4) 🚀 Première mission (5 minutes)</h2>
-      <ol>
-        <li>Choisir 1 professionnel</li>
-        <li>Choisir la bonne démo</li>
-        <li>Copier un message</li>
-        <li>Envoyer à 3 personnes</li>
+  <!-- S4 — Messages types sobres -->
+  <section class="section section--alt" id="messages" data-section="s4-messages">
+    <div class="container">
+      <p class="eyebrow">Messages types</p>
+      <h2 class="section-title">Messages types sobres</h2>
+      <p class="section-sub">Adaptez le prénom et, si besoin, remplacez le lien par la démonstration la plus adaptée au métier du professionnel que vous contactez.</p>
+      <div class="message-grid">
+
+        <article class="message-card">
+          <div class="message-card-hd">
+            <h3>WhatsApp</h3>
+            <button type="button" class="btn btn-secondary btn-sm btn-copy-msg" data-msg-id="msgWhatsapp" data-cta="copy-whatsapp">Copier ce message</button>
+          </div>
+          <div class="message-body">
+            <div class="message-text" id="msgWhatsapp">Bonjour [Prénom],
+
+J'ai pensé à vous en découvrant SmartCard. C'est une carte professionnelle de confiance qui pourrait bien correspondre à votre activité.
+
+Je vous laisse regarder cette démonstration :
+[LIEN]
+
+Bonne journée</div>
+            <p class="message-hint">Remplacez [Prénom] par le prénom du destinataire.</p>
+          </div>
+        </article>
+
+        <article class="message-card">
+          <div class="message-card-hd">
+            <h3>Email</h3>
+            <button type="button" class="btn btn-secondary btn-sm btn-copy-msg" data-msg-id="msgEmail" data-cta="copy-email">Copier ce message</button>
+          </div>
+          <div class="message-body">
+            <div class="message-text" id="msgEmail">Objet : Une carte professionnelle qui pourrait vous correspondre
+
+Bonjour [Prénom],
+
+En parcourant SmartCard, j'ai pensé à votre activité. C'est une carte professionnelle de confiance — sobre, claire, pensée pour durer.
+
+Voici une démonstration adaptée :
+[LIEN]
+
+Je reste disponible si vous souhaitez en discuter.
+
+Bien cordialement</div>
+            <p class="message-hint">Remplacez [Prénom] par le prénom du destinataire.</p>
+          </div>
+        </article>
+
+        <article class="message-card">
+          <div class="message-card-hd">
+            <h3>LinkedIn</h3>
+            <button type="button" class="btn btn-secondary btn-sm btn-copy-msg" data-msg-id="msgLinkedin" data-cta="copy-linkedin">Copier ce message</button>
+          </div>
+          <div class="message-body">
+            <div class="message-text" id="msgLinkedin">Bonjour [Prénom],
+
+J'ai découvert SmartCard récemment — une carte professionnelle de confiance, sobre et bien pensée. En voyant votre activité, j'ai pensé que cette démonstration pourrait vous intéresser :
+
+[LIEN]
+
+Bonne continuation</div>
+            <p class="message-hint">Remplacez [Prénom] par le prénom du destinataire.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 — Ce que vous pouvez dire / ne pas promettre -->
+  <section class="section" id="cadre" data-section="s5-cadre">
+    <div class="container">
+      <p class="eyebrow">Cadre</p>
+      <h2 class="section-title">Ce que vous pouvez dire — et ne pas promettre</h2>
+      <p class="section-sub">Recommandez en toute confiance. Votre réputation est protégée par un cadre clair et sobre.</p>
+      <div class="ethics-grid">
+        <div class="ethics-box">
+          <h3>Vous pouvez dire</h3>
+          <ul class="say-list">
+            <li>SmartCard présente votre activité avec confiance</li>
+            <li>SmartCard aide vos clients satisfaits à vous recommander</li>
+            <li>Voici une démo adaptée à votre métier</li>
+            <li>Regardez cette démonstration — vous verrez par vous-même</li>
+          </ul>
+        </div>
+        <div class="ethics-box">
+          <h3>Vous ne devez pas promettre</h3>
+          <ul class="dont-list">
+            <li>Des résultats chiffrés</li>
+            <li>Des ventes ou un retour sur investissement</li>
+            <li>Une augmentation de chiffre d'affaires</li>
+            <li>Des avis garantis</li>
+            <li>Des fonctionnalités que vous n'avez pas vérifiées</li>
+          </ul>
+        </div>
+      </div>
+      <p class="ethics-closing">Montrez la démo. C'est suffisant. Ne promettez rien de plus.</p>
+    </div>
+  </section>
+
+  <!-- S6 — Reconnaissance -->
+  <section class="section section--alt" id="reconnaissance" data-section="s6-reconnaissance">
+    <div class="container">
+      <p class="eyebrow">Reconnaissance</p>
+      <h2 class="section-title">Votre recommandation est reconnue</h2>
+      <p class="recognition-intro">
+        Lorsqu'un professionnel que vous avez orienté choisit SmartCard, votre geste est reconnu — simplement, loyalement, transparentement.
+        <em>Il ne s'agit pas d'un revenu — c'est une marque de reconnaissance pour avoir orienté un professionnel vers une solution digne de confiance.</em>
+      </p>
+      <div class="offers-grid">
+        <article class="offer-card">
+          <p class="offer-level">Niveau de service</p>
+          <h3 class="offer-name">SmartCard Solo</h3>
+          <p class="offer-tagline">Votre carte de confiance</p>
+          <div class="recognition-amt">
+            <p class="recognition-label">Reconnaissance</p>
+            <p class="recognition-value">20€</p>
+            <p class="recognition-note">Lors de la première souscription Solo validée</p>
+          </div>
+        </article>
+        <article class="offer-card">
+          <p class="offer-level">Niveau d'accompagnement</p>
+          <h3 class="offer-name">SmartCard Business</h3>
+          <p class="offer-tagline">Votre moteur de recommandation</p>
+          <div class="recognition-amt">
+            <p class="recognition-label">Reconnaissance</p>
+            <p class="recognition-value">35€</p>
+            <p class="recognition-note">Lors de la première souscription Business validée</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7 — Premier geste -->
+  <section class="section" id="premier-geste" data-section="s7-geste">
+    <div class="container">
+      <p class="eyebrow">Premier geste</p>
+      <h2 class="section-title">Votre premier geste de recommandation</h2>
+      <p class="section-sub">Pas de discours. Pas de script commercial. Trois étapes simples — avec la même sobriété que le reste du programme.</p>
+      <ol class="steps">
+        <li>
+          <strong>Pensez à un professionnel que vous estimez</strong>
+          <span>Artisan, praticien, agent, dirigeant — quelqu'un de votre réseau dont vous connaissez le sérieux.</span>
+        </li>
+        <li>
+          <strong>Choisissez la démo la plus adaptée</strong>
+          <span>Artisan, Bien-être, Immobilier ou Dirigeant — la carte correspond à son univers.</span>
+        </li>
+        <li>
+          <strong>Envoyez un message sobre avec votre lien</strong>
+          <span>Par message ou en personne — comme vous le feriez naturellement. Votre geste suffit.</span>
+        </li>
       </ol>
-      <p><strong>Objectif :</strong> montrer que ses clients peuvent devenir un générateur de business.</p>
-      <p><strong>🎯 Résultat attendu :</strong><br/>au moins 1 personne intéressée</p>
-    </section>
+      <p class="steps-closing">Vous n'avez rien à vendre. Vous montrez.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="btnCopyMain2" data-cta="copy-main-link-footer">Copier mon lien</button>
+        <a href="/static/affiliation.html" class="btn btn-secondary" data-cta="back-program-footer">Retour au Programme Ambassadeur</a>
+      </div>
+    </div>
+  </section>
 
-    <section class="box">
-      <h2>4bis) Permission d’envoi</h2>
-      <p>👉 tu n’as rien à vendre</p>
-      <p>👉 tu montres juste la démo</p>
-      <p>👉 même si tu n’es pas commercial</p>
-      <p>👉 l’objectif est juste de faire découvrir</p>
-    </section>
+  <!-- S8 — Footer -->
+  <footer class="site-footer" id="signature" data-section="s8-signature">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <strong>Maavnica</strong>
+        <p>Éditeur de cartes professionnelles de confiance.</p>
+      </div>
+      <nav class="footer-links" aria-label="Liens légaux">
+        <a href="/static/mentions-legales.html">Mentions légales</a>
+        <a href="/static/cgv-smartcard.html">CGV</a>
+        <a href="/static/confidentialite.html">Confidentialité</a>
+        <a href="/static/cookies.html">Cookies</a>
+      </nav>
+      <p class="footer-copy">© 2025 Maavnica · SmartCard</p>
+      <p class="footer-note">Votre lien de recommandation est suivi automatiquement lorsqu'il est partagé.</p>
+    </div>
+  </footer>
 
-    <section class="box">
-      <h2>4ter) Mini scénario réel</h2>
-      <p>Tu connais un artisan ?</p>
-      <p>→ tu envoies la démo<br/>→ il comprend en 30 sec<br/>→ il teste<br/>→ il peut devenir client</p>
-      <p><strong>👉 c’est comme ça que tu déclenches une vente</strong></p>
-    </section>
+  <div class="copy-toast" id="copyToast" role="status" aria-live="polite">Copié</div>
 
-    <section class="box">
-      <h2>5) Messages prêts à envoyer</h2>
-      <p class="muted">Adaptez juste le prénom et le lien de démo.</p>
+  <script>
+    (function () {
+      var REF_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+      var TTL_MS = 30 * 24 * 60 * 60 * 1000;
+      var PLACEHOLDER_REF = "votre_ref";
+      var BASE = window.location.origin || "https://smartcard.maavnica.com";
 
-      <p><strong>WhatsApp court</strong></p>
-      <div class="code">Je teste un outil qui transforme les clients satisfaits en recommandations.
+      function normalizeRef(raw) {
+        var s = String(raw || "").trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 32);
+        if (!s || !REF_RE.test(s)) return "";
+        return s;
+      }
 
-En clair, ça devient un générateur de business.
+      function persistRef(ref) {
+        try {
+          localStorage.setItem("maavnica_affiliate_ref", ref);
+          localStorage.setItem("maavnica_affiliate_ref_ts", String(Date.now()));
+        } catch (e) {}
+      }
 
-Regarde la démo :
-[LIEN]</div>
+      function readStoredRef() {
+        try {
+          var s = (localStorage.getItem("maavnica_affiliate_ref") || "").trim().toLowerCase();
+          if (!s) return "";
+          var tsRaw = localStorage.getItem("maavnica_affiliate_ref_ts");
+          var ts = tsRaw != null && tsRaw !== "" ? parseInt(tsRaw, 10) : NaN;
+          if (!Number.isFinite(ts) || Date.now() - ts > TTL_MS) {
+            localStorage.removeItem("maavnica_affiliate_ref");
+            localStorage.removeItem("maavnica_affiliate_ref_ts");
+            return "";
+          }
+          if (!REF_RE.test(s)) {
+            localStorage.removeItem("maavnica_affiliate_ref");
+            localStorage.removeItem("maavnica_affiliate_ref_ts");
+            return "";
+          }
+          return s;
+        } catch (e) {
+          return "";
+        }
+      }
 
-      <p><strong>WhatsApp brut (ultra simple)</strong></p>
-      <div class="code">je teste un truc
+      function resolveRef() {
+        try {
+          var qp = new URLSearchParams(window.location.search).get("ref");
+          if (qp !== null && qp !== "") {
+            var fromUrl = normalizeRef(qp);
+            if (fromUrl) {
+              persistRef(fromUrl);
+              return fromUrl;
+            }
+          }
+        } catch (e) {}
+        return readStoredRef();
+      }
 
-ça récupère les recommandations clients
+      var ref = resolveRef() || PLACEHOLDER_REF;
+      var hasRealRef = ref !== PLACEHOLDER_REF;
 
-regarde 30 sec :
-[LIEN]</div>
+      var links = {
+        main: BASE + "/?ref=" + ref,
+        solo: BASE + "/static/contact-smartcard.html?offre=solo&ref=" + ref,
+        business: BASE + "/static/contact-smartcard.html?offre=business&ref=" + ref
+      };
 
-      <p><strong>Variante curiosité</strong></p>
-      <div class="code">regarde juste ça
+      var linkMainDisplay = document.getElementById("linkMainDisplay");
+      var linkMainAnchor = document.getElementById("linkMainAnchor");
+      var linkSoloAnchor = document.getElementById("linkSoloAnchor");
+      var linkBusinessAnchor = document.getElementById("linkBusinessAnchor");
+      var refHint = document.getElementById("refHint");
 
-tu vas comprendre direct
+      if (linkMainDisplay) linkMainDisplay.textContent = links.main;
+      if (linkMainAnchor) {
+        linkMainAnchor.href = links.main;
+        linkMainAnchor.textContent = links.main;
+      }
+      if (linkSoloAnchor) {
+        linkSoloAnchor.href = links.solo;
+        linkSoloAnchor.textContent = links.solo;
+      }
+      if (linkBusinessAnchor) {
+        linkBusinessAnchor.href = links.business;
+        linkBusinessAnchor.textContent = links.business;
+      }
+      if (refHint && !hasRealRef) refHint.hidden = false;
 
-[LIEN]</div>
+      function fillMessagePlaceholders() {
+        document.querySelectorAll(".message-text").forEach(function (el) {
+          var tpl = el.getAttribute("data-template");
+          if (!tpl) {
+            tpl = el.textContent;
+            el.setAttribute("data-template", tpl);
+          }
+          el.textContent = tpl.replace(/\[LIEN\]/g, links.main);
+        });
+      }
+      fillMessagePlaceholders();
 
-      <p><strong>WhatsApp détaillé</strong></p>
-      <div class="code">Salut,
+      function showToast(label) {
+        var toast = document.getElementById("copyToast");
+        if (!toast) return;
+        toast.textContent = label || "Copié";
+        toast.classList.add("visible");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(function () {
+          toast.classList.remove("visible");
+        }, 2200);
+      }
 
-Je te partage SmartCard.
-Solo sert à recevoir des contacts, des avis Google et des demandes.
-Business sert à générer des recommandations visibles et traçables.
+      async function copyText(text) {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        } catch (e) {}
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        } catch (e2) {
+          return false;
+        }
+      }
 
-La recommandation devient un générateur de business.
+      function bindCopy(btn, getText, toastLabel) {
+        if (!btn) return;
+        btn.addEventListener("click", async function () {
+          var ok = await copyText(getText());
+          showToast(ok ? toastLabel : "Copie impossible");
+          if (ok && window.maavnicaSiteAnalytics) {
+            window.maavnicaSiteAnalytics.track({
+              event_type: "affiliate_click",
+              page_type: "affiliate",
+              target: btn.getAttribute("data-cta") || "copy",
+            });
+          }
+        });
+      }
 
-Démo :
-[LIEN]</div>
+      bindCopy(document.getElementById("btnCopyMain"), function () { return links.main; }, "Lien copié");
+      bindCopy(document.getElementById("btnCopyMain2"), function () { return links.main; }, "Lien copié");
 
-      <p><strong>LinkedIn</strong></p>
-      <div class="code">Je teste SmartCard avec des professionnels de terrain.
-
-L'idée : transformer les clients satisfaits en recommandations visibles et traçables.
-La recommandation devient un générateur de business.
-
-Démo : [LIEN]</div>
-
-      <p><strong>Facebook</strong></p>
-      <div class="code">Nouveau : SmartCard pour les pros locaux.
-Solo pour contact + avis + demandes.
-Business pour la recommandation client.
-
-La recommandation devient un générateur de business.
-
-Démo : [LIEN]</div>
-
-      <p><strong>Email</strong></p>
-      <div class="code">Objet : Un outil simple pour générer plus de recommandations
-
-Bonjour,
-
-Je vous recommande SmartCard, un outil qui transforme les clients satisfaits en recommandations visibles et traçables.
-La recommandation devient un générateur de business.
-
-Solo : contact + avis + demandes.
-Business : recommandation client.
-
-Démo : [LIEN]</div>
-    </section>
-
-    <section class="box">
-      <h2>6) Règles importantes</h2>
-      <ul>
-        <li>Commission uniquement lors de la première souscription validée</li>
-        <li>Aucun revenu automatique</li>
-        <li>Présentation honnête, sans promesse de résultats</li>
-        <li>Business n'est pas une offre multi-cartes</li>
-        <li>Multi-cartes = sur devis</li>
-      </ul>
-    </section>
-
-    <section class="box">
-      <h2>7) À ne pas faire</h2>
-      <ul>
-        <li>❌ ne pas survendre</li>
-        <li>❌ ne pas promettre des résultats</li>
-        <li>❌ ne pas parler technique</li>
-      </ul>
-      <p><strong>👉 montre juste la démo, c’est suffisant</strong></p>
-    </section>
-  </div>
+      document.querySelectorAll(".btn-copy-msg").forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          var id = btn.getAttribute("data-msg-id");
+          var el = id ? document.getElementById(id) : null;
+          var text = el ? el.textContent : "";
+          var ok = await copyText(text);
+          showToast(ok ? "Message copié" : "Copie impossible");
+          if (ok && window.maavnicaSiteAnalytics) {
+            window.maavnicaSiteAnalytics.track({
+              event_type: "affiliate_click",
+              page_type: "affiliate",
+              target: btn.getAttribute("data-cta") || "copy_message",
+            });
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="/static/maavnica-consent.js"></script>
+  <script src="/static/site-analytics.js"></script>
+  <script>
+    (function () {
+      if (window.maavnicaRunSiteAnalyticsInit) {
+        window.maavnicaRunSiteAnalyticsInit({ pageType: "affiliate" });
+      }
+      var SA = window.maavnicaSiteAnalytics;
+      if (!SA) return;
+      document.addEventListener(
+        "click",
+        function (e) {
+          var a = e.target.closest("a");
+          if (!a) return;
+          var h = a.getAttribute("href") || "";
+          var cta = a.getAttribute("data-cta") || "";
+          if (h.indexOf("/c/") !== -1) {
+            SA.track({
+              event_type: "demo_click",
+              page_type: "affiliate",
+              target: a.getAttribute("data-demo") || h.split("?")[0].slice(0, 200),
+            });
+            return;
+          }
+          if (h.indexOf("affiliation.html") !== -1 || cta.indexOf("back-program") === 0) {
+            SA.track({
+              event_type: "affiliate_click",
+              page_type: "affiliate",
+              target: cta || "back_program",
+            });
+          }
+        },
+        true
+      );
+    })();
+  </script>
 </body>
 </html>
-
