@@ -1,0 +1,2 @@
+# Dépendances génération OG (build Render / CI — pas chargées par uvicorn en runtime)
+playwright>=1.40.0

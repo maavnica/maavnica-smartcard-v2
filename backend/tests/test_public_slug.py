@@ -74,36 +74,52 @@ class SanitizePublicSlugTests(unittest.TestCase):
 
 
 class FrPublicOgImageUrlTests(unittest.TestCase):
-    """Règles og:image serveur (_fr_public_og_image_url) — demo2 marketing, arnaud-huard dédié."""
+    """Règles og:image serveur — /og/{slug}.jpg dynamique ou fallback."""
 
     base = "https://smartcard.maavnica.com"
 
-    def test_demo2_uses_og_default_not_avatar(self):
+    def test_demo2_uses_dynamic_og_when_generated(self):
         from app.main import _fr_public_og_image_url
 
         class CardWithAvatar:
+            slug = "demo2"
+            updated_at = None
+            visual_theme = "wellness-soft"
             avatar_url = "https://res.cloudinary.com/x/image/upload/v1/demo.png"
 
-        url = _fr_public_og_image_url(self.base, "demo2", CardWithAvatar())
-        self.assertEqual(url, f"{self.base}/static/og-default.jpg?v=3")
+        with patch("app.og_capture.og_generated_path") as mock_path:
+            mock_path.return_value.is_file = lambda: True
+            url = _fr_public_og_image_url(self.base, "demo2", CardWithAvatar())
+            self.assertIn("/og/demo2.jpg?v=", url)
 
-    def test_arnaud_huard_uses_dedicated_jpg(self):
+    def test_demo2_fallback_without_generated_file(self):
         from app.main import _fr_public_og_image_url
 
         class CardWithAvatar:
-            avatar_url = "https://res.cloudinary.com/x/y.png"
+            slug = "demo2"
+            updated_at = None
+            visual_theme = "wellness-soft"
+            avatar_url = "https://res.cloudinary.com/x/demo.png"
 
-        url = _fr_public_og_image_url(self.base, "arnaud-huard", CardWithAvatar())
-        self.assertEqual(url, f"{self.base}/static/og-arnaud-huard.jpg")
+        with patch("app.og_capture.og_generated_path") as mock_path:
+            mock_path.return_value.is_file = lambda: False
+            url = _fr_public_og_image_url(self.base, "demo2", CardWithAvatar())
+            self.assertIn("/static/og-default.jpg?v=", url)
 
-    def test_other_slug_still_uses_avatar_when_present(self):
+    def test_slug_uses_dynamic_og_not_avatar(self):
         from app.main import _fr_public_og_image_url
 
         class CardWithAvatar:
+            slug = "autre-pro"
+            updated_at = None
+            visual_theme = "wellness-soft"
             avatar_url = "https://cdn.example/photo.jpg"
 
-        url = _fr_public_og_image_url(self.base, "autre-pro", CardWithAvatar())
-        self.assertEqual(url, "https://cdn.example/photo.jpg")
+        with patch("app.og_capture.og_generated_path") as mock_path:
+            mock_path.return_value.is_file = lambda: True
+            url = _fr_public_og_image_url(self.base, "autre-pro", CardWithAvatar())
+            self.assertIn("/og/autre-pro.jpg?v=", url)
+            self.assertNotIn("cdn.example", url)
 
 
 class PublicSlugHttpTests(unittest.TestCase):
@@ -138,7 +154,7 @@ class PublicSlugHttpTests(unittest.TestCase):
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
 
-    def test_c_demo2_html_og_image_is_default(self):
+    def test_c_demo2_html_og_image_present(self):
         from fastapi.testclient import TestClient
 
         from app.main import app
@@ -147,7 +163,10 @@ class PublicSlugHttpTests(unittest.TestCase):
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
         self.assertIn('property="og:image"', r.text)
-        self.assertIn("/static/og-default.jpg?v=3", r.text)
+        self.assertTrue(
+            "/og/demo2.jpg?v=" in r.text or "/static/og-default.jpg?v=" in r.text,
+            r.text,
+        )
 
     def test_c_demo2_classic_template_by_default(self):
         from fastapi.testclient import TestClient

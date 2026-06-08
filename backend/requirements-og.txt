@@ -1,0 +1,2 @@
+# Génération OG au build Render (hors runtime uvicorn)
+playwright>=1.40.0

@@ -2,6 +2,18 @@ services:
   - type: web
     name: maavnica-smartcard
     env: python
-    buildCommand: pip install -r requirements.txt
+    rootDir: backend
+    buildCommand: |
+      pip install -r requirements.txt
+      pip install -r requirements-og.txt
+      playwright install chromium
+      bash ../scripts/build_regenerate_og.sh
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
     plan: free
+    envVars:
+      - key: OG_REGENERATE_ON_BUILD
+        value: "true"
+      - key: OG_DYNAMIC_ENABLED
+        value: "true"
+      - key: OG_BUILD_LENIENT
+        value: "true"

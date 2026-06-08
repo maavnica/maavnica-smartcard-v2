@@ -250,23 +250,26 @@
     /**
      * Image Open Graph pour les partages (réseaux / messageries) — cartes FR seulement (pas demo-latam-*).
      */
+    function buildOgImageUrl(card, slug) {
+      var slugL = String(slug || "").trim().toLowerCase();
+      var defaultImage = `${baseUrl}/static/og-default.jpg?v=3`;
+      if (!slugL) return defaultImage;
+      var v = "0";
+      if (card && card.updated_at) {
+        try {
+          v = String(new Date(card.updated_at).getTime() || 0);
+        } catch (e) {
+          v = "0";
+        }
+      }
+      return `${baseUrl}/og/${encodeURIComponent(slugL)}.jpg?v=${v}`;
+    }
+
     function updateFrenchCardOgImage(card, slug) {
       if (!slug || isLatamDemoSlugPrefix(slug)) return;
       var el = document.getElementById("seo-og-image");
       if (!el) return;
-      var defaultImage = `${baseUrl}/static/og-default.jpg?v=3`;
-      var slugL = String(slug).trim().toLowerCase();
-      var raw = "";
-      if (card && card.avatar_url != null) raw = String(card.avatar_url).trim();
-      else if (card && card.photo_url != null) raw = String(card.photo_url).trim();
-      var url;
-      if (slugL === "arnaud-huard") {
-        url = `${baseUrl}/static/og-arnaud-huard.jpg`;
-      } else if (slugL === "demo2") {
-        url = defaultImage;
-      } else {
-        url = raw ? absoluteUrlForOg(raw) : defaultImage;
-      }
+      var url = buildOgImageUrl(card, slug);
       el.setAttribute("content", url);
       upsertHeadMeta("name", "twitter:image", url);
     }

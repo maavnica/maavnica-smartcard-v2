@@ -85,3 +85,9 @@ htmlcov/
 # =========================
 *.tmp
 *.temp
+
+# =========================
+# OG IMAGES (artefacts build — ne pas versionner)
+# =========================
+backend/static/og/generated/*
+!backend/static/og/generated/.gitkeep

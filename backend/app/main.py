@@ -27,6 +27,8 @@ from app.routers.checkout import router as checkout_router
 from app.routers.upload import router as upload_router
 from app.routers.contact import router as contact_router
 from app.routers.affiliate_kit import router as affiliate_kit_router
+from app.routers.og import router as og_router
+from app.og_capture import build_og_image_url
 
 
 
@@ -305,18 +307,8 @@ def _absolute_public_url(base: str, path_or_url: str) -> str:
 
 
 def _fr_public_og_image_url(base_url: str, slug_norm: str, card: Optional[Any]) -> str:
-    """Image OG : arnaud-huard dédié, demo2 = visuel marketing (pas l’avatar), sinon avatar, sinon défaut."""
-    slug_l = (slug_norm or "").strip().lower()
-    if slug_l == "arnaud-huard":
-        return f"{base_url}/static/og-arnaud-huard.jpg"
-    if slug_l == "demo2":
-        return f"{base_url}/static/og-default.jpg?v={OG_DEFAULT_IMAGE_VERSION}"
-    avatar = ""
-    if card is not None:
-        avatar = (getattr(card, "avatar_url", None) or "").strip()
-    if avatar:
-        return _absolute_public_url(base_url, avatar)
-    return f"{base_url}/static/og-default.jpg?v={OG_DEFAULT_IMAGE_VERSION}"
+    """Image OG : capture pré-générée /og/{slug}.jpg ou fallback og-default.jpg."""
+    return build_og_image_url(base_url, slug_norm, card)
 
 
 def _inject_fr_social_bundle(
@@ -368,6 +360,7 @@ def _create_db_tables():
         ensure_card_city_column,
         ensure_card_theme_column,
         ensure_visual_theme_column,
+        ensure_google_rating_columns,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -381,6 +374,7 @@ def _create_db_tables():
     ensure_card_city_column()
     ensure_card_theme_column()
     ensure_visual_theme_column()
+    ensure_google_rating_columns()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
     _log_public_card_v3_assets()
@@ -402,6 +396,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
                 response.headers[header] = value
         elif path.startswith("/static/"):
             response.headers["Cache-Control"] = "public, max-age=604800, immutable"
+        elif path.startswith("/og/") and path.endswith(".jpg"):
+            response.headers["Cache-Control"] = "public, max-age=604800"
         else:
             response.headers["Cache-Control"] = "no-store"
 
@@ -441,6 +437,9 @@ async def root():
 # ------------------------------------------------------------
 # API routers
 # ------------------------------------------------------------
+# Images Open Graph pré-générées (cache statique)
+app.include_router(og_router)
+
 # API publique (lecture)
 app.include_router(public.router, tags=["public"])
 

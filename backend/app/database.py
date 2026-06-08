@@ -340,6 +340,51 @@ def ensure_card_theme_column() -> None:
     log.warning("DB_MIGRATION card_theme column added (dialect=%s)", dialect)
 
 
+def ensure_google_rating_columns() -> None:
+    """Ajoute google_rating / google_review_count sur cards si colonnes manquantes."""
+    import logging
+
+    from sqlalchemy import inspect, text
+
+    log = logging.getLogger(__name__)
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    dialect = engine.dialect.name
+    statements: list[str] = []
+    if "google_rating" not in existing:
+        if dialect == "postgresql":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN IF NOT EXISTS "
+                "google_rating DOUBLE PRECISION"
+            )
+        else:
+            statements.append("ALTER TABLE cards ADD COLUMN google_rating REAL")
+    if "google_review_count" not in existing:
+        if dialect == "postgresql":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN IF NOT EXISTS "
+                "google_review_count INTEGER"
+            )
+        else:
+            statements.append("ALTER TABLE cards ADD COLUMN google_review_count INTEGER")
+    if not statements:
+        return
+    with engine.begin() as conn:
+        for sql in statements:
+            conn.execute(text(sql))
+    log.warning(
+        "DB_MIGRATION google_rating columns added (dialect=%s, count=%s)",
+        dialect,
+        len(statements),
+    )
+
+
 def ensure_visual_theme_column() -> None:
     """Ajoute visual_theme sur cards si colonne manquante (default wellness-soft)."""
     import logging
