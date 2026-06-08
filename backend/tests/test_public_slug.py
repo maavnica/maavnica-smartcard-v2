@@ -85,7 +85,7 @@ class FrPublicOgImageUrlTests(unittest.TestCase):
             avatar_url = "https://res.cloudinary.com/x/image/upload/v1/demo.png"
 
         url = _fr_public_og_image_url(self.base, "demo2", CardWithAvatar())
-        self.assertEqual(url, f"{self.base}/static/og-default.jpg?v=2")
+        self.assertEqual(url, f"{self.base}/static/og-default.jpg?v=3")
 
     def test_arnaud_huard_uses_dedicated_jpg(self):
         from app.main import _fr_public_og_image_url
@@ -147,7 +147,7 @@ class PublicSlugHttpTests(unittest.TestCase):
         r = client.get("/c/demo2", follow_redirects=False)
         self.assertEqual(r.status_code, 200)
         self.assertIn('property="og:image"', r.text)
-        self.assertIn("/static/og-default.jpg?v=2", r.text)
+        self.assertIn("/static/og-default.jpg?v=3", r.text)
 
     def test_c_demo2_classic_template_by_default(self):
         from fastapi.testclient import TestClient

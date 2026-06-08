@@ -574,13 +574,16 @@
       if (!slug || isLatamDemoSlugPrefix(slug)) return;
       var el = document.getElementById("seo-og-image");
       if (!el) return;
-      var defaultImage = `${baseUrl}/static/og-default.jpg?v=2`;
+      var defaultImage = `${baseUrl}/static/og-default.jpg?v=3`;
+      var slugL = String(slug).trim().toLowerCase();
       var raw = "";
       if (card && card.avatar_url != null) raw = String(card.avatar_url).trim();
       else if (card && card.photo_url != null) raw = String(card.photo_url).trim();
       var url;
-      if (String(slug).trim().toLowerCase() === "arnaud-huard") {
+      if (slugL === "arnaud-huard") {
         url = `${baseUrl}/static/og-arnaud-huard.jpg`;
+      } else if (slugL === "demo2") {
+        url = defaultImage;
       } else {
         url = raw ? absoluteUrlForOg(raw) : defaultImage;
       }

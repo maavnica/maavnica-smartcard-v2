@@ -47,6 +47,9 @@ if not STATIC_DIR.exists():
 UPLOADS_DIR = STATIC_DIR / "uploads"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Version query-string pour og-default.jpg (cache busting Facebook / Twitter)
+OG_DEFAULT_IMAGE_VERSION = "3"
+
 # Landing marketing (source dans le dépôt, sans dupliquer index.html dans backend/static)
 LANDING_DIR = BACKEND_DIR.parent / "landing"
 LANDING_INDEX = LANDING_DIR / "index.html"
@@ -307,13 +310,13 @@ def _fr_public_og_image_url(base_url: str, slug_norm: str, card: Optional[Any]) 
     if slug_l == "arnaud-huard":
         return f"{base_url}/static/og-arnaud-huard.jpg"
     if slug_l == "demo2":
-        return f"{base_url}/static/og-default.jpg?v=2"
+        return f"{base_url}/static/og-default.jpg?v={OG_DEFAULT_IMAGE_VERSION}"
     avatar = ""
     if card is not None:
         avatar = (getattr(card, "avatar_url", None) or "").strip()
     if avatar:
         return _absolute_public_url(base_url, avatar)
-    return f"{base_url}/static/og-default.jpg?v=2"
+    return f"{base_url}/static/og-default.jpg?v={OG_DEFAULT_IMAGE_VERSION}"
 
 
 def _inject_fr_social_bundle(
