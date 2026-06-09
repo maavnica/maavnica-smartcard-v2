@@ -572,7 +572,7 @@
      */
     function buildOgImageUrl(card, slug) {
       var slugL = String(slug || "").trim().toLowerCase();
-      var defaultImage = `${baseUrl}/static/og-default.jpg?v=3`;
+      var defaultImage = `${baseUrl}/static/og-default.jpg?v=4`;
       if (!slugL) return defaultImage;
       var v = "0";
       if (card && card.updated_at) {

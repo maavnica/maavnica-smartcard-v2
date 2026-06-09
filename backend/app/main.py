@@ -50,7 +50,7 @@ UPLOADS_DIR = STATIC_DIR / "uploads"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Version query-string pour og-default.jpg (cache busting Facebook / Twitter)
-OG_DEFAULT_IMAGE_VERSION = "3"
+OG_DEFAULT_IMAGE_VERSION = "4"
 
 # Landing marketing (source dans le dépôt, sans dupliquer index.html dans backend/static)
 LANDING_DIR = BACKEND_DIR.parent / "landing"

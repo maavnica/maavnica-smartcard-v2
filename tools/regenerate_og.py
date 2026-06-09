@@ -23,6 +23,7 @@ sys.path.insert(0, str(BACKEND))
 from PIL import Image  # noqa: E402
 
 from app.og_capture import (  # noqa: E402
+    OG_DEFAULT_PATH,
     composite_og_canvas,
     css_color_to_rgb,
     ensure_og_dirs,
@@ -33,8 +34,9 @@ from app.og_capture import (  # noqa: E402
 from app.models import Card  # noqa: E402
 from app.database import SessionLocal  # noqa: E402
 
-# Sélecteurs zone à forte valeur (photo → CTA principal)
+# Sélecteurs zone haute valeur V2 (photo → CTA principal, sans chrome téléphone)
 _VALUE_ZONE_SELECTORS = [
+    ".wellness-avatar-stage",
     ".hero-avatar",
     "#person-name",
     "#hero-job-title",
@@ -43,19 +45,19 @@ _VALUE_ZONE_SELECTORS = [
     "#hero-google-badge-compact",
     "#hero-google-badge",
     ".hero-google-badge-wrap",
-    "#btn-primary-demande-contact",
+    ".wellness-google-rating-card",
+    ".wellness-google-inner",
 ]
 
 _CROP_CLIP_JS = """
-(slug) => {
-  const shell = document.querySelector(".phone-shell");
-  if (!shell) return null;
+() => {
+  const inner = document.querySelector(".phone-inner");
+  const cta = document.getElementById("btn-primary-demande-contact");
+  if (!inner || !cta) return null;
 
   const selectors = %s;
-  const shellRect = shell.getBoundingClientRect();
-  let top = shellRect.bottom;
-  let bottom = shellRect.top;
-  let found = false;
+  const innerRect = inner.getBoundingClientRect();
+  const ctaRect = cta.getBoundingClientRect();
 
   const visible = (el) => {
     if (!el) return false;
@@ -65,37 +67,44 @@ _CROP_CLIP_JS = """
     return r.width > 2 && r.height > 2;
   };
 
+  let top = Infinity;
+  let left = Infinity;
+  let right = -Infinity;
+  let found = false;
+
   for (const sel of selectors) {
     document.querySelectorAll(sel).forEach((el) => {
       if (!visible(el)) return;
       const r = el.getBoundingClientRect();
       found = true;
       top = Math.min(top, r.top);
-      bottom = Math.max(bottom, r.bottom);
+      left = Math.min(left, r.left);
+      right = Math.max(right, r.right);
     });
   }
 
-  const padTop = 14;
-  const padBottom = 18;
-  const padX = 10;
+  const padTop = 8;
+  const padBottom = 12;
+  const padX = 12;
 
   if (!found) {
-    const h = Math.min(shellRect.height, shellRect.width * 1.55);
     return {
-      x: Math.max(0, shellRect.left - padX),
-      y: Math.max(0, shellRect.top),
-      width: shellRect.width + padX * 2,
-      height: h,
+      x: Math.max(0, innerRect.left + padX),
+      y: Math.max(0, innerRect.top + padTop),
+      width: Math.max(80, innerRect.width - padX * 2),
+      height: Math.max(80, ctaRect.bottom - innerRect.top + padBottom),
     };
   }
 
-  top = Math.max(shellRect.top, top - padTop);
-  bottom = Math.min(shellRect.bottom, bottom + padBottom);
+  top = Math.max(innerRect.top, top - padTop);
+  const bottom = Math.min(innerRect.bottom, ctaRect.bottom + padBottom);
+  left = Math.max(innerRect.left, left - padX);
+  right = Math.min(innerRect.right, right + padX);
 
   return {
-    x: Math.max(0, shellRect.left - padX),
+    x: Math.max(0, left),
     y: Math.max(0, top),
-    width: shellRect.width + padX * 2,
+    width: Math.max(80, right - left),
     height: Math.max(80, bottom - top),
   };
 }
@@ -110,6 +119,9 @@ _CLEANUP_DOM_JS = """
   document.getElementById("demo-banner-shell")?.remove();
   document.querySelectorAll(".demo-marketing").forEach((el) => el.remove());
   document.getElementById("admin-preview-badge")?.remove();
+  document.querySelector(".notch")?.remove();
+  document.querySelector(".status-bar")?.remove();
+  document.querySelectorAll(".hero-badges, #hero-subline, #hero-reassurance, #hero-social-proof, #hero-subtitle, .hero-meta, .hero-contact-line").forEach((el) => el.remove());
 }
 """
 
@@ -236,7 +248,7 @@ def regenerate(
                         f"[og] WARN {slug}: manifest/hash ignoré ({manifest_exc})",
                         flush=True,
                     )
-                print(f"[og] OK {slug} → {out} ({len(jpeg)} bytes)", flush=True)
+                print(f"[og] OK {slug} -> {out} ({len(jpeg)} bytes)", flush=True)
                 ok += 1
             except Exception as exc:
                 print(f"[og] FAIL {slug}: {exc}", flush=True)
@@ -246,6 +258,18 @@ def regenerate(
         browser.close()
 
     return ok, fail
+
+
+def _sync_og_default_from(slug: str = "demo2") -> None:
+    """Met à jour og-default.jpg depuis une capture produit (fallback V2)."""
+    import shutil
+
+    src = og_generated_path(slug)
+    if not src.is_file():
+        print(f"[og] WARN: pas de fallback — {slug}.jpg absent", flush=True)
+        return
+    shutil.copy2(src, OG_DEFAULT_PATH)
+    print(f"[og] fallback -> {OG_DEFAULT_PATH}", flush=True)
 
 
 def main() -> int:
@@ -284,6 +308,8 @@ def main() -> int:
         return 0 if lenient else 1
 
     print(f"[og] terminé: {ok} ok, {fail} échec(s)", flush=True)
+    if not args.dry_run and "demo2" in slugs:
+        _sync_og_default_from("demo2")
     if lenient:
         return 0
     return 0 if fail == 0 else 1

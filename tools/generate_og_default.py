@@ -1,4 +1,7 @@
-"""Génère backend/static/og-default.jpg — visuel Open Graph SmartCard Premium (1200×630)."""
+"""DEPRECATED — utiliser tools/regenerate_og.py (capture produit V2).
+
+Ancien générateur bannière marketing ; conservé pour référence locale uniquement.
+"""
 from __future__ import annotations
 
 import os

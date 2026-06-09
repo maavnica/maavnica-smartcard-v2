@@ -11,14 +11,15 @@ from typing import Any, Optional, Tuple
 
 from PIL import Image
 
-# Layout OG (validé Phase 1)
+# Layout OG V2 — produit dominant (~72 % canvas, marges réduites)
 OG_WIDTH = 1200
 OG_HEIGHT = 630
-OG_CARD_TARGET_WIDTH = 840  # ~70 % du canvas
-OG_CARD_MAX_HEIGHT = 600
-OG_BRAND_LOGO_SIZE = 28
-OG_BRAND_LOGO_OPACITY = 0.35
-OG_BRAND_LOGO_MARGIN = 24
+OG_CARD_TARGET_WIDTH = 860  # ~72 % du canvas
+OG_CARD_MAX_HEIGHT = 566  # ~90 % hauteur utile
+OG_MIN_MARGIN = 32
+OG_BRAND_LOGO_SIZE = 22
+OG_BRAND_LOGO_OPACITY = 0.30
+OG_BRAND_LOGO_MARGIN = 20
 
 APP_DIR = Path(__file__).resolve().parent
 BACKEND_DIR = APP_DIR.parent
@@ -97,15 +98,18 @@ def composite_og_canvas(
     bg_rgb: Tuple[int, int, int] = (243, 237, 228),
     logo_path: Optional[Path] = None,
 ) -> bytes:
-    """Compose la capture recadrée sur un canvas 1200×630."""
+    """Compose la capture recadrée sur un canvas 1200×630 (V2 produit)."""
     card = card_image.convert("RGBA")
-    target_w = OG_CARD_TARGET_WIDTH
-    scale = target_w / max(card.width, 1)
-    target_h = int(card.height * scale)
-    if target_h > OG_CARD_MAX_HEIGHT:
-        scale = OG_CARD_MAX_HEIGHT / max(card.height, 1)
-        target_w = int(card.width * scale)
-        target_h = OG_CARD_MAX_HEIGHT
+    max_w = min(OG_CARD_TARGET_WIDTH, OG_WIDTH - 2 * OG_MIN_MARGIN)
+    max_h = OG_HEIGHT - 2 * OG_MIN_MARGIN
+    # Priorité largeur ~72 %, puis contrainte hauteur si besoin
+    scale = max_w / max(card.width, 1)
+    target_w = max(1, int(card.width * scale))
+    target_h = max(1, int(card.height * scale))
+    if target_h > max_h:
+        scale = max_h / max(card.height, 1)
+        target_w = max(1, int(card.width * scale))
+        target_h = max_h
     card = card.resize((target_w, target_h), Image.LANCZOS)
 
     canvas = Image.new("RGB", (OG_WIDTH, OG_HEIGHT), bg_rgb)
