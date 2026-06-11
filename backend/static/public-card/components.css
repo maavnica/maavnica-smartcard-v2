@@ -2364,3 +2364,58 @@
       }
     }
 
+    /* ==================================================================
+       CORRECTIF GLOBAL LISIBILITÉ FORMULAIRES — 2026-06
+       Source unique pour TOUS les thèmes (actuels et futurs) : les champs
+       partagés .quote-input / .feedback-input (contact, devis, RDV,
+       réservation, démo, modales) sont rendus sur fond blanc/crème par
+       les thèmes, mais héritaient d'une couleur de texte claire (#e5e7eb)
+       issue de l'ancien design sombre → texte et placeholders illisibles.
+       On ne touche ni aux fonds, ni aux bordures, ni aux espacements,
+       ni aux animations, ni aux styles de focus existants : uniquement
+       la couleur du texte saisi et des placeholders.
+       Scopé sur body[data-theme] non vide : tout thème injecté (SSR/JS)
+       hérite automatiquement du correctif. ================================ */
+
+    body[data-theme]:not([data-theme=""]) input.quote-input,
+    body[data-theme]:not([data-theme=""]) textarea.quote-input,
+    body[data-theme]:not([data-theme=""]) select.quote-input,
+    body[data-theme]:not([data-theme=""]) .quote-input,
+    body[data-theme]:not([data-theme=""]) .feedback-input {
+      color: #444444;
+      -webkit-text-fill-color: #444444;
+      caret-color: #444444;
+    }
+
+    body[data-theme]:not([data-theme=""]) .quote-input::placeholder,
+    body[data-theme]:not([data-theme=""]) .feedback-input::placeholder {
+      color: #7c7c7c;
+      -webkit-text-fill-color: #7c7c7c;
+      opacity: 1;
+    }
+
+    /* Focus : le texte reste sombre (anneau/bordure de focus inchangés) */
+    body[data-theme]:not([data-theme=""]) .quote-input:focus,
+    body[data-theme]:not([data-theme=""]) .feedback-input:focus {
+      color: #444444;
+      -webkit-text-fill-color: #444444;
+    }
+
+    /* Champs désactivés : éviter le rendu délavé iOS/Android */
+    body[data-theme]:not([data-theme=""]) .quote-input:disabled,
+    body[data-theme]:not([data-theme=""]) .feedback-input:disabled {
+      color: #444444;
+      -webkit-text-fill-color: #444444;
+      opacity: 1;
+    }
+
+    /* Autofill navigateur (Chrome/Safari/WebView mobiles) */
+    body[data-theme]:not([data-theme=""]) .quote-input:-webkit-autofill,
+    body[data-theme]:not([data-theme=""]) .quote-input:-webkit-autofill:hover,
+    body[data-theme]:not([data-theme=""]) .quote-input:-webkit-autofill:focus,
+    body[data-theme]:not([data-theme=""]) .feedback-input:-webkit-autofill,
+    body[data-theme]:not([data-theme=""]) .feedback-input:-webkit-autofill:focus {
+      -webkit-text-fill-color: #444444;
+      caret-color: #444444;
+    }
+
