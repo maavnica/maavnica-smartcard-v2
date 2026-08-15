@@ -168,46 +168,211 @@
       height: auto;
     }
 
-    /* ——— S1 Hero ——— */
+    /* ——— Header + S1 Hero ——— */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246, 244, 240, 0.9);
+      border-bottom: 1px solid rgba(232, 227, 220, 0.78);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .site-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .site-brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(30, 74, 86, 0.08));
+    }
+
+    .site-brand strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.28rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .site-brand-text {
+      display: block;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 3vw, 32px);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .site-nav a {
+      transition: color 0.18s ease;
+    }
+
+    .site-nav a:hover {
+      color: var(--primary);
+    }
+
+    .site-header-cta {
+      padding: 11px 17px;
+      border: 1px solid rgba(30, 74, 86, 0.22);
+      border-radius: 999px;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .site-header-cta:hover {
+      background: rgba(253, 251, 248, 0.82);
+      border-color: rgba(30, 74, 86, 0.45);
+      transform: translateY(-1px);
+    }
+
     .hero {
-      padding: clamp(40px, 7vw, 64px) 0 clamp(32px, 5vw, 48px);
+      position: relative;
+      overflow: hidden;
+      padding: clamp(34px, 5.2vw, 46px) 0 clamp(40px, 6.4vw, 68px);
       background:
-        radial-gradient(ellipse 100% 75% at 50% -15%, rgba(255, 250, 245, 0.95), transparent 68%),
-        var(--bg);
+        radial-gradient(ellipse 64% 72% at 83% 43%, rgba(176, 152, 114, 0.13), transparent 66%),
+        radial-gradient(ellipse 82% 72% at 8% 2%, rgba(253, 251, 248, 0.96), transparent 72%),
+        linear-gradient(135deg, #f8f5ee 0%, var(--bg) 47%, #efe9df 100%);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      border-radius: 999px;
+    }
+
+    .hero::before {
+      width: clamp(220px, 31vw, 430px);
+      height: clamp(220px, 31vw, 430px);
+      right: max(-90px, -5vw);
+      top: 12%;
+      border: 1px solid rgba(176, 152, 114, 0.2);
+      opacity: 0.72;
+    }
+
+    .hero::after {
+      width: 150px;
+      height: 1px;
+      left: clamp(18px, 7vw, 92px);
+      bottom: clamp(26px, 4vw, 46px);
+      background: linear-gradient(90deg, rgba(176, 152, 114, 0), rgba(176, 152, 114, 0.55), rgba(176, 152, 114, 0));
+    }
+
+    .hero .container {
+      max-width: 1200px;
     }
 
     .hero-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(28px, 5vw, 48px);
+      grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+      grid-template-areas:
+        "copy visual"
+        "actions visual";
+      gap: 24px clamp(32px, 5vw, 64px);
       align-items: center;
     }
 
-    @media (max-width: 860px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-visual { order: -1; max-width: 320px; margin: 0 auto; }
+    .hero-copy {
+      grid-area: copy;
+      padding-top: 6px;
+      animation: heroReveal 0.55s ease-out both;
     }
 
-    .hero-brand {
-      display: flex;
+    .hero-kicker {
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .hero-brand img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .hero-brand span {
-      font-size: 13px;
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.56;
+    }
+
+    .hero-copy .display-title {
+      max-width: 16.8ch;
+      font-size: clamp(2.55rem, 6vw, 4.45rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy .display-sub {
+      max-width: 43ch;
+      margin-top: 20px;
+      font-size: clamp(1.03rem, 1.55vw, 1.18rem);
+      color: #45515e;
+    }
+
+    .hero-actions {
+      grid-area: actions;
+      align-self: start;
+      animation: heroReveal 0.55s ease-out 0.08s both;
+    }
+
+    .hero-actions .btn-row {
+      margin-top: 6px;
+    }
+
+    .hero .btn {
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .hero .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero .btn-primary {
+      box-shadow: 0 18px 36px rgba(30, 74, 86, 0.17);
+    }
+
+    .hero .btn-primary:hover {
+      box-shadow: 0 22px 42px rgba(30, 74, 86, 0.22);
     }
 
     .hero-context {
@@ -218,136 +383,580 @@
     }
 
     .hero-visual {
-      max-width: 360px;
-      margin-left: auto;
+      grid-area: visual;
+      justify-self: end;
+      width: min(100%, 470px);
+      animation: heroCardReveal 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
     }
 
-    @media (max-width: 860px) {
-      .hero-visual { margin-left: auto; margin-right: auto; }
-    }
-
-    /* ——— S2 Proof ——— */
-    .proof-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(24px, 4vw, 40px);
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      .proof-grid { grid-template-columns: 1fr; }
-      .proof-visual { max-width: 300px; margin: 0 auto; }
-    }
-
-    .proof-scene {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 20px;
-      padding-left: 16px;
-      border-left: 2px solid var(--accent-line);
-    }
-
-    .proof-pillars {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-    }
-
-    .proof-pillars li {
-      font-size: 15px;
-      color: var(--text);
-      padding-left: 18px;
+    .hero-device {
       position: relative;
+      isolation: isolate;
+      padding: clamp(7px, 1vw, 11px);
+      border-radius: 38px;
+      background:
+        radial-gradient(ellipse 76% 68% at 48% 48%, rgba(253, 251, 248, 0.44), rgba(253, 251, 248, 0.11) 48%, rgba(253, 251, 248, 0) 72%),
+        radial-gradient(ellipse 82% 44% at 50% 86%, rgba(30, 74, 86, 0.12), rgba(30, 74, 86, 0) 68%);
+      box-shadow:
+        0 32px 76px rgba(26, 35, 50, 0.08);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .proof-pillars li::before {
+    .hero-device::before {
       content: "";
       position: absolute;
-      left: 0;
-      top: 0.55em;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+      z-index: -1;
+      inset: 4% 13% -3%;
+      border-radius: 48px;
+      background:
+        radial-gradient(ellipse 72% 58% at 50% 42%, rgba(253, 251, 248, 0.62), transparent 72%),
+        radial-gradient(ellipse 88% 42% at 54% 94%, rgba(30, 74, 86, 0.16), transparent 72%);
+      filter: blur(18px);
+      transform: translate(5%, 1%);
+      pointer-events: none;
+    }
+
+    .hero-device::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      right: 8%;
+      top: 10%;
+      width: 46%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(176, 152, 114, 0), rgba(176, 152, 114, 0.44));
+      transform: rotate(-18deg);
+      opacity: 0.72;
+      pointer-events: none;
+    }
+
+    .hero-device:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 38px 86px rgba(26, 35, 50, 0.1);
+    }
+
+    .hero-device .card-preview {
+      position: relative;
+      z-index: 1;
+      max-width: 374px;
+      margin: 0 auto;
+      border-radius: 29px;
+      border-color: rgba(176, 152, 114, 0.12);
+      box-shadow:
+        0 34px 76px rgba(26, 35, 50, 0.2),
+        0 12px 24px rgba(30, 74, 86, 0.1);
+      transition: transform 0.22s ease;
+    }
+
+    .hero-device:hover .card-preview {
+      transform: translateY(-2px) scale(1.012);
+    }
+
+    .hero-device img {
+      width: 100%;
+      max-height: min(72vh, 680px);
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    @keyframes heroReveal {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroCardReveal {
+      from { opacity: 0; transform: translateY(18px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 900px) {
+      .site-header-inner {
+        min-height: 68px;
+      }
+
+      .site-nav a:not(.site-header-cta) {
+        display: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "copy"
+          "visual"
+          "actions";
+        gap: 18px;
+      }
+
+      .hero-copy {
+        text-align: center;
+      }
+
+      .hero-kicker {
+        margin-bottom: 13px;
+      }
+
+      .hero-kicker::before {
+        width: 22px;
+      }
+
+      .hero-copy .display-title,
+      .hero-copy .display-sub,
+      .hero-context {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-copy .display-title {
+        max-width: 10.6ch;
+      }
+
+      .hero-visual {
+        justify-self: center;
+        width: min(100%, 360px);
+      }
+
+      .hero-device {
+        padding: 10px;
+        border-radius: 28px;
+      }
+
+      .hero-device .card-preview {
+        max-width: 214px;
+        border-radius: 22px;
+      }
+
+      .hero-device img {
+        max-height: 300px;
+      }
+
+      .hero-actions {
+        text-align: center;
+      }
+
+      .hero-actions .btn-row {
+        justify-content: center;
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .site-brand img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .site-brand strong {
+        font-size: 1.15rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 9px;
+      }
+
+      .site-header-cta {
+        padding: 9px 12px;
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 24px 0 34px;
+      }
+
+      .hero-copy .display-title {
+        font-size: clamp(2.35rem, 12vw, 3.25rem);
+        max-width: 9.5ch;
+      }
+
+      .hero-copy .display-sub {
+        margin-top: 14px;
+        font-size: 1rem;
+      }
+
+      .hero-visual {
+        width: min(100%, 292px);
+      }
+
+      .hero-device .card-preview {
+        max-width: 188px;
+      }
+
+      .hero-device img {
+        max-height: 258px;
+      }
+
+      .hero-actions .btn-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero {
+        padding: 20px 0 28px;
+      }
+
+      .hero-grid {
+        gap: 14px;
+      }
+
+      .hero-kicker {
+        margin-bottom: 10px;
+      }
+
+      .hero-copy .display-sub {
+        margin-top: 12px;
+      }
+
+      .hero-visual {
+        width: min(100%, 264px);
+      }
+
+      .hero-device {
+        padding: 8px;
+      }
+
+      .hero-device .card-preview {
+        max-width: 166px;
+      }
+
+      .hero-device img {
+        max-height: 224px;
+      }
+
+      .hero-context {
+        margin-top: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-copy,
+      .hero-actions,
+      .hero-visual {
+        animation: none;
+      }
+      .site-nav a,
+      .site-header-cta,
+      .hero .btn,
+      .hero-device,
+      .hero-device .card-preview {
+        transition: none;
+      }
+      .site-header-cta:hover,
+      .hero .btn:hover,
+      .hero-device:hover,
+      .hero-device:hover .card-preview {
+        transform: none;
+      }
+    }
+
+    /* ——— S2+ Homepage éditoriale ——— */
+    .section--warm {
+      background: var(--bg);
+    }
+
+    .section--deep {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .section--deep .eyebrow,
+    .section--deep .section-sub,
+    .section--deep .lead {
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .section--deep .section-title,
+    .section--deep h3 {
+      color: #fff;
+    }
+
+    .section-intro {
+      max-width: 720px;
+      margin-bottom: clamp(30px, 5vw, 46px);
+    }
+
+    .section-intro--center {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .section-intro--center .section-sub {
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .text-link {
       display: inline-block;
       margin-top: 18px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--primary);
-      border-bottom: 1px solid var(--accent-line);
-      padding-bottom: 2px;
-    }
-    .text-link:hover { color: var(--primary-hover); }
-
-    /* ——— S3 Projection ——— */
-    .metier-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 960px) {
-      .metier-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .metier-grid { grid-template-columns: 1fr; }
-    }
-
-    .metier-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .metier-card:hover {
-      box-shadow: var(--shadow);
-      border-color: rgba(176, 152, 114, 0.35);
-    }
-
-    .metier-card .card-preview {
-      border-radius: 14px;
-      max-height: 280px;
-      overflow: hidden;
-    }
-
-    .metier-card .card-preview img {
-      object-fit: cover;
-      object-position: top;
-    }
-
-    .metier-tag {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .metier-hook {
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: var(--primary);
+      background-image: linear-gradient(var(--accent), var(--accent));
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 100% 1px;
+      padding-bottom: 3px;
+      transition: color 0.18s ease, background-size 0.18s ease;
+    }
+
+    .text-link:hover {
+      color: var(--primary-hover);
+      background-size: 100% 2px;
+    }
+
+    .benefits-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(30px, 6vw, 70px);
+      align-items: center;
+    }
+
+    .benefits-note {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      font-weight: 500;
+      line-height: 1.32;
+      color: var(--primary);
+      padding: 28px 0 0 22px;
+      border-left: 1px solid var(--accent-line);
+    }
+
+    .benefits-list {
+      list-style: none;
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .benefit-item {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 18px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .benefit-number {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--accent-line);
       color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+    }
+
+    .benefit-item h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.28rem, 2.5vw, 1.55rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .benefit-item p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 48ch;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+      gap: clamp(28px, 5vw, 60px);
+      align-items: center;
+    }
+
+    .workflow-visual {
+      position: relative;
+      justify-self: center;
+      width: min(100%, 330px);
+    }
+
+    .workflow-visual::before {
+      content: "";
+      position: absolute;
+      inset: 10% -18% 4% 18%;
+      z-index: 0;
+      border-radius: 42px;
+      background: rgba(176, 152, 114, 0.12);
+      filter: blur(22px);
+    }
+
+    .workflow-visual .card-preview {
+      position: relative;
+      z-index: 1;
+      border-radius: 30px;
+      box-shadow: 0 30px 72px rgba(26, 35, 50, 0.13);
+    }
+
+    .workflow-steps {
+      list-style: none;
+      display: grid;
+      gap: 18px;
+      counter-reset: workflow;
+    }
+
+    .workflow-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .workflow-step:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .workflow-step::before {
+      counter-increment: workflow;
+      content: counter(workflow);
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--primary);
+      background: rgba(30, 74, 86, 0.07);
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+    }
+
+    .workflow-step h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.22rem, 2.2vw, 1.48rem);
+      font-weight: 600;
+      line-height: 1.18;
+      margin-bottom: 6px;
+    }
+
+    .workflow-step p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .trust-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: clamp(30px, 6vw, 66px);
+      align-items: end;
+    }
+
+    .trust-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4.2vw, 3rem);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #fff;
+      max-width: 15ch;
+    }
+
+    .trust-copy {
+      padding-top: 26px;
+      border-top: 1px solid rgba(176, 152, 114, 0.42);
+    }
+
+    .trust-copy p {
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .trust-copy p + p {
+      margin-top: 14px;
+    }
+
+    .metier-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(18px, 3vw, 28px);
+    }
+
+    .metier-card {
+      background: var(--surface);
+      border: 1px solid rgba(232, 227, 220, 0.82);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(26, 35, 50, 0.055);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .metier-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 26px 62px rgba(26, 35, 50, 0.09);
+      border-color: rgba(176, 152, 114, 0.38);
+    }
+
+    .metier-visual {
+      background: #eee8de;
+      padding: clamp(14px, 2.5vw, 22px);
+    }
+
+    .metier-card .card-preview {
+      border-radius: 18px;
+      max-height: 430px;
+      box-shadow: 0 16px 34px rgba(26, 35, 50, 0.08);
+    }
+
+    .metier-card .card-preview img {
+      width: 100%;
+      height: 430px;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .metier-body {
+      padding: 22px;
+    }
+
+    .metier-hook {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .metier-tag {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+      font-weight: 600;
+      line-height: 1.16;
+      color: var(--text);
+      margin-bottom: 10px;
     }
 
     .metier-text {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--muted);
       line-height: 1.5;
-      flex: 1;
+      margin-bottom: 18px;
     }
 
     .metier-link {
@@ -356,172 +965,43 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--primary);
+      background-image: linear-gradient(var(--accent), var(--accent));
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 100% 1px;
+      padding-bottom: 3px;
+      transition: color 0.18s ease, background-size 0.18s ease;
     }
 
-    /* ——— S4 Geste ——— */
-    .steps {
-      list-style: none;
-      display: grid;
-      gap: 20px;
-      max-width: 640px;
+    .metier-link:hover {
+      color: var(--primary-hover);
+      background-size: 100% 2px;
     }
 
-    .steps li {
-      padding: 20px 22px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .steps strong {
-      display: block;
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .steps span {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .steps-closing {
-      margin-top: 24px;
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 52ch;
-    }
-
-    /* ——— S5 Regard ——— */
-    .pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .pillars-grid { grid-template-columns: 1fr; }
-    }
-
-    .pillar {
-      padding: 24px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .pillar h3 {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .pillar p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .pillars-closing {
-      margin-top: 28px;
-      font-size: 15px;
-      color: var(--text);
-      max-width: 52ch;
-      padding-top: 20px;
-      border-top: 1px solid var(--accent-line);
-    }
-
-    /* ——— S6 Recommandation ——— */
-    .transform-block {
-      max-width: 680px;
-    }
-
-    .transform-block .lead { margin-bottom: 20px; }
-
-    .transform-quote {
-      font-family: var(--font-display);
-      font-size: clamp(1.2rem, 2.8vw, 1.45rem);
-      font-style: italic;
-      color: var(--primary);
-      line-height: 1.45;
-      margin: 24px 0;
-      padding: 20px 0;
-      border-top: 1px solid var(--accent-line);
-      border-bottom: 1px solid var(--accent-line);
-    }
-
-    .transform-list {
-      list-style: none;
-      display: grid;
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .transform-list li {
-      font-size: 15px;
-      color: var(--muted);
-      padding-left: 16px;
-      border-left: 2px solid rgba(30, 74, 86, 0.2);
-      line-height: 1.5;
-    }
-
-    .transform-list strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .transform-note {
-      margin-top: 24px;
-      font-size: 14px;
-      color: var(--muted-soft);
-      font-style: italic;
-    }
-
-    /* ——— S7 Crédibilité ——— */
-    .cred-grid {
+    .offers-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(28px, 4vw, 40px);
-      align-items: start;
+      gap: clamp(18px, 3vw, 28px);
+      align-items: stretch;
     }
 
-    @media (max-width: 768px) {
-      .cred-grid { grid-template-columns: 1fr; }
-    }
-
-    .cred-pillars {
-      list-style: none;
-      display: grid;
-      gap: 18px;
-    }
-
-    .cred-pillars li h3 {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .cred-pillars li p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .founder-block {
-      padding: 24px;
+    .offer-card {
+      position: relative;
+      padding: clamp(26px, 4vw, 38px);
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid rgba(232, 227, 220, 0.9);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 52px rgba(26, 35, 50, 0.055);
     }
 
-    .founder-block h3 {
+    .offer-card--business {
+      background: linear-gradient(180deg, #fffdf9 0%, #f8f4ed 100%);
+      border-color: rgba(176, 152, 114, 0.36);
+    }
+
+    .offer-level {
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.12em;
@@ -530,64 +1010,28 @@
       margin-bottom: 12px;
     }
 
-    .founder-block p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .founder-block p + p { margin-top: 12px; }
-
-    /* ——— S8 Offres ——— */
-    .offers-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 768px) {
-      .offers-grid { grid-template-columns: 1fr; }
-    }
-
-    .offer-card {
-      padding: 28px 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .offer-level {
-      font-size: 11px;
+    .offer-name {
+      font-family: var(--font-display);
+      font-size: clamp(1.7rem, 3.6vw, 2.2rem);
       font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
+      line-height: 1.06;
       margin-bottom: 8px;
     }
 
-    .offer-name {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
     .offer-tagline {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--muted);
-      margin-bottom: 16px;
-      font-style: italic;
+      margin-bottom: 22px;
+      max-width: 34ch;
     }
 
     .offer-price {
       font-family: var(--font-display);
-      font-size: 2rem;
+      font-size: clamp(2.2rem, 5vw, 3rem);
       font-weight: 600;
+      line-height: 1;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .offer-price span {
@@ -600,72 +1044,69 @@
     .offer-legal {
       font-size: 11px;
       color: var(--muted-soft);
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     .offer-features {
       list-style: none;
       flex: 1;
       display: grid;
-      gap: 10px;
-      margin-bottom: 22px;
+      gap: 12px;
+      margin-bottom: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--accent-line);
     }
 
     .offer-features li {
       font-size: 14px;
       color: var(--muted);
       line-height: 1.45;
-      padding-left: 14px;
+      padding-left: 18px;
       position: relative;
     }
 
     .offer-features li::before {
-      content: "—";
+      content: "";
       position: absolute;
       left: 0;
-      color: var(--accent);
+      top: 0.58em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
     }
 
-    .offer-card .btn { width: 100%; }
+    .offer-card .btn {
+      width: 100%;
+    }
 
     .offers-note {
-      margin-top: 20px;
+      margin: 24px auto 0;
       text-align: center;
       font-size: 14px;
       color: var(--muted);
-      max-width: 56ch;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 58ch;
     }
 
-    .offers-visual {
-      max-width: 200px;
-      margin: 0 auto 32px;
-      opacity: 0.92;
-    }
-
-    /* ——— S9 Réassurance ——— */
     .faq-list {
-      max-width: 680px;
+      max-width: 840px;
+      margin: 0 auto;
       display: grid;
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--surface);
+      gap: 12px;
     }
 
     .faq-item {
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--border);
+      padding: 22px 24px;
+      border: 1px solid rgba(232, 227, 220, 0.9);
+      border-radius: 18px;
+      background: rgba(253, 251, 248, 0.78);
     }
-
-    .faq-item:last-child { border-bottom: none; }
 
     .faq-item h4 {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.18rem;
       font-weight: 600;
+      line-height: 1.2;
       margin-bottom: 8px;
     }
 
@@ -675,33 +1116,243 @@
       line-height: 1.55;
     }
 
-    /* ——— S10 Invitation ——— */
     .invitation {
       text-align: center;
-      padding: clamp(56px, 10vw, 80px) 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(253, 251, 248, 0.9), transparent),
-        var(--bg);
+      padding: clamp(62px, 10vw, 92px) 0;
+      background: var(--primary);
+      color: #fff;
     }
 
     .invitation .section-title,
-    .invitation .section-sub {
+    .invitation .section-sub,
+    .invitation .lead {
       margin-left: auto;
       margin-right: auto;
+      color: #fff;
+    }
+
+    .invitation .section-title {
+      max-width: 13ch;
+      font-size: clamp(2.1rem, 5.8vw, 3.65rem);
+    }
+
+    .invitation .section-sub {
+      color: rgba(255, 255, 255, 0.76);
     }
 
     .invitation .lead {
-      margin: 20px auto 0;
-      text-align: center;
-    }
-
-    .invitation-visual {
-      max-width: 220px;
-      margin: 28px auto 0;
+      margin-top: 18px;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 46ch;
     }
 
     .invitation .btn-row {
       justify-content: center;
+    }
+
+    .invitation .btn-primary {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .invitation .btn-primary:hover {
+      background: #f6f4f0;
+    }
+
+    .invitation .btn-secondary {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.42);
+    }
+
+    .invitation .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.72);
+    }
+
+    .soft-reveal {
+      animation: sectionReveal 0.48s ease-out both;
+    }
+
+    @keyframes sectionReveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .benefits-layout,
+      .workflow,
+      .trust-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .benefits-note {
+        padding-top: 0;
+      }
+
+      .workflow-visual {
+        width: min(100%, 300px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: clamp(42px, 12vw, 58px) 0;
+      }
+
+      .metier-card .card-preview img {
+        height: min(72vw, 360px);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .metier-grid,
+      .offers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .section-intro {
+        margin-bottom: 26px;
+      }
+
+      #projection {
+        padding-top: 44px;
+        padding-bottom: 46px;
+      }
+
+      .benefits-note {
+        font-size: 1.28rem;
+        padding-left: 16px;
+      }
+
+      .benefit-item {
+        grid-template-columns: 42px 1fr;
+        gap: 12px;
+        padding: 20px 0;
+      }
+
+      .benefit-number,
+      .workflow-step::before {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+      }
+
+      .workflow-step {
+        grid-template-columns: 42px 1fr;
+        gap: 12px;
+        padding: 18px 0;
+      }
+
+      .workflow-visual {
+        width: min(100%, 252px);
+      }
+
+      .trust-quote {
+        max-width: 12ch;
+      }
+
+      .metier-grid {
+        gap: 16px;
+      }
+
+      .metier-visual {
+        padding: 10px;
+      }
+
+      .metier-card,
+      .offer-card {
+        border-radius: 20px;
+      }
+
+      .metier-card .card-preview {
+        border-radius: 16px;
+      }
+
+      .metier-card .card-preview img {
+        height: 242px;
+      }
+
+      .metier-body {
+        padding: 16px;
+      }
+
+      .metier-hook {
+        margin-bottom: 6px;
+      }
+
+      .metier-tag {
+        margin-bottom: 8px;
+      }
+
+      .metier-text {
+        margin-bottom: 14px;
+      }
+
+      .faq-item {
+        padding: 18px;
+      }
+
+      .offer-card {
+        padding: 24px 20px;
+      }
+
+      .invitation .btn-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .invitation .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .benefit-item p,
+      .workflow-step p,
+      .metier-text,
+      .offer-features li,
+      .faq-item p {
+        font-size: 13px;
+      }
+
+      #projection {
+        padding-top: 40px;
+        padding-bottom: 42px;
+      }
+
+      .metier-grid {
+        gap: 14px;
+      }
+
+      .metier-visual {
+        padding: 8px;
+      }
+
+      .metier-body {
+        padding: 14px;
+      }
+
+      .metier-card .card-preview img {
+        height: 218px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .soft-reveal {
+        animation: none;
+      }
+
+      .text-link,
+      .metier-card,
+      .metier-link {
+        transition: none;
+      }
+
+      .metier-card:hover {
+        transform: none;
+      }
     }
 
     /* ——— S11 Footer ——— */
@@ -761,244 +1412,238 @@
 </head>
 <body>
 
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <a class="site-brand" href="#hero" aria-label="SmartCard Maavnica">
+        <img src="/static/logo-palmier.png" alt="" width="38" height="38" decoding="async" role="presentation" />
+        <span class="site-brand-text">
+          <strong>Maavnica</strong>
+          <span class="site-brand-subtitle">SmartCard</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Navigation principale">
+        <a href="#geste">Le geste</a>
+        <a href="#credibilite">Confiance</a>
+        <a href="#offres">Offres</a>
+        <a class="site-header-cta" href="/static/recontact-smartcard.html">Être recontacté</a>
+      </nav>
+    </div>
+  </header>
+
   <!-- S1 — Hero — Promesse & révélation -->
-  <header class="hero" id="hero" data-section="s1-hero">
+  <section class="hero" id="hero" data-section="s1-hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <div class="hero-brand">
-          <img src="/static/logo-palmier.png" alt="" width="32" height="32" decoding="async" role="presentation" />
-          <span>Maavnica</span>
-        </div>
+        <p class="hero-kicker">SmartCard Maavnica</p>
         <h1 class="display-title">La carte professionnelle de confiance</h1>
         <p class="display-sub">
-          SmartCard transforme naturellement la satisfaction de vos clients en recommandations — avec élégance, simplicité et crédibilité.
+          Après une rencontre, SmartCard prolonge la relation&nbsp;: votre client peut vous retrouver, vous contacter et consulter ce qui inspire confiance.
         </p>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-device" aria-label="Aperçu du profil SmartCard Maavnica">
+          <div class="card-preview">
+            <img
+              src="/static/landing-v2/hero-maavnica.png"
+              alt="Profil SmartCard Maavnica d'Arnaud Huard"
+              width="360"
+              height="720"
+              loading="eager"
+              decoding="async" />
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions">
         <div class="btn-row">
           <a href="/static/contact-smartcard.html?offre=solo" class="btn btn-primary" data-cta="hero-primary">Découvrir votre carte</a>
           <a href="/static/recontact-smartcard.html" class="btn btn-secondary" data-cta="hero-secondary">Être recontacté</a>
         </div>
         <p class="hero-context">Pour artisans, praticiens, agents et dirigeants exigeants.</p>
       </div>
-      <div class="hero-visual">
-        <div class="card-preview">
-          <img
-            src="/static/landing-v2/hero-maavnica.png"
-            alt="SmartCard Maavnica — carte professionnelle de confiance"
-            width="360"
-            height="720"
-            loading="eager"
-            decoding="async" />
-        </div>
-      </div>
     </div>
-  </header>
+  </section>
 
-  <!-- S2 — Preuve immédiate -->
-  <section class="section section--alt" id="preuve" data-section="s2-preuve">
-    <div class="container proof-grid">
-      <div class="proof-visual">
+  <!-- S2 — Bénéfices -->
+  <section class="section section--alt soft-reveal" id="preuve" data-section="s2-benefices">
+    <div class="container benefits-layout">
+      <div>
+        <p class="eyebrow">Bénéfices</p>
+        <h2 class="section-title">Une présence claire, même après la rencontre</h2>
+        <p class="benefits-note">SmartCard rassemble l'essentiel de votre relation professionnelle&nbsp;: être reconnu, rassurer, rester facile à retrouver.</p>
+      </div>
+      <ol class="benefits-list">
+        <li class="benefit-item">
+          <span class="benefit-number">1</span>
+          <div>
+            <h3>Soyez immédiatement identifiable</h3>
+            <p>Votre activité, votre identité et vos coordonnées restent accessibles simplement.</p>
+          </div>
+        </li>
+        <li class="benefit-item">
+          <span class="benefit-number">2</span>
+          <div>
+            <h3>Inspirez confiance</h3>
+            <p>Votre présentation, vos avis disponibles et votre image professionnelle rassurent.</p>
+          </div>
+        </li>
+        <li class="benefit-item">
+          <span class="benefit-number">3</span>
+          <div>
+            <h3>Restez facile à contacter et à recommander</h3>
+            <p>La relation peut continuer après la rencontre, sans relance agressive.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- S3 — Comment ça marche -->
+  <section class="section section--warm soft-reveal" id="geste" data-section="s3-geste">
+    <div class="container workflow">
+      <div class="workflow-visual" aria-label="Aperçu d'un profil SmartCard consulté par un client">
         <div class="card-preview">
           <img
             src="/static/landing-v2/hero-maavnica.png"
-            alt="Aperçu d'une carte SmartCard premium"
+            alt="Profil SmartCard Maavnica avec coordonnées, présentation et éléments de confiance"
             width="360"
             loading="lazy"
             decoding="async" />
         </div>
       </div>
-      <div class="proof-copy">
-        <p class="eyebrow">Preuve</p>
-        <h2 class="section-title">Voici à quoi ressemble la confiance</h2>
-        <p class="section-sub">Une carte professionnelle que vos clients reçoivent, gardent — et peuvent recommander en toute confiance.</p>
-        <p class="proof-scene">
-          Vous venez de terminer une prestation. Votre client est satisfait. Vous lui envoyez votre carte — un geste simple, naturel, digne de la relation.
-        </p>
-        <ul class="proof-pillars">
-          <li>Votre identité professionnelle</li>
-          <li>La confiance de vos avis</li>
-          <li>Le geste de recommandation</li>
-        </ul>
-        <a href="#projection" class="text-link">Voir les cartes par métier</a>
+      <div>
+        <p class="eyebrow">Comment ça marche</p>
+        <h2 class="section-title">Un geste simple, lisible en quelques secondes</h2>
+        <p class="section-sub">Pas besoin d'expliquer un outil. Votre client ouvre une présentation claire et retrouve ce dont il a besoin.</p>
+        <ol class="workflow-steps">
+          <li class="workflow-step">
+            <div>
+              <h3>Vous partagez votre SmartCard</h3>
+              <p>Par message, après une intervention, une séance, une visite ou un rendez-vous.</p>
+            </div>
+          </li>
+          <li class="workflow-step">
+            <div>
+              <h3>Votre client consulte votre profil</h3>
+              <p>Il retrouve votre identité, votre activité, vos coordonnées et votre présentation.</p>
+            </div>
+          </li>
+          <li class="workflow-step">
+            <div>
+              <h3>La relation continue</h3>
+              <p>Il peut vous contacter, consulter vos éléments de confiance et vous recommander lorsque cette fonction est disponible.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
 
-  <!-- S3 — Projection métier -->
-  <section class="section" id="projection" data-section="s3-projection">
+  <!-- S4 — Preuve & confiance -->
+  <section class="section section--deep soft-reveal" id="credibilite" data-section="s4-credibilite">
+    <div class="container trust-panel">
+      <div>
+        <p class="eyebrow">Confiance</p>
+        <blockquote class="trust-quote">SmartCard ne crée pas la confiance. Elle la prolonge.</blockquote>
+      </div>
+      <div class="trust-copy">
+        <p>La preuve vient de ce que votre client a déjà vécu&nbsp;: votre prestation, votre posture, vos avis disponibles, votre manière d'être présenté.</p>
+        <p>SmartCard rassemble ces éléments dans une forme sobre et crédible. Pas de marketing bruyant. Pas de promesses creuses. Une carte professionnelle, pensée pour durer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 — Métiers -->
+  <section class="section section--alt soft-reveal" id="projection" data-section="s5-metiers">
     <div class="container">
-      <p class="eyebrow">Projection</p>
-      <h2 class="section-title">Chaque métier mérite une présentation à sa mesure</h2>
-      <p class="section-sub">Découvrez comment SmartCard s'adapte à votre univers — sans trahir votre exigence ni votre relation client.</p>
+      <div class="section-intro">
+        <p class="eyebrow">Métiers</p>
+        <h2 class="section-title">Chaque métier garde son registre</h2>
+        <p class="section-sub">Des cartes réelles, pensées pour rester proches de votre terrain, de votre ton et de votre relation client.</p>
+      </div>
       <div class="metier-grid">
         <article class="metier-card">
-          <div class="card-preview">
-            <img src="/static/landing-v2/demo-artisan.png" alt="Carte SmartCard — Artisan" loading="lazy" />
+          <div class="metier-visual">
+            <div class="card-preview">
+              <img src="/static/landing-v2/demo-artisan.png" alt="Carte SmartCard — Artisan" loading="lazy" />
+            </div>
           </div>
-          <p class="metier-hook">Artisan</p>
-          <h3 class="metier-tag">Restez présent après l'intervention</h3>
-          <p class="metier-text">Pour les professionnels de terrain qui vivent du bouche-à-oreille local. Votre carte rassure et permet à vos clients satisfaits de vous recommander — naturellement.</p>
-          <a href="/c/demo" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="artisan">Voir cette carte</a>
+          <div class="metier-body">
+            <p class="metier-hook">Artisan</p>
+            <h3 class="metier-tag">Restez présent après l'intervention</h3>
+            <p class="metier-text">Une carte claire pour être retrouvé et recommandé localement.</p>
+            <a href="/c/demo" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="artisan">Voir cette carte</a>
+          </div>
         </article>
         <article class="metier-card">
-          <div class="card-preview">
-            <img src="/static/landing-v2/demo-bienetre.png" alt="Carte SmartCard — Bien-être" loading="lazy" />
+          <div class="metier-visual">
+            <div class="card-preview">
+              <img src="/static/landing-v2/demo-bienetre.png" alt="Carte SmartCard — Bien-être" loading="lazy" />
+            </div>
           </div>
-          <p class="metier-hook">Bien-être</p>
-          <h3 class="metier-tag">Inspirez confiance dès le premier regard</h3>
-          <p class="metier-text">Pour les praticiens pour qui la relation est au cœur de la pratique. Une présentation sobre, humaine, qui respecte le registre de confiance.</p>
-          <a href="/c/demo2" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="bienetre">Voir cette carte</a>
+          <div class="metier-body">
+            <p class="metier-hook">Bien-être</p>
+            <h3 class="metier-tag">Inspirez confiance dès le premier regard</h3>
+            <p class="metier-text">Une présentation humaine, sobre, fidèle à la relation de soin.</p>
+            <a href="/c/demo2" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="bienetre">Voir cette carte</a>
+          </div>
         </article>
         <article class="metier-card">
-          <div class="card-preview">
-            <img src="/static/landing-v2/demo-immobilier.png" alt="Carte SmartCard — Immobilier" loading="lazy" />
+          <div class="metier-visual">
+            <div class="card-preview">
+              <img src="/static/landing-v2/demo-immobilier.png" alt="Carte SmartCard — Immobilier" loading="lazy" />
+            </div>
           </div>
-          <p class="metier-hook">Immobilier</p>
-          <h3 class="metier-tag">Prolongez la relation après chaque visite</h3>
-          <p class="metier-text">Pour les agents et professionnels de la mise en relation. Une carte claire, crédible, facile à transmettre à un proche ou un futur client.</p>
-          <a href="/c/demo3" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="immobilier">Voir cette carte</a>
+          <div class="metier-body">
+            <p class="metier-hook">Immobilier</p>
+            <h3 class="metier-tag">Prolongez la relation après chaque visite</h3>
+            <p class="metier-text">Une carte facile à transmettre à un proche ou un futur client.</p>
+            <a href="/c/demo3" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="immobilier">Voir cette carte</a>
+          </div>
         </article>
         <article class="metier-card">
-          <div class="card-preview">
-            <img src="/static/landing-v2/demo-maavnica.png" alt="Carte SmartCard — Dirigeant Maavnica" loading="lazy" />
+          <div class="metier-visual">
+            <div class="card-preview">
+              <img src="/static/landing-v2/demo-maavnica.png" alt="Carte SmartCard — Dirigeant" loading="lazy" />
+            </div>
           </div>
-          <p class="metier-hook">Dirigeant</p>
-          <h3 class="metier-tag">Une présentation à la hauteur de votre responsabilité</h3>
-          <p class="metier-text">Pour les dirigeants et professionnels exigeants. Un registre corporate, sobre et élégant — où la confiance prime sur la visibilité bruyante.</p>
-          <a href="/c/arnaud-huard" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="maavnica">Voir cette carte</a>
+          <div class="metier-body">
+            <p class="metier-hook">Dirigeant</p>
+            <h3 class="metier-tag">Une présence à la hauteur de votre responsabilité</h3>
+            <p class="metier-text">Un registre corporate, élégant, centré sur la confiance.</p>
+            <a href="/c/arnaud-huard" class="metier-link" target="_blank" rel="noopener noreferrer" data-demo="maavnica">Voir cette carte</a>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- S4 — Le geste relationnel -->
-  <section class="section section--alt" id="geste" data-section="s4-geste">
+  <!-- S6 — Offres -->
+  <section class="section section--warm soft-reveal" id="offres" data-section="s6-offres">
     <div class="container">
-      <p class="eyebrow">Le geste</p>
-      <h2 class="section-title">Après chaque prestation, un geste suffit</h2>
-      <p class="section-sub">Quand votre client est satisfait, c'est le moment naturel de prolonger la relation — avec simplicité et élégance.</p>
-      <ol class="steps">
-        <li>
-          <strong>Vous envoyez votre carte</strong>
-          <span>Un geste simple — par message, après une intervention, une séance ou une visite.</span>
-        </li>
-        <li>
-          <strong>Votre client la reçoit</strong>
-          <span>Une présentation claire, humaine, digne de la relation que vous venez d'avoir.</span>
-        </li>
-        <li>
-          <strong>La relation continue</strong>
-          <span>Un avis, un contact, une recommandation — selon ce que votre client ressent.</span>
-        </li>
-      </ol>
-      <p class="steps-closing">Pas de discours. Pas de relance agressive. Juste la prolongation naturelle d'une relation qui a bien fonctionné.</p>
-    </div>
-  </section>
-
-  <!-- S5 — Le regard client -->
-  <section class="section" id="regard-client" data-section="s5-regard">
-    <div class="container">
-      <p class="eyebrow">Le regard client</p>
-      <h2 class="section-title">Ce que voit votre client</h2>
-      <p class="section-sub">Il ne découvre pas un outil. Il découvre une présentation digne de confiance — claire, humaine, rassurante.</p>
-      <div class="pillars-grid">
-        <div class="pillar">
-          <h3>Clarté</h3>
-          <p>Votre nom, votre métier, votre zone — immédiatement lisibles. Aucune confusion.</p>
-        </div>
-        <div class="pillar">
-          <h3>Confiance</h3>
-          <p>Vos avis, votre présentation, votre sérieux — visibles avec retenue, sans sur-promesse.</p>
-        </div>
-        <div class="pillar">
-          <h3>Facilité</h3>
-          <p>Contacter, laisser un avis, recommander — en quelques gestes, sans contrainte.</p>
-        </div>
+      <div class="section-intro section-intro--center">
+        <p class="eyebrow">Offres</p>
+        <h2 class="section-title">Deux choix professionnels, selon votre usage</h2>
+        <p class="section-sub">Solo pose une présence claire et crédible. Business ajoute un parcours de recommandation pour les clients satisfaits.</p>
       </div>
-      <p class="pillars-closing">Vos clients ne se sentent jamais sollicités comme des leads. Ils se sentent respectés.</p>
-    </div>
-  </section>
-
-  <!-- S6 — Recommandation & bouche-à-oreille -->
-  <section class="section section--alt" id="recommandation" data-section="s6-recommandation">
-    <div class="container transform-block">
-      <p class="eyebrow">Recommandation</p>
-      <h2 class="section-title">Vos clients satisfaits deviennent vos meilleurs relais</h2>
-      <p class="section-sub">Le bouche-à-oreille est votre force. SmartCard lui donne simplement la forme qu'il mérite.</p>
-      <p class="lead">Vous faites confiance à votre métier. Vos clients aussi. Ce qui manque, ce n'est pas la satisfaction — c'est le geste qui permet à cette satisfaction de se transmettre.</p>
-      <blockquote class="transform-quote">SmartCard ne crée pas la confiance — elle la prolonge. Elle donne à vos clients quelque chose de clair à garder, à montrer, à transmettre.</blockquote>
-      <ul class="transform-list">
-        <li><strong>Recommander</strong> — un client satisfait peut vous recommander, avec une carte qu'il a fièrement reçue.</li>
-        <li><strong>Laisser un avis</strong> — au moment où la satisfaction est encore là.</li>
-        <li><strong>Consolider votre réputation</strong> — prestation après prestation.</li>
-      </ul>
-      <p class="transform-note">Selon votre activité, SmartCard accompagne votre présence professionnelle — ou active plus explicitement le parcours de recommandation.</p>
-    </div>
-  </section>
-
-  <!-- S7 — Crédibilité & visibilité -->
-  <section class="section" id="credibilite" data-section="s7-credibilite">
-    <div class="container cred-grid">
-      <div>
-        <p class="eyebrow">Crédibilité</p>
-        <h2 class="section-title">Votre réputation, au service de votre relation</h2>
-        <p class="section-sub">SmartCard ne remplace pas votre réputation — elle la rassemble, la rend accessible et la prolonge au-delà de la première prestation.</p>
-        <ul class="cred-pillars">
-          <li>
-            <h3>Avis &amp; crédibilité</h3>
-            <p>Vos avis Google, intégrés avec élégance — comme une preuve de confiance, pas comme un argument marketing.</p>
-          </li>
-          <li>
-            <h3>Présentation cohérente</h3>
-            <p>Votre activité, votre zone, votre image — réunies dans une présentation digne de vous.</p>
-          </li>
-          <li>
-            <h3>Visibilité locale, en complément</h3>
-            <p>Pour ceux qui vous cherchent près de chez eux, une présentation claire et cohérente. L'essentiel reste la relation directe avec vos clients.</p>
-          </li>
-        </ul>
-      </div>
-      <aside class="founder-block">
-        <h3>L'approche Maavnica</h3>
-        <p>SmartCard est éditée par Maavnica — fondée par Arnaud Huard — avec une conviction simple&nbsp;: la relation professionnelle mérite une forme à la hauteur de la confiance qu'elle porte.</p>
-        <p>Pas de marketing bruyant. Pas de promesses creuses. Une carte professionnelle, pensée pour durer.</p>
-      </aside>
-    </div>
-  </section>
-
-  <!-- S8 — Offres & accompagnement -->
-  <section class="section section--alt" id="offres" data-section="s8-offres">
-    <div class="container">
-      <div class="offers-visual card-preview">
-        <img src="/static/landing-v2/demo-maavnica.png" alt="" loading="lazy" role="presentation" />
-      </div>
-      <p class="eyebrow" style="text-align:center;">Accompagnement</p>
-      <h2 class="section-title" style="text-align:center;">Un accompagnement à la hauteur de votre exigence</h2>
-      <p class="section-sub" style="text-align:center;margin-left:auto;margin-right:auto;">
-        Deux niveaux de service pour protéger et élever votre image relationnelle — selon l'ambition de votre activité.
-      </p>
-      <p class="lead" style="text-align:center;margin:0 auto 28px;max-width:52ch;font-size:1rem;">
-        Chaque année, SmartCard vous accompagne dans la qualité de votre présence professionnelle — et, si vous le souhaitez, dans l'activation de la recommandation.
-      </p>
       <div class="offers-grid">
         <article class="offer-card" id="tarifs-solo">
-          <p class="offer-level">Niveau de service</p>
+          <p class="offer-level">Présence professionnelle</p>
           <h3 class="offer-name">SmartCard Solo</h3>
-          <p class="offer-tagline">Votre carte de confiance</p>
+          <p class="offer-tagline">Votre carte de confiance, simple à partager.</p>
           <p class="offer-price">39€ <span>HT / an</span></p>
           <p class="offer-legal">TVA non applicable – art. 293B du CGI</p>
           <ul class="offer-features">
             <li>Votre carte professionnelle, à partager en un geste</li>
             <li>Une présentation claire de qui vous êtes et de ce que vous faites</li>
             <li>Un parcours de contact et d'avis, pensé pour vos clients</li>
-            <li>Une image cohérente, digne de la relation que vous entretenez</li>
             <li>Idéal pour les indépendants et professionnels de service</li>
           </ul>
           <a href="/static/contact-smartcard.html?offre=solo" class="btn btn-primary" data-cta="offer-solo">Choisir Solo</a>
         </article>
-        <article class="offer-card" id="tarifs-business">
-          <p class="offer-level">Niveau d'accompagnement</p>
+        <article class="offer-card offer-card--business" id="tarifs-business">
+          <p class="offer-level">Recommandation accompagnée</p>
           <h3 class="offer-name">SmartCard Business</h3>
-          <p class="offer-tagline">Votre moteur de recommandation</p>
+          <p class="offer-tagline">La même présence, avec le partage recommandé.</p>
           <p class="offer-price">99€ <span>HT / an</span></p>
           <p class="offer-legal">TVA non applicable – art. 293B du CGI</p>
           <ul class="offer-features">
@@ -1014,20 +1659,22 @@
     </div>
   </section>
 
-  <!-- S9 — Réassurance -->
-  <section class="section" id="reassurance" data-section="s9-reassurance">
+  <!-- S7 — FAQ -->
+  <section class="section section--alt soft-reveal" id="reassurance" data-section="s7-faq">
     <div class="container">
-      <p class="eyebrow">Réassurance</p>
-      <h2 class="section-title">Tout simplement</h2>
-      <p class="section-sub">SmartCard a été pensée pour des professionnels exigeants — et pressés. Rien de superflu. Rien de compliqué.</p>
+      <div class="section-intro section-intro--center">
+        <p class="eyebrow">Questions utiles</p>
+        <h2 class="section-title">Simple à comprendre, simple à utiliser</h2>
+        <p class="section-sub">L'essentiel pour vous projeter, sans répéter ce que la page montre déjà.</p>
+      </div>
       <div class="faq-list">
         <div class="faq-item">
           <h4>Comment ça marche&nbsp;?</h4>
-          <p>Vous partagez le lien de votre carte — par message, après une prestation. Votre client ouvre une page claire&nbsp;: avis, contact ou recommandation. Naturellement.</p>
+          <p>Vous partagez le lien de votre carte. Votre client ouvre une page claire&nbsp;: contact, avis ou recommandation selon votre offre.</p>
         </div>
         <div class="faq-item">
           <h4>Quelle différence entre Solo et Business&nbsp;?</h4>
-          <p>Solo accompagne votre présence et votre crédibilité. Business ajoute un parcours de recommandation — pour activer le bouche-à-oreille de vos clients satisfaits.</p>
+          <p>Solo accompagne votre présence et votre crédibilité. Business ajoute un parcours de recommandation pour activer le bouche-à-oreille de vos clients satisfaits.</p>
         </div>
         <div class="faq-item">
           <h4>Et pour plusieurs cartes ou une équipe&nbsp;?</h4>
@@ -1043,21 +1690,18 @@
         </div>
         <div class="faq-item">
           <h4>Et pour ma visibilité locale&nbsp;?</h4>
-          <p>Votre carte rassemble votre activité, votre zone et vos avis dans une présentation cohérente — un complément utile. L'essentiel reste la relation directe avec vos clients.</p>
+          <p>Votre carte rassemble votre activité, votre zone et vos avis dans une présentation cohérente. L'essentiel reste la relation directe avec vos clients.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- S10 — Invitation -->
-  <section class="invitation" id="invitation" data-section="s10-invitation">
+  <!-- S8 — Invitation -->
+  <section class="invitation soft-reveal" id="invitation" data-section="s8-invitation">
     <div class="container">
       <h2 class="section-title">Vous méritez d'être présenté avec confiance</h2>
-      <p class="section-sub">Prenons le prochain pas — simplement, à votre rythme.</p>
-      <p class="lead">Vos clients satisfaits sont déjà vos meilleurs relais. SmartCard leur donne la forme qu'ils méritent.</p>
-      <div class="invitation-visual card-preview">
-        <img src="/static/landing-v2/hero-maavnica.png" alt="" loading="lazy" role="presentation" />
-      </div>
+      <p class="section-sub">Une carte sobre, professionnelle, fidèle à la relation que vous construisez déjà.</p>
+      <p class="lead">SmartCard donne à vos clients quelque chose de clair à garder, à retrouver, à transmettre.</p>
       <div class="btn-row">
         <a href="/static/contact-smartcard.html?offre=solo" class="btn btn-primary" data-cta="invitation-primary">Découvrir votre carte</a>
         <a href="/static/recontact-smartcard.html" class="btn btn-secondary" data-cta="invitation-secondary">Être recontacté</a>
