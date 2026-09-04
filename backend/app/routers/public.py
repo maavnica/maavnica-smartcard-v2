@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+import logging
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
@@ -23,6 +24,7 @@ from app.utils.public_slug import sanitize_public_slug
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
+logger = logging.getLogger(__name__)
 
 
 def get_card_by_id_or_404(card_id: int, db: Session) -> Card:
@@ -214,10 +216,46 @@ def _base_email_html(title: str, subtitle: str, body_html: str, cta_url: str, ct
 """
 
 
-def notify_pro(background_tasks: BackgroundTasks, card: Card, subject: str, text: str, html: str) -> None:
-    if not card.email_pro:
+def _send_pro_notification(
+    to_email: str,
+    subject: str,
+    text: str,
+    html: str,
+    reply_to: Optional[str],
+    card_id: Optional[int],
+) -> None:
+    ok = send_email(to_email, subject, text, html, reply_to=reply_to)
+    if ok:
+        logger.info("[MAIL] notify_pro ok card_id=%s", card_id)
+    else:
+        logger.error("[MAIL] notify_pro failed card_id=%s", card_id)
+
+
+def notify_pro(
+    background_tasks: BackgroundTasks,
+    card: Card,
+    subject: str,
+    text: str,
+    html: str,
+    reply_to: Optional[str] = None,
+) -> None:
+    to_email = (card.email_pro or "").strip()
+    if not to_email:
+        logger.warning(
+            "[MAIL] SKIP NO RECIPIENT card_id=%s",
+            getattr(card, "id", None),
+        )
         return
-    background_tasks.add_task(send_email, card.email_pro, subject, text, html)
+    rt = (reply_to or "").strip() or None
+    background_tasks.add_task(
+        _send_pro_notification,
+        to_email,
+        subject,
+        text,
+        html,
+        rt,
+        getattr(card, "id", None),
+    )
 
 
 # -------------------------------------------------------------------
@@ -532,6 +570,7 @@ def create_quote(
         subject=f"{labels['subject_prefix']} – {card.company_name}",
         text=text,
         html=html,
+        reply_to=str(payload.email) if payload.email else None,
     )
 
     return {"message": "Quote created", "id": quote.id}
