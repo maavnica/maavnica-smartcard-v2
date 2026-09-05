@@ -188,6 +188,81 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertEqual(captured["body"]["replyTo"]["email"], "prospect@example.com")
         self.assertNotEqual(captured["body"]["sender"]["email"], "prospect@example.com")
 
+    def test_send_email_explicit_from_used_by_brevo(self):
+        fake_resp = MagicMock()
+        fake_resp.read.return_value = b"{}"
+        fake_resp.__enter__.return_value = fake_resp
+        fake_resp.__exit__.return_value = False
+        captured = {}
+
+        def fake_urlopen(req, timeout=15):
+            captured["body"] = json.loads(req.data.decode("utf-8"))
+            return fake_resp
+
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(
+                    BREVO_API_KEY="brevo-key-not-logged",
+                    SMTP_FROM="smtp-from@maavnica.com",
+                ),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=fake_urlopen),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            ok = emailer.send_email(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                "<p>html</p>",
+                reply_to="prospect@example.com",
+                from_email="notifications@maavnica.com",
+            )
+        self.assertTrue(ok)
+        self.assertEqual(_DummySMTP.instances, [])
+        self.assertEqual(captured["body"]["sender"]["email"], "notifications@maavnica.com")
+        self.assertEqual(captured["body"]["to"][0]["email"], "pro@maavnica.com")
+        self.assertEqual(captured["body"]["replyTo"]["email"], "prospect@example.com")
+
+    def test_send_email_explicit_from_used_by_smtp(self):
+        with (
+            patch.dict(os.environ, _smtp_env(SMTP_FROM="smtp-from@maavnica.com"), clear=True),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            ok = emailer.send_email(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                "<p>html</p>",
+                reply_to="prospect@example.com",
+                from_email="notifications@maavnica.com",
+            )
+        self.assertTrue(ok)
+        msg = _DummySMTP.instances[0].sent[0]
+        self.assertEqual(msg["From"], "notifications@maavnica.com")
+        self.assertEqual(msg["To"], "pro@maavnica.com")
+        self.assertEqual(msg["Reply-To"], "prospect@example.com")
+
+    def test_send_email_without_explicit_from_ignores_smartcard_mail_from(self):
+        """affiliate_kit / appel générique : SMARTCARD_MAIL_FROM ne change pas le From."""
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(SMARTCARD_MAIL_FROM="notifications@maavnica.com"),
+                clear=True,
+            ),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            ok = emailer.send_email(
+                "kit@example.com",
+                "Kit",
+                "plain",
+                "<p>html</p>",
+            )
+        self.assertTrue(ok)
+        self.assertEqual(_DummySMTP.instances[0].sent[0]["From"], "from@maavnica.com")
+
     def test_cas4_no_transport(self):
         with (
             patch.object(emailer.smtplib, "SMTP", _DummySMTP),
@@ -315,6 +390,10 @@ class EmailerTransportTests(unittest.TestCase):
         text = src.read_text(encoding="utf-8")
         self.assertIn("msg.set_content", text)
         self.assertNotIn("add_alternative", text)
+        self.assertIn('msg["From"] = mail_from', text)
+        self.assertIn('_env_required("MAIL_FROM")', text)
+        self.assertNotIn("SMARTCARD_MAIL_FROM", text)
+        self.assertNotIn("send_email", text)
 
     def test_smtp_only_result_auth_error(self):
         class _AuthFail(_DummySMTP):
@@ -442,7 +521,9 @@ class NotifyProTests(unittest.TestCase):
 
     def test_notify_pro_calls_send_email_directly(self):
         card = _card_pro()
+        env = _smtp_env(SMARTCARD_MAIL_FROM="notifications@maavnica.com")
         with (
+            patch.dict(os.environ, env, clear=True),
             patch("app.routers.public.send_email", return_value=True) as mocked,
             self.assertLogs("app.routers.public", level="INFO") as logs,
         ):
@@ -459,6 +540,7 @@ class NotifyProTests(unittest.TestCase):
             "texte",
             "<p>x</p>",
             reply_to="prospect@example.com",
+            from_email="notifications@maavnica.com",
         )
         self.assertNotIn("smtp_only", mocked.call_args.kwargs)
         self.assertTrue(any("[MAIL] notify_pro ok" in m for m in logs.output))
@@ -550,7 +632,11 @@ class NotifyProTests(unittest.TestCase):
         )
 
     def test_send_pro_notification_calls_send_email_without_smtp_only(self):
-        with patch("app.routers.public.send_email", return_value=True) as mocked:
+        env = _smtp_env(SMARTCARD_MAIL_FROM="notifications@maavnica.com")
+        with (
+            patch.dict(os.environ, env, clear=True),
+            patch("app.routers.public.send_email", return_value=True) as mocked,
+        ):
             _send_pro_notification(
                 "contact@maavnica.com",
                 "Sujet",
@@ -565,8 +651,69 @@ class NotifyProTests(unittest.TestCase):
             "texte",
             "<p>x</p>",
             reply_to="prospect@example.com",
+            from_email="notifications@maavnica.com",
         )
         self.assertNotIn("smtp_only", mocked.call_args.kwargs)
+
+    def test_send_pro_notification_uses_smartcard_mail_from(self):
+        fake_resp = MagicMock()
+        fake_resp.read.return_value = b"{}"
+        fake_resp.__enter__.return_value = fake_resp
+        fake_resp.__exit__.return_value = False
+        captured = {}
+
+        def fake_urlopen(req, timeout=15):
+            captured["body"] = json.loads(req.data.decode("utf-8"))
+            return fake_resp
+
+        _DummySMTP.instances = []
+        env = _smtp_env(
+            BREVO_API_KEY="brevo-key-not-logged",
+            SMTP_FROM="smtp-from@maavnica.com",
+            SMARTCARD_MAIL_FROM="notifications@maavnica.com",
+        )
+        with (
+            patch.dict(os.environ, env, clear=True),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=fake_urlopen),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            _send_pro_notification(
+                "contact@maavnica.com",
+                "Sujet",
+                "texte",
+                "<p>html</p>",
+                "prospect@example.com",
+                10,
+            )
+        self.assertEqual(_DummySMTP.instances, [])
+        self.assertEqual(captured["body"]["sender"]["email"], "notifications@maavnica.com")
+        self.assertEqual(captured["body"]["to"][0]["email"], "contact@maavnica.com")
+        self.assertEqual(captured["body"]["replyTo"]["email"], "prospect@example.com")
+        joined = "\n".join(logs.output)
+        self.assertIn("[MAILTRACE] FROM_DOMAIN=maavnica.com", joined)
+        self.assertNotIn("brevo-key-not-logged", joined)
+        self.assertNotIn("notifications@maavnica.com", joined)
+
+    def test_send_pro_notification_falls_back_to_mail_from(self):
+        _DummySMTP.instances = []
+        with (
+            patch.dict(os.environ, _smtp_env(SMTP_FROM="smtp-from@maavnica.com"), clear=True),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            _send_pro_notification(
+                "contact@maavnica.com",
+                "Sujet",
+                "texte",
+                "<p>html</p>",
+                "prospect@example.com",
+                10,
+            )
+        msg = _DummySMTP.instances[0].sent[0]
+        self.assertEqual(msg["From"], "from@maavnica.com")
+        self.assertNotEqual(msg["From"], "smtp-from@maavnica.com")
+        self.assertEqual(msg["To"], "contact@maavnica.com")
+        self.assertEqual(msg["Reply-To"], "prospect@example.com")
 
     def test_send_pro_notification_uses_brevo_when_key_present(self):
         fake_resp = MagicMock()
@@ -622,6 +769,11 @@ class NotifyProTests(unittest.TestCase):
         app.dependency_overrides[get_db] = _override_db
         try:
             with (
+                patch.dict(
+                    os.environ,
+                    _smtp_env(SMARTCARD_MAIL_FROM="notifications@maavnica.com"),
+                    clear=True,
+                ),
                 patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
                 patch("app.routers.public.send_email", return_value=send_ok) as mocked,
             ):
@@ -637,11 +789,15 @@ class NotifyProTests(unittest.TestCase):
         dumped = json.dumps(body)
         self.assertNotIn("smtp-password-value", dumped)
         self.assertNotIn("brevo-key", dumped)
+        self.assertNotIn("notifications@maavnica.com", dumped)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
         mocked.assert_called_once()
         self.assertEqual(mocked.call_args.args[0], "contact@maavnica.com")
+        self.assertEqual(mocked.call_args.kwargs["from_email"], "notifications@maavnica.com")
         self.assertNotIn("smtp_only", mocked.call_args.kwargs)
+        if "email" in payload:
+            self.assertEqual(mocked.call_args.kwargs["reply_to"], payload["email"])
 
 
 if __name__ == "__main__":

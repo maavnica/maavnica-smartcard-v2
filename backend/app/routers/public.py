@@ -17,7 +17,7 @@ from app.routers.cards import (
     _ensure_owner_share_key,
     _serialize_card_public,
 )
-from app.utils.emailer import send_email
+from app.utils.emailer import send_email, smartcard_mail_from
 from app.utils.rate_limit import rate_limit_by_ip
 from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
 from app.utils.public_slug import sanitize_public_slug
@@ -225,7 +225,14 @@ def _send_pro_notification(
     card_id: Optional[int],
 ) -> None:
     try:
-        ok = send_email(to_email, subject, text, html, reply_to=reply_to)
+        ok = send_email(
+            to_email,
+            subject,
+            text,
+            html,
+            reply_to=reply_to,
+            from_email=smartcard_mail_from() or None,
+        )
     except Exception:
         logger.exception("[MAIL] notify_pro failed card_id=%s", card_id)
         return

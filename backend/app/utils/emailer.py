@@ -54,6 +54,11 @@ def _email_domain(email: str) -> str:
     return domain or "(unknown)"
 
 
+def smartcard_mail_from() -> str:
+    """From SmartCard : SMARTCARD_MAIL_FROM, sinon MAIL_FROM. N'altère pas SMTP_FROM."""
+    return _clean(os.getenv("SMARTCARD_MAIL_FROM")) or _clean(os.getenv("MAIL_FROM"))
+
+
 def _safe_error_text(raw: str, limit: int = 300) -> str:
     text = _clean(raw)
     text = _SECRET_IN_TEXT.sub(r"\1=***", text)
@@ -349,11 +354,13 @@ def send_email(
     html: str | None = None,
     reply_to: str | None = None,
     smtp_only: bool = False,
+    from_email: str | None = None,
 ) -> bool:
     """
     Envoi email (historique SmartCard) :
-    - Brevo API si BREVO_API_KEY + SMTP_FROM/MAIL_FROM.
+    - Brevo API si BREVO_API_KEY + sender.
     - Sinon fallback SMTP (SMTP_PASSWORD, sinon SMTP_PASS).
+    - from_email explicite (SmartCard) prioritaire, sinon SMTP_FROM/MAIL_FROM.
     - reply_to optionnel (jamais utilisé comme From).
     """
     to_email = _clean(to_email)
@@ -379,7 +386,11 @@ def send_email(
         )["sent"]
 
     api_key = _clean(os.getenv("BREVO_API_KEY"))
-    from_email = _clean(os.getenv("SMTP_FROM")) or _clean(os.getenv("MAIL_FROM"))
+    from_email = (
+        _clean(from_email)
+        or _clean(os.getenv("SMTP_FROM"))
+        or _clean(os.getenv("MAIL_FROM"))
+    )
     from_name = _clean(os.getenv("SMTP_FROM_NAME")) or "Maavnica SmartCard"
 
     logger.warning(
