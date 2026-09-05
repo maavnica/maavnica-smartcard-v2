@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import socket
 import ssl
 import smtplib
 import urllib.error
@@ -12,7 +13,15 @@ from email.message import EmailMessage
 logger = logging.getLogger(__name__)
 
 _SECRET_IN_TEXT = re.compile(
-    r"(?i)(api[-_]?key|x-key|password|token|secret)\s*[:=]\s*\S+"
+    r"(?i)(api[-_]?key|x-key|smtp_password|smtp_pass|password|token|secret)\s*[:=]\s*\S+"
+)
+_NAMED_SMTP_ERRORS = (
+    smtplib.SMTPAuthenticationError,
+    smtplib.SMTPConnectError,
+    smtplib.SMTPServerDisconnected,
+    smtplib.SMTPRecipientsRefused,
+    smtplib.SMTPSenderRefused,
+    smtplib.SMTPDataError,
 )
 
 
@@ -39,7 +48,39 @@ def _mask_email(email: str) -> str:
 def _safe_error_text(raw: str, limit: int = 300) -> str:
     text = _clean(raw)
     text = _SECRET_IN_TEXT.sub(r"\1=***", text)
+    for env_name in ("SMTP_PASSWORD", "SMTP_PASS", "BREVO_API_KEY"):
+        secret = _clean(os.getenv(env_name))
+        if secret:
+            text = text.replace(secret, "***")
     return text[:limit]
+
+
+def _classify_smtp_error(exc: BaseException) -> str:
+    if isinstance(exc, _NAMED_SMTP_ERRORS):
+        return type(exc).__name__
+    if isinstance(exc, ssl.SSLError):
+        return "SSL error"
+    if isinstance(exc, socket.gaierror):
+        return "gaierror"
+    if isinstance(exc, (TimeoutError, socket.timeout)):
+        return "TimeoutError"
+    return type(exc).__name__
+
+
+def _smtp_diag_ok() -> dict:
+    return {"sent": True, "transport": "smtp"}
+
+
+def _smtp_diag_fail(error_type: str, error_message: str = "") -> dict:
+    result = {
+        "sent": False,
+        "transport": "smtp",
+        "error_type": error_type,
+    }
+    sanitized = _safe_error_text(error_message)
+    if sanitized:
+        result["error_message"] = sanitized
+    return result
 
 
 def _smtp_configured(host: str, user: str, password: str, from_email: str) -> bool:
@@ -172,7 +213,7 @@ def _send_via_smtp_contact(
     text: str,
     html: str,
     reply_to: str,
-) -> bool:
+) -> dict:
     """Même handshake que ``contact.py`` : 465 = SMTP_SSL, sinon EHLO+STARTTLS+EHLO+LOGIN."""
     msg = EmailMessage()
     msg["From"] = from_email
@@ -204,7 +245,7 @@ def _send_via_smtp_contact(
                 server.login(user, password)
                 server.send_message(msg)
         logger.info("[MAIL] SMTP OK dest=%s", dest)
-        return True
+        return _smtp_diag_ok()
     except Exception as e:
         logger.warning(
             "[MAIL] SMTP FAILED dest=%s error=%s detail=%s",
@@ -212,7 +253,56 @@ def _send_via_smtp_contact(
             type(e).__name__,
             _safe_error_text(str(e)),
         )
-        return False
+        return _smtp_diag_fail(_classify_smtp_error(e), str(e))
+
+
+def send_smtp_only_result(
+    to_email: str,
+    subject: str,
+    text: str,
+    html: str | None = None,
+    reply_to: str | None = None,
+) -> dict:
+    """SMTP-only (SmartCard) : même transport que ``send_email(..., smtp_only=True)``, avec diagnostic."""
+    to_email = _clean(to_email)
+    subject = _clean(subject)
+    text = text or ""
+    html = html or ""
+    reply_to = _clean(reply_to)
+
+    if not to_email:
+        logger.warning("[MAIL] SKIP NO RECIPIENT")
+        return _smtp_diag_fail("configuration missing", "no recipient")
+    if not subject:
+        logger.warning("[MAIL] SKIP empty subject dest=%s", _mask_email(to_email))
+        return _smtp_diag_fail("configuration missing", "empty subject")
+
+    host = _clean(os.getenv("SMTP_HOST"))
+    port_raw = _clean(os.getenv("SMTP_PORT"))
+    user = _clean(os.getenv("SMTP_USER"))
+    password = _clean(os.getenv("SMTP_PASSWORD"))
+    from_email = _clean(os.getenv("MAIL_FROM"))
+    try:
+        port = int(port_raw) if port_raw else 587
+    except ValueError:
+        logger.warning("[MAIL] SKIP NO TRANSPORT")
+        return _smtp_diag_fail("configuration missing", "invalid SMTP port")
+    if not _smtp_configured(host, user, password, from_email):
+        logger.warning("[MAIL] SKIP NO TRANSPORT")
+        return _smtp_diag_fail("configuration missing", "SMTP settings incomplete")
+
+    return _send_via_smtp_contact(
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        from_email=from_email,
+        to_email=to_email,
+        subject=subject,
+        text=text,
+        html=html,
+        reply_to=reply_to,
+    )
 
 
 def send_email(
@@ -244,31 +334,13 @@ def send_email(
         return False
 
     if smtp_only:
-        host = _clean(os.getenv("SMTP_HOST"))
-        port_raw = _clean(os.getenv("SMTP_PORT"))
-        user = _clean(os.getenv("SMTP_USER"))
-        password = _clean(os.getenv("SMTP_PASSWORD"))
-        from_email = _clean(os.getenv("MAIL_FROM"))
-        try:
-            port = int(port_raw) if port_raw else 587
-        except ValueError:
-            logger.warning("[MAIL] SKIP NO TRANSPORT")
-            return False
-        if not _smtp_configured(host, user, password, from_email):
-            logger.warning("[MAIL] SKIP NO TRANSPORT")
-            return False
-        return _send_via_smtp_contact(
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            from_email=from_email,
-            to_email=to_email,
-            subject=subject,
-            text=text,
-            html=html,
+        return send_smtp_only_result(
+            to_email,
+            subject,
+            text,
+            html,
             reply_to=reply_to,
-        )
+        )["sent"]
 
     api_key = _clean(os.getenv("BREVO_API_KEY"))
     from_email = _clean(os.getenv("SMTP_FROM")) or _clean(os.getenv("MAIL_FROM"))
