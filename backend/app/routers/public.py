@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
@@ -232,7 +232,6 @@ def _send_pro_notification(
 
 
 def notify_pro(
-    background_tasks: BackgroundTasks,
     card: Card,
     subject: str,
     text: str,
@@ -247,15 +246,20 @@ def notify_pro(
         )
         return
     rt = (reply_to or "").strip() or None
-    background_tasks.add_task(
-        _send_pro_notification,
-        to_email,
-        subject,
-        text,
-        html,
-        rt,
-        getattr(card, "id", None),
-    )
+    try:
+        _send_pro_notification(
+            to_email,
+            subject,
+            text,
+            html,
+            rt,
+            getattr(card, "id", None),
+        )
+    except Exception:
+        logger.exception(
+            "[MAIL] notify_pro failed card_id=%s",
+            getattr(card, "id", None),
+        )
 
 
 # -------------------------------------------------------------------
@@ -393,7 +397,6 @@ def get_vcard(slug: str, db: Session = Depends(get_db)):
 def create_feedback(
     card_id: int,
     payload: FeedbackCreate,
-    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
@@ -454,7 +457,6 @@ def create_feedback(
     )
 
     notify_pro(
-        background_tasks,
         card,
         subject=f"⭐ Nouvel avis – {card.company_name}",
         text=text,
@@ -468,7 +470,6 @@ def create_feedback(
 def create_quote(
     card_id: int,
     payload: QuoteCreate,
-    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
@@ -565,7 +566,6 @@ def create_quote(
     )
 
     notify_pro(
-        background_tasks,
         card,
         subject=f"{labels['subject_prefix']} – {card.company_name}",
         text=text,
