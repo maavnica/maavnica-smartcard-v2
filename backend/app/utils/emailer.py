@@ -162,7 +162,7 @@ def _send_via_brevo(
             e.code,
             _safe_error_text(body or str(e)),
         )
-        logger.info(
+        logger.warning(
             "[MAILTRACE] BREVO_FAILED type=%s status=%s",
             type(e).__name__,
             e.code,
@@ -175,7 +175,7 @@ def _send_via_brevo(
             type(e).__name__,
             _safe_error_text(str(e)),
         )
-        logger.info(
+        logger.warning(
             "[MAILTRACE] BREVO_FAILED type=%s status=-",
             type(e).__name__,
         )
@@ -233,7 +233,7 @@ def _send_via_smtp(
             type(e).__name__,
             _safe_error_text(str(e)),
         )
-        logger.info("[MAILTRACE] SMTP_FALLBACK_FAILED type=%s", type(e).__name__)
+        logger.warning("[MAILTRACE] SMTP_FALLBACK_FAILED type=%s", type(e).__name__)
         return False
 
 
@@ -382,16 +382,16 @@ def send_email(
     from_email = _clean(os.getenv("SMTP_FROM")) or _clean(os.getenv("MAIL_FROM"))
     from_name = _clean(os.getenv("SMTP_FROM_NAME")) or "Maavnica SmartCard"
 
-    logger.info(
+    logger.warning(
         "[MAILTRACE] CONFIG brevo_key_present=%s sender_present=%s",
         "true" if api_key else "false",
         "true" if from_email else "false",
     )
-    logger.info("[MAILTRACE] TO_DOMAIN=%s", _email_domain(to_email))
-    logger.info("[MAILTRACE] FROM_DOMAIN=%s", _email_domain(from_email))
+    logger.warning("[MAILTRACE] TO_DOMAIN=%s", _email_domain(to_email))
+    logger.warning("[MAILTRACE] FROM_DOMAIN=%s", _email_domain(from_email))
 
     if api_key and from_email:
-        logger.info("[MAILTRACE] BREVO_ATTEMPT")
+        logger.warning("[MAILTRACE] BREVO_ATTEMPT")
         if _send_via_brevo(
             api_key=api_key,
             from_email=from_email,
@@ -402,7 +402,7 @@ def send_email(
             html=html,
             reply_to=reply_to,
         ):
-            logger.info("[MAILTRACE] BREVO_OK")
+            logger.warning("[MAILTRACE] BREVO_OK")
             return True
         logger.info("[MAIL] BREVO FAILED falling back to SMTP dest=%s", _mask_email(to_email))
 
@@ -420,7 +420,7 @@ def send_email(
     use_tls = _clean(os.getenv("SMTP_TLS", "true")).lower() in ("1", "true", "yes", "on")
     use_ssl = _clean(os.getenv("SMTP_SSL", "false")).lower() in ("1", "true", "yes", "on")
 
-    logger.info("[MAILTRACE] SMTP_FALLBACK_ATTEMPT")
+    logger.warning("[MAILTRACE] SMTP_FALLBACK_ATTEMPT")
     ok = _send_via_smtp(
         host=host,
         port=port,
@@ -436,5 +436,5 @@ def send_email(
         use_ssl=use_ssl,
     )
     if ok:
-        logger.info("[MAILTRACE] SMTP_FALLBACK_OK")
+        logger.warning("[MAILTRACE] SMTP_FALLBACK_OK")
     return ok
