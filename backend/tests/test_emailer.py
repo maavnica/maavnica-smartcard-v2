@@ -96,11 +96,22 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertTrue(any("[MAIL] SMTP OK" in m for m in logs.output))
         self.assertFalse(any("[MAIL] BREVO OK" in m for m in logs.output))
 
-    def test_smtp_pass_takes_precedence_over_smtp_password(self):
+    def test_smtp_password_preferred_over_smtp_pass(self):
         with patch.object(emailer.smtplib, "SMTP", _DummySMTP):
             ok = self._send(
                 **_smtp_env(SMTP_PASS="legacy-pass-value")
             )
+        self.assertTrue(ok)
+        self.assertEqual(
+            _DummySMTP.instances[0].logged_in,
+            ("smtp-user@example.test", "smtp-password-value"),
+        )
+
+    def test_smtp_pass_used_when_smtp_password_missing(self):
+        env = _smtp_env(SMTP_PASS="legacy-pass-value")
+        del env["SMTP_PASSWORD"]
+        with patch.object(emailer.smtplib, "SMTP", _DummySMTP):
+            ok = self._send(**env)
         self.assertTrue(ok)
         self.assertEqual(
             _DummySMTP.instances[0].logged_in,
@@ -358,7 +369,7 @@ class NotifyProTests(unittest.TestCase):
     def test_cas5_empty_email_pro_skips_send(self):
         card = SimpleNamespace(id=10, email_pro=None)
         with (
-            patch("app.routers.public.send_smtp_only_result") as mocked,
+            patch("app.routers.public.send_email") as mocked,
             self.assertLogs("app.routers.public", level="WARNING") as logs,
         ):
             notify_pro(card, "Sujet", "texte", "<p>x</p>", reply_to="a@b.c")
@@ -368,7 +379,7 @@ class NotifyProTests(unittest.TestCase):
     def test_blank_email_pro_skips_send(self):
         card = SimpleNamespace(id=10, email_pro="   ")
         with (
-            patch("app.routers.public.send_smtp_only_result") as mocked,
+            patch("app.routers.public.send_email") as mocked,
             self.assertLogs("app.routers.public", level="WARNING") as logs,
         ):
             notify_pro(card, "Sujet", "texte", "<p>x</p>")
@@ -378,10 +389,7 @@ class NotifyProTests(unittest.TestCase):
     def test_notify_pro_calls_send_email_directly(self):
         card = _card_pro()
         with (
-            patch(
-                "app.routers.public.send_smtp_only_result",
-                return_value={"sent": True, "transport": "smtp"},
-            ) as mocked,
+            patch("app.routers.public.send_email", return_value=True) as mocked,
             self.assertLogs("app.routers.public", level="INFO") as logs,
         ):
             notify_pro(
@@ -398,6 +406,7 @@ class NotifyProTests(unittest.TestCase):
             "<p>x</p>",
             reply_to="prospect@example.com",
         )
+        self.assertNotIn("smtp_only", mocked.call_args.kwargs)
         self.assertTrue(any("[MAIL] notify_pro ok" in m for m in logs.output))
 
     def test_create_quote_commits_before_direct_notification(self):
@@ -407,7 +416,6 @@ class NotifyProTests(unittest.TestCase):
 
         def _notify(*args, **kwargs):
             order.append("notify")
-            return {"sent": True, "transport": "smtp"}
 
         with (
             patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
@@ -415,14 +423,8 @@ class NotifyProTests(unittest.TestCase):
         ):
             result = create_quote(10, _quote_payload(), db)
 
-        self.assertEqual(
-            result,
-            {
-                "message": "Quote created",
-                "id": 36,
-                "email_notification": {"sent": True, "transport": "smtp"},
-            },
-        )
+        self.assertEqual(result, {"message": "Quote created", "id": 36})
+        self.assertNotIn("email_notification", result)
         db.add.assert_called_once()
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
@@ -493,12 +495,9 @@ class NotifyProTests(unittest.TestCase):
             send_ok=True,
         )
 
-    def test_send_pro_notification_calls_send_email_smtp_only(self):
-        with patch(
-            "app.routers.public.send_smtp_only_result",
-            return_value={"sent": True, "transport": "smtp"},
-        ) as mocked:
-            result = _send_pro_notification(
+    def test_send_pro_notification_calls_send_email_without_smtp_only(self):
+        with patch("app.routers.public.send_email", return_value=True) as mocked:
+            _send_pro_notification(
                 "contact@maavnica.com",
                 "Sujet",
                 "texte",
@@ -513,23 +512,37 @@ class NotifyProTests(unittest.TestCase):
             "<p>x</p>",
             reply_to="prospect@example.com",
         )
-        self.assertEqual(result, {"sent": True, "transport": "smtp"})
+        self.assertNotIn("smtp_only", mocked.call_args.kwargs)
 
-    def test_sync_path_uses_same_smtp_contact_function(self):
-        """Appel direct : send_email → _send_via_smtp_contact (SMTP-only)."""
+    def test_send_pro_notification_uses_brevo_when_key_present(self):
+        fake_resp = MagicMock()
+        fake_resp.read.return_value = b"{}"
+        fake_resp.__enter__.return_value = fake_resp
+        fake_resp.__exit__.return_value = False
         _DummySMTP.instances = []
         with (
-            patch.dict(os.environ, _smtp_env(BREVO_API_KEY="must-not-be-used"), clear=True),
-            patch.object(emailer.urllib.request, "urlopen") as brevo,
+            patch.dict(os.environ, _smtp_env(BREVO_API_KEY="brevo-key-not-logged"), clear=True),
+            patch.object(emailer.urllib.request, "urlopen", return_value=fake_resp) as brevo,
             patch.object(emailer.smtplib, "SMTP", _DummySMTP),
-            patch.object(
-                emailer,
-                "_send_via_smtp_contact",
-                wraps=emailer._send_via_smtp_contact,
-            ) as smtp_contact,
-            self.assertLogs("app.utils.emailer", level="INFO") as logs,
         ):
-            result = _send_pro_notification(
+            _send_pro_notification(
+                "contact@maavnica.com",
+                "Sujet",
+                "texte",
+                "<p>html</p>",
+                "prospect@example.com",
+                10,
+            )
+        brevo.assert_called_once()
+        self.assertEqual(_DummySMTP.instances, [])
+
+    def test_send_pro_notification_smtp_fallback_keeps_html(self):
+        _DummySMTP.instances = []
+        with (
+            patch.dict(os.environ, _smtp_env(), clear=True),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            _send_pro_notification(
                 "contact@maavnica.com",
                 "Sujet sync",
                 "corps texte",
@@ -537,32 +550,17 @@ class NotifyProTests(unittest.TestCase):
                 "prospect@example.com",
                 10,
             )
-        self.assertEqual(result, {"sent": True, "transport": "smtp"})
-        brevo.assert_not_called()
-        smtp_contact.assert_called_once()
-        self.assertEqual(smtp_contact.call_args.kwargs["to_email"], "contact@maavnica.com")
-        self.assertEqual(smtp_contact.call_args.kwargs["reply_to"], "prospect@example.com")
-        self.assertEqual(len(_DummySMTP.instances), 1)
         msg = _DummySMTP.instances[0].sent[0]
-        self.assertEqual(msg["From"], "from@maavnica.com")
+        self.assertTrue(msg.is_multipart())
+        self.assertEqual(msg.get_content_type(), "multipart/alternative")
+        self.assertIn("<p>html</p>", msg.as_string())
         self.assertEqual(msg["To"], "contact@maavnica.com")
         self.assertEqual(msg["Reply-To"], "prospect@example.com")
-        self.assertTrue(any("[MAIL] SMTP OK" in m for m in logs.output))
 
     def _assert_public_post_keeps_201(self, path: str, payload: dict, *, send_ok: bool) -> None:
         from app.main import app
 
         db = _db_committed(36)
-        mail_result = (
-            {"sent": True, "transport": "smtp"}
-            if send_ok
-            else {
-                "sent": False,
-                "transport": "smtp",
-                "error_type": "SMTPAuthenticationError",
-                "error_message": "535",
-            }
-        )
 
         def _override_db():
             yield db
@@ -571,10 +569,7 @@ class NotifyProTests(unittest.TestCase):
         try:
             with (
                 patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
-                patch(
-                    "app.routers.public.send_smtp_only_result",
-                    return_value=mail_result,
-                ) as mocked,
+                patch("app.routers.public.send_email", return_value=send_ok) as mocked,
             ):
                 client = TestClient(app)
                 response = client.post(path, json=payload)
@@ -584,18 +579,15 @@ class NotifyProTests(unittest.TestCase):
         self.assertEqual(response.status_code, 201, response.text)
         body = response.json()
         self.assertIn("id", body)
+        self.assertNotIn("email_notification", body)
+        dumped = json.dumps(body)
+        self.assertNotIn("smtp-password-value", dumped)
+        self.assertNotIn("brevo-key", dumped)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
         mocked.assert_called_once()
         self.assertEqual(mocked.call_args.args[0], "contact@maavnica.com")
-        if path.endswith("/quotes"):
-            self.assertEqual(body["email_notification"]["sent"], send_ok)
-            self.assertEqual(body["email_notification"]["transport"], "smtp")
-            if not send_ok:
-                self.assertEqual(
-                    body["email_notification"]["error_type"],
-                    "SMTPAuthenticationError",
-                )
+        self.assertNotIn("smtp_only", mocked.call_args.kwargs)
 
 
 if __name__ == "__main__":

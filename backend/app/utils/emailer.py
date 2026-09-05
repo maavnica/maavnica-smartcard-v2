@@ -30,8 +30,8 @@ def _clean(v: str | None) -> str:
 
 
 def _smtp_password() -> str:
-    """SMTP_PASS d'abord, puis SMTP_PASSWORD (variable déjà utilisée par /api/contact)."""
-    return _clean(os.getenv("SMTP_PASS")) or _clean(os.getenv("SMTP_PASSWORD"))
+    """SMTP_PASSWORD (contact / Render), sinon ancien SMTP_PASS."""
+    return _clean(os.getenv("SMTP_PASSWORD")) or _clean(os.getenv("SMTP_PASS"))
 
 
 def _mask_email(email: str) -> str:
@@ -332,10 +332,9 @@ def send_email(
     smtp_only: bool = False,
 ) -> bool:
     """
-    Envoi email :
-    - Défaut (kit affilié, etc.) : Brevo si configuré, sinon SMTP.
-    - smtp_only=True (notifications SmartCard) : SMTP uniquement, comme /api/contact
-      (SMTP_HOST/PORT/USER/PASSWORD, MAIL_FROM ; 465=SSL, sinon STARTTLS).
+    Envoi email (historique SmartCard) :
+    - Brevo API si BREVO_API_KEY + SMTP_FROM/MAIL_FROM.
+    - Sinon fallback SMTP (SMTP_PASSWORD, sinon SMTP_PASS).
     - reply_to optionnel (jamais utilisé comme From).
     """
     to_email = _clean(to_email)

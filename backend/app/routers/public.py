@@ -17,7 +17,7 @@ from app.routers.cards import (
     _ensure_owner_share_key,
     _serialize_card_public,
 )
-from app.utils.emailer import send_smtp_only_result
+from app.utils.emailer import send_email
 from app.utils.rate_limit import rate_limit_by_ip
 from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
 from app.utils.public_slug import sanitize_public_slug
@@ -223,27 +223,16 @@ def _send_pro_notification(
     html: str,
     reply_to: Optional[str],
     card_id: Optional[int],
-) -> dict:
+) -> None:
     try:
-        result = send_smtp_only_result(
-            to_email,
-            subject,
-            text,
-            html,
-            reply_to=reply_to,
-        )
-    except Exception as exc:
+        ok = send_email(to_email, subject, text, html, reply_to=reply_to)
+    except Exception:
         logger.exception("[MAIL] notify_pro failed card_id=%s", card_id)
-        result = {
-            "sent": False,
-            "transport": "smtp",
-            "error_type": type(exc).__name__,
-        }
-    if result.get("sent"):
+        return
+    if ok:
         logger.info("[MAIL] notify_pro ok card_id=%s", card_id)
     else:
         logger.error("[MAIL] notify_pro failed card_id=%s", card_id)
-    return result
 
 
 def notify_pro(
@@ -580,20 +569,15 @@ def create_quote(
         cta_label=labels["cta"],
     )
 
-    email_notification = _send_pro_notification(
-        (card.email_pro or "").strip(),
-        f"{labels['subject_prefix']} – {card.company_name}",
-        text,
-        html,
-        str(payload.email) if payload.email else None,
-        getattr(card, "id", None),
+    notify_pro(
+        card,
+        subject=f"{labels['subject_prefix']} – {card.company_name}",
+        text=text,
+        html=html,
+        reply_to=str(payload.email) if payload.email else None,
     )
 
-    return {
-        "message": "Quote created",
-        "id": quote.id,
-        "email_notification": email_notification,
-    }
+    return {"message": "Quote created", "id": quote.id}
 
 
 
