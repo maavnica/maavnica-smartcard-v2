@@ -255,6 +255,37 @@ class EmailerTransportTests(unittest.TestCase):
             )
         self.assertEqual(result, {"sent": True, "transport": "smtp"})
 
+    def test_smartcard_message_is_text_plain_only(self):
+        with (
+            patch.dict(os.environ, _smtp_env(), clear=True),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            emailer.send_smtp_only_result(
+                "pro@maavnica.com",
+                "📨 Nouvelle demande de contact / démo – Maavnica",
+                "corps texte",
+                "<p>html ne doit pas partir</p>",
+                reply_to="prospect@maavnica.com",
+            )
+        msg = _DummySMTP.instances[0].sent[0]
+        self.assertFalse(msg.is_multipart())
+        self.assertEqual(msg.get_content_type(), "text/plain")
+        self.assertNotEqual(msg.get_content_type(), "multipart/alternative")
+        self.assertEqual(msg.get_content().strip(), "corps texte")
+        self.assertNotIn("<p>html ne doit pas partir</p>", msg.as_string())
+        self.assertEqual(msg["Subject"], "Nouvelle demande de contact / démo – Maavnica")
+        self.assertEqual(msg["From"], "from@maavnica.com")
+        self.assertEqual(msg["To"], "pro@maavnica.com")
+        self.assertEqual(msg["Reply-To"], "prospect@maavnica.com")
+
+    def test_contact_py_still_text_only_and_untouched(self):
+        from pathlib import Path
+
+        src = Path(__file__).resolve().parents[1] / "app" / "routers" / "contact.py"
+        text = src.read_text(encoding="utf-8")
+        self.assertIn("msg.set_content", text)
+        self.assertNotIn("add_alternative", text)
+
     def test_smtp_only_result_auth_error(self):
         class _AuthFail(_DummySMTP):
             def login(self, user, password):

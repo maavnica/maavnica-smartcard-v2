@@ -71,6 +71,23 @@ def _smtp_diag_ok() -> dict:
     return {"sent": True, "transport": "smtp"}
 
 
+_SUBJECT_DECORATION_RE = re.compile(
+    "["
+    "\U0001F300-\U0001FAFF"
+    "\U00002700-\U000027BF"
+    "\U00002600-\U000026FF"
+    "\U0000FE0F"
+    "\U0000200D"
+    "]+",
+    flags=re.UNICODE,
+)
+
+
+def _plain_subject(subject: str) -> str:
+    """Retire les emojis / décorations du sujet (alignement contact.py, texte simple)."""
+    return " ".join(_SUBJECT_DECORATION_RE.sub(" ", subject).split())
+
+
 def _smtp_diag_fail(error_type: str, error_message: str = "") -> dict:
     result = {
         "sent": False,
@@ -214,16 +231,17 @@ def _send_via_smtp_contact(
     html: str,
     reply_to: str,
 ) -> dict:
-    """Même handshake que ``contact.py`` : 465 = SMTP_SSL, sinon EHLO+STARTTLS+EHLO+LOGIN."""
+    """Même handshake que ``contact.py`` : 465 = SMTP_SSL, sinon EHLO+STARTTLS+EHLO+LOGIN.
+
+    Diagnostic délivrabilité : texte seul (pas de part HTML), comme ``contact.py``.
+    """
     msg = EmailMessage()
     msg["From"] = from_email
     msg["To"] = to_email
-    msg["Subject"] = subject
+    msg["Subject"] = _plain_subject(subject)
     if reply_to:
         msg["Reply-To"] = reply_to
     msg.set_content(text)
-    if html:
-        msg.add_alternative(html, subtype="html")
 
     dest = _mask_email(to_email)
     try:
