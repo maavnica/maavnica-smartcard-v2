@@ -1925,8 +1925,8 @@
     body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-pay:not(.is-open) .btn-link {
       pointer-events: none;
     }
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-quote:not(.is-open) .quote-input,
-    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]) #panel-quote:not(.is-open) #btn-send-quote {
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]):not([data-theme="maavnica"]) #panel-quote:not(.is-open) .quote-input,
+    body.public-card--compact:not([data-theme|="wellness-soft"]):not([data-theme="artisan"]):not([data-theme="real-estate"]):not([data-theme="maavnica"]) #panel-quote:not(.is-open) #btn-send-quote {
       pointer-events: none;
     }
 

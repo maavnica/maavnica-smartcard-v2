@@ -160,18 +160,74 @@ def _send_via_smtp(
         return False
 
 
+def _send_via_smtp_contact(
+    *,
+    host: str,
+    port: int,
+    user: str,
+    password: str,
+    from_email: str,
+    to_email: str,
+    subject: str,
+    text: str,
+    html: str,
+    reply_to: str,
+) -> bool:
+    """Même handshake que ``contact.py`` : 465 = SMTP_SSL, sinon EHLO+STARTTLS+EHLO+LOGIN."""
+    msg = EmailMessage()
+    msg["From"] = from_email
+    msg["To"] = to_email
+    msg["Subject"] = subject
+    if reply_to:
+        msg["Reply-To"] = reply_to
+    msg.set_content(text)
+    if html:
+        msg.add_alternative(html, subtype="html")
+
+    dest = _mask_email(to_email)
+    try:
+        timeout = 20
+        if port == 465:
+            with smtplib.SMTP_SSL(
+                host,
+                port,
+                timeout=timeout,
+                context=ssl.create_default_context(),
+            ) as server:
+                server.login(user, password)
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(host, port, timeout=timeout) as server:
+                server.ehlo()
+                server.starttls(context=ssl.create_default_context())
+                server.ehlo()
+                server.login(user, password)
+                server.send_message(msg)
+        logger.info("[MAIL] SMTP OK dest=%s", dest)
+        return True
+    except Exception as e:
+        logger.warning(
+            "[MAIL] SMTP FAILED dest=%s error=%s detail=%s",
+            dest,
+            type(e).__name__,
+            _safe_error_text(str(e)),
+        )
+        return False
+
+
 def send_email(
     to_email: str,
     subject: str,
     text: str,
     html: str | None = None,
     reply_to: str | None = None,
+    smtp_only: bool = False,
 ) -> bool:
     """
     Envoi email :
-    - Priorité: API Brevo (HTTPS).
-    - Si Brevo est absent ou échoue: SMTP (SMTP_PASS, sinon SMTP_PASSWORD).
-    - Jamais deux envois si Brevo a réussi.
+    - Défaut (kit affilié, etc.) : Brevo si configuré, sinon SMTP.
+    - smtp_only=True (notifications SmartCard) : SMTP uniquement, comme /api/contact
+      (SMTP_HOST/PORT/USER/PASSWORD, MAIL_FROM ; 465=SSL, sinon STARTTLS).
     - reply_to optionnel (jamais utilisé comme From).
     """
     to_email = _clean(to_email)
@@ -186,6 +242,33 @@ def send_email(
     if not subject:
         logger.warning("[MAIL] SKIP empty subject dest=%s", _mask_email(to_email))
         return False
+
+    if smtp_only:
+        host = _clean(os.getenv("SMTP_HOST"))
+        port_raw = _clean(os.getenv("SMTP_PORT"))
+        user = _clean(os.getenv("SMTP_USER"))
+        password = _clean(os.getenv("SMTP_PASSWORD"))
+        from_email = _clean(os.getenv("MAIL_FROM"))
+        try:
+            port = int(port_raw) if port_raw else 587
+        except ValueError:
+            logger.warning("[MAIL] SKIP NO TRANSPORT")
+            return False
+        if not _smtp_configured(host, user, password, from_email):
+            logger.warning("[MAIL] SKIP NO TRANSPORT")
+            return False
+        return _send_via_smtp_contact(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            from_email=from_email,
+            to_email=to_email,
+            subject=subject,
+            text=text,
+            html=html,
+            reply_to=reply_to,
+        )
 
     api_key = _clean(os.getenv("BREVO_API_KEY"))
     from_email = _clean(os.getenv("SMTP_FROM")) or _clean(os.getenv("MAIL_FROM"))

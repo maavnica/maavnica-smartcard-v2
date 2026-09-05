@@ -224,7 +224,7 @@ def _send_pro_notification(
     reply_to: Optional[str],
     card_id: Optional[int],
 ) -> None:
-    ok = send_email(to_email, subject, text, html, reply_to=reply_to)
+    ok = send_email(to_email, subject, text, html, reply_to=reply_to, smtp_only=True)
     if ok:
         logger.info("[MAIL] notify_pro ok card_id=%s", card_id)
     else:

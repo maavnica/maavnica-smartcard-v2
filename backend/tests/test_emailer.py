@@ -63,7 +63,7 @@ class EmailerTransportTests(unittest.TestCase):
     def setUp(self):
         _DummySMTP.instances = []
 
-    def _send(self, **env):
+    def _send(self, smtp_only: bool = False, **env):
         with patch.dict(os.environ, env, clear=True):
             return emailer.send_email(
                 "pro@maavnica.com",
@@ -71,6 +71,7 @@ class EmailerTransportTests(unittest.TestCase):
                 "corps texte",
                 "<p>html</p>",
                 reply_to="prospect@example.com",
+                smtp_only=smtp_only,
             )
 
     def test_cas1_brevo_absent_smtp_password_used(self):
@@ -189,6 +190,53 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertTrue(ok)
         self.assertIsNone(_DummySMTP.instances[0].sent[0]["Reply-To"])
 
+    def test_smartcard_smtp_only_ignores_brevo(self):
+        fake_urlopen = MagicMock(side_effect=AssertionError("Brevo ne doit pas être appelé"))
+        with (
+            patch.object(emailer.urllib.request, "urlopen", fake_urlopen),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            ok = self._send(
+                smtp_only=True,
+                **_smtp_env(BREVO_API_KEY="brevo-key-not-logged", SMTP_FROM="other@example.com"),
+            )
+        self.assertTrue(ok)
+        fake_urlopen.assert_not_called()
+        inst = _DummySMTP.instances[0]
+        self.assertTrue(inst.started_tls)
+        self.assertEqual(inst.logged_in, ("smtp-user@example.test", "smtp-password-value"))
+        msg = inst.sent[0]
+        self.assertEqual(msg["From"], "from@maavnica.com")
+        self.assertEqual(msg["To"], "pro@maavnica.com")
+        self.assertEqual(msg["Reply-To"], "prospect@example.com")
+        self.assertTrue(any("[MAIL] SMTP OK" in m for m in logs.output))
+        self.assertFalse(any("[MAIL] BREVO" in m for m in logs.output))
+
+    def test_smartcard_smtp_only_uses_ssl_on_465(self):
+        smtp_plain = MagicMock(side_effect=AssertionError("SMTP plain ne doit pas être appelé"))
+        with (
+            patch.object(emailer.smtplib, "SMTP", smtp_plain),
+            patch.object(emailer.smtplib, "SMTP_SSL", _DummySMTP),
+        ):
+            ok = self._send(smtp_only=True, **_smtp_env(SMTP_PORT="465"))
+        self.assertTrue(ok)
+        self.assertEqual(len(_DummySMTP.instances), 1)
+        self.assertFalse(_DummySMTP.instances[0].started_tls)
+        smtp_plain.assert_not_called()
+
+    def test_smartcard_smtp_only_ignores_smtp_pass(self):
+        with patch.object(emailer.smtplib, "SMTP", _DummySMTP):
+            ok = self._send(
+                smtp_only=True,
+                **_smtp_env(SMTP_PASS="legacy-pass-value"),
+            )
+        self.assertTrue(ok)
+        self.assertEqual(
+            _DummySMTP.instances[0].logged_in,
+            ("smtp-user@example.test", "smtp-password-value"),
+        )
+
 
 class NotifyProTests(unittest.TestCase):
     def test_cas5_empty_email_pro_skips_send(self):
@@ -236,6 +284,7 @@ class NotifyProTests(unittest.TestCase):
             "texte",
             "<p>x</p>",
             reply_to="prospect@example.com",
+            smtp_only=True,
         )
         self.assertTrue(any("[MAIL] notify_pro ok" in m for m in logs.output))
 
