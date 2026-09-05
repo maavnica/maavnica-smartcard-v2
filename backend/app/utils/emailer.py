@@ -45,6 +45,15 @@ def _mask_email(email: str) -> str:
     return f"{local[0]}***@{domain}"
 
 
+def _email_domain(email: str) -> str:
+    """Domaine seul pour MAILTRACE (jamais d'adresse complète)."""
+    cleaned = _clean(email)
+    if not cleaned or "@" not in cleaned:
+        return "(unknown)"
+    domain = cleaned.rsplit("@", 1)[-1].strip().lower()
+    return domain or "(unknown)"
+
+
 def _safe_error_text(raw: str, limit: int = 300) -> str:
     text = _clean(raw)
     text = _SECRET_IN_TEXT.sub(r"\1=***", text)
@@ -153,6 +162,11 @@ def _send_via_brevo(
             e.code,
             _safe_error_text(body or str(e)),
         )
+        logger.info(
+            "[MAILTRACE] BREVO_FAILED type=%s status=%s",
+            type(e).__name__,
+            e.code,
+        )
         return False
     except Exception as e:
         logger.warning(
@@ -160,6 +174,10 @@ def _send_via_brevo(
             dest,
             type(e).__name__,
             _safe_error_text(str(e)),
+        )
+        logger.info(
+            "[MAILTRACE] BREVO_FAILED type=%s status=-",
+            type(e).__name__,
         )
         return False
 
@@ -215,6 +233,7 @@ def _send_via_smtp(
             type(e).__name__,
             _safe_error_text(str(e)),
         )
+        logger.info("[MAILTRACE] SMTP_FALLBACK_FAILED type=%s", type(e).__name__)
         return False
 
 
@@ -363,7 +382,16 @@ def send_email(
     from_email = _clean(os.getenv("SMTP_FROM")) or _clean(os.getenv("MAIL_FROM"))
     from_name = _clean(os.getenv("SMTP_FROM_NAME")) or "Maavnica SmartCard"
 
+    logger.info(
+        "[MAILTRACE] CONFIG brevo_key_present=%s sender_present=%s",
+        "true" if api_key else "false",
+        "true" if from_email else "false",
+    )
+    logger.info("[MAILTRACE] TO_DOMAIN=%s", _email_domain(to_email))
+    logger.info("[MAILTRACE] FROM_DOMAIN=%s", _email_domain(from_email))
+
     if api_key and from_email:
+        logger.info("[MAILTRACE] BREVO_ATTEMPT")
         if _send_via_brevo(
             api_key=api_key,
             from_email=from_email,
@@ -374,6 +402,7 @@ def send_email(
             html=html,
             reply_to=reply_to,
         ):
+            logger.info("[MAILTRACE] BREVO_OK")
             return True
         logger.info("[MAIL] BREVO FAILED falling back to SMTP dest=%s", _mask_email(to_email))
 
@@ -391,7 +420,8 @@ def send_email(
     use_tls = _clean(os.getenv("SMTP_TLS", "true")).lower() in ("1", "true", "yes", "on")
     use_ssl = _clean(os.getenv("SMTP_SSL", "false")).lower() in ("1", "true", "yes", "on")
 
-    return _send_via_smtp(
+    logger.info("[MAILTRACE] SMTP_FALLBACK_ATTEMPT")
+    ok = _send_via_smtp(
         host=host,
         port=port,
         user=user,
@@ -405,3 +435,6 @@ def send_email(
         use_tls=use_tls,
         use_ssl=use_ssl,
     )
+    if ok:
+        logger.info("[MAILTRACE] SMTP_FALLBACK_OK")
+    return ok

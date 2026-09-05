@@ -95,6 +95,13 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertEqual(msg["Reply-To"], "prospect@example.com")
         self.assertTrue(any("[MAIL] SMTP OK" in m for m in logs.output))
         self.assertFalse(any("[MAIL] BREVO OK" in m for m in logs.output))
+        joined = "\n".join(logs.output)
+        self.assertIn("[MAILTRACE] CONFIG brevo_key_present=false sender_present=true", joined)
+        self.assertIn("[MAILTRACE] TO_DOMAIN=maavnica.com", joined)
+        self.assertIn("[MAILTRACE] FROM_DOMAIN=maavnica.com", joined)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
+        self.assertNotIn("[MAILTRACE] BREVO_ATTEMPT", joined)
 
     def test_smtp_password_preferred_over_smtp_pass(self):
         with patch.object(emailer.smtplib, "SMTP", _DummySMTP):
@@ -141,6 +148,12 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertIn("http=400", joined)
         self.assertIn("[MAIL] SMTP OK", joined)
         self.assertNotIn("brevo-key-not-logged", joined)
+        self.assertIn("[MAILTRACE] CONFIG brevo_key_present=true sender_present=true", joined)
+        self.assertIn("[MAILTRACE] BREVO_ATTEMPT", joined)
+        self.assertIn("[MAILTRACE] BREVO_FAILED type=HTTPError status=400", joined)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
+        self.assertNotIn("[MAILTRACE] BREVO_OK", joined)
 
     def test_cas3_brevo_ok_skips_smtp(self):
         fake_resp = MagicMock()
@@ -165,6 +178,12 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertEqual(_DummySMTP.instances, [])
         self.assertTrue(any("[MAIL] BREVO OK" in m for m in logs.output))
         self.assertFalse(any("[MAIL] SMTP OK" in m for m in logs.output))
+        joined = "\n".join(logs.output)
+        self.assertIn("[MAILTRACE] CONFIG brevo_key_present=true sender_present=true", joined)
+        self.assertIn("[MAILTRACE] BREVO_ATTEMPT", joined)
+        self.assertIn("[MAILTRACE] BREVO_OK", joined)
+        self.assertNotIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
+        self.assertNotIn("[MAILTRACE] BREVO_FAILED", joined)
         self.assertEqual(captured["body"]["sender"]["email"], "from@maavnica.com")
         self.assertEqual(captured["body"]["replyTo"]["email"], "prospect@example.com")
         self.assertNotEqual(captured["body"]["sender"]["email"], "prospect@example.com")
@@ -326,6 +345,41 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertEqual(result["sent"], False)
         self.assertEqual(result["transport"], "smtp")
         self.assertEqual(result["error_type"], "configuration missing")
+
+    def test_mailtrace_hides_secrets_and_full_addresses(self):
+        with (
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            ok = self._send(**_smtp_env())
+        self.assertTrue(ok)
+        trace = [m for m in logs.output if "[MAILTRACE]" in m]
+        self.assertTrue(trace)
+        dumped = "\n".join(trace)
+        self.assertNotIn("brevo-key-not-logged", dumped)
+        self.assertNotIn("smtp-password-value", dumped)
+        self.assertNotIn("pro@maavnica.com", dumped)
+        self.assertNotIn("from@maavnica.com", dumped)
+        self.assertNotIn("prospect@example.com", dumped)
+        self.assertNotIn("corps texte", dumped)
+        self.assertNotIn("<p>html</p>", dumped)
+        self.assertNotIn("@", dumped)
+
+    def test_mailtrace_smtp_fallback_failed(self):
+        class _FailSMTP(_DummySMTP):
+            def send_message(self, msg):
+                raise smtplib.SMTPRecipientsRefused({"x": (550, b"no")})
+
+        with (
+            patch.object(emailer.smtplib, "SMTP", _FailSMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            ok = self._send(**_smtp_env())
+        self.assertFalse(ok)
+        joined = "\n".join(logs.output)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
+        self.assertIn("[MAILTRACE] SMTP_FALLBACK_FAILED type=SMTPRecipientsRefused", joined)
+        self.assertNotIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
 
     def test_classify_ssl_and_timeout(self):
         self.assertEqual(emailer._classify_smtp_error(ssl.SSLError("boom")), "SSL error")
