@@ -21,6 +21,7 @@ from app.utils.recommender_display import (
 )
 from app.utils.admin_auth import require_admin_http_basic
 from app.utils.rate_limit import rate_limit_by_ip
+from app.utils.preview_card import should_skip_preview_persistence
 
 router_api = APIRouter(prefix="/api/analytics", tags=["analytics"])
 router_pages = APIRouter(tags=["analytics"])
@@ -54,6 +55,8 @@ def record_visit(
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(180, 60)),
 ):
+    if should_skip_preview_persistence(db, payload.slug):
+        return Response(status_code=204)
     src = _normalize_src_for_storage(payload.src)
     ref = _normalize_src_for_storage(payload.ref)
     rec = _normalize_src_for_storage(payload.rec)
@@ -74,6 +77,8 @@ def record_event(
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(180, 60)),
 ):
+    if should_skip_preview_persistence(db, payload.slug):
+        return Response(status_code=204)
     src = _normalize_src_for_storage(payload.src)
     ref = _normalize_src_for_storage(payload.ref)
     rec = _normalize_src_for_storage(payload.rec)
@@ -100,6 +105,8 @@ def record_recommendation_event(
     db: Session = Depends(get_db),
     _: None = Depends(rate_limit_by_ip(180, 60)),
 ):
+    if should_skip_preview_persistence(db, payload.card_slug):
+        return Response(status_code=204)
     fn = _optional_recommender_part(payload.recommender_first_name)
     ln = _optional_recommender_part(payload.recommender_last_name)
     display = build_recommender_display_name(payload.recommender_first_name, payload.recommender_last_name)

@@ -55,6 +55,11 @@ class Card(Base):
     # Univers visuel FR (attribut body data-theme : wellness-soft, artisan, …)
     visual_theme = Column(String(32), nullable=False, default="wellness-soft")
     expires_at = Column(DateTime, nullable=True)
+    # Mode proposition / preview (Local Finder, démos internes, etc.)
+    # Indépendant du slug et du plan_type. Défaut false = carte client inchangée.
+    is_preview = Column(Boolean, nullable=False, default=False)
+    preview_origin = Column(String(64), nullable=True)
+    preview_expires_at = Column(DateTime, nullable=True)
 
     # 🔹 NOUVEAUX CHAMPS – PROFIL & INFOS DIGITALES
     # Type de SmartCard / profil métier :

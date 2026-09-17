@@ -385,6 +385,65 @@ def ensure_google_rating_columns() -> None:
     )
 
 
+def ensure_card_preview_columns() -> None:
+    """Ajoute is_preview / preview_origin / preview_expires_at si colonnes manquantes."""
+    import logging
+
+    from sqlalchemy import inspect, text
+
+    log = logging.getLogger(__name__)
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    dialect = engine.dialect.name
+    statements: list[str] = []
+    if "is_preview" not in existing:
+        if dialect == "postgresql":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN IF NOT EXISTS "
+                "is_preview BOOLEAN NOT NULL DEFAULT false"
+            )
+        elif dialect == "sqlite":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN is_preview BOOLEAN NOT NULL DEFAULT 0"
+            )
+        else:
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN is_preview BOOLEAN NOT NULL DEFAULT false"
+            )
+    if "preview_origin" not in existing:
+        if dialect == "postgresql":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN IF NOT EXISTS preview_origin VARCHAR(64)"
+            )
+        else:
+            statements.append("ALTER TABLE cards ADD COLUMN preview_origin VARCHAR(64)")
+    if "preview_expires_at" not in existing:
+        if dialect == "sqlite":
+            statements.append("ALTER TABLE cards ADD COLUMN preview_expires_at DATETIME")
+        elif dialect == "postgresql":
+            statements.append(
+                "ALTER TABLE cards ADD COLUMN IF NOT EXISTS preview_expires_at TIMESTAMP"
+            )
+        else:
+            statements.append("ALTER TABLE cards ADD COLUMN preview_expires_at TIMESTAMP")
+    if not statements:
+        return
+    with engine.begin() as conn:
+        for sql in statements:
+            conn.execute(text(sql))
+    log.warning(
+        "DB_MIGRATION card preview columns added (dialect=%s, count=%s)",
+        dialect,
+        len(statements),
+    )
+
+
 def ensure_visual_theme_column() -> None:
     """Ajoute visual_theme sur cards si colonne manquante (default wellness-soft)."""
     import logging

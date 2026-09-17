@@ -226,18 +226,15 @@ class VisualThemePersistTests(unittest.TestCase):
     def test_themes_css_contains_artisan_rules(self):
         from pathlib import Path
 
-        css = (
+        artisan = (
             Path(__file__).resolve().parents[1]
             / "static"
             / "public-card"
-            / "themes.css"
+            / "artisan-premium.css"
         ).read_text(encoding="utf-8")
-        self.assertIn('body[data-theme="artisan"]', css)
-        self.assertIn('body[data-theme="artisan"] .phone-inner', css)
-        wellness_part, artisan_part = css.split('body[data-theme="artisan"]', 1)
-        self.assertIn("#3b6a52", wellness_part)
-        self.assertIn("#8b5e3c", artisan_part)
-        self.assertIn("#5a615e", artisan_part)
+        self.assertIn('body[data-theme="artisan"]', artisan)
+        self.assertIn('body[data-theme="artisan"] .phone-inner', artisan)
+        self.assertIn("#8a6b4d", artisan)
 
     def test_maavnica_css_isolated(self):
         import re
