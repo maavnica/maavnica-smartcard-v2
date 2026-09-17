@@ -32,19 +32,28 @@ def _admin_headers():
 
 
 class AdminPreviewToggleStaticTests(unittest.TestCase):
-    def test_admin_form_has_preview_checkbox_unchecked_by_default(self):
+    def test_admin_form_has_card_mode_select_in_plan_section(self):
         html = ADMIN_HTML.read_text(encoding="utf-8")
-        self.assertIn('id="is-preview"', html)
+        plan_idx = html.index("Plan & expiration")
+        visual_idx = html.index("Univers visuel")
+        mode_idx = html.index('id="card-mode"')
+        self.assertLess(plan_idx, mode_idx)
+        self.assertLess(mode_idx, visual_idx)
+        self.assertNotIn('id="is-preview"', html)
+        self.assertIn("Mode de la carte", html)
+        self.assertIn("Carte client standard", html)
         self.assertIn("Proposition personnalisée Maavnica", html)
         self.assertIn(
-            "Carte de démonstration : affiche un cadre discret et désactive devis, avis, recommandation et analytics.",
+            "La proposition personnalisée affiche un cadre Maavnica et désactive les demandes de devis, avis, recommandations et analytics.",
             html,
         )
-        self.assertNotRegex(html, r'id="is-preview"[^>]*\bchecked\b')
+        mode_block = html[html.index("<select id=\"card-mode\">") : html.index("</select>", html.index("<select id=\"card-mode\">"))]
+        self.assertIn('value="standard" selected', mode_block)
         self.assertNotIn('id="preview-origin"', html)
         self.assertNotIn('name="preview_origin"', html)
         self.assertIn('id="plan-type"', html)
         self.assertIn("Demo (sans expiration)", html)
+        self.assertNotIn('<option value="preview">Demo', html)
         self.assertIn("Prévisualiser la carte (interne)", html)
         self.assertIn('id="btn-open-preview"', html)
 
@@ -54,7 +63,8 @@ class AdminPreviewToggleStaticTests(unittest.TestCase):
         self.assertIn("function applyIsPreviewToForm", js)
         self.assertIn("function collectAdminCardPayload", js)
         self.assertIn("is_preview: readIsPreviewFromForm()", js)
-        self.assertIn("el.checked = !!(card && card.is_preview === true)", js)
+        self.assertIn('el.value === "preview"', js)
+        self.assertIn('el.value = card && card.is_preview === true ? "preview" : "standard"', js)
         self.assertIn("applyIsPreviewToForm(card)", js)
         self.assertIn("applyIsPreviewToForm({ is_preview: false })", js)
         self.assertIn("const payload = collectAdminCardPayload();", js)
@@ -63,7 +73,7 @@ class AdminPreviewToggleStaticTests(unittest.TestCase):
         ]
         self.assertNotIn("preview_origin", payload_fn)
         self.assertNotIn('getElementById("preview-origin")', js)
-        self.assertIn('id="plan-type"', ADMIN_HTML.read_text(encoding="utf-8"))
+        self.assertIn('getElementById("card-mode")', js)
         self.assertIn("adminPreviewUrlForSlug", js)
         self.assertIn("?admin_view=1", js)
 
@@ -90,10 +100,10 @@ function makeDocument(overrides) {
     "company-name": { value: "Atelier Test" },
     slug: { value: "atelier-test" },
     "plan-type": { value: "demo" },
+    "card-mode": { value: "standard" },
     "region-version": { value: "fr" },
     "visual-theme": { value: "artisan", options: [{ value: "artisan" }] },
     "expires-at": { value: "" },
-    "is-preview": { value: "", checked: false },
     "enable-recommendation": { value: "", checked: false },
     "first-name": { value: "" },
     "last-name": { value: "" },
@@ -134,13 +144,13 @@ function readVisualThemeFromSelect() {
             harness
             + snippet
             + r"""
-function run(checked) {
-  global.document = makeDocument({ "is-preview": { value: "", checked } });
+function run(mode) {
+  global.document = makeDocument({ "card-mode": { value: mode } });
   const payload = collectAdminCardPayload();
   return payload;
 }
-const preview = run(true);
-const normal = run(false);
+const preview = run("preview");
+const normal = run("standard");
 if (preview.is_preview !== true) throw new Error("preview payload must send is_preview true");
 if (normal.is_preview !== false) throw new Error("normal payload must send is_preview false");
 if (Object.prototype.hasOwnProperty.call(preview, "preview_origin")) {
@@ -200,7 +210,7 @@ class AdminPreviewToggleApiTests(unittest.TestCase):
 
         return TestClient(app)
 
-    def test_existing_preview_card_reloads_is_preview_true_for_checkbox(self):
+    def test_existing_preview_card_reloads_card_mode_preview(self):
         client = self._client()
         r = client.get(
             f"/api/cards/by-slug/{PREVIEW_ARTISAN_SLUG}",
@@ -209,24 +219,18 @@ class AdminPreviewToggleApiTests(unittest.TestCase):
         self.assertEqual(r.status_code, 200, r.text)
         data = r.json()
         self.assertIs(data["is_preview"], True)
-        box = {"checked": False}
-
-        class _El:
-            def __init__(self, state):
-                self.state = state
-
-            @property
-            def checked(self):
-                return self.state["checked"]
-
-            @checked.setter
-            def checked(self, value):
-                self.state["checked"] = bool(value)
-
-        el = _El(box)
-        el.checked = data["is_preview"] is True
-        self.assertTrue(box["checked"])
+        mode = "preview" if data["is_preview"] is True else "standard"
+        self.assertEqual(mode, "preview")
         self.assertEqual(data.get("preview_origin"), "local_finder")
+
+        client_card = client.get(
+            f"/api/cards/by-slug/{CLIENT_SLUG}",
+            headers=_admin_headers(),
+        )
+        self.assertEqual(client_card.status_code, 200, client_card.text)
+        self.assertIs(client_card.json()["is_preview"], False)
+        client_mode = "preview" if client_card.json()["is_preview"] is True else "standard"
+        self.assertEqual(client_mode, "standard")
 
     def test_admin_create_payload_preview_and_normal(self):
         client = self._client()
@@ -276,8 +280,13 @@ class AdminPreviewToggleApiTests(unittest.TestCase):
         self.assertIn('id="preview-proposition-frame"', html.text)
         admin_page = client.get("/admin")
         self.assertEqual(admin_page.status_code, 200)
-        self.assertIn('id="is-preview"', admin_page.text)
+        self.assertIn('id="card-mode"', admin_page.text)
+        self.assertIn("Mode de la carte", admin_page.text)
+        self.assertIn("Carte client standard", admin_page.text)
         self.assertIn("Proposition personnalisée Maavnica", admin_page.text)
+        self.assertNotIn('id="is-preview"', admin_page.text)
+        cache_control = (admin_page.headers.get("cache-control") or "").lower()
+        self.assertIn("no-store", cache_control)
 
 
 if __name__ == "__main__":

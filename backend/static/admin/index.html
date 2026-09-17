@@ -89,6 +89,14 @@
             <input id="expires-at" type="datetime-local" />
           </div>
         </div>
+        <label for="card-mode">Mode de la carte</label>
+        <select id="card-mode">
+          <option value="standard" selected>Carte client standard</option>
+          <option value="preview">Proposition personnalisée Maavnica</option>
+        </select>
+        <div class="hint">
+          La proposition personnalisée affiche un cadre Maavnica et désactive les demandes de devis, avis, recommandations et analytics.
+        </div>
         <label for="region-version">Région / version</label>
         <select id="region-version">
           <option value="fr">France / standard</option>
@@ -233,14 +241,6 @@
           La SmartCard sera rendue depuis l’URL publique de la carte.
         </div>
 
-        <label class="checkbox-row" for="is-preview" style="display:flex;align-items:flex-start;gap:10px;margin-top:12px;cursor:pointer;">
-          <input id="is-preview" type="checkbox" style="margin-top:3px;flex-shrink:0;" />
-          <span>Proposition personnalisée Maavnica</span>
-        </label>
-        <div class="hint" style="margin-top:4px;">
-          Carte de démonstration : affiche un cadre discret et désactive devis, avis, recommandation et analytics.
-        </div>
-
         <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
           <button class="btn btn-primary" id="btn-save">
             Enregistrer la carte
@@ -312,7 +312,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=admin-preview-toggle-1"></script>
+  <script src="/static/admin/app.js?v=admin-card-mode-1"></script>
 </body>
 </html>
 

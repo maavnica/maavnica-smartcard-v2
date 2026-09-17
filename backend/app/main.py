@@ -485,7 +485,11 @@ async def serve_admin():
     file_path = STATIC_DIR / "admin" / "index.html"
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="Admin UI not found")
-    return FileResponse(path=str(file_path), media_type="text/html; charset=utf-8")
+    return FileResponse(
+        path=str(file_path),
+        media_type="text/html; charset=utf-8",
+        headers=_PUBLIC_CARD_DEV_NO_CACHE_HEADERS,
+    )
 
 
 # ------------------------------------------------------------
