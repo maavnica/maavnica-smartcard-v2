@@ -288,15 +288,16 @@ function publicCardUrlForSlug(slug) {
   return `${baseUrl}/c/${encodeURIComponent(s)}`;
 }
 
-/** Case « Proposition personnalisée Maavnica » — champ backend is_preview, jamais le slug ni le plan Demo. */
+/** Menu « Mode de la carte » — champ backend is_preview, jamais le slug ni le plan Demo. */
 function readIsPreviewFromForm() {
-  return !!document.getElementById("is-preview")?.checked;
+  const el = document.getElementById("card-mode");
+  return !!(el && el.value === "preview");
 }
 
 function applyIsPreviewToForm(card) {
-  const el = document.getElementById("is-preview");
+  const el = document.getElementById("card-mode");
   if (!el) return;
-  el.checked = !!(card && card.is_preview === true);
+  el.value = card && card.is_preview === true ? "preview" : "standard";
 }
 
 /** Payload d’enregistrement admin. L’origine interne preview n’y figure jamais. */
