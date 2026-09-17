@@ -165,6 +165,7 @@ document.getElementById("last-name").value = card.last_name || "";
   document.getElementById("form-title").value = card.form_title || "";
   const recCb = document.getElementById("enable-recommendation");
   if (recCb) recCb.checked = !!card.enable_recommendation;
+  applyIsPreviewToForm(card);
   const recCodeEl = document.getElementById("recommendation-code");
   if (recCodeEl) recCodeEl.value = card.recommendation_code || "";
   const ownerKeyEl = document.getElementById("owner-share-key");
@@ -221,6 +222,7 @@ document.getElementById("last-name").value = "";
   document.getElementById("form-title").value = "";
   const recCbReset = document.getElementById("enable-recommendation");
   if (recCbReset) recCbReset.checked = false;
+  applyIsPreviewToForm({ is_preview: false });
   const recCodeReset = document.getElementById("recommendation-code");
   if (recCodeReset) recCodeReset.value = "";
   const ownerKeyReset = document.getElementById("owner-share-key");
@@ -284,6 +286,80 @@ function publicCardUrlForSlug(slug) {
   const s = (slug || "").trim();
   if (!s) return "";
   return `${baseUrl}/c/${encodeURIComponent(s)}`;
+}
+
+/** Case « Proposition personnalisée Maavnica » — champ backend is_preview, jamais le slug ni le plan Demo. */
+function readIsPreviewFromForm() {
+  return !!document.getElementById("is-preview")?.checked;
+}
+
+function applyIsPreviewToForm(card) {
+  const el = document.getElementById("is-preview");
+  if (!el) return;
+  el.checked = !!(card && card.is_preview === true);
+}
+
+/** Payload d’enregistrement admin. L’origine interne preview n’y figure jamais. */
+function collectAdminCardPayload() {
+  const companyName = (document.getElementById("company-name")?.value || "").trim();
+  const slug = (document.getElementById("slug")?.value || "").trim().toLowerCase();
+  const payload = {
+    first_name: document.getElementById("first-name")?.value.trim() || null,
+    last_name: document.getElementById("last-name")?.value.trim() || null,
+    company_name: companyName,
+    city: (document.getElementById("city")?.value ?? "").trim() || null,
+    slug,
+    plan_type: document.getElementById("plan-type")?.value || "demo",
+    region: (() => {
+      const el = document.getElementById("region-version");
+      const v = el && el.value ? el.value.trim().toLowerCase() : "";
+      return v === "latam" ? "latam" : "fr";
+    })(),
+    visual_theme: readVisualThemeFromSelect(),
+    expires_at: (() => {
+      const v = document.getElementById("expires-at")?.value;
+      return v ? new Date(v).toISOString() : null;
+    })(),
+    google_review_link: document.getElementById("google-link")?.value.trim() || null,
+    google_rating: (() => {
+      const v = (document.getElementById("google-rating")?.value || "").trim();
+      if (!v) return null;
+      const n = parseFloat(v);
+      return isNaN(n) ? null : n;
+    })(),
+    google_review_count: (() => {
+      const v = (document.getElementById("google-review-count")?.value || "").trim();
+      if (!v) return null;
+      const n = parseInt(v, 10);
+      return isNaN(n) ? null : n;
+    })(),
+    phone: document.getElementById("phone")?.value.trim() || null,
+    whatsapp: document.getElementById("whatsapp")?.value.trim() || null,
+    payment_link: document.getElementById("payment-link")?.value.trim() || null,
+    instagram: document.getElementById("instagram")?.value.trim() || null,
+    facebook: document.getElementById("facebook")?.value.trim() || null,
+    tiktok: document.getElementById("tiktok")?.value.trim() || null,
+    profile: document.getElementById("profile")?.value || "artisan",
+    email_pro: document.getElementById("email-pro")?.value.trim() || null,
+    site_web: document.getElementById("site-web")?.value.trim() || null,
+    avatar_url: document.getElementById("avatar-url")?.value.trim() || null,
+    hero_title: document.getElementById("hero-title")?.value.trim() || null,
+    hero_text: document.getElementById("hero-text")?.value.trim() || null,
+    hero_cta_text: document.getElementById("hero-cta-text")?.value.trim() || null,
+    display_name: document.getElementById("display-name")?.value.trim() || null,
+    business_name:
+      document.getElementById("business-name-field")?.value.trim() || null,
+    job_title: document.getElementById("job-title")?.value.trim() || null,
+    form_title: document.getElementById("form-title")?.value.trim() || null,
+    enable_recommendation: !!document.getElementById("enable-recommendation")?.checked,
+    recommendation_code:
+      document.getElementById("recommendation-code")?.value.trim() || null,
+    is_preview: readIsPreviewFromForm(),
+  };
+  if (NON_EXPIRING_PLANS.has(payload.plan_type)) {
+    payload.expires_at = null;
+  }
+  return payload;
 }
 
 /** Prévisualisation admin : n’impacte pas les analytics publiques. */
@@ -426,69 +502,9 @@ async function saveCard() {
   document.getElementById("slug").value = slug;
   document.getElementById("existing-slug").value = slug;
 
-  // Payload admin : visual_theme (CSS) + profile (métier) uniquement.
-  // theme / card_theme / theme_color : colonnes BDD conservées, non envoyées depuis l’admin.
-  const payload = {
- first_name: document.getElementById("first-name")?.value.trim() || null,
-  last_name: document.getElementById("last-name")?.value.trim() || null,
-    company_name: companyName,
-    city: (document.getElementById("city")?.value ?? "").trim() || null,
-    slug,
-    plan_type: document.getElementById("plan-type").value || "demo",
-    region: (() => {
-      const el = document.getElementById("region-version");
-      const v = el && el.value ? el.value.trim().toLowerCase() : "";
-      return v === "latam" ? "latam" : "fr";
-    })(),
-    visual_theme: readVisualThemeFromSelect(),
-    expires_at: (() => {
-      const v = document.getElementById("expires-at").value;
-      return v ? new Date(v).toISOString() : null;
-    })(),
-
-    // 🔹 Champs classiques
-    google_review_link: document.getElementById("google-link").value.trim() || null,
-    google_rating: (() => {
-      const v = document.getElementById("google-rating").value.trim();
-      if (!v) return null;
-      const n = parseFloat(v);
-      return isNaN(n) ? null : n;
-    })(),
-    google_review_count: (() => {
-      const v = document.getElementById("google-review-count").value.trim();
-      if (!v) return null;
-      const n = parseInt(v, 10);
-      return isNaN(n) ? null : n;
-    })(),
-    phone: document.getElementById("phone").value.trim() || null,
-    whatsapp: document.getElementById("whatsapp").value.trim() || null,
-    payment_link: document.getElementById("payment-link").value.trim() || null,
-    instagram: document.getElementById("instagram").value.trim() || null,
-    facebook: document.getElementById("facebook").value.trim() || null,
-    tiktok: document.getElementById("tiktok").value.trim() || null,
-
-    // 🔹 NOUVEAUX CHAMPS
-    profile: document.getElementById("profile").value || "artisan",
-    email_pro: document.getElementById("email-pro").value.trim() || null,
-    site_web: document.getElementById("site-web").value.trim() || null,
-    avatar_url: document.getElementById("avatar-url").value.trim() || null,
-    hero_title: document.getElementById("hero-title").value.trim() || null,
-    hero_text: document.getElementById("hero-text").value.trim() || null,
-    hero_cta_text: document.getElementById("hero-cta-text").value.trim() || null,
-
-    display_name: document.getElementById("display-name").value.trim() || null,
-    business_name:
-      document.getElementById("business-name-field").value.trim() || null,
-    job_title: document.getElementById("job-title").value.trim() || null,
-    form_title: document.getElementById("form-title").value.trim() || null,
-
-    enable_recommendation: !!document.getElementById("enable-recommendation")?.checked,
-    recommendation_code:
-      document.getElementById("recommendation-code")?.value.trim() || null
-  };
-  if (NON_EXPIRING_PLANS.has(payload.plan_type)) {
-    payload.expires_at = null;
-  }
+  // Payload admin : visual_theme (CSS) + profile (métier) + is_preview.
+  // theme / card_theme / theme_color : non envoyés. Origine interne preview non éditable.
+  const payload = collectAdminCardPayload();
 
   // on met aussi à jour currentProfile si on change dans le formulaire
   currentProfile = payload.profile || "artisan";
