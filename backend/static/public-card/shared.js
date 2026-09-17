@@ -395,6 +395,8 @@
 
     /** True si la page est une consultation interne (param URL ou slug marqué localement pour ce navigateur). */
     let isInternalView = false;
+    /** Carte preview (statut API is_preview) — jamais déduit du slug. */
+    let isPreviewSafeMode = false;
 
     function migrateLegacyAdminViewFlag(slug) {
       try {
@@ -418,6 +420,7 @@
     }
 
     function shouldTrackAnalytics() {
+      if (isPreviewSafeMode) return false;
       if (isInternalView) return false;
       try {
         if (localStorage.getItem("maavnica_consent") !== "all") return false;
@@ -451,6 +454,34 @@
     function isDemoSlug(slug) {
       if (!slug) return false;
       return slug.toLowerCase().startsWith("demo");
+    }
+
+    /** Proposition preview : flag API explicite, jamais un préfixe de slug. */
+    function isPreviewCardPayload(card) {
+      return !!(card && card.is_preview === true);
+    }
+
+    function syncPreviewPropositionFrame(isPreview) {
+      var frame = document.getElementById("preview-proposition-frame");
+      if (isPreview) {
+        document.body.classList.add("preview-card-mode");
+        document.body.setAttribute("data-preview", "1");
+      } else {
+        document.body.classList.remove("preview-card-mode");
+        document.body.removeAttribute("data-preview");
+      }
+      if (!frame) return;
+      if (isPreview) {
+        frame.hidden = false;
+        frame.removeAttribute("hidden");
+        frame.classList.add("preview-proposition-frame--on");
+        frame.setAttribute("aria-hidden", "false");
+      } else {
+        frame.hidden = true;
+        frame.setAttribute("hidden", "");
+        frame.classList.remove("preview-proposition-frame--on");
+        frame.setAttribute("aria-hidden", "true");
+      }
     }
 
     /** Démos LATAM (servies par index_latam en prod) — pas de surcouche SEO FR sur ce préfixe. */
@@ -1278,7 +1309,9 @@
       syncInternalViewFromUrl(slug);
       refreshIsInternalView(slug);
 
-      const isDemoCard = isDemoSlug(slug);
+      let isDemoCard = isDemoSlug(slug);
+      isPreviewSafeMode = false;
+      syncPreviewPropositionFrame(false);
       document.body.classList.toggle("client-card-mode", !isDemoCard);
       applyClientMidsectionVisibility(isDemoCard);
       syncDemoMarketingVisibility(isDemoCard);
@@ -1328,6 +1361,15 @@
           (card.slug != null && card.slug !== undefined && String(card.slug).trim())
             ? String(card.slug).trim()
             : slug;
+
+        isPreviewSafeMode = isPreviewCardPayload(card);
+        if (isPreviewSafeMode) {
+          isDemoCard = false;
+        }
+        document.body.classList.toggle("client-card-mode", !isDemoCard);
+        applyClientMidsectionVisibility(isDemoCard);
+        syncDemoMarketingVisibility(isDemoCard);
+        syncPreviewPropositionFrame(isPreviewSafeMode);
 
         var showOwnerShareTools = !!isDemoCard || card.owner_mode === true;
         document.body.classList.toggle("owner-share-tools", showOwnerShareTools);
@@ -2160,6 +2202,10 @@
           }
 
           btnFeedback.onclick = async () => {
+            if (isPreviewSafeMode) {
+              showToast("Cette proposition est une démonstration — aucun avis n’a été enregistré.");
+              return;
+            }
             if (!feedbackValue) {
               showToast("Merci de choisir un avis 😊 / 😐", true);
               return;
@@ -2230,6 +2276,11 @@
 
             if (!name || !phone || !message) {
               showToast("Merci de remplir les champs obligatoires (*).");
+              return;
+            }
+
+            if (isPreviewSafeMode) {
+              showToast("Cette proposition est une démonstration — aucune demande n’a été enregistrée.");
               return;
             }
 
@@ -2384,7 +2435,8 @@
 
         const recommendEnabled = card.enable_recommendation === true;
         /* Démo : toujours montrer le bloc recommandation (démo produit complète). Vraie carte : selon réglage admin. */
-        const showRecommendBlock = isDemoCard || recommendEnabled;
+        /* Preview : jamais de recommandation persistante. */
+        const showRecommendBlock = !isPreviewSafeMode && (isDemoCard || recommendEnabled);
         const recommendBlock = document.getElementById("recommend-block");
         if (recommendBlock) {
           recommendBlock.style.display = showRecommendBlock ? "block" : "none";

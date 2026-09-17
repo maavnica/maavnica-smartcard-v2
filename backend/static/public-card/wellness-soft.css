@@ -168,6 +168,26 @@ body[data-theme|="wellness-soft"] .admin-preview-badge , body[data-theme="artisa
   color: var(--card-muted);
 }
 
+body[data-theme|="wellness-soft"] .preview-proposition-frame.preview-proposition-frame--on,
+body[data-theme="artisan"] .preview-proposition-frame.preview-proposition-frame--on,
+body[data-theme="real-estate"] .preview-proposition-frame.preview-proposition-frame--on {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+  padding: 16px 16px 0;
+  margin: 0;
+  border: none;
+}
+body[data-theme|="wellness-soft"] .preview-proposition-label,
+body[data-theme="artisan"] .preview-proposition-label,
+body[data-theme="real-estate"] .preview-proposition-label {
+  color: var(--card-muted);
+  border-bottom-color: var(--card-border);
+}
+
 /* —— Hero —— */
 body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero , body[data-theme="real-estate"] .hero ,
 body[data-theme|="wellness-soft"] .hero , body[data-theme="artisan"] .hero , body[data-theme="real-estate"] .hero {

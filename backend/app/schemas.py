@@ -13,6 +13,7 @@ _EMAIL_IN_TEXT_PATTERN = re.compile(
 _PHONE_PATTERN = re.compile(r"^[0-9+\-\s()./]{6,25}$")
 _AFFILIATE_REF_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{0,31}$")
 _RECOMMENDATION_CODE_PATTERN = re.compile(r"^[a-zA-Z0-9_-]{1,64}$")
+_PREVIEW_ORIGIN_PATTERN = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
 _ALLOWED_PLAN_TYPES = {"demo", "lifetime", "trial", "solo", "business"}
 _ALLOWED_REGIONS = {"fr", "latam"}
 _ALLOWED_CARD_THEMES = {"classic", "experience"}
@@ -57,6 +58,9 @@ class CardBase(BaseModel):
     card_theme: str = "classic"
     visual_theme: str = "wellness-soft"
     expires_at: Optional[datetime] = None
+    is_preview: bool = False
+    preview_origin: Optional[str] = Field(None, max_length=64)
+    preview_expires_at: Optional[datetime] = None
 
     # 🔹 NOUVEAUX CHAMPS — PROFIL & INFOS MÉTIER
     #   artisan, digital, bien_etre, medical, immo, resto, generic…
@@ -197,6 +201,36 @@ class CardBase(BaseModel):
             )
         return v
 
+    @field_validator("is_preview", mode="before")
+    @classmethod
+    def _is_preview_normalize(cls, v):
+        if v is None:
+            return False
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "on"}
+        return bool(v)
+
+    @field_validator("preview_origin", mode="before")
+    @classmethod
+    def _preview_origin_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            return s if s else None
+        return v
+
+    @field_validator("preview_origin")
+    @classmethod
+    def _preview_origin_validate(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if not _PREVIEW_ORIGIN_PATTERN.fullmatch(v):
+            raise ValueError(
+                "preview_origin invalide (lettres minuscules, chiffres, underscores)."
+            )
+        return v
+
     @field_validator("city", mode="before")
     @classmethod
     def _city_strip(cls, v):
@@ -239,6 +273,9 @@ class CardUpdate(BaseModel):
     card_theme: Optional[str] = None
     visual_theme: Optional[str] = None
     expires_at: Optional[datetime] = None
+    is_preview: Optional[bool] = None
+    preview_origin: Optional[str] = Field(None, max_length=64)
+    preview_expires_at: Optional[datetime] = None
 
     # 🔹 Nouveaux champs
     profile: Optional[str] = None
@@ -263,6 +300,36 @@ class CardUpdate(BaseModel):
     hero_title: Optional[str] = Field(None, max_length=200)
     hero_text: Optional[str] = Field(None, max_length=1200)
     hero_cta_text: Optional[str] = Field(None, max_length=500)
+
+    @field_validator("is_preview", mode="before")
+    @classmethod
+    def _is_preview_update_normalize(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "on"}
+        return bool(v)
+
+    @field_validator("preview_origin", mode="before")
+    @classmethod
+    def _preview_origin_update_strip(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            s = v.strip().lower()
+            return s if s else None
+        return v
+
+    @field_validator("preview_origin")
+    @classmethod
+    def _preview_origin_update_validate(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if not _PREVIEW_ORIGIN_PATTERN.fullmatch(v):
+            raise ValueError(
+                "preview_origin invalide (lettres minuscules, chiffres, underscores)."
+            )
+        return v
 
     @field_validator("city", mode="before")
     @classmethod
@@ -415,6 +482,10 @@ class CardPublic(BaseModel):
     card_theme: str = "classic"
     visual_theme: str = "wellness-soft"
     expires_at: Optional[datetime] = None
+    is_preview: bool = False
+    preview_expires_at: Optional[datetime] = None
+    # Renseigné uniquement pour une requête admin authentifiée — jamais au visiteur public.
+    preview_origin: Optional[str] = None
     computed_status: str = "active"
     days_remaining: Optional[int] = None
 

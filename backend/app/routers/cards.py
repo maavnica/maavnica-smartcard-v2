@@ -112,7 +112,12 @@ def _card_to_public_dict(card: models.Card, db: Session) -> dict:
     """Construit le dict CardPublic sans lire owner_share_key depuis l’ORM (évite toute fuite)."""
     d = {}
     for name in schemas.CardPublic.model_fields:
-        if name in ("owner_mode", "owner_share_key", "recommendation_share_count"):
+        if name in (
+            "owner_mode",
+            "owner_share_key",
+            "recommendation_share_count",
+            "preview_origin",
+        ):
             continue
         if hasattr(card, name):
             d[name] = getattr(card, name)
@@ -180,6 +185,11 @@ def _serialize_card_public(
     out["owner_mode"] = owner_mode
     out["owner_share_key"] = card.owner_share_key if admin_bearer_matches(request) else None
     out["recommendation_share_count"] = recommendation_share_count
+    out["is_preview"] = bool(getattr(card, "is_preview", False))
+    origin = getattr(card, "preview_origin", None)
+    if origin is not None:
+        origin = str(origin).strip() or None
+    out["preview_origin"] = origin if admin_bearer_matches(request) else None
     return schemas.CardPublic(**out)
 
 

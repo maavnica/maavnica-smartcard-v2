@@ -139,7 +139,7 @@ _BODY_DATA_THEME_ATTR_RE = re.compile(
     re.IGNORECASE,
 )
 # Pendant la phase de développement SmartCard, on privilégie la fraîcheur des assets au cache navigateur.
-PUBLIC_ASSET_VERSION = "2026-06-02-mobile-layout-fix"
+PUBLIC_ASSET_VERSION = "2026-09-17-preview-safety"
 
 _PUBLIC_CARD_STATIC_ASSET_RE = re.compile(
     r"(/static/(?:public-card/[\w.\-]+|maavnica-consent\.js|service-worker\.js))"
@@ -361,6 +361,7 @@ def _create_db_tables():
         ensure_card_theme_column,
         ensure_visual_theme_column,
         ensure_google_rating_columns,
+        ensure_card_preview_columns,
     )
 
     Base.metadata.create_all(bind=engine)
@@ -377,6 +378,7 @@ def _create_db_tables():
     ensure_google_rating_columns()
     ensure_quote_recommendation_columns()
     ensure_recommendation_event_display_columns()
+    ensure_card_preview_columns()
     _log_public_card_v3_assets()
 
 

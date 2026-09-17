@@ -21,6 +21,7 @@ from app.utils.emailer import send_email, smartcard_mail_from
 from app.utils.rate_limit import rate_limit_by_ip
 from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
 from app.utils.public_slug import sanitize_public_slug
+from app.utils.preview_card import raise_if_preview_expired, raise_if_preview_writes
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
@@ -370,6 +371,7 @@ def get_public_card(
     db: Session = Depends(get_db),
 ):
     card = get_card_by_slug_or_404(slug, db)
+    raise_if_preview_expired(card)
     if card.expires_at and card.expires_at <= datetime.utcnow():
         raise HTTPException(
             status_code=403,
@@ -395,6 +397,7 @@ def get_public_card(
 def get_vcard(slug: str, db: Session = Depends(get_db)):
     """Télécharge une vCard (.vcf) avec les infos principales de la carte."""
     card = get_card_by_slug_or_404(slug, db)
+    raise_if_preview_expired(card)
     vcard = _build_vcard(card)
     filename = f"{card.slug}.vcf"
     return Response(
@@ -412,6 +415,7 @@ def create_feedback(
     _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
     card = get_card_by_id_or_404(card_id, db)
+    raise_if_preview_writes(card)
 
     feedback = Feedback(
         card_id=card.id,
@@ -485,6 +489,7 @@ def create_quote(
     _: None = Depends(rate_limit_by_ip(5, 60)),
 ):
     card = get_card_by_id_or_404(card_id, db)
+    raise_if_preview_writes(card)
 
     reco_first: Optional[str] = None
     reco_last: Optional[str] = None

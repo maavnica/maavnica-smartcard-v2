@@ -133,6 +133,21 @@ body[data-theme="maavnica"] .notch, body[data-theme="maavnica"] .status-bar, bod
 body[data-theme="maavnica"] .admin-preview-badge, body[data-theme="maavnica"] .admin-preview-badge{
   color: var(--card-muted);
 }
+body[data-theme="maavnica"] .preview-proposition-frame.preview-proposition-frame--on{
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+  padding: 16px 16px 0;
+  margin: 0;
+  border: none;
+}
+body[data-theme="maavnica"] .preview-proposition-label{
+  color: var(--card-muted);
+  border-bottom-color: var(--card-border);
+}
 /* —— Hero —— */
 body[data-theme="maavnica"] .hero, body[data-theme="maavnica"] .hero{
   padding: 38px 0 0;
