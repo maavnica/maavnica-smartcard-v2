@@ -15,6 +15,7 @@ from app.models import Card, User
 
 CLIENT_SLUG = "client-normal-fixture"
 PREVIEW_ARTISAN_SLUG = "preview-artisan-fixture"
+PREVIEW_LONG_TITLE_SLUG = "preview-long-title-fixture"
 PREVIEW_THERAPIST_SLUG = "preview-therapist-fixture"
 PREVIEW_DEMO_SLUG = "demo-preview-safety-slug"
 PREVIEW_EXPIRED_SLUG = "preview-expired-fixture"
@@ -59,6 +60,21 @@ def seed_preview_safety_cards(session: Session) -> Dict[str, int]:
             phone="0622334455",
             whatsapp="33622334455",
             google_review_link="https://maps.google.com/?q=atelier-martin",
+            enable_recommendation=True,
+        ),
+        dict(
+            slug=PREVIEW_LONG_TITLE_SLUG,
+            company_name="PROJINOV Menuiseries Auxerre",
+            display_name="PROJINOV Menuiseries Auxerre",
+            job_title="Menuisier",
+            city="Auxerre",
+            profile="artisan",
+            visual_theme="artisan",
+            is_preview=True,
+            preview_origin="local_finder",
+            phone="0622334455",
+            whatsapp="33622334455",
+            google_review_link="https://maps.google.com/?q=projinov-auxerre",
             enable_recommendation=True,
         ),
         dict(

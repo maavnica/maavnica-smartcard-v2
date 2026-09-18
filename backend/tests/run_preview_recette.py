@@ -25,6 +25,7 @@ from app.models import Base  # noqa: E402
 from tests.preview_card_fixtures import (  # noqa: E402
     CLIENT_SLUG,
     PREVIEW_ARTISAN_SLUG,
+    PREVIEW_LONG_TITLE_SLUG,
     PREVIEW_THERAPIST_SLUG,
     seed_preview_safety_cards,
 )
@@ -50,6 +51,7 @@ def main() -> None:
     print()
     print("Cartes de recette :")
     print(f"  artisan preview   http://127.0.0.1:8765/c/{PREVIEW_ARTISAN_SLUG}")
+    print(f"  titre long        http://127.0.0.1:8765/c/{PREVIEW_LONG_TITLE_SLUG}")
     print(f"  therapist preview http://127.0.0.1:8765/c/{PREVIEW_THERAPIST_SLUG}")
     print(f"  client normale    http://127.0.0.1:8765/c/{CLIENT_SLUG}")
     print()

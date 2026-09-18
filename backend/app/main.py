@@ -139,7 +139,7 @@ _BODY_DATA_THEME_ATTR_RE = re.compile(
     re.IGNORECASE,
 )
 # Pendant la phase de développement SmartCard, on privilégie la fraîcheur des assets au cache navigateur.
-PUBLIC_ASSET_VERSION = "2026-09-17-preview-safety"
+PUBLIC_ASSET_VERSION = "2026-09-18-preview-presentation"
 
 _PUBLIC_CARD_STATIC_ASSET_RE = re.compile(
     r"(/static/(?:public-card/[\w.\-]+|maavnica-consent\.js|service-worker\.js))"
@@ -178,6 +178,47 @@ def _inject_public_card_asset_cache_version(html: str) -> str:
         rf"\1?v={PUBLIC_ASSET_VERSION}",
         html,
     )
+
+
+_PREVIEW_EXCHANGE_LABEL = "Échanger avec Maavnica"
+_BODY_CLASS_ATTR_RE = re.compile(
+    r'\bclass\s*=\s*(["\'])(.*?)\1',
+    re.IGNORECASE | re.DOTALL,
+)
+_WELLNESS_CTA_LABEL_RE = re.compile(
+    r'(<span\b[^>]*\bid=["\']wellness-cta-label["\'][^>]*>)(.*?)(</span>)',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _inject_preview_card_presentation(html: str, is_preview: bool) -> str:
+    """Cadre preview + CTA mailto dès le HTML, sans le mot devis visible."""
+    if not is_preview:
+        return html
+    match = _BODY_TAG_RE.search(html)
+    if match:
+        attrs = match.group(1)
+        class_m = _BODY_CLASS_ATTR_RE.search(attrs)
+        if class_m:
+            classes = class_m.group(2)
+            if "preview-card-mode" not in classes.split():
+                classes = f"{classes} preview-card-mode".strip()
+            attrs = (
+                attrs[: class_m.start()]
+                + f'class="{classes}"'
+                + attrs[class_m.end() :]
+            )
+        else:
+            attrs = f'{attrs.rstrip()} class="preview-card-mode"'
+        if "data-preview=" not in attrs.lower():
+            attrs = f'{attrs.rstrip()} data-preview="1"'
+        html = html[: match.start()] + f"<body{attrs}>" + html[match.end() :]
+    html = _WELLNESS_CTA_LABEL_RE.sub(
+        rf"\g<1>{_PREVIEW_EXCHANGE_LABEL}\3",
+        html,
+        count=1,
+    )
+    return html
 
 
 def _is_public_card_dev_static_path(path: str) -> bool:
@@ -520,6 +561,7 @@ async def serve_public_card(request: Request, slug: str):
     visual_theme_sql_slug: Optional[str] = None
     visual_theme_sql_id: Optional[str] = None
     card_id_log: Optional[int] = None
+    is_preview_html = False
 
     db = SessionLocal()
     try:
@@ -568,6 +610,9 @@ async def serve_public_card(request: Request, slug: str):
             resolved_visual_theme = _resolve_visual_theme(
                 card, db, slug=slug_norm
             )
+            from app.utils.preview_card import is_preview_card
+
+            is_preview_html = is_preview_card(card)
     finally:
         db.close()
 
@@ -602,6 +647,7 @@ async def serve_public_card(request: Request, slug: str):
     # Thème visuel toujours injecté ; SEO/OG en best-effort (ne pas renvoyer le HTML brut).
     html = file_path.read_text(encoding="utf-8")
     html = _inject_public_card_visual_theme(html, injected_visual_theme)
+    html = _inject_preview_card_presentation(html, is_preview_html)
     html = _inject_public_card_asset_cache_version(html)
     try:
         html = _inject_fr_public_card_head(html, seo_fr)
