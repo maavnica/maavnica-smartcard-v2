@@ -213,6 +213,16 @@
       line-height: 1.4;
     }
 
+    /* Preview : ne pas proposer de devis (le CTA hero pointe vers mailto Maavnica). */
+    body.preview-card-mode #acc-trigger-quote,
+    body.preview-card-mode #panel-quote,
+    body.preview-card-mode #btn-send-quote {
+      display: none !important;
+    }
+    body.preview-card-mode .qr-copy-hint--default {
+      display: none !important;
+    }
+
     /* Surcouche marketing — uniquement activée en JS si slug === "demo" */
     .demo-marketing {
       display: none;
@@ -440,7 +450,7 @@
       z-index: 1;
     }
 
-    .hero-texts { flex: 1; min-width: 0; }
+    .hero-texts { flex: 1; min-width: 0; max-width: 100%; }
 
     /* Signature hero masquée : branding porté par #status-bar-label (JS conserve #hero-subline) */
     #hero-subline {
@@ -454,9 +464,15 @@
     .hero-title {
       font-size: 18px;
       font-weight: 700;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      overflow-wrap: break-word;
+      word-break: normal;
+      text-wrap: balance;
+      max-width: 100%;
+      min-width: 0;
+      line-height: 1.2;
       margin-bottom: 2px;
     }
 

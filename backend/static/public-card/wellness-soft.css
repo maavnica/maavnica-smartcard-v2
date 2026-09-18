@@ -326,15 +326,33 @@ body[data-theme|="wellness-soft"] #hero-subline , body[data-theme="artisan"] #he
   display: none !important;
 }
 
+body[data-theme|="wellness-soft"] .hero-texts , body[data-theme="artisan"] .hero-texts , body[data-theme="real-estate"] .hero-texts {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title , body[data-theme="real-estate"] #person-name.hero-title ,
 body[data-theme|="wellness-soft"] #person-name.hero-title , body[data-theme="artisan"] #person-name.hero-title , body[data-theme="real-estate"] #person-name.hero-title {
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 8.2vw, 2.95rem);
   font-weight: 600;
-  line-height: 1.02;
+  line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--card-text);
-  margin: 0 0 6px;
+  margin: 0 auto 6px;
+  max-width: 100%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  hyphens: manual;
 }
 
 body[data-theme|="wellness-soft"] #company-name.hero-company , body[data-theme="artisan"] #company-name.hero-company , body[data-theme="real-estate"] #company-name.hero-company ,

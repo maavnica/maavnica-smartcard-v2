@@ -461,6 +461,35 @@
       return !!(card && card.is_preview === true);
     }
 
+    var PREVIEW_EXCHANGE_LABEL = "Échanger avec Maavnica";
+    var PREVIEW_EXCHANGE_MAILTO = "mailto:contact@maavnica.com";
+
+    function applyPreviewExchangePresentation() {
+      if (!isPreviewSafeMode) return;
+      var label = document.getElementById("wellness-cta-label");
+      var btn = document.getElementById("btn-primary-demande-contact");
+      if (label) {
+        label.textContent = PREVIEW_EXCHANGE_LABEL;
+      } else if (btn) {
+        var leaf = btn.querySelector(".wellness-cta-leaf");
+        btn.textContent = "";
+        if (leaf) btn.appendChild(leaf);
+        var span = document.createElement("span");
+        span.className = "wellness-cta-label";
+        span.id = "wellness-cta-label";
+        span.textContent = PREVIEW_EXCHANGE_LABEL;
+        btn.appendChild(span);
+      }
+      if (btn) {
+        btn.setAttribute("data-preview-mailto", PREVIEW_EXCHANGE_MAILTO);
+        btn.setAttribute("aria-label", PREVIEW_EXCHANGE_LABEL);
+      }
+      var quoteLabel = document.getElementById("quote-section-label");
+      if (quoteLabel) quoteLabel.textContent = PREVIEW_EXCHANGE_LABEL;
+      var quoteBtn = document.getElementById("btn-send-quote");
+      if (quoteBtn) quoteBtn.textContent = PREVIEW_EXCHANGE_LABEL;
+    }
+
     function syncPreviewPropositionFrame(isPreview) {
       var frame = document.getElementById("preview-proposition-frame");
       if (isPreview) {
@@ -1759,7 +1788,8 @@
         const wellnessCtaLabel = document.getElementById("wellness-cta-label");
         if (
           btnPrimaryContact &&
-          isPremiumLayoutTheme()
+          isPremiumLayoutTheme() &&
+          !isPreviewSafeMode
         ) {
           var wellnessCta = resolvePremiumHeroCta(profileKey, rawFormTitle);
           if (wellnessCtaLabel) {
@@ -1770,9 +1800,10 @@
         }
 
         const quoteBtn = document.getElementById("btn-send-quote");
-        if (quoteBtn && CURRENT_PROFILE_CONFIG.quoteButtonLabel) {
+        if (quoteBtn && CURRENT_PROFILE_CONFIG.quoteButtonLabel && !isPreviewSafeMode) {
           quoteBtn.textContent = "📝 " + CURRENT_PROFILE_CONFIG.quoteButtonLabel;
         }
+        applyPreviewExchangePresentation();
 
         const availabilityNote = document.getElementById("hero-availability-note");
         if (availabilityNote) availabilityNote.textContent = "";
@@ -2610,7 +2641,13 @@
       var q = document.getElementById("acc-trigger-quote");
       var b = document.getElementById("btn-primary-demande-contact");
       if (b) {
-        b.addEventListener("click", function () {
+        b.addEventListener("click", function (ev) {
+          if (isPreviewSafeMode) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            window.location.href = PREVIEW_EXCHANGE_MAILTO;
+            return;
+          }
           if (isPremiumMinimalLayoutTheme()) {
             openWellnessContactModal();
           } else if (q) {

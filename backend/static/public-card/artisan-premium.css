@@ -83,6 +83,10 @@ body[data-theme="artisan"] #hero-avatar-fallback {
 
 body[data-theme="artisan"] .hero-texts {
   margin-top: -8px;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 body[data-theme="artisan"] .wellness-cta-leaf {
