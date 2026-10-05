@@ -8,10 +8,15 @@ from datetime import timedelta
 from pathlib import Path
 
 from sqlalchemy import create_engine
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import sessionmaker
+from fastapi import HTTPException
 
 from app.database import Base
 from app.models import Card, Quote, QuoteNotificationOutbox, User
+from app.routers.admin_notifications import list_notifications, retry_notification
+from app.schemas import CardCreate, CardPublic, CardUpdate
 from app.services.notification_outbox import (
     DeliveryOutcome,
     claim_notification,
@@ -19,6 +24,10 @@ from app.services.notification_outbox import (
     process_one,
     sanitize_outbox_error,
     utc_now,
+)
+from app.services.quote_notifications import (
+    build_quote_notification,
+    resolve_notification_recipient,
 )
 
 
@@ -73,6 +82,40 @@ class NotificationOutboxTests(unittest.TestCase):
             self.assertEqual(row.status, "pending")
             self.assertEqual(row.attempts, 0)
             self.assertEqual(len(row.idempotency_key), 36)
+
+    def test_postgresql_migration_uses_timezone_aware_timestamps(self):
+        ddl = str(
+            CreateTable(QuoteNotificationOutbox.__table__).compile(
+                dialect=postgresql.dialect()
+            )
+        )
+        self.assertIn("TIMESTAMP WITH TIME ZONE", ddl)
+
+    def test_notification_email_then_email_pro_fallback(self):
+        with self.sessions() as db:
+            quote = db.get(Quote, self.quote_id)
+            card = db.get(Card, quote.card_id)
+            self.assertEqual(
+                resolve_notification_recipient(card),
+                "private@gmail.test",
+            )
+            card.notification_email = None
+            self.assertEqual(
+                resolve_notification_recipient(card),
+                "public@maavnica.test",
+            )
+
+    def test_notification_email_is_admin_input_but_not_public_output(self):
+        self.assertIn("notification_email", CardCreate.model_fields)
+        self.assertIn("notification_email", CardUpdate.model_fields)
+        self.assertNotIn("notification_email", CardPublic.model_fields)
+
+    def test_reply_to_is_prospect_email(self):
+        with self.sessions() as db:
+            quote = db.get(Quote, self.quote_id)
+            card = db.get(Card, quote.card_id)
+            message = build_quote_notification(card, quote)
+        self.assertEqual(message.reply_to, "prospect@example.test")
 
     def test_lease_prevents_two_workers_and_expires(self):
         now = utc_now()
@@ -141,6 +184,31 @@ class NotificationOutboxTests(unittest.TestCase):
             outbox_id=self.outbox_id,
         )
         self.assertIsNone(repeated)
+
+    def test_unknown_requires_explicit_admin_confirmation(self):
+        process_one(
+            self.sessions,
+            lambda _job: DeliveryOutcome("unknown", "brevo", "TimeoutError"),
+            outbox_id=self.outbox_id,
+        )
+        with self.sessions() as db:
+            with self.assertRaises(HTTPException) as raised:
+                retry_notification(self.outbox_id, confirm_unknown=False, db=db)
+            self.assertEqual(raised.exception.status_code, 409)
+        with self.sessions() as db:
+            result = retry_notification(
+                self.outbox_id,
+                confirm_unknown=True,
+                db=db,
+            )
+        self.assertEqual(result, {"id": self.outbox_id, "status": "pending"})
+
+    def test_admin_listing_never_displays_recipient(self):
+        with self.sessions() as db:
+            result = list_notifications(status_filter=None, limit=50, db=db)
+        dumped = str(result)
+        self.assertNotIn("private@gmail.test", dumped)
+        self.assertNotIn("recipient", dumped)
 
     def test_errors_are_sanitized(self):
         value = sanitize_outbox_error(

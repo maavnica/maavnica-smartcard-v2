@@ -66,6 +66,8 @@ class CardBase(BaseModel):
     #   artisan, digital, bien_etre, medical, immo, resto, generic…
     profile: str = "artisan"
     email_pro: Optional[str] = None
+    # Destinataire privé des notifications, réservé aux entrées admin.
+    notification_email: Optional[EmailStr] = None
     site_web: Optional[str] = None
 
     # 🔹 Contact & actions
@@ -280,6 +282,7 @@ class CardUpdate(BaseModel):
     # 🔹 Nouveaux champs
     profile: Optional[str] = None
     email_pro: Optional[str] = None
+    notification_email: Optional[EmailStr] = None
     site_web: Optional[str] = None
 
     google_review_link: Optional[str] = None

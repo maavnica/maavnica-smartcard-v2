@@ -5,9 +5,8 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.responses import Response
 from sqlalchemy import and_, func, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 from html import escape
-import re
 
 from app.database import get_db
 from app.models import Card, Feedback, Quote, RecommendationEvent
@@ -22,6 +21,11 @@ from app.utils.rate_limit import rate_limit_by_ip
 from app.utils.recommender_display import build_recommender_display_name, effective_recommender_label
 from app.utils.public_slug import sanitize_public_slug
 from app.utils.preview_card import raise_if_preview_expired, raise_if_preview_writes
+from app.services.notification_outbox import new_outbox, process_one
+from app.services.quote_notifications import (
+    deliver_quote_notification,
+    resolve_notification_recipient,
+)
 
 
 router = APIRouter(prefix="/api/public", tags=["public"])
@@ -274,94 +278,6 @@ def notify_pro(
         )
 
 
-# -------------------------------------------------------------------
-# Libellés dynamiques selon le métier (card.profile)
-# -------------------------------------------------------------------
-
-def _norm_profile(profile: str | None) -> str:
-    p = (profile or "").strip().lower()
-    # normalisation légère (suffisante pour matching)
-    p = p.replace("é", "e").replace("è", "e").replace("ê", "e").replace("à", "a").replace("ç", "c")
-    p = re.sub(r"\s+", " ", p)
-    return p
-
-
-def lead_labels_for_profile(profile: str | None) -> dict:
-    """
-    Retourne les libellés email (titre/sujet/CTA) selon le métier (card.profile).
-    Fallback universel: "Demande de contact / démo".
-    """
-    p = _norm_profile(profile)
-
-    # 1) ARTISANS / CHANTIER -> DEVIS
-    devis_keywords = {
-        "artisan", "plombier", "electricien", "chauffagiste", "clim", "climatisation",
-        "menuisier", "serrurier", "carreleur", "macon", "peintre", "couvreur",
-        "charpentier", "vitrier", "jardinier", "paysagiste", "renovation", "renov",
-        "btp", "garage", "garagiste", "mecanicien", "mecanique", "depannage",
-        "travaux", "intervention", "installateur",
-    }
-    if any(k in p for k in devis_keywords):
-        return {
-            "kind": "devis",
-            "title": "Nouvelle demande de devis",
-            "subject_prefix": "📩 Nouvelle demande de devis",
-            "section_label": "Demande de devis",
-            "subtitle": "Un prospect vous a envoyé une demande de devis depuis votre SmartCard.",
-            "cta": "Voir la demande",
-        }
-
-    # 2) BEAUTÉ / SANTÉ / BIEN-ÊTRE -> RDV
-    rdv_keywords = {
-        "coiffeur", "coiffeuse", "barbier", "estheticienne", "esthetique", "beaute",
-        "massage", "kine", "osteopathe", "osteo", "therapeute", "naturopathe",
-        "coach sportif", "bien etre", "spa", "onglerie",
-    }
-    if any(k in p for k in rdv_keywords):
-        return {
-            "kind": "rdv",
-            "title": "Nouvelle demande de rendez-vous",
-            "subject_prefix": "📅 Nouvelle demande de rendez-vous",
-            "section_label": "Demande de rendez-vous",
-            "subtitle": "Un prospect souhaite prendre rendez-vous via votre SmartCard.",
-            "cta": "Voir la demande",
-        }
-
-    # 3) RESTAURATION / HÔTELLERIE -> RÉSERVATION
-    resa_keywords = {"restaurant", "brasserie", "snack", "traiteur", "hotel", "bar", "cafe"}
-    if any(k in p for k in resa_keywords):
-        return {
-            "kind": "reservation",
-            "title": "Nouvelle demande de réservation",
-            "subject_prefix": "🍽️ Nouvelle demande de réservation",
-            "section_label": "Demande de réservation",
-            "subtitle": "Un prospect a demandé une réservation via votre SmartCard.",
-            "cta": "Voir la demande",
-        }
-
-    # 4) IMMOBILIER -> INFO / VISITE
-    immo_keywords = {"immobilier", "agent immobilier", "agence immobiliere", "syndic", "location", "vente"}
-    if any(k in p for k in immo_keywords):
-        return {
-            "kind": "immo",
-            "title": "Nouvelle demande d’information",
-            "subject_prefix": "🏠 Nouvelle demande d’information",
-            "section_label": "Demande d’information",
-            "subtitle": "Un prospect vous a contacté via votre SmartCard.",
-            "cta": "Voir la demande",
-        }
-
-    # 5) DEFAULT -> CONTACT / DÉMO
-    return {
-        "kind": "contact",
-        "title": "Nouvelle demande de contact / démo",
-        "subject_prefix": "📨 Nouvelle demande de contact / démo",
-        "section_label": "Demande de contact / démo",
-        "subtitle": "Un prospect vous a contacté via votre SmartCard.",
-        "cta": "Voir le contact",
-    }
-
-
 @router.get("/cards/{slug}", response_model=CardPublic)
 def get_public_card(
     slug: str,
@@ -515,79 +431,38 @@ def create_quote(
         recommender_display_name=reco_display,
     )
     db.add(quote)
+    db.flush()
+    outbox = new_outbox(
+        quote_id=quote.id,
+        recipient=resolve_notification_recipient(card),
+    )
+    db.add(outbox)
     db.commit()
     db.refresh(quote)
+    db.refresh(outbox)
 
-    labels = lead_labels_for_profile(getattr(card, "profile", None))
-    prospect_email = payload.email or "(non renseigné)"
-    reco_label = effective_recommender_label(reco_display, payload.referrer_id)
-
-    # TEXTE (fallback)
-    text = (
-        f"{labels['title']} via votre SmartCard Maavnica\n\n"
-        f"Entreprise : {card.company_name}\n"
-        f"Carte : {_card_url(card)}\n"
-        f"Métier (profil) : {getattr(card, 'profile', '') or '(non renseigné)'}\n\n"
-        "Coordonnées du prospect :\n"
-        f"- Nom : {payload.name}\n"
-        f"- Téléphone : {payload.phone}\n"
-        f"- Email : {prospect_email}\n\n"
-        f"- Origine : {'recommandation' if payload.source_type == 'recommendation' else 'directe / autre'}\n"
-        f"- Recommandé par : {reco_label if payload.source_type == 'recommendation' else '—'}\n\n"
-        "Message :\n"
-        f"{payload.message}\n"
-    )
-
-    # HTML premium
-    body_html = f"""
-      <div style="margin:0 0 10px 0;">
-        <b>Entreprise :</b> {escape(card.company_name)}<br/>
-        <b>Carte :</b> <a href="{escape(_card_url(card))}" style="color:#93c5fd;text-decoration:none;">{escape(_card_url(card))}</a><br/>
-        <b>Métier (profil) :</b> {escape(getattr(card, "profile", "") or "—")}
-      </div>
-
-      <div style="background:rgba(2,6,23,.35);border:1px solid rgba(148,163,184,.22);
-                  border-radius:14px;padding:12px;">
-        <div style="font-size:12px;color:rgba(148,163,184,.95);text-transform:uppercase;letter-spacing:.12em;">
-          {escape(labels["section_label"])}
-        </div>
-
-        <div style="margin-top:8px;font-size:14px;">
-          <b>Nom :</b> {escape(payload.name)}<br/>
-          <b>Téléphone :</b> {escape(payload.phone)}<br/>
-          <b>Email :</b> {escape(payload.email or "—")}<br/>
-          <b>Origine :</b> {escape("recommandation" if payload.source_type == "recommendation" else "directe / autre")}<br/>
-          <b>Recommandé par :</b> {escape(reco_label if payload.source_type == "recommendation" else "—")}
-        </div>
-
-        <div style="margin-top:12px;">
-          <b>Message</b><br/>
-          <div style="margin-top:6px;white-space:pre-wrap;color:rgba(226,232,240,.92);">
-            {escape(payload.message)}
-          </div>
-        </div>
-
-        <div style="margin-top:12px;color:rgba(148,163,184,.92);font-size:12px;">
-          Conseil : recontactez rapidement ce prospect pour maximiser vos chances.
-        </div>
-      </div>
-    """
-
-    html = _base_email_html(
-        title=labels["title"],
-        subtitle=labels["subtitle"],
-        body_html=body_html,
-        cta_url=_card_url(card),
-        cta_label=labels["cta"],
-    )
-
-    notify_pro(
-        card,
-        subject=f"{labels['subject_prefix']} – {card.company_name}",
-        text=text,
-        html=html,
-        reply_to=str(payload.email) if payload.email else None,
-    )
+    try:
+        outbox_sessions = sessionmaker(
+            bind=db.get_bind(),
+            autocommit=False,
+            autoflush=False,
+        )
+        process_one(
+            outbox_sessions,
+            lambda job: deliver_quote_notification(
+                job,
+                session_factory=outbox_sessions,
+            ),
+            outbox_id=outbox.id,
+        )
+    except Exception:
+        # Le devis et son outbox sont déjà commités : le prospect reçoit 201,
+        # et le Cron / l'admin pourra reprendre cette notification.
+        logger.exception(
+            "[OUTBOX] immediate processing failed outbox_id=%s quote_id=%s",
+            outbox.id,
+            quote.id,
+        )
 
     return {"message": "Quote created", "id": quote.id}
 

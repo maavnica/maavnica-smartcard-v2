@@ -16,8 +16,10 @@ from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 
 from app.database import get_db
+from app.models import Quote, QuoteNotificationOutbox
 from app.routers.public import _send_pro_notification, create_feedback, create_quote, notify_pro
 from app.schemas import FeedbackCreate, QuoteCreate
+from app.services.notification_outbox import DeliveryOutcome
 from app.utils import emailer
 
 
@@ -205,6 +207,29 @@ class EmailerTransportTests(unittest.TestCase):
             )
         self.assertEqual(result.state, "unknown")
         self.assertEqual(result.transport, "brevo")
+        self.assertEqual(_DummySMTP.instances, [])
+
+    def test_brevo_unexpected_exception_is_unknown_without_smtp_fallback(self):
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(
+                emailer.urllib.request,
+                "urlopen",
+                side_effect=RuntimeError("ambiguous transport failure"),
+            ),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key="44444444-4444-4444-8444-444444444444",
+            )
+        self.assertEqual(result.state, "unknown")
         self.assertEqual(_DummySMTP.instances, [])
 
     def test_brevo_idempotency_key_is_stable_in_payload(self):
@@ -554,6 +579,7 @@ def _card_pro() -> SimpleNamespace:
     return SimpleNamespace(
         id=10,
         email_pro="contact@maavnica.com",
+        notification_email=None,
         company_name="Maavnica",
         slug="arnaud-huard",
         profile="digital",
@@ -563,9 +589,17 @@ def _card_pro() -> SimpleNamespace:
 def _db_committed(lead_id: int = 36) -> MagicMock:
     db = MagicMock()
 
-    def _refresh(obj):
-        obj.id = lead_id
+    def _flush():
+        for call in db.add.call_args_list:
+            obj = call.args[0]
+            if isinstance(obj, Quote) and obj.id is None:
+                obj.id = lead_id
 
+    def _refresh(obj):
+        if getattr(obj, "id", None) is None:
+            obj.id = lead_id
+
+    db.flush.side_effect = _flush
     db.refresh.side_effect = _refresh
     return db
 
@@ -626,29 +660,32 @@ class NotifyProTests(unittest.TestCase):
         self.assertNotIn("smtp_only", mocked.call_args.kwargs)
         self.assertTrue(any("[MAIL] notify_pro ok" in m for m in logs.output))
 
-    def test_create_quote_commits_before_direct_notification(self):
+    def test_create_quote_commits_quote_and_outbox_before_processing(self):
         db = _db_committed(36)
         order: list[str] = []
         db.commit.side_effect = lambda: order.append("commit")
 
-        def _notify(*args, **kwargs):
-            order.append("notify")
+        def _process(*args, **kwargs):
+            order.append("process")
+            return DeliveryOutcome("sent", "brevo")
 
         with (
             patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
-            patch("app.routers.public._send_pro_notification", side_effect=_notify) as notify,
+            patch("app.routers.public.process_one", side_effect=_process) as process,
         ):
             result = create_quote(10, _quote_payload(), db)
 
         self.assertEqual(result, {"message": "Quote created", "id": 36})
         self.assertNotIn("email_notification", result)
-        db.add.assert_called_once()
+        self.assertEqual(db.add.call_count, 2)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
-        notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0], "contact@maavnica.com")
-        self.assertEqual(notify.call_args.args[4], "prospect@example.com")
-        self.assertEqual(order, ["commit", "notify"])
+        process.assert_called_once()
+        outbox = db.add.call_args_list[1].args[0]
+        self.assertIsInstance(outbox, QuoteNotificationOutbox)
+        self.assertEqual(outbox.quote_id, 36)
+        self.assertEqual(outbox.recipient, "contact@maavnica.com")
+        self.assertEqual(order, ["commit", "process"])
 
     def test_create_quote_smtp_failure_keeps_lead_and_http_201(self):
         self._assert_public_post_keeps_201(
@@ -848,6 +885,7 @@ class NotifyProTests(unittest.TestCase):
             yield db
 
         app.dependency_overrides[get_db] = _override_db
+        is_quote = path.endswith("/quotes")
         try:
             with (
                 patch.dict(
@@ -856,7 +894,14 @@ class NotifyProTests(unittest.TestCase):
                     clear=True,
                 ),
                 patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
-                patch("app.routers.public.send_email", return_value=send_ok) as mocked,
+                patch(
+                    "app.routers.public.process_one",
+                    return_value=DeliveryOutcome(
+                        "sent" if send_ok else "failed",
+                        "brevo" if send_ok else "smtp",
+                    ),
+                ) as process_mock,
+                patch("app.routers.public.send_email", return_value=send_ok) as send_mock,
             ):
                 client = TestClient(app)
                 response = client.post(path, json=payload)
@@ -873,12 +918,21 @@ class NotifyProTests(unittest.TestCase):
         self.assertNotIn("notifications@maavnica.com", dumped)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
-        mocked.assert_called_once()
-        self.assertEqual(mocked.call_args.args[0], "contact@maavnica.com")
-        self.assertEqual(mocked.call_args.kwargs["from_email"], "notifications@maavnica.com")
-        self.assertNotIn("smtp_only", mocked.call_args.kwargs)
-        if "email" in payload:
-            self.assertEqual(mocked.call_args.kwargs["reply_to"], payload["email"])
+        if is_quote:
+            process_mock.assert_called_once()
+            send_mock.assert_not_called()
+            self.assertEqual(db.add.call_count, 2)
+            outbox = db.add.call_args_list[1].args[0]
+            self.assertIsInstance(outbox, QuoteNotificationOutbox)
+            self.assertEqual(outbox.status, "pending")
+        else:
+            process_mock.assert_not_called()
+            send_mock.assert_called_once()
+            self.assertEqual(send_mock.call_args.args[0], "contact@maavnica.com")
+            self.assertEqual(
+                send_mock.call_args.kwargs["from_email"],
+                "notifications@maavnica.com",
+            )
 
 
 if __name__ == "__main__":

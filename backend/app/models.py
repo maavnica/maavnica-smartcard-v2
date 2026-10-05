@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import (
     Column,
@@ -15,6 +15,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from .database import Base
+
+
+def _utc_now_aware() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 # =============================================================
@@ -221,13 +225,27 @@ class QuoteNotificationOutbox(Base):
     recipient = Column(String(320), nullable=True)
     status = Column(String(16), nullable=False, default="pending", index=True)
     attempts = Column(Integer, nullable=False, default=0)
-    next_attempt_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    next_attempt_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=_utc_now_aware,
+        index=True,
+    )
     last_error = Column(Text, nullable=True)
     idempotency_key = Column(String(36), nullable=False)
     processing_until = Column(DateTime(timezone=True), nullable=True, index=True)
     locked_by = Column(String(36), nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=False)
-    updated_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=_utc_now_aware,
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=_utc_now_aware,
+        onupdate=_utc_now_aware,
+    )
     sent_at = Column(DateTime(timezone=True), nullable=True)
 
     quote = relationship("Quote", back_populates="notification_outbox")
