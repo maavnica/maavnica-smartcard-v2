@@ -8,6 +8,7 @@ pillow
 python-multipart
 itsdangerous
 psycopg2-binary
+psycopg[binary]
 stripe==14.1.0
 cloudinary
 
