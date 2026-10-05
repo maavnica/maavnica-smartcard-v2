@@ -9,6 +9,8 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
     Text,
+    CheckConstraint,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 
@@ -68,6 +70,8 @@ class Card(Base):
 
     # Email professionnel affiché sur la carte
     email_pro = Column(String, nullable=True)
+    # Destinataire privé des notifications (jamais exposé sur la carte publique).
+    notification_email = Column(String(320), nullable=True)
 
     # Site web / page principale (vitrine, booking, etc.)
     site_web = Column(String, nullable=True)
@@ -181,9 +185,58 @@ class Quote(Base):
 
     # Relation
     card = relationship("Card", back_populates="quotes")
+    notification_outbox = relationship(
+        "QuoteNotificationOutbox",
+        back_populates="quote",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self) -> str:
         return f"<Quote id={self.id} card_id={self.card_id} name={self.name!r}>"
+
+
+class QuoteNotificationOutbox(Base):
+    """Notification durable associée à une demande de devis."""
+
+    __tablename__ = "quote_notification_outbox"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'processing', 'sent', 'failed', 'unknown')",
+            name="ck_quote_notification_outbox_status",
+        ),
+        UniqueConstraint("quote_id", name="uq_quote_notification_outbox_quote"),
+        UniqueConstraint(
+            "idempotency_key",
+            name="uq_quote_notification_outbox_idempotency",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    quote_id = Column(
+        Integer,
+        ForeignKey("quotes.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    recipient = Column(String(320), nullable=True)
+    status = Column(String(16), nullable=False, default="pending", index=True)
+    attempts = Column(Integer, nullable=False, default=0)
+    next_attempt_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    last_error = Column(Text, nullable=True)
+    idempotency_key = Column(String(36), nullable=False)
+    processing_until = Column(DateTime(timezone=True), nullable=True, index=True)
+    locked_by = Column(String(36), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False)
+    updated_at = Column(DateTime(timezone=True), nullable=False)
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+
+    quote = relationship("Quote", back_populates="notification_outbox")
+
+    def __repr__(self) -> str:
+        return (
+            f"<QuoteNotificationOutbox id={self.id} quote_id={self.quote_id} "
+            f"status={self.status!r}>"
+        )
 
 
 # =============================================================

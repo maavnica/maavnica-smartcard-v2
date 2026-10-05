@@ -216,6 +216,30 @@ def ensure_quote_recommendation_columns() -> None:
             conn.execute(text(stmt))
 
 
+def ensure_card_notification_email_column() -> None:
+    """Ajoute le destinataire privé des notifications aux cartes existantes."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(engine)
+    except Exception:
+        return
+    if not insp.has_table("cards"):
+        return
+    existing = {c["name"] for c in insp.get_columns("cards")}
+    if "notification_email" in existing:
+        return
+    if engine.dialect.name == "postgresql":
+        statement = (
+            "ALTER TABLE cards ADD COLUMN IF NOT EXISTS "
+            "notification_email VARCHAR(320)"
+        )
+    else:
+        statement = "ALTER TABLE cards ADD COLUMN notification_email VARCHAR(320)"
+    with engine.begin() as conn:
+        conn.execute(text(statement))
+
+
 def ensure_recommendation_event_display_columns() -> None:
     """Ajoute prénom / nom / libellé affiché sur recommendation_events si manquant."""
     from sqlalchemy import inspect, text

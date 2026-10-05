@@ -155,6 +155,87 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
         self.assertNotIn("[MAILTRACE] BREVO_OK", joined)
 
+    def test_brevo_500_falls_back_to_smtp(self):
+        err = urllib.error.HTTPError(
+            "https://api.brevo.com/v3/smtp/email",
+            500,
+            "Internal Server Error",
+            hdrs=Message(),
+            fp=io.BytesIO(b'{"message":"temporary failure"}'),
+        )
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=err),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                reply_to="prospect@example.com",
+                idempotency_key="11111111-1111-4111-8111-111111111111",
+            )
+        self.assertEqual(result.state, "sent")
+        self.assertEqual(result.transport, "smtp")
+        self.assertEqual(len(_DummySMTP.instances), 1)
+
+    def test_brevo_timeout_is_unknown_without_smtp_fallback(self):
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(
+                emailer.urllib.request,
+                "urlopen",
+                side_effect=TimeoutError("delivery result unknown"),
+            ),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key="22222222-2222-4222-8222-222222222222",
+            )
+        self.assertEqual(result.state, "unknown")
+        self.assertEqual(result.transport, "brevo")
+        self.assertEqual(_DummySMTP.instances, [])
+
+    def test_brevo_idempotency_key_is_stable_in_payload(self):
+        fake_resp = MagicMock()
+        fake_resp.read.return_value = b"{}"
+        fake_resp.__enter__.return_value = fake_resp
+        fake_resp.__exit__.return_value = False
+        captured = {}
+
+        def fake_urlopen(req, timeout=15):
+            captured["body"] = json.loads(req.data.decode("utf-8"))
+            return fake_resp
+
+        key = "33333333-3333-4333-8333-333333333333"
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=fake_urlopen),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key=key,
+            )
+        self.assertTrue(result.sent)
+        self.assertEqual(captured["body"]["headers"]["idempotencyKey"], key)
+
     def test_cas3_brevo_ok_skips_smtp(self):
         fake_resp = MagicMock()
         fake_resp.read.return_value = b"{}"
