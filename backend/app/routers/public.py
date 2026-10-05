@@ -238,8 +238,12 @@ def _send_pro_notification(
             reply_to=reply_to,
             from_email=smartcard_mail_from() or None,
         )
-    except Exception:
-        logger.exception("[MAIL] notify_pro failed card_id=%s", card_id)
+    except Exception as exc:
+        logger.error(
+            "[MAIL] notify_pro failed card_id=%s error_type=%s",
+            card_id,
+            type(exc).__name__,
+        )
         return
     if ok:
         logger.info("[MAIL] notify_pro ok card_id=%s", card_id)
@@ -271,10 +275,11 @@ def notify_pro(
             rt,
             getattr(card, "id", None),
         )
-    except Exception:
-        logger.exception(
-            "[MAIL] notify_pro failed card_id=%s",
+    except Exception as exc:
+        logger.error(
+            "[MAIL] notify_pro failed card_id=%s error_type=%s",
             getattr(card, "id", None),
+            type(exc).__name__,
         )
 
 
@@ -455,13 +460,15 @@ def create_quote(
             ),
             outbox_id=outbox.id,
         )
-    except Exception:
+    except Exception as exc:
         # Le devis et son outbox sont déjà commités : le prospect reçoit 201,
         # et le Cron / l'admin pourra reprendre cette notification.
-        logger.exception(
-            "[OUTBOX] immediate processing failed outbox_id=%s quote_id=%s",
+        logger.error(
+            "[OUTBOX] immediate processing failed outbox_id=%s quote_id=%s "
+            "error_type=%s",
             outbox.id,
             quote.id,
+            type(exc).__name__,
         )
 
     return {"message": "Quote created", "id": quote.id}

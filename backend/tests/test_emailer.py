@@ -185,6 +185,38 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertEqual(result.transport, "smtp")
         self.assertEqual(len(_DummySMTP.instances), 1)
 
+    def test_brevo_error_masks_recipient_email_in_logs(self):
+        raw_email = "private.prospect@example.com"
+        err = urllib.error.HTTPError(
+            "https://api.brevo.com/v3/smtp/email",
+            400,
+            "Bad Request",
+            hdrs=Message(),
+            fp=io.BytesIO(
+                json.dumps({"message": f"invalid recipient {raw_email}"}).encode()
+            ),
+        )
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=err),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            result = emailer.send_email_result(
+                raw_email,
+                "Sujet",
+                "texte",
+                idempotency_key="55555555-5555-4555-8555-555555555555",
+            )
+        self.assertTrue(result.sent)
+        dumped = "\n".join(logs.output)
+        self.assertNotIn(raw_email, dumped)
+        self.assertIn("***@***", dumped)
+
     def test_brevo_timeout_is_unknown_without_smtp_fallback(self):
         with (
             patch.dict(
@@ -553,18 +585,31 @@ class EmailerTransportTests(unittest.TestCase):
     def test_mailtrace_smtp_fallback_failed(self):
         class _FailSMTP(_DummySMTP):
             def send_message(self, msg):
-                raise smtplib.SMTPRecipientsRefused({"x": (550, b"no")})
+                raise smtplib.SMTPRecipientsRefused(
+                    {"private.prospect@example.com": (550, b"no")}
+                )
 
         with (
             patch.object(emailer.smtplib, "SMTP", _FailSMTP),
             self.assertLogs("app.utils.emailer", level="INFO") as logs,
         ):
-            ok = self._send(**_smtp_env())
-        self.assertFalse(ok)
+            with patch.dict(os.environ, _smtp_env(), clear=True):
+                result = emailer.send_email_result(
+                    "private.prospect@example.com",
+                    "Sujet test",
+                    "corps texte",
+                )
+        self.assertFalse(result.sent)
         joined = "\n".join(logs.output)
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_FAILED type=SMTPRecipientsRefused", joined)
         self.assertNotIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
+        self.assertNotIn("private.prospect@example.com", joined)
+        self.assertNotIn(
+            "private.prospect@example.com",
+            result.error_message,
+        )
+        self.assertIn("***@***", result.error_message)
 
     def test_classify_ssl_and_timeout(self):
         self.assertEqual(emailer._classify_smtp_error(ssl.SSLError("boom")), "SSL error")

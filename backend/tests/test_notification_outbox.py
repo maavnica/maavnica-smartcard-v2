@@ -185,6 +185,32 @@ class NotificationOutboxTests(unittest.TestCase):
         )
         self.assertIsNone(repeated)
 
+    def test_unexpected_handler_error_masks_email_in_logs_and_last_error(self):
+        raw_email = "unexpected.prospect@example.com"
+
+        def failing_handler(_job):
+            raise RuntimeError(f"provider failed for {raw_email}")
+
+        with self.assertLogs(
+            "app.services.notification_outbox",
+            level="ERROR",
+        ) as logs:
+            outcome = process_one(
+                self.sessions,
+                failing_handler,
+                outbox_id=self.outbox_id,
+            )
+
+        self.assertEqual(outcome.state, "unknown")
+        dumped = "\n".join(logs.output)
+        self.assertNotIn(raw_email, dumped)
+        self.assertIn("***@***", dumped)
+        with self.sessions() as db:
+            row = db.get(QuoteNotificationOutbox, self.outbox_id)
+            self.assertEqual(row.status, "unknown")
+            self.assertNotIn(raw_email, row.last_error)
+            self.assertIn("***@***", row.last_error)
+
     def test_unknown_requires_explicit_admin_confirmation(self):
         process_one(
             self.sessions,

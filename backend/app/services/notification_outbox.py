@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import re
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
@@ -13,6 +12,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.models import QuoteNotificationOutbox
+from app.utils.log_safety import sanitize_log_text
 
 logger = logging.getLogger(__name__)
 
@@ -21,22 +21,13 @@ DEFAULT_LEASE_SECONDS = 120
 DEFAULT_MAX_ATTEMPTS = 6
 RETRY_DELAYS_SECONDS = (60, 300, 900, 3600, 21600)
 
-_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-_SECRET_RE = re.compile(
-    r"(?i)(api[-_]?key|password|smtp_pass(?:word)?|token|secret)\s*[:=]\s*\S+"
-)
-
-
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
 def sanitize_outbox_error(value: object, limit: int = 500) -> str:
     """Conserve un diagnostic exploitable sans adresse ni secret."""
-    text = str(value or "").replace("\r", " ").replace("\n", " ").strip()
-    text = _EMAIL_RE.sub("***@***", text)
-    text = _SECRET_RE.sub(r"\1=***", text)
-    return " ".join(text.split())[:limit]
+    return sanitize_log_text(value, limit=limit)
 
 
 @dataclass(frozen=True)
@@ -223,14 +214,21 @@ def process_one(
         else:
             outcome = handler(job)
     except Exception as exc:  # garde-fou : le processeur ne perd jamais la ligne
-        logger.exception(
-            "[OUTBOX] handler failed outbox_id=%s quote_id=%s",
+        safe_detail = sanitize_outbox_error(str(exc))
+        logger.error(
+            "[OUTBOX] handler failed outbox_id=%s quote_id=%s "
+            "error_type=%s detail=%s",
             job.outbox_id,
             job.quote_id,
+            type(exc).__name__,
+            safe_detail or "-",
         )
         outcome = DeliveryOutcome(
             "unknown",
-            error=f"handler exception: {type(exc).__name__}",
+            error=(
+                f"handler exception: {type(exc).__name__} "
+                f"{safe_detail or '-'}"
+            ),
         )
 
     with session_factory() as db:

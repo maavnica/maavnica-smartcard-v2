@@ -11,11 +11,10 @@ import urllib.request
 from dataclasses import dataclass
 from email.message import EmailMessage
 
+from app.utils.log_safety import sanitize_log_text
+
 logger = logging.getLogger(__name__)
 
-_SECRET_IN_TEXT = re.compile(
-    r"(?i)(api[-_]?key|x-key|smtp_password|smtp_pass|password|token|secret)\s*[:=]\s*\S+"
-)
 _NAMED_SMTP_ERRORS = (
     smtplib.SMTPAuthenticationError,
     smtplib.SMTPConnectError,
@@ -74,13 +73,15 @@ def smartcard_mail_from() -> str:
 
 
 def _safe_error_text(raw: str, limit: int = 300) -> str:
-    text = _clean(raw)
-    text = _SECRET_IN_TEXT.sub(r"\1=***", text)
-    for env_name in ("SMTP_PASSWORD", "SMTP_PASS", "BREVO_API_KEY"):
-        secret = _clean(os.getenv(env_name))
-        if secret:
-            text = text.replace(secret, "***")
-    return text[:limit]
+    return sanitize_log_text(
+        raw,
+        secrets=(
+            os.getenv("SMTP_PASSWORD", ""),
+            os.getenv("SMTP_PASS", ""),
+            os.getenv("BREVO_API_KEY", ""),
+        ),
+        limit=limit,
+    )
 
 
 def _classify_smtp_error(exc: BaseException) -> str:
