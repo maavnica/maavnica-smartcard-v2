@@ -161,7 +161,11 @@ async def submit_contact(
     try:
         _send_contact_email(payload)
     except Exception as exc:
-        logger.exception("Echec envoi email contact (ip=%s): %s", client_ip, exc)
+        logger.error(
+            "Echec envoi email contact (ip=%s, error_type=%s)",
+            client_ip,
+            type(exc).__name__,
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Échec de l'envoi de l'email.",

@@ -16,8 +16,10 @@ from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 
 from app.database import get_db
+from app.models import Quote, QuoteNotificationOutbox
 from app.routers.public import _send_pro_notification, create_feedback, create_quote, notify_pro
 from app.schemas import FeedbackCreate, QuoteCreate
+from app.services.notification_outbox import DeliveryOutcome
 from app.utils import emailer
 
 
@@ -154,6 +156,142 @@ class EmailerTransportTests(unittest.TestCase):
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
         self.assertNotIn("[MAILTRACE] BREVO_OK", joined)
+
+    def test_brevo_500_falls_back_to_smtp(self):
+        err = urllib.error.HTTPError(
+            "https://api.brevo.com/v3/smtp/email",
+            500,
+            "Internal Server Error",
+            hdrs=Message(),
+            fp=io.BytesIO(b'{"message":"temporary failure"}'),
+        )
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=err),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                reply_to="prospect@example.com",
+                idempotency_key="11111111-1111-4111-8111-111111111111",
+            )
+        self.assertEqual(result.state, "sent")
+        self.assertEqual(result.transport, "smtp")
+        self.assertEqual(len(_DummySMTP.instances), 1)
+
+    def test_brevo_error_masks_recipient_email_in_logs(self):
+        raw_email = "private.prospect@example.com"
+        err = urllib.error.HTTPError(
+            "https://api.brevo.com/v3/smtp/email",
+            400,
+            "Bad Request",
+            hdrs=Message(),
+            fp=io.BytesIO(
+                json.dumps({"message": f"invalid recipient {raw_email}"}).encode()
+            ),
+        )
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=err),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+            self.assertLogs("app.utils.emailer", level="INFO") as logs,
+        ):
+            result = emailer.send_email_result(
+                raw_email,
+                "Sujet",
+                "texte",
+                idempotency_key="55555555-5555-4555-8555-555555555555",
+            )
+        self.assertTrue(result.sent)
+        dumped = "\n".join(logs.output)
+        self.assertNotIn(raw_email, dumped)
+        self.assertIn("***@***", dumped)
+
+    def test_brevo_timeout_is_unknown_without_smtp_fallback(self):
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(
+                emailer.urllib.request,
+                "urlopen",
+                side_effect=TimeoutError("delivery result unknown"),
+            ),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key="22222222-2222-4222-8222-222222222222",
+            )
+        self.assertEqual(result.state, "unknown")
+        self.assertEqual(result.transport, "brevo")
+        self.assertEqual(_DummySMTP.instances, [])
+
+    def test_brevo_unexpected_exception_is_unknown_without_smtp_fallback(self):
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(
+                emailer.urllib.request,
+                "urlopen",
+                side_effect=RuntimeError("ambiguous transport failure"),
+            ),
+            patch.object(emailer.smtplib, "SMTP", _DummySMTP),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key="44444444-4444-4444-8444-444444444444",
+            )
+        self.assertEqual(result.state, "unknown")
+        self.assertEqual(_DummySMTP.instances, [])
+
+    def test_brevo_idempotency_key_is_stable_in_payload(self):
+        fake_resp = MagicMock()
+        fake_resp.read.return_value = b"{}"
+        fake_resp.__enter__.return_value = fake_resp
+        fake_resp.__exit__.return_value = False
+        captured = {}
+
+        def fake_urlopen(req, timeout=15):
+            captured["body"] = json.loads(req.data.decode("utf-8"))
+            return fake_resp
+
+        key = "33333333-3333-4333-8333-333333333333"
+        with (
+            patch.dict(
+                os.environ,
+                _smtp_env(BREVO_API_KEY="brevo-key-not-logged"),
+                clear=True,
+            ),
+            patch.object(emailer.urllib.request, "urlopen", side_effect=fake_urlopen),
+        ):
+            result = emailer.send_email_result(
+                "pro@maavnica.com",
+                "Sujet",
+                "texte",
+                idempotency_key=key,
+            )
+        self.assertTrue(result.sent)
+        self.assertEqual(captured["body"]["headers"]["idempotencyKey"], key)
 
     def test_cas3_brevo_ok_skips_smtp(self):
         fake_resp = MagicMock()
@@ -447,18 +585,31 @@ class EmailerTransportTests(unittest.TestCase):
     def test_mailtrace_smtp_fallback_failed(self):
         class _FailSMTP(_DummySMTP):
             def send_message(self, msg):
-                raise smtplib.SMTPRecipientsRefused({"x": (550, b"no")})
+                raise smtplib.SMTPRecipientsRefused(
+                    {"private.prospect@example.com": (550, b"no")}
+                )
 
         with (
             patch.object(emailer.smtplib, "SMTP", _FailSMTP),
             self.assertLogs("app.utils.emailer", level="INFO") as logs,
         ):
-            ok = self._send(**_smtp_env())
-        self.assertFalse(ok)
+            with patch.dict(os.environ, _smtp_env(), clear=True):
+                result = emailer.send_email_result(
+                    "private.prospect@example.com",
+                    "Sujet test",
+                    "corps texte",
+                )
+        self.assertFalse(result.sent)
         joined = "\n".join(logs.output)
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_ATTEMPT", joined)
         self.assertIn("[MAILTRACE] SMTP_FALLBACK_FAILED type=SMTPRecipientsRefused", joined)
         self.assertNotIn("[MAILTRACE] SMTP_FALLBACK_OK", joined)
+        self.assertNotIn("private.prospect@example.com", joined)
+        self.assertNotIn(
+            "private.prospect@example.com",
+            result.error_message,
+        )
+        self.assertIn("***@***", result.error_message)
 
     def test_classify_ssl_and_timeout(self):
         self.assertEqual(emailer._classify_smtp_error(ssl.SSLError("boom")), "SSL error")
@@ -473,6 +624,7 @@ def _card_pro() -> SimpleNamespace:
     return SimpleNamespace(
         id=10,
         email_pro="contact@maavnica.com",
+        notification_email=None,
         company_name="Maavnica",
         slug="arnaud-huard",
         profile="digital",
@@ -482,9 +634,17 @@ def _card_pro() -> SimpleNamespace:
 def _db_committed(lead_id: int = 36) -> MagicMock:
     db = MagicMock()
 
-    def _refresh(obj):
-        obj.id = lead_id
+    def _flush():
+        for call in db.add.call_args_list:
+            obj = call.args[0]
+            if isinstance(obj, Quote) and obj.id is None:
+                obj.id = lead_id
 
+    def _refresh(obj):
+        if getattr(obj, "id", None) is None:
+            obj.id = lead_id
+
+    db.flush.side_effect = _flush
     db.refresh.side_effect = _refresh
     return db
 
@@ -545,29 +705,32 @@ class NotifyProTests(unittest.TestCase):
         self.assertNotIn("smtp_only", mocked.call_args.kwargs)
         self.assertTrue(any("[MAIL] notify_pro ok" in m for m in logs.output))
 
-    def test_create_quote_commits_before_direct_notification(self):
+    def test_create_quote_commits_quote_and_outbox_before_processing(self):
         db = _db_committed(36)
         order: list[str] = []
         db.commit.side_effect = lambda: order.append("commit")
 
-        def _notify(*args, **kwargs):
-            order.append("notify")
+        def _process(*args, **kwargs):
+            order.append("process")
+            return DeliveryOutcome("sent", "brevo")
 
         with (
             patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
-            patch("app.routers.public._send_pro_notification", side_effect=_notify) as notify,
+            patch("app.routers.public.process_one", side_effect=_process) as process,
         ):
             result = create_quote(10, _quote_payload(), db)
 
         self.assertEqual(result, {"message": "Quote created", "id": 36})
         self.assertNotIn("email_notification", result)
-        db.add.assert_called_once()
+        self.assertEqual(db.add.call_count, 2)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
-        notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0], "contact@maavnica.com")
-        self.assertEqual(notify.call_args.args[4], "prospect@example.com")
-        self.assertEqual(order, ["commit", "notify"])
+        process.assert_called_once()
+        outbox = db.add.call_args_list[1].args[0]
+        self.assertIsInstance(outbox, QuoteNotificationOutbox)
+        self.assertEqual(outbox.quote_id, 36)
+        self.assertEqual(outbox.recipient, "contact@maavnica.com")
+        self.assertEqual(order, ["commit", "process"])
 
     def test_create_quote_smtp_failure_keeps_lead_and_http_201(self):
         self._assert_public_post_keeps_201(
@@ -767,6 +930,7 @@ class NotifyProTests(unittest.TestCase):
             yield db
 
         app.dependency_overrides[get_db] = _override_db
+        is_quote = path.endswith("/quotes")
         try:
             with (
                 patch.dict(
@@ -775,7 +939,14 @@ class NotifyProTests(unittest.TestCase):
                     clear=True,
                 ),
                 patch("app.routers.public.get_card_by_id_or_404", return_value=_card_pro()),
-                patch("app.routers.public.send_email", return_value=send_ok) as mocked,
+                patch(
+                    "app.routers.public.process_one",
+                    return_value=DeliveryOutcome(
+                        "sent" if send_ok else "failed",
+                        "brevo" if send_ok else "smtp",
+                    ),
+                ) as process_mock,
+                patch("app.routers.public.send_email", return_value=send_ok) as send_mock,
             ):
                 client = TestClient(app)
                 response = client.post(path, json=payload)
@@ -792,12 +963,21 @@ class NotifyProTests(unittest.TestCase):
         self.assertNotIn("notifications@maavnica.com", dumped)
         db.commit.assert_called_once()
         db.rollback.assert_not_called()
-        mocked.assert_called_once()
-        self.assertEqual(mocked.call_args.args[0], "contact@maavnica.com")
-        self.assertEqual(mocked.call_args.kwargs["from_email"], "notifications@maavnica.com")
-        self.assertNotIn("smtp_only", mocked.call_args.kwargs)
-        if "email" in payload:
-            self.assertEqual(mocked.call_args.kwargs["reply_to"], payload["email"])
+        if is_quote:
+            process_mock.assert_called_once()
+            send_mock.assert_not_called()
+            self.assertEqual(db.add.call_count, 2)
+            outbox = db.add.call_args_list[1].args[0]
+            self.assertIsInstance(outbox, QuoteNotificationOutbox)
+            self.assertEqual(outbox.status, "pending")
+        else:
+            process_mock.assert_not_called()
+            send_mock.assert_called_once()
+            self.assertEqual(send_mock.call_args.args[0], "contact@maavnica.com")
+            self.assertEqual(
+                send_mock.call_args.kwargs["from_email"],
+                "notifications@maavnica.com",
+            )
 
 
 if __name__ == "__main__":

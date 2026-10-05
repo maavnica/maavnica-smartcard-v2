@@ -8,13 +8,13 @@ import ssl
 import smtplib
 import urllib.error
 import urllib.request
+from dataclasses import dataclass
 from email.message import EmailMessage
+
+from app.utils.log_safety import sanitize_log_text
 
 logger = logging.getLogger(__name__)
 
-_SECRET_IN_TEXT = re.compile(
-    r"(?i)(api[-_]?key|x-key|smtp_password|smtp_pass|password|token|secret)\s*[:=]\s*\S+"
-)
 _NAMED_SMTP_ERRORS = (
     smtplib.SMTPAuthenticationError,
     smtplib.SMTPConnectError,
@@ -23,6 +23,19 @@ _NAMED_SMTP_ERRORS = (
     smtplib.SMTPSenderRefused,
     smtplib.SMTPDataError,
 )
+
+
+@dataclass(frozen=True)
+class MailDeliveryResult:
+    state: str  # sent | failed | unknown
+    transport: str | None = None
+    error_type: str | None = None
+    error_message: str = ""
+    http_status: int | None = None
+
+    @property
+    def sent(self) -> bool:
+        return self.state == "sent"
 
 
 def _clean(v: str | None) -> str:
@@ -60,13 +73,15 @@ def smartcard_mail_from() -> str:
 
 
 def _safe_error_text(raw: str, limit: int = 300) -> str:
-    text = _clean(raw)
-    text = _SECRET_IN_TEXT.sub(r"\1=***", text)
-    for env_name in ("SMTP_PASSWORD", "SMTP_PASS", "BREVO_API_KEY"):
-        secret = _clean(os.getenv(env_name))
-        if secret:
-            text = text.replace(secret, "***")
-    return text[:limit]
+    return sanitize_log_text(
+        raw,
+        secrets=(
+            os.getenv("SMTP_PASSWORD", ""),
+            os.getenv("SMTP_PASS", ""),
+            os.getenv("BREVO_API_KEY", ""),
+        ),
+        limit=limit,
+    )
 
 
 def _classify_smtp_error(exc: BaseException) -> str:
@@ -128,7 +143,8 @@ def _send_via_brevo(
     text: str,
     html: str,
     reply_to: str,
-) -> bool:
+    idempotency_key: str,
+) -> MailDeliveryResult:
     payload: dict = {
         "sender": {"email": from_email, "name": from_name},
         "to": [{"email": to_email}],
@@ -139,6 +155,8 @@ def _send_via_brevo(
         payload["htmlContent"] = html
     if reply_to:
         payload["replyTo"] = {"email": reply_to}
+    if idempotency_key:
+        payload["headers"] = {"idempotencyKey": idempotency_key}
 
     req = urllib.request.Request(
         url="https://api.brevo.com/v3/smtp/email",
@@ -155,7 +173,7 @@ def _send_via_brevo(
         with urllib.request.urlopen(req, timeout=15) as resp:
             resp.read()
         logger.info("[MAIL] BREVO OK dest=%s", dest)
-        return True
+        return MailDeliveryResult("sent", transport="brevo")
     except urllib.error.HTTPError as e:
         try:
             body = e.read().decode("utf-8", errors="ignore")
@@ -172,7 +190,22 @@ def _send_via_brevo(
             type(e).__name__,
             e.code,
         )
-        return False
+        # Une répétition dans la fenêtre d'idempotence signifie que Brevo a déjà
+        # accepté la requête originale : ne pas provoquer un doublon via SMTP.
+        if "duplicate_parameter" in body.lower():
+            logger.warning("[MAILTRACE] BREVO_IDEMPOTENT_DUPLICATE")
+            return MailDeliveryResult(
+                "sent",
+                transport="brevo",
+                http_status=e.code,
+            )
+        return MailDeliveryResult(
+            "failed",
+            transport="brevo",
+            error_type=type(e).__name__,
+            error_message=_safe_error_text(body or str(e)),
+            http_status=e.code,
+        )
     except Exception as e:
         logger.warning(
             "[MAIL] BREVO FAILED dest=%s error=%s detail=%s",
@@ -184,7 +217,14 @@ def _send_via_brevo(
             "[MAILTRACE] BREVO_FAILED type=%s status=-",
             type(e).__name__,
         )
-        return False
+        # Sans réponse HTTP, Brevo peut avoir accepté le message avant la
+        # coupure. Le fallback immédiat risquerait alors un doublon.
+        return MailDeliveryResult(
+            "unknown",
+            transport="brevo",
+            error_type=type(e).__name__,
+            error_message=_safe_error_text(str(e)),
+        )
 
 
 def _send_via_smtp(
@@ -201,7 +241,7 @@ def _send_via_smtp(
     reply_to: str,
     use_tls: bool,
     use_ssl: bool,
-) -> bool:
+) -> MailDeliveryResult:
     msg = EmailMessage()
     msg["From"] = from_email
     msg["To"] = to_email
@@ -230,7 +270,7 @@ def _send_via_smtp(
                 server.login(user, password)
                 server.send_message(msg)
         logger.info("[MAIL] SMTP OK dest=%s", dest)
-        return True
+        return MailDeliveryResult("sent", transport="smtp")
     except Exception as e:
         logger.warning(
             "[MAIL] SMTP FAILED dest=%s error=%s detail=%s",
@@ -239,7 +279,21 @@ def _send_via_smtp(
             _safe_error_text(str(e)),
         )
         logger.warning("[MAILTRACE] SMTP_FALLBACK_FAILED type=%s", type(e).__name__)
-        return False
+        ambiguous = isinstance(
+            e,
+            (
+                TimeoutError,
+                socket.timeout,
+                smtplib.SMTPServerDisconnected,
+                ssl.SSLError,
+            ),
+        )
+        return MailDeliveryResult(
+            "unknown" if ambiguous else "failed",
+            transport="smtp",
+            error_type=_classify_smtp_error(e),
+            error_message=_safe_error_text(str(e)),
+        )
 
 
 def _send_via_smtp_contact(
@@ -347,7 +401,7 @@ def send_smtp_only_result(
     )
 
 
-def send_email(
+def send_email_result(
     to_email: str,
     subject: str,
     text: str,
@@ -355,7 +409,8 @@ def send_email(
     reply_to: str | None = None,
     smtp_only: bool = False,
     from_email: str | None = None,
-) -> bool:
+    idempotency_key: str | None = None,
+) -> MailDeliveryResult:
     """
     Envoi email (historique SmartCard) :
     - Brevo API si BREVO_API_KEY + sender.
@@ -371,19 +426,33 @@ def send_email(
 
     if not to_email:
         logger.warning("[MAIL] SKIP NO RECIPIENT")
-        return False
+        return MailDeliveryResult(
+            "failed",
+            error_type="configuration missing",
+            error_message="no recipient",
+        )
     if not subject:
         logger.warning("[MAIL] SKIP empty subject dest=%s", _mask_email(to_email))
-        return False
+        return MailDeliveryResult(
+            "failed",
+            error_type="configuration missing",
+            error_message="empty subject",
+        )
 
     if smtp_only:
-        return send_smtp_only_result(
+        smtp_result = send_smtp_only_result(
             to_email,
             subject,
             text,
             html,
             reply_to=reply_to,
-        )["sent"]
+        )
+        return MailDeliveryResult(
+            "sent" if smtp_result["sent"] else "failed",
+            transport="smtp",
+            error_type=smtp_result.get("error_type"),
+            error_message=smtp_result.get("error_message", ""),
+        )
 
     api_key = _clean(os.getenv("BREVO_API_KEY"))
     from_email = (
@@ -403,7 +472,7 @@ def send_email(
 
     if api_key and from_email:
         logger.warning("[MAILTRACE] BREVO_ATTEMPT")
-        if _send_via_brevo(
+        brevo_result = _send_via_brevo(
             api_key=api_key,
             from_email=from_email,
             from_name=from_name,
@@ -412,13 +481,27 @@ def send_email(
             text=text,
             html=html,
             reply_to=reply_to,
-        ):
+            idempotency_key=_clean(idempotency_key),
+        )
+        if brevo_result.sent:
             logger.warning("[MAILTRACE] BREVO_OK")
-            return True
+            return brevo_result
+        if brevo_result.state == "unknown":
+            logger.warning("[MAILTRACE] BREVO_AMBIGUOUS no_smtp_fallback=true")
+            return brevo_result
         logger.info("[MAIL] BREVO FAILED falling back to SMTP dest=%s", _mask_email(to_email))
 
     host = _clean(os.getenv("SMTP_HOST"))
-    port = int(_clean(os.getenv("SMTP_PORT", "587")) or "587")
+    try:
+        port = int(_clean(os.getenv("SMTP_PORT", "587")) or "587")
+    except ValueError:
+        logger.warning("[MAIL] SKIP invalid SMTP port")
+        return MailDeliveryResult(
+            "failed",
+            transport="smtp",
+            error_type="configuration missing",
+            error_message="invalid SMTP port",
+        )
     user = _clean(os.getenv("SMTP_USER"))
     password = _smtp_password()
     if not from_email:
@@ -426,13 +509,18 @@ def send_email(
 
     if not _smtp_configured(host, user, password, from_email):
         logger.warning("[MAIL] SKIP NO TRANSPORT")
-        return False
+        return MailDeliveryResult(
+            "failed",
+            transport="smtp",
+            error_type="configuration missing",
+            error_message="SMTP settings incomplete",
+        )
 
     use_tls = _clean(os.getenv("SMTP_TLS", "true")).lower() in ("1", "true", "yes", "on")
     use_ssl = _clean(os.getenv("SMTP_SSL", "false")).lower() in ("1", "true", "yes", "on")
 
     logger.warning("[MAILTRACE] SMTP_FALLBACK_ATTEMPT")
-    ok = _send_via_smtp(
+    smtp_result = _send_via_smtp(
         host=host,
         port=port,
         user=user,
@@ -446,6 +534,29 @@ def send_email(
         use_tls=use_tls,
         use_ssl=use_ssl,
     )
-    if ok:
+    if smtp_result.sent:
         logger.warning("[MAILTRACE] SMTP_FALLBACK_OK")
-    return ok
+    return smtp_result
+
+
+def send_email(
+    to_email: str,
+    subject: str,
+    text: str,
+    html: str | None = None,
+    reply_to: str | None = None,
+    smtp_only: bool = False,
+    from_email: str | None = None,
+    idempotency_key: str | None = None,
+) -> bool:
+    """Compatibilité historique : retourne seulement le succès final."""
+    return send_email_result(
+        to_email,
+        subject,
+        text,
+        html,
+        reply_to=reply_to,
+        smtp_only=smtp_only,
+        from_email=from_email,
+        idempotency_key=idempotency_key,
+    ).sent

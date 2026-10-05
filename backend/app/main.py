@@ -28,6 +28,7 @@ from app.routers.upload import router as upload_router
 from app.routers.contact import router as contact_router
 from app.routers.affiliate_kit import router as affiliate_kit_router
 from app.routers.og import router as og_router
+from app.routers.admin_notifications import router as admin_notifications_router
 from app.og_capture import build_og_image_url
 
 
@@ -392,6 +393,7 @@ def _create_db_tables():
         ensure_card_owner_share_key_column,
         ensure_card_hero_columns,
         ensure_card_identity_columns,
+        ensure_card_notification_email_column,
         ensure_enable_recommendation_column,
         ensure_quote_recommendation_columns,
         ensure_recommendation_code_column,
@@ -406,6 +408,7 @@ def _create_db_tables():
     )
 
     Base.metadata.create_all(bind=engine)
+    ensure_card_notification_email_column()
     ensure_card_owner_share_key_column()
     ensure_card_hero_columns()
     ensure_card_identity_columns()
@@ -497,6 +500,9 @@ app.include_router(contact_router)
 
 # Kit affilié (outil interne, clé admin)
 app.include_router(affiliate_kit_router)
+
+# Outbox devis (administration protégée ; aucun destinataire exposé).
+app.include_router(admin_notifications_router)
 
 # Analytics (API + page /admin/analytics)
 app.include_router(analytics_router.router_api)
