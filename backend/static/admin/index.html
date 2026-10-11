@@ -5,7 +5,7 @@
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- CSS admin externe -->
-  <link rel="stylesheet" href="/static/admin/style.css" />
+  <link rel="stylesheet" href="/static/admin/style.css?v=admin-session-1" />
 </head>
 <body>
   <div class="app">
@@ -21,7 +21,7 @@
       </div>
       <p class="hint" style="margin-top:10px;">
         <a href="/admin/analytics" target="_blank" rel="noopener">Analytics cartes</a>
-        (performance, sources) — connexion : utilisateur <code>admin</code>, mot de passe = clé API admin.
+        (performance, sources).
         <br />
         <a href="/admin/site-analytics" target="_blank" rel="noopener">Analytics site</a>
         (landing, sources marketing, CTA — isolé des cartes).
@@ -29,6 +29,14 @@
         <a href="/admin/business" target="_blank" rel="noopener">Voir le dashboard business</a>
         (pilotage cartes, plans, expiration).
       </p>
+      <div class="admin-session-panel" aria-live="polite">
+        <div>
+          <span>Session administrateur :</span>
+          <strong id="admin-session-status">Vérification…</strong>
+          <div id="admin-session-detail" class="auth-detail"></div>
+        </div>
+        <button class="btn btn-outline" id="btn-logout" type="button">Se déconnecter</button>
+      </div>
     </div>
 
     <div class="layout">
@@ -311,8 +319,24 @@
 
   <div class="toast" id="toast"></div>
 
+  <div id="reauth-overlay" class="reauth-overlay" hidden>
+    <div class="reauth-card" role="dialog" aria-modal="true" aria-labelledby="reauth-title">
+      <h2 id="reauth-title">Session expirée</h2>
+      <p>Reconnectez-vous pour continuer. Le formulaire et la carte en cours restent inchangés.</p>
+      <form id="reauth-form">
+        <label for="reauth-password">Mot de passe administrateur</label>
+        <input id="reauth-password" type="password" autocomplete="current-password" required />
+        <div class="reauth-actions">
+          <button class="btn btn-primary" type="submit">Se reconnecter</button>
+          <button class="btn btn-outline" id="btn-reauth-later" type="button">Plus tard</button>
+        </div>
+      </form>
+      <p id="reauth-error" class="login-error" role="alert" aria-live="polite"></p>
+    </div>
+  </div>
+
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=admin-card-mode-1"></script>
+  <script src="/static/admin/app.js?v=admin-session-1"></script>
 </body>
 </html>
 

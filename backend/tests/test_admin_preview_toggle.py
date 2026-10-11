@@ -278,6 +278,15 @@ class AdminPreviewToggleApiTests(unittest.TestCase):
         html = client.get(f"/c/{CLIENT_SLUG}?admin_view=1")
         self.assertEqual(html.status_code, 200)
         self.assertIn('id="preview-proposition-frame"', html.text)
+        unauthenticated = client.get("/admin", follow_redirects=False)
+        self.assertEqual(unauthenticated.status_code, 303)
+        self.assertTrue(unauthenticated.headers["location"].startswith("/admin/login"))
+        login = client.post(
+            "/api/admin/session/login",
+            json={"password": "test-admin-key"},
+            headers={"x-forwarded-for": "preview-toggle-login"},
+        )
+        self.assertEqual(login.status_code, 200, login.text)
         admin_page = client.get("/admin")
         self.assertEqual(admin_page.status_code, 200)
         self.assertIn('id="card-mode"', admin_page.text)

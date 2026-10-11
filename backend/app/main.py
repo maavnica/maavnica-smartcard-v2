@@ -1,17 +1,20 @@
 # backend/app/main.py
 
+import hashlib
 import logging
 import os
 import re
+import secrets
 from html import escape
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 
 
@@ -29,7 +32,13 @@ from app.routers.contact import router as contact_router
 from app.routers.affiliate_kit import router as affiliate_kit_router
 from app.routers.og import router as og_router
 from app.routers.admin_notifications import router as admin_notifications_router
+from app.routers.admin_session import router as admin_session_router
 from app.og_capture import build_og_image_url
+from app.utils.admin_auth import (
+    ADMIN_SESSION_COOKIE,
+    ADMIN_SESSION_MAX_AGE_SECONDS,
+    require_admin_http_basic,
+)
 
 
 
@@ -64,6 +73,26 @@ LANDING_INDEX = LANDING_DIR / "index.html"
 app = FastAPI(title="Maavnica SmartCard API")
 
 _public_card_log = logging.getLogger(__name__)
+
+
+def _admin_session_signing_key() -> str:
+    admin_secret = (os.getenv("ADMIN_API_KEY") or "").strip()
+    if not admin_secret:
+        # La connexion restera fail-safe (500), mais l'application peut démarrer.
+        return secrets.token_urlsafe(32)
+    return hashlib.sha256(
+        ("maavnica-smartcard-admin-session:" + admin_secret).encode("utf-8")
+    ).hexdigest()
+
+
+def _is_production_runtime() -> bool:
+    if (os.getenv("RENDER") or "").strip().lower() == "true":
+        return True
+    environment = (os.getenv("ENVIRONMENT") or os.getenv("ENV") or "").strip().lower()
+    if environment in {"production", "prod"}:
+        return True
+    return (os.getenv("PUBLIC_BASE_URL") or "").strip().lower().startswith("https://")
+
 
 _PUBLIC_CARD_V3_FILES = (
     "index_v3.html",
@@ -467,6 +496,14 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "Accept"],
 )
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=_admin_session_signing_key(),
+    session_cookie=ADMIN_SESSION_COOKIE,
+    max_age=ADMIN_SESSION_MAX_AGE_SECONDS,
+    same_site="lax",
+    https_only=_is_production_runtime(),
+)
 
 
 # ------------------------------------------------------------
@@ -504,6 +541,9 @@ app.include_router(affiliate_kit_router)
 # Outbox devis (administration protégée ; aucun destinataire exposé).
 app.include_router(admin_notifications_router)
 
+# Connexion, état et déconnexion de la session administrateur.
+app.include_router(admin_session_router)
+
 # Analytics (API + page /admin/analytics)
 app.include_router(analytics_router.router_api)
 app.include_router(analytics_router.router_pages)
@@ -527,7 +567,7 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 # Admin UI
 # ------------------------------------------------------------
 @app.api_route("/admin", methods=["GET", "HEAD"], include_in_schema=False)
-async def serve_admin():
+async def serve_admin(_: str = Depends(require_admin_http_basic)):
     """Sert directement l'interface d'administration statique."""
     file_path = STATIC_DIR / "admin" / "index.html"
     if not file_path.exists():
