@@ -5,7 +5,7 @@
   <title>Maavnica SmartCard – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- CSS admin externe -->
-  <link rel="stylesheet" href="/static/admin/style.css" />
+  <link rel="stylesheet" href="/static/admin/style.css?v=admin-auth-1" />
 </head>
 <body>
   <div class="app">
@@ -29,6 +29,16 @@
         <a href="/admin/business" target="_blank" rel="noopener">Voir le dashboard business</a>
         (pilotage cartes, plans, expiration).
       </p>
+      <div class="admin-auth-panel" aria-live="polite">
+        <div>
+          <span>Authentification admin :</span>
+          <span id="admin-auth-status" class="auth-status auth-status-missing">Non authentifié</span>
+          <div id="admin-auth-detail" class="auth-detail"></div>
+        </div>
+        <button class="btn btn-outline" id="btn-change-admin-key" type="button">
+          Changer la clé administrateur
+        </button>
+      </div>
     </div>
 
     <div class="layout">
@@ -312,7 +322,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- JS admin externe -->
-  <script src="/static/admin/app.js?v=admin-card-mode-1"></script>
+  <script src="/static/admin/app.js?v=admin-auth-1"></script>
 </body>
 </html>
 

@@ -139,6 +139,46 @@ h1{
   margin-bottom: 8px;
 }
 
+.admin-auth-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:var(--radius2);
+  background:rgba(2,6,23,.38);
+  color:var(--muted);
+  font-size:12.5px;
+}
+.auth-status{
+  display:inline-block;
+  margin-left:6px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-weight:800;
+}
+.auth-status-authenticated{
+  color:#86efac;
+  background:rgba(34,197,94,.2);
+}
+.auth-status-checking,
+.auth-status-unverified{
+  color:#fde68a;
+  background:rgba(251,191,36,.16);
+}
+.auth-status-invalid,
+.auth-status-error{
+  color:#fca5a5;
+  background:rgba(239,68,68,.18);
+}
+.auth-detail{
+  min-height:1.35em;
+  margin-top:5px;
+  color:var(--muted2);
+}
+
 .pill-input{
   flex:1;
   padding: 11px 12px;
@@ -302,6 +342,7 @@ input:focus, select:focus{
   .layout{ grid-template-columns: 1fr; }
   .columns-small{ grid-template-columns: 1fr; }
   .row{ grid-template-columns: 1fr; }
+  .admin-auth-panel{ align-items:stretch; flex-direction:column; }
   h1{ font-size: 28px; }
 }
 

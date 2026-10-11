@@ -4,6 +4,11 @@ let ADMIN_API_KEY = sessionStorage.getItem("ADMIN_API_KEY") || "";
 let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
 const NON_EXPIRING_PLANS = new Set(["demo", "lifetime"]);
+const ADMIN_AUTH_INVALID_DETAIL = "Clé admin invalide.";
+const ADMIN_AUTH_INVALID_MESSAGE =
+  "Clé administrateur invalide. Saisissez à nouveau votre clé ; vos informations sont conservées.";
+let adminAuthState = ADMIN_API_KEY ? "unverified" : "missing";
+let adminKeyVerificationPromise = null;
 
 /** Valeurs techniques visual_theme (seul champ qui pilote data-theme CSS). */
 const ALLOWED_VISUAL_THEMES = new Set([
@@ -85,17 +90,173 @@ function readVisualThemeFromSelect() {
   return normalizeVisualThemeValue(selected);
 }
 
-function ensureAdminApiKey() {
-  if (ADMIN_API_KEY && ADMIN_API_KEY.trim()) return ADMIN_API_KEY.trim();
-  const entered = window.prompt("Clé admin requise pour accéder à l’interface SmartCard :");
-  if (entered === null) return "";
-  ADMIN_API_KEY = entered.trim();
-  if (!ADMIN_API_KEY) {
-    showToast("Clé admin manquante. Actions admin bloquées.", true);
-    return "";
+function updateAdminAuthStatus(state, message = "") {
+  adminAuthState = state;
+  const status = document.getElementById("admin-auth-status");
+  const detail = document.getElementById("admin-auth-detail");
+  if (status) {
+    const labels = {
+      missing: "Non authentifié",
+      unverified: "Clé à vérifier",
+      checking: "Vérification…",
+      authenticated: "Authentifié",
+      invalid: "Clé refusée",
+      error: "Vérification impossible",
+    };
+    status.textContent = labels[state] || labels.missing;
+    status.className = `auth-status auth-status-${state}`;
   }
-  sessionStorage.setItem("ADMIN_API_KEY", ADMIN_API_KEY);
-  return ADMIN_API_KEY;
+  if (detail) detail.textContent = message;
+}
+
+function clearAdminApiKey(message = ADMIN_AUTH_INVALID_MESSAGE) {
+  ADMIN_API_KEY = "";
+  sessionStorage.removeItem("ADMIN_API_KEY");
+  updateAdminAuthStatus("invalid", message);
+}
+
+function rememberValidatedAdminApiKey(key) {
+  ADMIN_API_KEY = key;
+  sessionStorage.setItem("ADMIN_API_KEY", key);
+  updateAdminAuthStatus("authenticated", "Clé vérifiée pour cette session.");
+}
+
+async function responseHasInvalidAdminKey(response) {
+  if (!response || response.status !== 403) return false;
+  try {
+    const payload = await response.clone().json();
+    return payload && payload.detail === ADMIN_AUTH_INVALID_DETAIL;
+  } catch (e) {
+    return false;
+  }
+}
+
+function fetchWithAdminKey(url, options, key) {
+  const requestOptions = options ? { ...options } : {};
+  requestOptions.headers = {
+    ...(requestOptions.headers || {}),
+    "Authorization": "Bearer " + key,
+  };
+  return fetch(url, requestOptions);
+}
+
+async function verifyAdminApiKey(candidate) {
+  const key = String(candidate || "").trim();
+  if (!key) return { ok: false, reason: "missing" };
+  try {
+    const response = await fetchWithAdminKey(`${API_BASE}/`, { method: "GET" }, key);
+    if (response.ok) return { ok: true };
+    if (await responseHasInvalidAdminKey(response)) {
+      return { ok: false, reason: "invalid" };
+    }
+    return { ok: false, reason: "server", status: response.status };
+  } catch (error) {
+    return { ok: false, reason: "network" };
+  }
+}
+
+async function changeAdminApiKey() {
+  const previousKey = ADMIN_API_KEY;
+  const previousState = adminAuthState;
+  const entered = window.prompt("Nouvelle clé administrateur :");
+  if (entered === null) return false;
+
+  const candidate = entered.trim();
+  if (!candidate) {
+    showToast("Clé administrateur vide. L’état précédent est conservé.", true);
+    return false;
+  }
+
+  updateAdminAuthStatus("checking", "Vérification de la clé…");
+  const result = await verifyAdminApiKey(candidate);
+  if (result.ok) {
+    rememberValidatedAdminApiKey(candidate);
+    showToast("Clé administrateur vérifiée.");
+    return true;
+  }
+
+  if (result.reason === "invalid") {
+    clearAdminApiKey();
+  } else {
+    ADMIN_API_KEY = previousKey;
+  }
+  if (result.reason !== "invalid" && previousKey) {
+    updateAdminAuthStatus(
+      previousState,
+      "Vérification impossible ; la clé précédente est conservée."
+    );
+  } else if (result.reason !== "invalid") {
+    updateAdminAuthStatus(
+      "error",
+      result.reason === "network"
+        ? "Impossible de joindre le serveur. Réessayez sans perdre vos informations."
+        : "Le serveur n’a pas pu vérifier la clé. Réessayez ultérieurement."
+    );
+  }
+
+  if (result.reason === "invalid") {
+    showToast(ADMIN_AUTH_INVALID_MESSAGE, true);
+  } else if (result.reason === "network") {
+    showToast("Problème réseau pendant la vérification de la clé.", true);
+  } else {
+    showToast("Erreur serveur pendant la vérification de la clé.", true);
+  }
+  return false;
+}
+
+async function ensureAdminApiKey() {
+  if (ADMIN_API_KEY && adminAuthState === "authenticated") return ADMIN_API_KEY;
+  if (adminKeyVerificationPromise) return adminKeyVerificationPromise;
+
+  adminKeyVerificationPromise = (async () => {
+    if (!ADMIN_API_KEY) {
+      await changeAdminApiKey();
+      return adminAuthState === "authenticated" ? ADMIN_API_KEY : "";
+    }
+
+    updateAdminAuthStatus("checking", "Vérification de la clé de cette session…");
+    const result = await verifyAdminApiKey(ADMIN_API_KEY);
+    if (result.ok) {
+      rememberValidatedAdminApiKey(ADMIN_API_KEY);
+      return ADMIN_API_KEY;
+    }
+    if (result.reason === "invalid") {
+      clearAdminApiKey();
+      showToast(ADMIN_AUTH_INVALID_MESSAGE, true);
+    } else {
+      updateAdminAuthStatus(
+        "error",
+        result.reason === "network"
+          ? "Impossible de joindre le serveur. La clé n’est pas déclarée invalide."
+          : "Erreur serveur : la clé n’est pas déclarée invalide."
+      );
+      showToast(
+        result.reason === "network"
+          ? "Problème réseau pendant la vérification de la clé."
+          : "Erreur serveur pendant la vérification de la clé.",
+        true
+      );
+    }
+    return "";
+  })();
+
+  try {
+    return await adminKeyVerificationPromise;
+  } finally {
+    adminKeyVerificationPromise = null;
+  }
+}
+
+async function adminFetch(url, options = {}) {
+  const key = await ensureAdminApiKey();
+  if (!key) return null;
+  const response = await fetchWithAdminKey(url, options, key);
+  if (await responseHasInvalidAdminKey(response)) {
+    clearAdminApiKey();
+    showToast(ADMIN_AUTH_INVALID_MESSAGE, true);
+    return null;
+  }
+  return response;
 }
 
 function showToast(message, isError = false) {
@@ -452,13 +613,9 @@ async function loadCardBySlug() {
     return;
   }
 
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
-
   try {
-    const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`, {
-      headers: { "Authorization": "Bearer " + adminKey }
-    });
+    const res = await adminFetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`);
+    if (!res) return;
     if (!res.ok) {
       showToast("Carte introuvable pour ce slug.", true);
       return;
@@ -496,7 +653,7 @@ async function saveCard() {
     return;
   }
 
-  const adminKey = ensureAdminApiKey();
+  const adminKey = await ensureAdminApiKey();
   if (!adminKey) return;
 
   slug = slug.toLowerCase();
@@ -525,15 +682,15 @@ async function saveCard() {
       method = "PUT";
     }
 
-    const res = await fetch(url, {
+    const res = await adminFetch(url, {
       method,
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + adminKey
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
 
+    if (!res) return;
     if (!res.ok) {
       const text = await res.text();
       console.error("Erreur API:", res.status, text);
@@ -574,14 +731,11 @@ function formatExpiration(card) {
 }
 
 async function loadAllCards() {
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
   const box = document.getElementById("cards-list");
   if (!box) return;
   try {
-    const res = await fetch(`${API_BASE}/`, {
-      headers: { "Authorization": "Bearer " + adminKey }
-    });
+    const res = await adminFetch(`${API_BASE}/`);
+    if (!res) return;
     if (!res.ok) {
       box.innerHTML = '<div class="hint">Impossible de charger la liste.</div>';
       return;
@@ -632,18 +786,12 @@ async function loadAllCards() {
 async function loadFeedbackAndQuotes() {
   if (!currentCardId) return;
 
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
-
   try {
     const [fRes, qRes] = await Promise.all([
-      fetch(`${API_BASE}/${currentCardId}/feedback`, {
-        headers: { "Authorization": "Bearer " + adminKey }
-      }),
-      fetch(`${API_BASE}/${currentCardId}/quotes`, {
-        headers: { "Authorization": "Bearer " + adminKey }
-      })
+      adminFetch(`${API_BASE}/${currentCardId}/feedback`),
+      adminFetch(`${API_BASE}/${currentCardId}/quotes`)
     ]);
+    if (!fRes || !qRes) return;
 
     const feedbackList = document.getElementById("feedback-list");
     const quoteList = document.getElementById("quote-list");
@@ -746,17 +894,17 @@ function hasAllowedAvatarExt(filename) {
 }
 
 async function uploadAvatarFile(file) {
-  const adminKey = ensureAdminApiKey();
+  const adminKey = await ensureAdminApiKey();
   if (!adminKey) throw new Error("Clé admin requise.");
-  const res = await fetch(UPLOAD_AVATAR_URL, {
+  const res = await adminFetch(UPLOAD_AVATAR_URL, {
     method: "POST",
-    headers: { "Authorization": "Bearer " + adminKey },
     body: (() => {
       const fd = new FormData();
       fd.append("file", file);
       return fd;
     })(),
   });
+  if (!res) throw new Error(ADMIN_AUTH_INVALID_MESSAGE);
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail || "Échec de l’upload.");
@@ -795,6 +943,7 @@ function initAvatarUpload() {
 document.getElementById("btn-load").addEventListener("click", loadCardBySlug);
 document.getElementById("btn-save").addEventListener("click", saveCard);
 document.getElementById("btn-reset").addEventListener("click", resetForm);
+document.getElementById("btn-change-admin-key").addEventListener("click", changeAdminApiKey);
 document.getElementById("slug").addEventListener("input", updatePublicLink);
 document.getElementById("plan-type").addEventListener("change", () => updatePlanExpirationUI(true));
 document.getElementById("btn-copy-owner-link").addEventListener("click", copyOwnerLink);
@@ -803,6 +952,10 @@ const btnOpenPreview = document.getElementById("btn-open-preview");
 if (btnOpenPreview) btnOpenPreview.addEventListener("click", openAdminCardPreview);
 document.getElementById("btn-refresh-cards").addEventListener("click", loadAllCards);
 initAvatarUpload();
+updateAdminAuthStatus(
+  ADMIN_API_KEY ? "unverified" : "missing",
+  ADMIN_API_KEY ? "La clé enregistrée doit être vérifiée." : "Aucune clé vérifiée pour cette session."
+);
 updatePlanExpirationUI(false);
 loadAllCards();
 loadCardFromQueryParam();
