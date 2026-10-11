@@ -1,6 +1,7 @@
 const API_BASE = "/api/cards";
 const baseUrl = window.location.origin || "";
-let ADMIN_API_KEY = sessionStorage.getItem("ADMIN_API_KEY") || "";
+const ADMIN_SESSION_URL = "/api/admin/session";
+let ADMIN_CSRF_TOKEN = "";
 let currentCardId = null;
 let currentProfile = "artisan"; // 🔹 profil courant (par défaut)
 const NON_EXPIRING_PLANS = new Set(["demo", "lifetime"]);
@@ -85,17 +86,134 @@ function readVisualThemeFromSelect() {
   return normalizeVisualThemeValue(selected);
 }
 
-function ensureAdminApiKey() {
-  if (ADMIN_API_KEY && ADMIN_API_KEY.trim()) return ADMIN_API_KEY.trim();
-  const entered = window.prompt("Clé admin requise pour accéder à l’interface SmartCard :");
-  if (entered === null) return "";
-  ADMIN_API_KEY = entered.trim();
-  if (!ADMIN_API_KEY) {
-    showToast("Clé admin manquante. Actions admin bloquées.", true);
-    return "";
+function updateAdminSessionStatus(active, message = "") {
+  const status = document.getElementById("admin-session-status");
+  const detail = document.getElementById("admin-session-detail");
+  if (status) {
+    status.textContent = active ? "Connectée" : "Expirée";
+    status.style.color = active ? "#86efac" : "#fca5a5";
   }
-  sessionStorage.setItem("ADMIN_API_KEY", ADMIN_API_KEY);
-  return ADMIN_API_KEY;
+  if (detail) detail.textContent = message;
+}
+
+function showReauthentication() {
+  ADMIN_CSRF_TOKEN = "";
+  updateAdminSessionStatus(false, "Reconnectez-vous sans perdre votre saisie.");
+  const overlay = document.getElementById("reauth-overlay");
+  const password = document.getElementById("reauth-password");
+  if (overlay) overlay.hidden = false;
+  if (password) {
+    password.value = "";
+    setTimeout(() => password.focus(), 0);
+  }
+}
+
+function hideReauthentication() {
+  const overlay = document.getElementById("reauth-overlay");
+  const error = document.getElementById("reauth-error");
+  const password = document.getElementById("reauth-password");
+  if (overlay) overlay.hidden = true;
+  if (error) error.textContent = "";
+  if (password) password.value = "";
+}
+
+async function refreshAdminSession() {
+  try {
+    const response = await fetch(ADMIN_SESSION_URL, {
+      credentials: "same-origin",
+      headers: { "Accept": "application/json" },
+    });
+    if (response.status === 401) {
+      showReauthentication();
+      return false;
+    }
+    if (!response.ok) {
+      showToast("Impossible de vérifier la session administrateur.", true);
+      return false;
+    }
+    const data = await response.json();
+    ADMIN_CSRF_TOKEN = data.csrf_token || "";
+    if (!ADMIN_CSRF_TOKEN) {
+      showReauthentication();
+      return false;
+    }
+    updateAdminSessionStatus(true, "Session sécurisée active.");
+    return true;
+  } catch (error) {
+    showToast("Problème réseau pendant la vérification de la session.", true);
+    return false;
+  }
+}
+
+async function adminFetch(url, options = {}) {
+  if (!ADMIN_CSRF_TOKEN && !(await refreshAdminSession())) return null;
+  const requestOptions = { ...options, credentials: "same-origin" };
+  const method = String(requestOptions.method || "GET").toUpperCase();
+  requestOptions.headers = { ...(requestOptions.headers || {}) };
+  if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+    requestOptions.headers["X-CSRF-Token"] = ADMIN_CSRF_TOKEN;
+  }
+  const response = await fetch(url, requestOptions);
+  if (response.status === 401) {
+    showReauthentication();
+    showToast(
+      "Session expirée. Reconnectez-vous puis relancez vous-même l’action.",
+      true
+    );
+    return null;
+  }
+  return response;
+}
+
+async function submitReauthentication(event) {
+  event.preventDefault();
+  const passwordInput = document.getElementById("reauth-password");
+  const errorBox = document.getElementById("reauth-error");
+  const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+  const password = passwordInput.value;
+  if (!password) return;
+
+  errorBox.textContent = "";
+  submitButton.disabled = true;
+  try {
+    const response = await fetch(`${ADMIN_SESSION_URL}/login`, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    passwordInput.value = "";
+    if (!response.ok) {
+      errorBox.textContent =
+        response.status === 429
+          ? "Trop de tentatives. Réessayez dans quelques minutes."
+          : "Mot de passe administrateur incorrect.";
+      return;
+    }
+    const data = await response.json();
+    ADMIN_CSRF_TOKEN = data.csrf_token || "";
+    hideReauthentication();
+    updateAdminSessionStatus(true, "Session renouvelée.");
+    showToast("Reconnecté. Relancez l’action souhaitée.");
+  } catch (error) {
+    passwordInput.value = "";
+    errorBox.textContent = "Impossible de joindre le serveur.";
+  } finally {
+    submitButton.disabled = false;
+  }
+}
+
+async function logoutAdmin() {
+  try {
+    await fetch(`${ADMIN_SESSION_URL}/logout`, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "X-CSRF-Token": ADMIN_CSRF_TOKEN },
+    });
+  } finally {
+    ADMIN_CSRF_TOKEN = "";
+    window.location.replace("/admin/login");
+  }
 }
 
 function showToast(message, isError = false) {
@@ -452,13 +570,9 @@ async function loadCardBySlug() {
     return;
   }
 
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
-
   try {
-    const res = await fetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`, {
-      headers: { "Authorization": "Bearer " + adminKey }
-    });
+    const res = await adminFetch(`${API_BASE}/by-slug/${encodeURIComponent(slug)}`);
+    if (!res) return;
     if (!res.ok) {
       showToast("Carte introuvable pour ce slug.", true);
       return;
@@ -496,9 +610,6 @@ async function saveCard() {
     return;
   }
 
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
-
   slug = slug.toLowerCase();
   document.getElementById("slug").value = slug;
   document.getElementById("existing-slug").value = slug;
@@ -525,15 +636,15 @@ async function saveCard() {
       method = "PUT";
     }
 
-    const res = await fetch(url, {
+    const res = await adminFetch(url, {
       method,
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + adminKey
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
 
+    if (!res) return;
     if (!res.ok) {
       const text = await res.text();
       console.error("Erreur API:", res.status, text);
@@ -574,14 +685,11 @@ function formatExpiration(card) {
 }
 
 async function loadAllCards() {
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
   const box = document.getElementById("cards-list");
   if (!box) return;
   try {
-    const res = await fetch(`${API_BASE}/`, {
-      headers: { "Authorization": "Bearer " + adminKey }
-    });
+    const res = await adminFetch(`${API_BASE}/`);
+    if (!res) return;
     if (!res.ok) {
       box.innerHTML = '<div class="hint">Impossible de charger la liste.</div>';
       return;
@@ -632,18 +740,12 @@ async function loadAllCards() {
 async function loadFeedbackAndQuotes() {
   if (!currentCardId) return;
 
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) return;
-
   try {
     const [fRes, qRes] = await Promise.all([
-      fetch(`${API_BASE}/${currentCardId}/feedback`, {
-        headers: { "Authorization": "Bearer " + adminKey }
-      }),
-      fetch(`${API_BASE}/${currentCardId}/quotes`, {
-        headers: { "Authorization": "Bearer " + adminKey }
-      })
+      adminFetch(`${API_BASE}/${currentCardId}/feedback`),
+      adminFetch(`${API_BASE}/${currentCardId}/quotes`)
     ]);
+    if (!fRes || !qRes) return;
 
     const feedbackList = document.getElementById("feedback-list");
     const quoteList = document.getElementById("quote-list");
@@ -746,17 +848,15 @@ function hasAllowedAvatarExt(filename) {
 }
 
 async function uploadAvatarFile(file) {
-  const adminKey = ensureAdminApiKey();
-  if (!adminKey) throw new Error("Clé admin requise.");
-  const res = await fetch(UPLOAD_AVATAR_URL, {
+  const res = await adminFetch(UPLOAD_AVATAR_URL, {
     method: "POST",
-    headers: { "Authorization": "Bearer " + adminKey },
     body: (() => {
       const fd = new FormData();
       fd.append("file", file);
       return fd;
     })(),
   });
+  if (!res) throw new Error("Session expirée. Reconnectez-vous puis relancez l’envoi.");
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail || "Échec de l’upload.");
@@ -802,10 +902,17 @@ document.getElementById("btn-copy-public-link").addEventListener("click", copyPu
 const btnOpenPreview = document.getElementById("btn-open-preview");
 if (btnOpenPreview) btnOpenPreview.addEventListener("click", openAdminCardPreview);
 document.getElementById("btn-refresh-cards").addEventListener("click", loadAllCards);
+document.getElementById("btn-logout").addEventListener("click", logoutAdmin);
+document.getElementById("reauth-form").addEventListener("submit", submitReauthentication);
+document.getElementById("btn-reauth-later").addEventListener("click", hideReauthentication);
 initAvatarUpload();
 updatePlanExpirationUI(false);
-loadAllCards();
-loadCardFromQueryParam();
+
+(async function initializeAdmin() {
+  if (!(await refreshAdminSession())) return;
+  await loadAllCards();
+  await loadCardFromQueryParam();
+})();
 
 
 

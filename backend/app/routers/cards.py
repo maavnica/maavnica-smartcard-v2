@@ -16,7 +16,7 @@ from ..database import (
     read_card_visual_theme_by_slug,
     write_card_visual_theme,
 )
-from app.utils.admin_auth import admin_bearer_matches, require_admin_api_key
+from app.utils.admin_auth import admin_request_matches, require_admin_api_key
 from app.utils.public_slug import sanitize_public_slug
 
 router = APIRouter()
@@ -183,13 +183,13 @@ def _serialize_card_public(
     out["computed_status"] = _computed_status(card)
     out["days_remaining"] = _days_remaining(card)
     out["owner_mode"] = owner_mode
-    out["owner_share_key"] = card.owner_share_key if admin_bearer_matches(request) else None
+    out["owner_share_key"] = card.owner_share_key if admin_request_matches(request) else None
     out["recommendation_share_count"] = recommendation_share_count
     out["is_preview"] = bool(getattr(card, "is_preview", False))
     origin = getattr(card, "preview_origin", None)
     if origin is not None:
         origin = str(origin).strip() or None
-    out["preview_origin"] = origin if admin_bearer_matches(request) else None
+    out["preview_origin"] = origin if admin_request_matches(request) else None
     return schemas.CardPublic(**out)
 
 

@@ -45,14 +45,18 @@ from html import escape
 from typing import List, Optional, Tuple
 from urllib.parse import quote, urlencode
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Card
 from app.routers.cards import _computed_status, _days_remaining
-from app.utils.admin_auth import require_admin_http_basic
+from app.utils.admin_auth import (
+    get_admin_csrf_token,
+    require_admin_http_basic,
+    validate_page_csrf,
+)
 
 router_pages = APIRouter(tags=["business"])
 
@@ -197,6 +201,7 @@ def _build_business_dashboard_html(
     filter_value: str,
     search_query: str,
     sort_value: str,
+    csrf_token: str,
 ) -> str:
     cards = db.query(Card).all()
 
@@ -284,6 +289,7 @@ def _build_business_dashboard_html(
         if can_convert:
             actions_html.append(
                 "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"csrf_token\" value=\"{escape(csrf_token)}\" />"
                 f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
                 "<input type=\"hidden\" name=\"action_type\" value=\"convert_solo\" />"
                 f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
@@ -294,6 +300,7 @@ def _build_business_dashboard_html(
             )
             actions_html.append(
                 "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"csrf_token\" value=\"{escape(csrf_token)}\" />"
                 f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
                 "<input type=\"hidden\" name=\"action_type\" value=\"convert_business\" />"
                 f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
@@ -305,6 +312,7 @@ def _build_business_dashboard_html(
         if can_extend_30:
             actions_html.append(
                 "<form method=\"post\" action=\"/admin/business/actions\" class=\"action-form\">"
+                f"<input type=\"hidden\" name=\"csrf_token\" value=\"{escape(csrf_token)}\" />"
                 f"<input type=\"hidden\" name=\"card_id\" value=\"{card.id}\" />"
                 "<input type=\"hidden\" name=\"action_type\" value=\"extend_30\" />"
                 f"<input type=\"hidden\" name=\"filter\" value=\"{escape(filter_value)}\" />"
@@ -540,6 +548,7 @@ def _build_business_dashboard_html(
 
 @router_pages.get("/admin/business", response_class=HTMLResponse, include_in_schema=False)
 def business_dashboard_page(
+    request: Request,
     filter: str = Query("all"),
     q: str = Query(""),
     sort: str = Query("expiring_soon"),
@@ -553,20 +562,24 @@ def business_dashboard_page(
         filter_value=filter_value,
         search_query=q,
         sort_value=sort_value,
+        csrf_token=get_admin_csrf_token(request),
     )
     return HTMLResponse(content=html)
 
 
 @router_pages.post("/admin/business/actions", include_in_schema=False)
 def business_dashboard_action(
+    request: Request,
     card_id: int = Form(...),
     action_type: str = Form(...),
+    csrf_token: str = Form(""),
     filter: str = Form("all"),
     q: str = Form(""),
     sort: str = Form("expiring_soon"),
     db: Session = Depends(get_db),
-    _: None = Depends(require_admin_http_basic),
+    auth_mode: str = Depends(require_admin_http_basic),
 ):
+    validate_page_csrf(request, auth_mode, csrf_token)
     filter_value = _normalize_filter(filter)
     sort_value = _normalize_sort(sort)
     normalized_action = (action_type or "").strip().lower()
