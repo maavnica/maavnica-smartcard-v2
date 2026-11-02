@@ -11,5 +11,6 @@ psycopg2-binary
 psycopg[binary]
 stripe==14.1.0
 cloudinary
+certifi==2026.10.23
 
 
